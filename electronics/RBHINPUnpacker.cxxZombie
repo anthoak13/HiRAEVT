@@ -1,0 +1,420 @@
+//#include <config.h>
+#include <stdint.h>
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string>
+#include <stdexcept>
+
+#include </usr/opt/nscldaq/current/include/CFatalException.h>
+
+#include "RBHINPUnpacker.h"
+
+using namespace std;
+
+const Int_t XLM1 =  0x1ff3;
+const Int_t XLM2 =  0x2ff3;
+
+static UInt_t numChips;
+
+TClonesArray *RBHINPUnpacker::fgHits = 0;
+
+//______________________________________________________________________________
+RBHINPUnpacker::RBHINPUnpacker(const char* name, Int_t nMBs, Bool_t usingSISFADC)
+:fFoundBeginMarker(0),fReportNExtraMarkers(0)
+{
+  // --
+  //
+  
+  SetGeo(-1);
+  fnMBs         = nMBs;
+  for(Int_t i=0; i<fgMaxXLMs; i++){
+    fBankMB[i][0]    = -1;
+    fBankMB[i][1]    = -1;
+  }
+  fUsingSISFADC = usingSISFADC;
+  
+  if(!fgHits) fgHits = new TClonesArray("RBHINPHit",10);
+  fHits  = fgHits;
+  fNHits = 0;
+  fNUnpackedEvents = 0;
+}
+
+
+//______________________________________________________________________________
+RBHINPUnpacker::~RBHINPUnpacker()
+{
+  // --
+  //
+  
+  Clear();
+}
+
+
+//______________________________________________________________________________
+void RBHINPUnpacker::Clear(Option_t *option)
+{
+  // --
+  //
+
+  if(strcmp(option,"A")==0) fNUnpackedEvents = 0;
+  if(fHits) fHits->Clear("C");
+  fNHits = 0;
+}
+
+
+//______________________________________________________________________________
+void RBHINPUnpacker::InitBranch(TTree *tree)
+{
+  // --
+  //
+  
+  if(GetFillData()){
+    Char_t tmp[500];
+    //sprintf(tmp,"%s[%i]/s",fChName.Data(),fnCh);
+    //tree->Branch(fChName, fData, tmp);
+    tree->Branch(TString(GetName())+".fHits","TClonesArray",&fHits,32000,99);
+  }else{
+    cout << "-->RBHINPUnpacker::InitBranch  Branches will not be created or filled." << endl;
+  }
+}
+
+
+//______________________________________________________________________________
+void RBHINPUnpacker::InitTree(TTree *tree)
+{
+  // --
+  //
+  
+  fChain = tree;
+}
+
+
+//______________________________________________________________________________
+UShort_t RBHINPUnpacker::GetBankMB(Int_t xlm, char bank)
+{
+  // --
+  //
+  
+  if(xlm<0 || xlm>fgMaxXLMs) cerr << "-->RBHINPUnpacker::GetBankMB  Invalid xlm " << xlm << endl;
+  else if(bank=='A') return fBankMB[xlm][0];
+  else if(bank=='B') return fBankMB[xlm][1];
+  else cerr << "-->RBHINPUnpacker::GetBankMB  Invalid XLM("
+            << xlm << ") BANK(" << bank << endl;
+  
+  return -1;
+}
+
+
+//______________________________________________________________________________
+UShort_t RBHINPUnpacker::GetBankMBByIndex(Int_t xlm, Int_t bank)
+{
+  // --
+  //
+  
+ // cout << "GetBankMB: " << xlm << " " << bank << " ";
+//  for(Int_t i=0; i<fgMaxXLMs; i++) cout << fBankMB[i][0] << " " << fBankMB[i][1] << " ";
+//  cout << endl;
+  if((bank==0 || bank==1) && xlm>=0 && fnMBs>=2*xlm) return fBankMB[xlm][bank];
+  else cerr << "-->RBHINPUnpacker::GetBankMBByIndex  Invalid XLM("
+            << xlm << ") BANK(" << bank << ")" << endl;
+  
+  return -1;
+}
+
+
+//______________________________________________________________________________
+void RBHINPUnpacker::SetBankMB(Int_t xlm, char bank, Int_t mb)
+{
+  // -- Map the motherboard to a specific XLM BANK.
+  //
+  
+  if(!(bank=='A' || bank=='B') &&
+     xlm>=0 && xlm<=fgMaxXLMs) cerr << "-->RBHINPUnpacker::SetBANKMap  Invalid XLM("
+                                  << xlm << ") BANK(" << bank << endl;
+  else{
+    if(bank == 'A') fBankMB[xlm][0] = mb;
+    if(bank == 'B') fBankMB[xlm][1] = mb;
+  }
+}
+
+
+//______________________________________________________________________________
+RBHINPHit* RBHINPUnpacker::AddHit(Int_t xlm, UShort_t bank, Bool_t mismatch, UShort_t ch,
+                                  UShort_t chip, UShort_t Hi, UShort_t Lo, UShort_t time)
+{
+  // --
+  //
+  
+  RBHINPHit *hit = (RBHINPHit*)fHits->ConstructedAt(fNHits);
+  fNHits++;
+  //  hit->Set(xlm, bank, mismatch, ch, chip, energy, time);
+  hit->Set(xlm, bank, mismatch, ch, chip, Hi,Lo, time);
+  
+  return hit;
+}
+
+
+//______________________________________________________________________________
+Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
+{
+  // -- Unpacker
+  //
+  //
+  //  ------------------------------------
+  // | id 16-bits                         |
+  //  ------------------------------------
+  // | number of words in the bank        |
+  //  ------------------------------------
+  // | number of events                   |
+  //  ------------------------------------
+  // | tag data from XLM1 SRAMa           |
+  // |...                                 |
+  //  ------------------------------------
+  // | number of events                   |
+  //  ------------------------------------
+  // | tag data from XLM1 SRAMb           |
+  // |..                                  |
+  //  ------------------------------------
+  // | 0xfadc                             |
+  //  ------------------------------------
+  // | Mask of read groups                |
+  //  ------------------------------------
+  // | Data from the FADC module group1   |
+  //  ------------------------------------
+  // | 0xaaa                              |
+  //  ------------------------------------
+  // |...                                 |
+  // | Data from the FADC module group2   |
+  // |...                                 |
+  //  ------------------------------------
+  //
+  //
+  
+  Clear();
+
+  cout << "Starting RBHINPUnpacker::Unpack" << endl;
+  
+  UShort_t         xlmID[10];
+  ULong64_t        xlmWordCount[10];
+  ULong64_t        xlmChWordCount[10];
+  ULong64_t        xlmChMismatchWordCount[10];
+  vector<UShort_t> channelIds16[10];
+  vector<UInt_t>   channelIds32[10];
+    
+  // There could be markers defined, such as the HiRA marker.
+  // Skip these and find the XLM ID.
+  // Markers should be unpacked properly elsewhere in the future. . .
+  if(event[offset]==0xb0fe){
+    if(!fFoundBeginMarker) cout << "\n-->RBHINPUnpacker:: Using markers in VMUSB stack.\n";
+    fFoundBeginMarker = kTRUE;
+    offset+=2;
+    
+    //    // Skip to the next begin marker if there is one.
+    //    UInt_t nextXLMWords = getLong(event,offset+1);
+    //    if(nextXLMWords<event.size()){
+    //      if(event[nextXLMWords]==0xb0fe){
+    //        offset = offset + 1 + nextXLMWords + 1;
+    //        if(reportNExtraMarkers%1000==0){
+    //          cerr << "-->RBHINPUnpacker:: Found EXTRA markers!!! Data buffers are ill-defined. "
+    //               << "           (This error will be partially suppressed.)" << endl;
+    //        }
+    //        reportNExtraMarkers++;
+    //      }
+    //      if(event[offset]==0xb0fe){
+    //        nextXLMWords = getLong(event,offset+1);
+    //        if(event[nextXLMWords]==0xb0fe) offset = offset + 1 + nextXLMWords + 1;
+    //      }
+    //    }
+    //    offset+=2;
+  }
+  
+  // Find the first XLM ID.
+  if(event[offset]!=XLM1) cerr << "-->RBHINPUnpacker:: Did not find first XLM ID!" << endl;
+
+  fNUnpackedEvents++;
+  
+  // Loop through the global XLM bank IDs (i.e. the MB/Tower IDs)
+  for(int bank=0; bank<fnMBs; bank++){
+    xlmID[bank]           = event[offset];          offset++;
+    xlmWordCount[bank]    = getLong(event,offset);  offset+=2;
+    xlmChWordCount[bank]  = event[offset];          offset++;
+    
+    fTimestamp[0] = getLong(event, offset);  offset+=2;
+    fTimestamp[1] = getLong(event, offset);  offset+=2;
+    
+    //if(xlmID[bank] != XLMTag[bank]) cerr << "-->RBHINPUnpacker::Unpack  XLM tag was " << xlmID[bank] << endl;
+    
+    //printf("%0.4x %0.4x %0.4x %0.4x %0.4x %0.4x\n",offset,xlmID[bank],xlmWordCount[bank],xlmChWordCount[bank],fTimestamp[0], fTimestamp[1]);
+    
+    // Check that the channel count is sane.
+    // If it is not, then skip the RBHINPUnpacker unpacking of the current
+    // VMUSB buffer.
+    if(xlmChWordCount[bank]>5000){
+      cerr << "-->RBHINPUnpacker:: Error from " << " - "
+      << "Channel count = " << xlmChWordCount[bank] << endl;
+      offset += xlmChWordCount[bank]*2 + 1;
+      return offset;
+    }
+    
+    // Loop over the channels
+    UInt_t remainingWords = xlmWordCount[bank] - 5;
+    for(int ch=0; ch<xlmChWordCount[bank]; ch++){
+      //      channelIds32[bank].push_back(getLong(event,offset));
+      channelIds16[bank].push_back(event[offset]);
+      offset++;
+      remainingWords--;
+    }
+    // Read the remaining words, these should be XLM junk.
+    for(int rWords=0; rWords<remainingWords; rWords++){
+      UShort_t trailWord = event[offset];
+      offset++;
+    }
+    
+    // By default, assume we are using the XLM ADCs
+    // If we are using the XLM ADCs, then unpack them.
+    if(!fUsingSISFADC){
+      // Loop over the channels
+      for(int ch=0; ch<xlmChWordCount[bank]; ch++){
+        channelIds32[bank].push_back(getLong(event, offset));
+        offset += 2;
+      }
+      for(int i=0; i<xlmChWordCount[bank]; i++) {
+        // Get the time data
+        if(offset >= event.size()){
+          cerr << "-->RBHINPUnpacker:: Offset is larger than event buffer size!" << endl;
+          break;
+        }
+        UInt_t time  = getLong(event, offset);
+        offset        += 2;
+        // Get the energy data
+        if (offset >= event.size()){
+          cerr << "-->RBHINPUnpacker:: Offset is larger than event buffer size!" << endl;
+          break;
+        }
+	//        UInt_t energy  = getLong(event, offset);
+	//        UInt_t energy  = getLong(event, offset);
+        offset          += 2;
+        
+        UInt_t channelId = channelIds32[bank][i];
+        UInt_t channel   = channelId & 0x0f;
+        UInt_t chip      = (channelId >> 5) & 0xff;
+      }
+    }
+  }
+  
+  // If we are using SIS FADCs, then unpack them.
+  // The format of the longwords is shown in section 4.34
+  // of the SIS manual.
+  //
+  //  ---------------------------------------------------------------------
+  // | offset address | ADC   1   3   5   7      | ADC   2   4   6   8     |
+  // |                | D31  D30      D29:16     | D15   D14     D13:0     |
+  //  ---------------------------------------------------------------------
+  // | 0x0            |  U  OR bit  14-bit data  |  G  OR bit  14-bit data |
+  // | ..             |                          |                         |
+  // | 0x7fffc        |  U  OR bit  14-bit data  |  G  OR bit  14-bit data |
+  //  ---------------------------------------------------------------------
+  //
+  //
+  if(fUsingSISFADC){
+    // Check that we have a FADC ID
+    if(event[offset] != 0xfadc){
+      cerr << "-->RBHINPUnpacker:: Using FADC but did not find FADC ID! Found " << event[offset] <<endl;
+      cerr.flush();
+      return offset;
+    }
+    offset++;
+    
+    // Read the mask of read groups.
+    // The low order four bits of this 16-bit data word describe which ADC groups are present.
+    // If bit 0 is set, group 1 is present, if bit 1 is set group 2 and so on.
+    fGroupMask = event[offset];  offset++;
+    
+    // Loop over the FADC channels
+    // It is assumed that each XLM bank is matched to it's corresponding FADC channel group.
+    for(Int_t iADC=0; iADC<fnMBs; iADC++){
+      Bool_t mismatch = kFALSE; // XLM/FADC ch mismatch flag
+      
+      UInt_t wordCount = getLong(event, offset); // Group size, not self-inclusive.
+      offset += 2; // move to data
+      
+      // Check that the word count is sane.
+      if(wordCount>1550) {
+        cerr << "-->RBHINPUnpacker:: Error from " << " - wordCount = "
+        << wordCount << endl;
+        wordCount &= 0xfff;
+	//        throw  std::string("bad event discarded.");
+	//throw std::runtime_error("Bad event, discarded with std::runtime.");
+        return offset;
+      }
+      
+      // Check that the word count is sane with the XLM channel count.
+      // The word count should always = the XLM channel count.
+      if (wordCount != xlmChWordCount[iADC]) {
+        xlmChMismatchWordCount[iADC] = xlmWordCount[iADC] - 7 - xlmChWordCount[iADC];
+//        cerr << "-->RBHINPUnpacker:: Event size mismatch XLM " << iADC
+//             << " wordCount = "     << wordCount
+//             << " channelCount = "  << xlmChWordCount[iADC]
+//             << " xlmChMismatch = " << xlmChMismatchWordCount[iADC] << endl;
+        // count mismatches
+        
+        mismatch = kTRUE;
+        
+        //throw  std::string("mismatch event discarded.");
+        //return offset;
+      }
+      
+      // Loop over the FADC words
+      for(int i=0; i<wordCount; i++){
+        // Get the energy and time data.
+        // A bitwise AND is applied to extract the 14-bit value.
+        // !!! Currently E and T are reversed. This should be set using a flag.
+
+	//This is from the old HINP used for e09084 and e10015
+        //UShort_t time    = event[offset] & 0x3fff;  offset++;
+        //UShort_t energy  = event[offset] & 0x3fff;  offset++; energy = 16383 - energy;
+
+	//This is from the new HINPA. There is both a high gain and low gain energy signal
+        uint32_t Hi     = event[offset] & 0x3fff;
+	offset += 1;
+	uint32_t Lo     = event[offset] & 0x3fff;
+	offset += 1;
+	uint32_t time  = event[offset] & 0x3fff;
+        offset += 1;
+	
+
+        
+        if(i<channelIds16[iADC].size()){
+          UShort_t channelId = channelIds16[iADC][i];
+          UInt_t channel   = channelId & 0x0f;        // Lower 4 bits are the channel
+          UInt_t chip      = (channelId >> 5) & 0xff; // 8 bits for chip ID
+          
+          Int_t bank = iADC%2; // iADC is the global bank ID, bank is the local XLM bank.
+          Int_t xlm  = (iADC-iADC%2)/2;
+	  //if (xlm == 0 && bank == 0 && (chip == 13 || chip == 14) ){cout << "I found Tele 5! chip is " << chip << endl;}
+	  //          AddHit(xlm, bank, mismatch, channel, chip, energy, time);
+          AddHit(xlm, bank, mismatch, channel, chip, Hi, Lo, time);
+        }
+//        // Validate chip ID
+//        if (chip > 0 && chip <= numChips) {
+//          CTreeParameterArray** pChipTree = myParameters[iADC][chip-1];
+//          CTreeParameterArray*  pEs       = pChipTree[0];
+//          CTreeParameterArray*  pTs       = pChipTree[1];
+//          
+//          (*pEs)[channel] = energy;
+//          (*pTs)[channel] = time;
+//        }
+      }
+
+      // Check that we found the FADC trailer
+      if(event[offset]!=0xaaaa){
+        cerr << "RBHINPUnpacker:: Did not find FADC trailer for bank = " << iADC
+        << ", found " << event[offset] << endl;
+      }
+      offset++;
+    }
+  }
+  
+  return offset;
+}

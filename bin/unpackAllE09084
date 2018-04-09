@@ -1,0 +1,12 @@
+hi=$2
+low=$1
+for i in `seq $low $hi`
+do
+echo $i
+#nohup sleep 10 &>> /dev/null &
+#echo "done"
+nohup nice /projects/e09084/ribbit/bin/unpack $i &>> junk.out 
+echo "Behold, the unpacketh is come">junk.dat	
+done
+mail -s "Done with $low through $hi" manfredi@nscl.msu.edu < junk.dat
+exit
