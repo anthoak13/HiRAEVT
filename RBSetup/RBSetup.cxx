@@ -11,18 +11,13 @@
 #include "RBPh7xxUnpacker.h"
 #include "RBCAEN7xxUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
-#include "RBHiRA.h"
-#include "RBMcpTrack.h"
-#include "RBNeutronWall.h"
-#include "RBMicroball.h"
-#include "RBForwardArray.h"
 #include "RBSisTimestampUnpacker.h"
 
 //#include "MCPSettings.C"
 
 //______________________________________________________________________________
 RBSetup::RBSetup(){
-  
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 // ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
 //                                GENERAL SETUP                                          //
@@ -32,7 +27,7 @@ RBSetup::RBSetup(){
   // Set the setup name and title.
   SetName ("testBeamSetup");
   SetTitle("NSCL experiment 15190");
-  
+
   // Instantiate a new RBExperiment object.
   fExperiment = new RBExperiment("NE");
   // Initialize data members.
@@ -40,7 +35,7 @@ RBSetup::RBSetup(){
   fExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190/experiment/");//TEMPORARY
   fExperiment->SetRootFilePath    ("/mnt/analysis/e15190/rootfilesMerged/");//TEMPORARY
   fExperiment->SetExperimentNumber("15190");
-  
+
   //HiRA Stack
   RBSisTimestampUnpacker *timestamp1 = new RBSisTimestampUnpacker("timestamp1");
   RBHINPUnpacker *hinp = new RBHINPUnpacker("hinp",2,kFALSE);
@@ -60,15 +55,7 @@ RBSetup::RBSetup(){
   // Register electronics which should/can be unpacked as raw channels.
   // If adding electronics to a USBStack, the order matters unless directly specified
   // as an optional argument when calling AddToStack().
-  
-  // Set pedestal parameters
-  MBqdc1->SetPedestals("/projects/e15190/input-files/MBqdc1_20180210.ped"); //TEMPORARY
-  MBqdc2->SetPedestals("/projects/e15190/input-files/MBqdc2_20180210.ped"); //TEMPORARY
-  MBqdc3->SetPedestals("/projects/e15190/input-files/MBqdc3_20180210.ped"); //TEMPORARY
-  MBqdc4->SetPedestals("/projects/e15190/input-files/MBqdc4_20180210.ped"); //TEMPORARY
-  MBqdc5->SetPedestals("/projects/e15190/input-files/MBqdc5_20180210.ped"); //TEMPORARY
-  MBqdc6->SetPedestals("/projects/e15190/input-files/MBqdc6_20180210.ped"); //TEMPORARY
-  
+
   RBUSBStack *hiraStack = new RBUSBStack();
   hiraStack->AddStack();
   // Usage: AddToStack(<stackNum>, <slot>, <modulePtr>)
@@ -95,7 +82,7 @@ RBSetup::RBSetup(){
   hiraStack->SetBranchName("HiRA Stack");
 
   fExperiment->RegisterElectronics(hiraStack);
-  
+
   //NWVW Stack
   // Define the modules in the VME crate that are used in the VMUSB stack.
   RBSisTimestampUnpacker *timestamp2 = new RBSisTimestampUnpacker("timestamp2");
@@ -107,23 +94,12 @@ RBSetup::RBSetup(){
   RBCAEN7xxUnpacker  *qdc6 = new RBCAEN7xxUnpacker ("qdc6");    // Slot 10
   //  RBCAEN1x90Unpacker *NWTDC = new RBCAEN1x90Unpacker("NWTDC",1,96,128,0.1);//Slot 12
   RBCAEN1x90Unpacker *NWTDC = new RBCAEN1x90Unpacker("NWTDC",1,104,128,0.1);//Slot 12
-  RBCAEN7xxUnpacker  *qdc7 = new RBCAEN7xxUnpacker ("qdc7");   
+  RBCAEN7xxUnpacker  *qdc7 = new RBCAEN7xxUnpacker ("qdc7");
   RBCAEN7xxUnpacker  *qdc8 = new RBCAEN7xxUnpacker ("qdc8");
   //  RBCAEN1x90Unpacker *VWTDC = new RBCAEN1x90Unpacker("VWTDC",1,1,128,0.1);//Slot 14
   RBCAEN1x90Unpacker *VWTDC = new RBCAEN1x90Unpacker("VWTDC",1,8,128,0.1);//Slot 14
-  RBCAEN7xxUnpacker  *qdcfart = new RBCAEN7xxUnpacker ("qdcfart");   
-    
-  // Set pedestal parameters
-  qdc1->SetPedestals("/projects/e15190/input-files/qdc1_20180210.ped"); //TEMPORARY
-  qdc2->SetPedestals("/projects/e15190/input-files/qdc2_20180210.ped"); //TEMPORARY
-  qdc3->SetPedestals("/projects/e15190/input-files/qdc3_20180210.ped"); //TEMPORARY
-  qdc4->SetPedestals("/projects/e15190/input-files/qdc4_20180210.ped"); //TEMPORARY
-  qdc5->SetPedestals("/projects/e15190/input-files/qdc5_20180210.ped"); //TEMPORARY
-  qdc6->SetPedestals("/projects/e15190/input-files/qdc6_20180210.ped"); //TEMPORARY
-  qdc7->SetPedestals("/projects/e15190/input-files/qdc7_20180210.ped"); //TEMPORARY
-  qdc8->SetPedestals("/projects/e15190/input-files/qdc8_20180210.ped"); //TEMPORARY
-  qdcfart->SetPedestals("/projects/e15190/input-files/qdcfart_20180217.ped"); //TEMPORARY
-  
+  RBCAEN7xxUnpacker  *qdcfart = new RBCAEN7xxUnpacker ("qdcfart");
+
   // Register electronics which should/can be unpacked as raw channels.
   // If adding electronics to a USBStack, the order matters unless directly specified
   // as an optional argument when calling AddToStack().
@@ -150,283 +126,14 @@ RBSetup::RBSetup(){
   //The VMUSB stack is the only thing in the electronics list. All of the modules are part
   //of the stack and are unpacked in RBUSBStack::Unpackz
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-//                                DETECTOR BUILDING                                      //
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-///////////////////////////////////////////////////////////////////////////////////////////
-  
-  // Register detectors that are in the setup.
-  // For any detector systems that rely on unpacking from defined electronics modules,
-  // assign those modules to the detectors. The assignment will depend on what is
-  // implemented in the detector's "AssignModule" method.
-  
-  // ====== HiRA ==========================================================================================
-  //
-  //hira->AssignModule(<MB ID>, <module pointer>)
-
-  //NOTE ON MB NUMBERS!
-  //The code counts MB numbers from 0 while us humans counted them from 1, so REMEMBER:
-  //MB1 = 0
-  //MB2 = 1
-  //MB3 = 2
-  //MB4 = 3
-
-
-  RBHiRA *hira = new RBHiRA(12);  // Create the HiRA array, specifying the number of teles.
-
-  hira->SetNMBs(2);
-  hira->AssignModule(0,hinp);
-  hinp->SetBankMB(0,'A',0); // Assign XLM1, BANK A to MB1
-  hinp->SetBankMB(0,'B',1); // Assign XLM1, BANK B to MB2
-
-  hira->GetTelescope(0)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(1)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(2)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(3)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(4)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(5)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(6)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(7)->GetCsI()->AssignModule(adc1);
-  hira->GetTelescope(8)->GetCsI()->AssignModule(adc2);
-  hira->GetTelescope(9)->GetCsI()->AssignModule(adc2);
-  hira->GetTelescope(10)->GetCsI()->AssignModule(adc2);
-  hira->GetTelescope(11)->GetCsI()->AssignModule(adc2);
-
-  hira->SetFillData(kTRUE);
-
-  // ====== Neutron Wall ==================================================================================
-  //
-  RBNeutronWall* neutronWall = new RBNeutronWall();
-  
-  //______________________________________________________________________________
-  // Neutron Wall Module assignment
-  neutronWall->AssignModule(0,qdc1);
-  neutronWall->AssignModule(0,qdc2);
-  neutronWall->AssignModule(0,qdc3);
-  neutronWall->AssignModule(0,qdc4);
-  neutronWall->AssignModule(0,qdc5);
-  neutronWall->AssignModule(0,qdc6);
-  neutronWall->AssignModule(0,qdc7);
-  neutronWall->AssignModule(0,qdc8);
-  neutronWall->AssignModule(1,NWTDC);
-  neutronWall->AssignModule(1,VWTDC);
-  
-  //______________________________________________________________________________
-  // Enable Neutron Wall
-  neutronWall->SetFillData(kTRUE);
-  //______________________________________________________________________________
-  // Enable Neutron Wall Analysis
-  neutronWall->SetAnalysisEnabled(kTRUE);
-  //______________________________________________________________________________
-  // Define Neutron Wall data output
-  neutronWall->SetAnalysisTree(kTRUE);  
-  neutronWall->SetRawDataTree(kTRUE);
-  neutronWall->SetPhysicsTree(kFALSE); //not yet implemented
-  
-  // ====== Microball =====================================================================================
-  //
-  RBMicroball* Microball = new RBMicroball();
-  //______________________________________________________________________________
-  // Microball Module assignment 
-  Microball->AssignModule(0,MBqdc1);
-  Microball->AssignModule(0,MBqdc2);
-  Microball->AssignModule(0,MBqdc3);  
-  Microball->AssignModule(0,MBqdc4);  
-  Microball->AssignModule(0,MBqdc5);  
-  Microball->AssignModule(0,MBqdc6);  
-  Microball->AssignModule(1,MBtdc1);  
-  Microball->AssignModule(1,MBtdc2);  
-  Microball->AssignModule(1,MBtdc3);  
-  //______________________________________________________________________________
-  // Enable Microball
-  Microball->SetFillData(kTRUE);
-  //______________________________________________________________________________
-  // Enable Microball Analysis
-  Microball->SetAnalysisEnabled(kFALSE);
-  //______________________________________________________________________________
-  // Define Microball data output
-  Microball->SetAnalysisTree(kTRUE);  
-  Microball->SetRawDataTree(kTRUE);
-  Microball->SetPhysicsTree(kFALSE); //not yet implemented
-  
-  // ====== Forward Array =================================================================================
-  //
-  RBForwardArray* ForwardArray = new RBForwardArray();
-  //______________________________________________________________________________
-  // Forward Array Module assignment 
-  ForwardArray->AssignModule(0,qdcfart);
-  ForwardArray->AssignModule(1,VWTDC);
-  //______________________________________________________________________________
-  // Enable Forward Array
-  ForwardArray->SetFillData(kTRUE);
-  //______________________________________________________________________________
-  // Enable Forward Array Analysis
-  ForwardArray->SetAnalysisEnabled(kFALSE);
-  //______________________________________________________________________________
-  // Define Forward Array data output
-  ForwardArray->SetAnalysisTree(kTRUE);  
-  ForwardArray->SetRawDataTree(kTRUE);
-  ForwardArray->SetPhysicsTree(kFALSE); //not yet implemented  
-  
-  
-///////////////////////////////////////////////////////////////////////////////////////////
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-//                     DETECTOR FILLING AND REGISTERING                                  //
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-///////////////////////////////////////////////////////////////////////////////////////////
-  
-  //______________________________________________________________________________
-  // Set the built data merged IDs.
-  hiraStack->SetMergedID(0);
-  NWStack->SetMergedID(1);
-  //______________________________________________________________________________
-  // Define components to be filled.
-  timestamp1 ->SetFillData(kTRUE);
-  hinp       ->SetFillData(kTRUE);
-  adc1       ->SetFillData(kTRUE);
-  adc2       ->SetFillData(kTRUE);
-  ATqdc      ->SetFillData(kTRUE);  
-  MBqdc1     ->SetFillData(kTRUE);
-  MBqdc2     ->SetFillData(kTRUE);
-  MBqdc3     ->SetFillData(kTRUE);
-  MBqdc4     ->SetFillData(kTRUE);
-  MBqdc5     ->SetFillData(kTRUE);
-  MBqdc6     ->SetFillData(kTRUE);
-  MBtdc1     ->SetFillData(kTRUE);
-  MBtdc2     ->SetFillData(kTRUE);
-  MBtdc3     ->SetFillData(kTRUE);
-  timestamp2 ->SetFillData(kTRUE);
-  qdc1       ->SetFillData(kTRUE);
-  qdc2       ->SetFillData(kTRUE);
-  qdc3       ->SetFillData(kTRUE);
-  qdc4       ->SetFillData(kTRUE);
-  qdc5       ->SetFillData(kTRUE);
-  qdc6       ->SetFillData(kTRUE);
-  qdc7       ->SetFillData(kTRUE);
-  qdc8       ->SetFillData(kTRUE);
-  NWTDC      ->SetFillData(kTRUE);
-  VWTDC      ->SetFillData(kTRUE);
-  //______________________________________________________________________________
-  // Register detectors.
-  fExperiment->RegisterDetector(hira);
-  fExperiment->RegisterDetector(neutronWall);
-  fExperiment->RegisterDetector(Microball);
-  fExperiment->RegisterDetector(ForwardArray);
-  
-  // Define our event builder sources.
-  // VMUSBSource->Add(NWStack);
-
   //______________________________________________________________________________
   // Now initialize the class.
   // NOTE:  We must do this before we initialize the scaler section.
   printf("---------------- Initializing Classes ------------------------------------\n");
   fExperiment->InitClass();
   printf("--------------------------------------------------------------------------\n\n\n");
-    
-///////////////////////////////////////////////////////////////////////////////////////////
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-//                           DETECTOR CHANNEL MAPPINGS                                   //
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-///////////////////////////////////////////////////////////////////////////////////////////
-
-  // ====== Neutron Wall ==================================================================================
-  //______________________________________________________________________________
-  // Neutron Wall electronics mapping
-  neutronWall->SetSignalMapNWALeft ("/projects/e15190/input-files/NWALeft.map");  //TEMPORARY
-  neutronWall->SetSignalMapNWARight("/projects/e15190/input-files/NWARight.map"); //TEMPORARY
-  neutronWall->SetSignalMapNWBLeft ("/projects/e15190/input-files/NWBLeft.map");  //TEMPORARY
-  neutronWall->SetSignalMapNWBRight("/projects/e15190/input-files/NWBRight.map"); //TEMPORARY
-  //______________________________________________________________________________
-  // Veto Wall electronics mapping  
-  neutronWall->SetSignalMapVWTop   ("/projects/e15190/input-files/VWTop.map");    //TEMPORARY  
-  neutronWall->SetSignalMapVWBottom("/projects/e15190/input-files/VWBottom.map"); //TEMPORARY
-
-  // ====== Microball =====================================================================================
-  //______________________________________________________________________________
-  // Microball electronics mapping
-  Microball->SetSignalMap ("/projects/e15190/input-files/Microball_20180212.map"); //TEMPORARY
-
-  // ====== Forward Array =================================================================================
-  //______________________________________________________________________________
-  // Microball electronics mapping
-  ForwardArray->SetSignalMap ("/projects/e15190/input-files/ForwardArray_20180213.map"); //TEMPORARY
-  
-  // ====== MCP ===========================================================================================
-  // An integer matrix is used to map the corner signals to the correct
-  // channel of the electronics module given by,
-  //   {corner, module, ch}
-  // where corner = 0-3 corresponds to the first gain stage,
-  //       corner = 4-7 corresponds to the second gain stage, and so on ...
-
-  
-  // ====== HiRA ==========================================================================================
-  // Mapping for each telescope face to its HINP chips.
-  // This will also set the telescope ID
-  // FORMAT: ( MB, SLOT, CB, TELEID, SiFACE )
-
-  // Maps for 09084 taken from /mnt/analysis/e09084/home/Development/SpecTcl_Merged/input-files
-  // ChipTeleMap09084.dat and AdcCsiMap09084.dat (ADC modules specified above for each telescope)
-
-  hira->GetTelescope( 0)->SetChipTeleMap(0,1, 1, 5,"eb"); hira->GetTelescope(0)->SetCsIMap( 0, 1, 2, 3);
-  hira->GetTelescope( 0)->SetChipTeleMap(0,2, 2, 5,"ef");
-
-  hira->GetTelescope( 1)->SetChipTeleMap(0, 3, 3, 9,"eb"); hira->GetTelescope(1)->SetCsIMap( 4, 5, 6, 7);
-  hira->GetTelescope( 1)->SetChipTeleMap(0, 4, 4, 9,"ef");
-
-  hira->GetTelescope( 2)->SetChipTeleMap(0, 5, 5, 15,"eb"); hira->GetTelescope(2)->SetCsIMap( 8, 9,10,11);
-  hira->GetTelescope( 2)->SetChipTeleMap(0, 6, 6, 15,"ef");
-
-  hira->GetTelescope( 3)->SetChipTeleMap(0, 7, 7, 6,"eb");
-  hira->GetTelescope( 3)->SetChipTeleMap(0, 8, 8, 6,"ef"); hira->GetTelescope(3)->SetCsIMap(12,13,14,15);
-
-  hira->GetTelescope( 4)->SetChipTeleMap(0,9, 9, 13,"eb");
-  hira->GetTelescope( 4)->SetChipTeleMap(0,10,10, 13,"ef"); hira->GetTelescope(4)->SetCsIMap(16,17,18,19);
-
-
-  hira->GetTelescope( 5)->SetChipTeleMap(0,11, 11, 8,"eb");
-  hira->GetTelescope( 5)->SetChipTeleMap(0,12, 12, 8,"ef"); hira->GetTelescope(5)->SetCsIMap(20,21,22,23);
-
-  hira->GetTelescope( 6)->SetChipTeleMap(1, 1, 1,12,"eb");
-  hira->GetTelescope( 6)->SetChipTeleMap(1, 2, 2,12,"ef"); hira->GetTelescope(6)->SetCsIMap(24,25,26,27);
-
-  hira->GetTelescope( 7)->SetChipTeleMap(1, 3, 3,14,"eb");
-  hira->GetTelescope( 7)->SetChipTeleMap(1, 4, 4,14,"ef"); hira->GetTelescope(7)->SetCsIMap(28,29,30,31);
-
-  hira->GetTelescope( 8)->SetChipTeleMap(1, 5, 5,1,"eb");
-  hira->GetTelescope( 8)->SetChipTeleMap(1, 6, 6,1,"ef"); hira->GetTelescope(8)->SetCsIMap( 0, 1, 2, 3);
-
-  hira->GetTelescope( 9)->SetChipTeleMap(1, 7, 7, 7,"eb");
-  hira->GetTelescope( 9)->SetChipTeleMap(1, 8, 8, 7,"ef"); hira->GetTelescope(9)->SetCsIMap( 4, 5, 6, 7);
-
-  hira->GetTelescope(10)->SetChipTeleMap(1,9, 9,10,"eb");
-  hira->GetTelescope(10)->SetChipTeleMap(1,10,10,10,"ef"); hira->GetTelescope(10)->SetCsIMap(8,9,10,11);
-
-  hira->GetTelescope(11)->SetChipTeleMap(1,9, 11, 11,"eb");
-  hira->GetTelescope(11)->SetChipTeleMap(1,10, 12, 12,"ef"); hira->GetTelescope(11)->SetCsIMap(12,13,14,15);
-
-  
-///////////////////////////////////////////////////////////////////////////////////////////
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-//                           DETECTOR CALIBRATION PARAMETERS                             //
-// ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo00000ooooo //
-///////////////////////////////////////////////////////////////////////////////////////////
-
-  // ====== Neutron Wall ==================================================================================
-  
-  //______________________________________________________________________________
-  // Neutron Wall Time calibration
-  neutronWall->SetCalibrationParTime ("/projects/e15190/input-files/NWTime.calib");  //TEMPORARY
-  
-  // ====== Forward Array =================================================================================
-  
-  //______________________________________________________________________________
-  // Forward Array calibration
-  ForwardArray->SetAnalysis(kTRUE); //enable detector analysis (i.e. calibrations and so on)  
 }
 
 RBSetup::~RBSetup(){
   delete fExperiment;
 }
-
-

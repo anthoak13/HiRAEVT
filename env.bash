@@ -9,9 +9,9 @@ export ROOTSYS='/mnt/misc/sw/x86_64/Debian/8/root/gnu/5.34.32'
 export LD_LIBRARY_PATH=$ROOTSYS/lib/root:$LD_LIBRARY_PATH:./
 
 #Set environmental variables for ribbit
-export RIBbitSRC=/projects/e15190/ribbitMerged
-export RIBbitLIB=/projects/e15190/ribbitMerged/lib
-export RIBbitBIN=/projects/e15190/ribbitMerged/bin
+export RIBbitSRC=/projects/hira/Daniele/RIBbit2-dev
+export RIBbitLIB=/projects/hira/Daniele/RIBbit2-dev/lib
+export RIBbitBIN=/projects/hira/Daniele/RIBbit2-dev/bin
 export RIBbitDAQROOT=/usr/opt/nscldaq/current
 export DAQROOT=/usr/opt/nscldaq/current
 

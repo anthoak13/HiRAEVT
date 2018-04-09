@@ -60,7 +60,7 @@ static const UInt_t INVALID(6);
 
 /*!
  Construction is a no-op.
- 
+
  */
 //RBCAEN7xxUnpacker::RBCAEN7xxUnpacker() {}
 
@@ -69,14 +69,14 @@ static const UInt_t INVALID(6);
  */
 //______________________________________________________________________________
 RBCAEN7xxUnpacker::RBCAEN7xxUnpacker(const char *chName)
-:fChName(chName),fnCh(32),fPedestalSuppression(0),fTotalUnpackedCount(0),fOverflowCount(0),fVSNMismatchCount(0)
+:fChName(chName),fnCh(32),fTotalUnpackedCount(0),fOverflowCount(0),fVSNMismatchCount(0)
 {
   // --
   //
-  
+
   SetEnabled(kTRUE);
   SetFillData(kTRUE);
-  
+
   SetBranchName(chName);
 
   Clear();
@@ -90,9 +90,8 @@ RBCAEN7xxUnpacker::~RBCAEN7xxUnpacker() {}
 //______________________________________________________________________________
 void RBCAEN7xxUnpacker::Clear(Option_t *option)
 {
-   for(int i=0; i<fnCh; i++)
-   {
-     fData[i]=-9999; 
+   for(int i=0; i<fnCh; i++) {
+     fData[i]=-9999;
    }
 }
 
@@ -132,17 +131,17 @@ void RBCAEN7xxUnpacker::InitTree(TTree *tree)
  skip out without doing anything.
  - For all data words, until we see a non data word;
  extract the data -> the parameter index indicated by our parameter map.
- 
+
  \param rEvent  - The event we are unpacking.
  \param event   - References the vector containing the assembled event
  (the internal segment headers have been removed).
  \param offset  - Index in event to our chunk.
  \param pMap    - Pointer to our parameter map.  This contains our VSN and map of channel->
  parameter id (index in rEvent).
- 
+
  \return unsigned int
  \retval offset to the first word of the event not processed by this member.
- 
+
  \note - Overflow and Underflow parameters are not transferred to parameters.
  \note - the data are in little-endian form.
  */
@@ -150,10 +149,10 @@ void RBCAEN7xxUnpacker::InitTree(TTree *tree)
 Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 {
   Clear();
-  
-  // DEBUG 
+
+  // DEBUG
 //   printf("called RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)\n");
-  
+
   // Get the 'header' .. ensure that it is one and that it matches our VSN.
   unsigned long header;
   int           vsn = -1;
@@ -171,40 +170,40 @@ Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
   // Ok this is our data:
   offset += 2;			// Next longword..
-  
-  
+
+
   // I've seen cases where all I get is a _trailer_.. in that case
   // we're done so skip the analysis:
   if (((header & ALLH_TYPEMASK) >> ALLH_TYPESHIFT) != TRAILER) {
     unsigned long datum   = getLong(event, offset);
     offset += 2;			// skip even if its not a data long as it's a trailer then.
-    
+
     while (((datum & ALLH_TYPEMASK) >> ALLH_TYPESHIFT) == DATA) {
       bool underflow = (datum & DATAL_UNBIT) != 0;
       bool overflow  = (datum & DATAL_OVBIT) != 0;
 
       fTotalUnpackedCount++;
-      
+
       //Edited by JJM May 2016
-      //Adjusting treatment of overflow events 
+      //Adjusting treatment of overflow events
       if (!underflow) {
 	if (!overflow) {
 	  int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
 	  int value   = datum & DATAL_DATAMASK;
 	  fData[channel] = value;
-          
+
 //           printf("setting %d channel to %d value\n",channel, value);
 //           printf("the value was %lu\n",datum & DATAL_DATAMASK);
-          
+
 	  //	  cout << value << " ";
 	} else {
 	  fOverflowCount++;
 	  int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
 	  int value   = 4096;
 	  fData[channel] = value;
-          
+
 //           printf("setting %d channel to %d value\n",channel, value);
-          
+
 	  //	  cout << value << " ";
 	}
       }
@@ -220,18 +219,13 @@ Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
     }
     offset -= 2;		// Don't count the non trailer longword.
   }
-  
+
   // An extra 32 bits of 0xffffffff was read if not in a chain or if at
   // end of chain:
   if (getLong(event, offset) == 0xffffffff) {
     offset += 2;
   }
 
-  // Pedestal suppression
-  if (fPedestalSuppression) {
-    SuppressPedestals(); 
-  }
-  
   return offset;
 }
 
@@ -240,34 +234,8 @@ Int_t RBCAEN7xxUnpacker::DecodeVSN(Int_t header)
 {
   // --
   //
-  
+
   return ((header & ALLH_GEOMASK) >> ALLH_GEOSHIFT);
-}
-
-//______________________________________________________________________________
-Int_t RBCAEN7xxUnpacker::SetPedestals(const char * file_name)
-{
-  fPedManager=(RBPedestalManager *)new RBPedestalManager(file_name,fnCh);
-  if(!fPedManager->IsSet()) {
-    printf("%s : Error while reading pedestal file %s\n", fChName.Data(), file_name); 
-    return -1;
-  }
-
-  printf("%s : Read pedestal file %s\n", fChName.Data(), file_name);
-  SetPedestalSuppression(kTRUE);
-  return 0;  
-}
-
-//______________________________________________________________________________
-void RBCAEN7xxUnpacker::SuppressPedestals()
-{
-  for(int i=0; i<fnCh; i++)
-  {
-    if(fData[i]<fPedManager->GetPedestalValue(i)) fData[i]=-9999; 
-    else if (fData[i]<4096) fData[i]-=fPedManager->GetPedestalValue(i);
-  }
-  
-  return;
 }
 
 //______________________________________________________________________________

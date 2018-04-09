@@ -31,19 +31,18 @@ extern void G__set_cpp_environmentRBElectronicsDict();
 
 #include "TObject.h"
 #include "TMemberInspector.h"
-#include "RBCCUSBPacket.h"
 #include "RBElectronics.h"
-#include "RBUSBStack.h"
-#include "RBCAEN7xxUnpacker.h"
+#include "RBPedestalManager.h"
 #include "RBSisTimestampUnpacker.h"
 #include "RBHINPUnpacker.h"
-#include "RBSIS330xUnpacker.h"
+#include "RBCCUSBPacket.h"
+#include "RBCAEN7xxUnpacker.h"
 #include "RBUSBStackMarker.h"
 #include "RBTimestamp.h"
 #include "RBPh7xxUnpacker.h"
+#include "RBUSBStack.h"
 #include "RBModuleUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
-#include "RBPedestalManager.h"
 #include <algorithm>
 namespace std { }
 using namespace std;
@@ -63,23 +62,22 @@ extern G__linked_taginfo G__RBElectronicsDictLN_TList;
 extern G__linked_taginfo G__RBElectronicsDictLN_TClonesArray;
 extern G__linked_taginfo G__RBElectronicsDictLN_vectorlETVirtualArraymUcOallocatorlETVirtualArraymUgRsPgR;
 extern G__linked_taginfo G__RBElectronicsDictLN_reverse_iteratorlEvectorlETVirtualArraymUcOallocatorlETVirtualArraymUgRsPgRcLcLiteratorgR;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBCCUSBPacket;
 extern G__linked_taginfo G__RBElectronicsDictLN_iteratorlEbidirectional_iterator_tagcOTObjectmUcOlongcOconstsPTObjectmUmUcOconstsPTObjectmUaNgR;
 extern G__linked_taginfo G__RBElectronicsDictLN_TTree;
 extern G__linked_taginfo G__RBElectronicsDictLN_TBranch;
 extern G__linked_taginfo G__RBElectronicsDictLN_maplEstringcOTObjArraymUcOlesslEstringgRcOallocatorlEpairlEconstsPstringcOTObjArraymUgRsPgRsPgR;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBElectronics;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBModuleUnpacker;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBTimestamp;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackMarker;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStack;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackcLcL_StackInfo;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBPedestalManager;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBCAEN7xxUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBSisTimestampUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBHINPHit;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBHINPUnpacker;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBCCUSBPacket;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBCAEN7xxUnpacker;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackMarker;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBTimestamp;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBPh7xxUnpacker;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStack;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackcLcL_StackInfo;
 extern G__linked_taginfo G__RBElectronicsDictLN_TRandom3;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBCAEN1x90Unpacker;
 

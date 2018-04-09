@@ -1,6 +1,6 @@
 //
 //  RBExperiment.cpp
-//  
+//
 //
 //  Created by Andrew Rogers on 4/21/14.
 //  Modified by Juan Manfredi
@@ -28,8 +28,6 @@
 
 ClassImp(RBExperiment);
 ClassImp(RBNSCLBufferHeader);
-//ClassImp(RBA1900)
-//ClassImp(RBDetector);
 
 ////////////////////////////////////////////////////////////////////////////////
 /* BEGIN_HTML
@@ -38,9 +36,9 @@ ClassImp(RBNSCLBufferHeader);
  For example there is a class that represents HiRA (RBHiRA) and the
  S800 (RBS800).  An instance of  these classes is then instanciated in
  RBExperiment.</p>
- 
+
  <p>RBExperiment is then a contruct that describes the entire experiment.   </p
- 
+
  <p>Run information can be displayed using the command,
  tree->GetUserInfo()->Print()
  This information can also be stored and used in any processing
@@ -50,12 +48,12 @@ ClassImp(RBNSCLBufferHeader);
  ch = (Char_t*)tree->GetUserInfo->FindObject("Pauses")->GetTitle();
  </p>
  <h3><a name="unpack">I. Unpacking</a></h3>
- 
+
  <h3><a name="vars">II. Important Data Members</a></h3>
- 
+
  <h3><a name="examples">III. Examples</a></h3>
- 
- 
+
+
  END_HTML */
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -70,15 +68,12 @@ RBExperiment::RBExperiment(const char *name)
   //              MyClass::Class()->IgnoreTObjectStreamer();
   // This will save, in some cases, a significant amount of disk space when
   // writing a root file.
-  
+
   fName = name;
-  
+
   // Create the electronics list.
   fElectronics = new TList();
 
-  // Create the detector list.
-  fDetectors = new TList();
-  
   RBNSCLBufferHeader::Class()->IgnoreTObjectStreamer();
 //#ifdef RBA1900CLASS_FLAG
 ////  A1900::Class()->IgnoreTObjectStreamer();
@@ -98,7 +93,7 @@ RBExperiment::RBExperiment(const char *name)
   TScalerCh::Class()->IgnoreTObjectStreamer();
   scalers = new TScaler();
 #endif
-  
+
   // Allocate memory for objects that will be written to UserInfo list.
   analysisState       = new TNamed("Analysis State","-1");
   expNumber           = new TNamed("Experiment Number","unknown");
@@ -113,7 +108,7 @@ RBExperiment::RBExperiment(const char *name)
   nPauses             = new TNamed("Pauses","-1");
   nResumes            = new TNamed("Resumes","-1");
   nBuffers            = new TNamed("Number of buffers read","-1");
-  
+
   nTotalEntities      = new TNamed("Total Entity Count","-1");
   nTotalType1Entities = new TNamed("Total Type1 (Data) Entity Count","-1");
   nTotalWords         = new TNamed("Total Word Count","-1");
@@ -124,24 +119,24 @@ RBExperiment::RBExperiment(const char *name)
   avgType1WordRate    = new TNamed("Average Type1 (Data) Word Rate","-1");
   evtSize             = new TNamed("Event File Size","-1");
   rootSize            = new TNamed("ROOT File Size","-1");
-  
-  
+
+
   evtFilePath  = "./";
   rootFilePath = "./";
-  
-  // Allocate memory for detector classes.
+
+  // Allocate memory for detector classes. (?)
   header = new RBNSCLBufferHeader();
 
   //Set merged data flag (taken from Andy's code Aug 19 2016)
   SetMergedData(kFALSE);
-  
+
   // By default do not fill anything.
   kA1900Fill   = kFALSE;
   kS800Fill    = kFALSE;
   kEpicsFill   = kFALSE;
   kScalerFill  = kFALSE;
   kElogFill    = kFALSE;
- 
+
 }
 
 
@@ -150,7 +145,7 @@ RBExperiment::~RBExperiment()
 {
   // --  Destructor
   //
-  
+
   delete header;
 #ifdef EPICSCLASS_FLAG
   delete epics;
@@ -163,20 +158,10 @@ RBExperiment::~RBExperiment()
 //______________________________________________________________________________
 RBElectronics* RBExperiment::RegisterElectronics(RBElectronics *elc)
 {
-  // -- Register and add the detector to the list of detectors.
-  
+  // -- Register and add the electronic module to the list of modules (fElectronics).
+
   fElectronics->AddLast(elc);
   return elc;
-}
-
-
-//______________________________________________________________________________
-RBDetector* RBExperiment::RegisterDetector(RBDetector *det)
-{
-  // -- Register and add the detector to the list of detectors.
-  
-  fDetectors->AddLast(det);
-  return det;
 }
 
 //______________________________________________________________________________
@@ -184,21 +169,17 @@ void RBExperiment::Clear(Option_t *option)
 {
   // -- Clear all member classes.
   //
-  
+
   fBRI_Size      = 0;
   fBRI_Timestamp = 0;
-  
+
   header->Clear();
-  
+
   TIter nextModule(fElectronics);
   while(RBElectronics* elc = (RBElectronics*)nextModule()){
     elc->Clear(option);
   }
-  TIter nextDet(fDetectors);
-  while(RBDetector* det = (RBDetector*)nextDet()){
-    det->Clear(option);
-  }
-  
+
 #ifdef EPICSCLASS_FLAG
   if(kEpicsFill)  epics->Clear();
 #endif
@@ -215,11 +196,6 @@ void RBExperiment::CreateFolders()
   // run information . . . among other things.
   //
   // This method should call all sub-class CreateFolders methods.
-  
-  f_constants.SetNameTitle("Constants","CONSTANTS");
-  
-  f_constants.Write();
-  
 }
 
 //______________________________________________________________________________
@@ -227,12 +203,12 @@ void RBExperiment::SetRunInfo(RBRingStateChangeItem *stateItem)
 {
   // --
   //
-  
+
   Char_t   cBuf[200];
   sprintf(cBuf,"%u",stateItem->GetRunNumber());
   runNumber->SetTitle(cBuf);
   runTitle->SetTitle(stateItem->GetRunTitle());
-  
+
   struct tm *tptr;
   time_t tstamp(stateItem->GetTimestamp());
   tptr = gmtime(&tstamp);
@@ -248,12 +224,12 @@ void RBExperiment::DumpClassInfo()
 {
   // -- Output of currently built and fillable classes.
   //
-  
+
   printf("**********************DUMPING CLASS MEMBERS INFO*****************************\n");
-  
+
   Bool_t kBuilt=kFALSE;
-  
-  
+
+
 #ifdef EPICSCLASS_FLAG
   kBuilt=kTRUE;
 #endif
@@ -269,7 +245,7 @@ void RBExperiment::DumpClassInfo()
 #endif
   printf("* TElog Class Built . . .      [%u] \t Filled . . . [%u]\n",kBuilt,kElogFill);
   kBuilt=kFALSE;
-  
+
 }
 
 
@@ -280,12 +256,12 @@ void RBExperiment::DumpInfo()
   // This output should include all information in the UserInfoList of the current TTree.
   // In addition scaler values are output along with any quantities calculated with these
   // values.
-  
+
   ofstream dumpFile("RUNDUMP.dat",ios::out);
   Char_t outC[2000];
-  
+
   printf("***************************DUMPING RUN INFO**********************************\n");
-  
+
   // Dump UserInfo
   fChain->GetUserInfo()->Print();
   TNamed *namedTmp = (TNamed*)fChain->GetUserInfo()->FindObject("Elapsed Run Time");
@@ -299,11 +275,11 @@ void RBExperiment::DumpInfo()
     }
   }
   dumpFile.close();
-  
+
 #ifdef SCALERCLASS_FLAG
   if(kScalerFill) scalers->DumpScalers("RUNDUMP.dat","UPDATE");
 #endif
-  
+
 }
 
 
@@ -313,16 +289,12 @@ void RBExperiment::InitClass()
   // -- Initialize the class and sub-classes.
   // The InitClass method of all member classes should be called here.  This
   // method is responsible for setting all the defaults of the member classes.
-  
+
   TIter nextModule(fElectronics);
   while(RBElectronics* elc = (RBElectronics*)nextModule()){
     elc->InitClass();
   }
-  TIter nextDet(fDetectors);
-  while(RBDetector* det = (RBDetector*)nextDet()){
-    det->InitClass();
-  }
-  
+
 #ifdef EPICSCLASS_FLAG
   epics->InitClass();
 #endif
@@ -341,18 +313,14 @@ void RBExperiment::InitTree(TTree *itree)
   // IMPORTANT:  This method assumes that classes are created using the object oriented
   //             method described in the ROOT Users Manual or that the corresponding
   //             class has a valid InitTree method.
-  
+
   fChain = itree;
-  
+
   TIter nextModule(fElectronics);
   while(RBElectronics *elc = (RBElectronics*)nextModule()){
     if(elc->GetFillData()) elc->InitTree(fChain);
   }
-  TIter nextDet(fDetectors);
-  while(RBDetector *det = (RBDetector*)nextDet()){
-    if(det->GetFillData()) det->InitTree(fChain);
-  }
-  
+
 #ifdef EPICSCLASS_FLAG
     if(kEpicsFill){
       if(strcmp(fChain->ClassName(),"TChain")!=0){
@@ -378,72 +346,45 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   //
 
   TString evtFileStr(evtFile);
+  TSTring evtFileName(evtFileStr.SubString(evtFileStr.Last("/")+1));
   // Determine run number from file name.
-  Int_t runNum      = -1; TString runNumStr;
-  Int_t runNumBegin = evtFileStr.First("run-") + 4;
-  Int_t runNumEnd   = evtFileStr.Last('-');
-  for(Int_t i=runNumBegin; i<runNumEnd; i++) runNumStr.Append(evtFileStr[i]);
-  runNum = runNumStr.Atoi();
-  
-  // Determine the buffer format.
-  evtFileStr.Remove(0,evtFileStr.Last('-')+1);
-  evtFileStr.ReplaceAll(".evt","");
-  // The number of words per buffer.
-  fnBufferWords = evtFileStr.Atoi();
-    cout << "**fnBufferWords " << fnBufferWords << endl;
-  if     (fnBufferWords==4096) cout << "Event file uses 8k fixed length buffers." << endl;
-  else if(fnBufferWords <= 25){
-    cout << "Event file is using Ring Buffers." << endl;
-    //return ConvertRingBufferEvt(evtFile, rootFile, nBufs);
-  }
-  else{
-    cerr << "enrecognized buffer length or event file!" << endl;
-   // return kFALSE;
-  }
-  
+  TString runNumStr(evtFileStr.SubString(evtFileStr.First("run-"),4));
+  Int_t runNum = runNumStr.Atoi();
+
+  // Determine the evt file number.
+  TString evtNumStr(evtFileStr.SubString(evtFileStr.Last("-")+1,evtFileStr.Last(".evt")-evtFileStr.Last("-")-1));
+  fEvtFileNumber = evtNumStr.Atoi();
+
   Char_t   cBuf[200];
-  
+
   // Set the number of buffers to unpack.
   fnBuf2Read = (Long64_t)atoi(nBufs);
-  
-  // Set the full path for the evt file.
-  Char_t tempChar[500], pathE[500], pathR[500];
-  memset(tempChar,'\0',500);
-  memset(pathE,'\0',500);
-//  strcat(pathE,evtFilePath);
-  strcat(pathE,evtFile);
-  
+
   // Set the path for the root file.
   TString rootFileStr(rootFile);
   if(rootFileStr=="out.root"){
     rootFileStr.Clear();
-    rootFileStr.Append(evtFile);
-    rootFileStr.Remove(0,rootFileStr.Last('/')+1);
+    rootFileStr.Append(rootFilePath);
+    rootFileStr.Append(evtFileName);
     rootFileStr.ReplaceAll(".evt",".root");
   }
-  memset(pathR,'\0',500);
-  strcat(pathR,rootFilePath);
-  strcat(pathR,rootFileStr.Data());
-  
+
   // Open evt file for reading.
-  fEvtFile.open(pathE,ios::in | ios::binary);
-  if(!fEvtFile.is_open()){ printf("File could not be opened!\n"); return kFALSE;}
-  
+  fEvtFile.open(evtFile,ios::in | ios::binary);
+  if(!fEvtFile.is_open()){ printf("File %s could not be opened!\n", evtFile); return kFALSE;}
+
   fEvtFile.seekg(0,ios::end);
   fEvtFileSize = fEvtFile.tellg();
   cout << "Evt File size:        " << fEvtFileSize << " bytes" << endl;
-  
-  fEvtFile.seekg(0,ios::beg);
-  cout << "At beginning of file: " << pathE << endl;
-  
+
   // Open ROOT file for writing.
-  fROOTFile = new TFile(pathR,"RECREATE");
-  
+  fROOTFile = new TFile(rootFileStr.Data(),"RECREATE");
+
   if (fROOTFile->IsZombie()) {
-    cout << "Error opening file " << pathR << endl;
+    cout << "Error opening file " << rootFileStr << endl;
     exit(-1);
   }else{
-    cout << "Opened ROOT file:     " << pathR << endl;
+    cout << "Opened ROOT file:     " << rootFileStr << endl;
   }
 
   // We must be careful here.  The file must be open before we create the tree.
@@ -454,43 +395,30 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   type3Tree = new TTree("testListT",  "Text list items TTree                   ",2);
   type4Tree = new TTree("eventCountT","Event count items TTree                 ",2);
   type5Tree = new TTree("unknownT",   "Unknown item type TTree                 ",2);
-  
-  // Create the branches.
-  //type0Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type1Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type2Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type3Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type4Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type5Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  //   type6Tree->Branch("Header","RBNSCLBufferHeader",&header,32000);
-  
+
   // Initialize the branches for EVB RingItem data.
   type1Tree->Branch("fBRI_Size",     &fBRI_Size,     "fBRI_Size/i");
   type1Tree->Branch("fBRI_Timestamp",&fBRI_Timestamp,"fBRI_Timestamp/l");
-  // Initialize the branches for the elctronics and detector objects.
+  // Initialize the branches for the elctronics.
   TIter nextModule(fElectronics);
   while(RBElectronics *elc = (RBElectronics*)nextModule()){
     cout << "RBExperiment: " << elc->GetBranchName() << " " << elc->GetFillData() << endl;
     if(elc->GetFillData()) elc->InitBranch(type1Tree);
   }
-  TIter nextDet(fDetectors);
-  while(RBDetector *det = (RBDetector*)nextDet()){
-    if(det->GetFillData()) det->InitBranch(type1Tree);
-  }
-  
+
 #ifdef EPICSCLASS_FLAG
   if(kEpicsFill)  type4Tree->Branch("epics","TEpics",&epics);
 #endif
 #ifdef SCALERCLASS_FLAG
   if(kScalerFill) type2Tree->Branch("scalers","TScaler",&scalers);
 #endif
-  
+
 //  type1Tree->SetAutoSave(50000000);
-  
+
 //  CreateFolders();
-  
+
   analysisState->SetTitle("0");  // Set the analysis state to 0=RAW data TTree.
-  
+
   fBuffers          = 0;
   nTotEntities      = 0;
   nTotType1Entities = 0;
@@ -501,12 +429,12 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   nTotalType1Entities->SetTitle("0");
   nTotalWords->SetTitle("0");
   nTotalType1Words->SetTitle("0");
-  
+
   counter  = 0 ;                  // Counter for updating progress.
   fPauses  = 0;                   // Number of times run was paused.
   fResumes = 0;                   // Number of times run was resumed.
   fRunEnd  = kFALSE;              // Did we find an end run buffer?
-  
+
   // Close file and open later during convsersion process.
   fEvtFile.close();
 
@@ -518,7 +446,7 @@ Int_t RBExperiment::Fill(Int_t type)
 {
   // -- Fill the TTrees for a given event-item type.
   //
-  
+
   if     (type==0) type0Tree->Fill();
   else if(type==1) type1Tree->Fill();
   else if(type==2) type2Tree->Fill();
@@ -527,7 +455,7 @@ Int_t RBExperiment::Fill(Int_t type)
   else if(type==5) type5Tree->Fill();
 //  else if(type==6) type6Tree->Fill();
   else cerr << "-->RBExperiment::Fill Invalid event-item type." << endl;
-  
+
   return type;
 }
 
@@ -535,11 +463,11 @@ Bool_t RBExperiment::EndROOTConverter()
 {
   //______________________________________________________________________________
   cout << "Read " << fBuffers << " buffers." << endl;
-  
+
 //  sprintf(cBuf,"%llu",fBuffers);
 //  nBuffers->SetTitle(cBuf);
 //  type1Tree->GetUserInfo()->Add(nBuffers);
-  
+
   Char_t   cBuf[200];
 //  Double_t timeTmp = atof(type1Tree->GetUserInfo()->FindObject("Elapsed Run Time")->GetTitle());
   sprintf(cBuf,"%llu",nTotEntities);
@@ -563,7 +491,7 @@ Bool_t RBExperiment::EndROOTConverter()
   sprintf(cBuf,"%lli",(Long64_t)fROOTFile->GetSize());
   rootSize->SetTitle(cBuf);
   type1Tree->GetUserInfo()->Add(nTotalEntities);
-  
+
   type1Tree->GetUserInfo()->Add(runNumber);
   type1Tree->GetUserInfo()->Add(runTitle);
   type1Tree->GetUserInfo()->Add(expNumber);
@@ -571,7 +499,7 @@ Bool_t RBExperiment::EndROOTConverter()
   type1Tree->GetUserInfo()->Add(dateTimestamp);
   type1Tree->GetUserInfo()->Add(dateBegin);
   type1Tree->GetUserInfo()->Add(timeBegin);
-  
+
   type1Tree->GetUserInfo()->Add(nTotalWords);
   type1Tree->GetUserInfo()->Add(avgEventRate);
   type1Tree->GetUserInfo()->Add(avgWordRate);
@@ -581,8 +509,8 @@ Bool_t RBExperiment::EndROOTConverter()
   type1Tree->GetUserInfo()->Add(avgType1WordRate);
   type1Tree->GetUserInfo()->Add(evtSize);
   type1Tree->GetUserInfo()->Add(rootSize);
-  
-  
+
+
 //  type1Tree->SetBranchStatus("*",1);
   type0Tree->AutoSave();
   type1Tree->AutoSave();
@@ -591,22 +519,22 @@ Bool_t RBExperiment::EndROOTConverter()
   type4Tree->AutoSave();
   type5Tree->AutoSave();
 //  type6Tree->AutoSave();
-  
+
 //  type0Tree->Write();
 //  type1Tree->Write();
 //  type2Tree->Write();
 //  type3Tree->Write();
 //  type4Tree->Write();
 //  type5Tree->Write();
-  
+
   ResetTrees();
 
   // Write the histos.
   //  theA1900HistoManager->GetHistos()->Write("",2);
-  
+
   fROOTFile->Close();
   delete fROOTFile;
-  
+
   return kTRUE;
 
 }
@@ -624,29 +552,29 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
   // For additional information on the buffer structure please see,
   // http://docs.nscl.msu.edu
   //
-  
+
   // char holders
   Char_t tempChar[500], pathE[500], pathR[500];
-  
+
   InitializeROOTConverter(evtFile, rootFile, nBufs);
-  
+
   // Open evt file for reading.
   fEvtFile.open(pathE,ios::in | ios::binary);
   if(!fEvtFile.is_open()){ printf("File could not be opened!\n"); return kFALSE;}
-  
+
   // Start the counter.
   time(&start);
-  
+
   Char_t   cBuf[200];
-  
+
   // Unpack the event file.
   while (!fEvtFile.eof()) {                  // Read event file
     UShort_t *p;                             // This is the pointer to the buffer.
     UShort_t buffer[4096];                   // 4096 16-bit unsigned-integer words.
     UShort_t packetTag;                      // packet ID number.
-    
+
     fEvtFile.read((Char_t*)buffer,sizeof(buffer));   // Read buffer
-    
+
     // Unpack the header              // Set the BufferHeader data members
     nWords      = buffer[0];          header->nwds = nWords;
     type        = buffer[1];          header->type = type;
@@ -656,7 +584,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
     sequence[1] = buffer[5];          header->sequence  = (Long64_t)(sequence[1]<<16|sequence[0]);
     nEntities   = buffer[6];          header->nEntities = nEntities;
     format      = buffer[10];
-    
+
     nReadWords    = 1;
     nTotEntities += nEntities;
     nTotWords    += nWords;
@@ -673,7 +601,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
     << " \t sequence[1]: " << sequence[1]
     << " \t nEntities: "   << nEntities << endl;
 #endif
-    
+
     // Output progress to stdout.
 #ifndef DEBUG
     if(counter == 50){
@@ -687,28 +615,28 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
     }
     counter++;
 #endif
-    
+
     type0Tree->Fill();
-    
+
     //######################################################################
     // Event Data Type
     //######################################################################
     if (type == 1){                                // type = 1 is event data.
       p = &buffer[16];                             // Point p toward the first word after buffer header.
-      
+
       for (Long64_t jj=0; jj<nEntities; jj++){     // Loop through all entities in the buffer.
         entitySize  = *p++;                        // First word in the buffer, it's the entity size.
         entitySize--;                              // The word count is self inclusive.
         nReadWords++;
         Bool_t foundEvents = kFALSE;
-        
+
         while (entitySize>0) {                     // Loop through single events in the buffer.
           subEvtSize       = *p++;                 // Sub-Event length.
           subEvtLength     = subEvtSize;
           nReadWords++;
-          
+
           packetTag = *p++;
-          
+
           switch(packetTag){
             case A1900_PACKET:
               nReadWords++;
@@ -719,14 +647,14 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
               cout << "Uknown Packet:  " << *p <<endl;
               break;
           }
-          
+
           entitySize -= subEvtLength;
           p          += subEvtLength - 2;             // Advance the pointer to the next packet. Subtract 2
                                                       // since pointer was left at begining of packet body.
           if (foundEvents == kFALSE) return kTRUE;    // Give up. We should account for all packets.
         }
         // END OF EVENT
-        
+
         type1Tree->Fill();
         // Fill histos.
 //        theA1900HistoManager->FillHistos(theA1900);
@@ -745,7 +673,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
 #endif
       // END OF EVENT
       Clear();
-      
+
     }else if (type == 3){ // Snapshot Scaler data buffers
       type3Tree->Fill();
       Clear();
@@ -764,7 +692,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
 #endif
       // END OF EVENT
       Clear();
-      
+
     }else if (type == 6){
       type6Tree->Fill();
       Clear();
@@ -777,36 +705,36 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
     else if (type == 11){ cout << "BEGIN RUN"  << endl;
       sprintf(cBuf,"%u",buffer[3]);
       runNumber->SetTitle(cBuf);
-      
+
       Char_t runTitleA[200];
       Char_t *runT;
       memset(runTitleA,'\0',200);
-      
+
       // Get the run title (80 bytes of 8bit char with \0 termination)
       for(Int_t i=16,j=0; i<56; i++){
         runTitleA[j]   = (Char_t)(buffer[i]&0x00ff);
         runTitleA[j+1] = (Char_t)(buffer[i]>>8);
         if(runTitleA[j+1] == '\0') break;
-        
+
         j = j + 2;
       }
       runT = runTitleA;
       printf("Run Title:         %s\n",runT);
-      
+
       sprintf(cBuf,"%s",runTitleA);
       runTitle->SetTitle(cBuf);
       sprintf(cBuf,"%02u/%02u/%u",buffer[58],buffer[59],buffer[60]);
       dateBegin->SetTitle(cBuf);
       sprintf(cBuf,"%02u:%02u:%02u",buffer[61],buffer[62],buffer[63]);
       timeBegin->SetTitle(cBuf);
-      
+
       type1Tree->GetUserInfo()->Add(runNumber);
       type1Tree->GetUserInfo()->Add(runTitle);
       type1Tree->GetUserInfo()->Add(expNumber);
       type1Tree->GetUserInfo()->Add(analysisState);
       type1Tree->GetUserInfo()->Add(dateBegin);
       type1Tree->GetUserInfo()->Add(timeBegin);
-      
+
       Clear();
     }
     //######################################################################
@@ -824,7 +752,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
         eVal  = (Double_t) eTime/10.00;                     // Convert from 10ths of seconds.
         sprintf(cBuf,"%.2lf",eVal);
         elapsedTime->SetTitle(cBuf);
-        
+
         sprintf(cBuf,"%02u/%02u/%u",buffer[58],buffer[59],buffer[60]);
         dateEnded->SetTitle(cBuf);
         sprintf(cBuf,"%02u:%02u:%02u",buffer[61],buffer[62],buffer[63]);
@@ -833,7 +761,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
         nPauses->SetTitle(cBuf);
         sprintf(cBuf,"%u",fResumes);
         nResumes->SetTitle(cBuf);
-        
+
         type1Tree->GetUserInfo()->Add(elapsedTime);
         type1Tree->GetUserInfo()->Add(dateEnded);
         type1Tree->GetUserInfo()->Add(timeEnded);
@@ -842,11 +770,11 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
       }
       //      type1Tree->Fill();
       Clear();
-      
+
       if(fRunEnd) break;
-      
+
       fRunEnd = kTRUE;
-      
+
     }else if (type == 13){ cout << "PAUSE RUN"  << endl;
       fPauses++;
       Clear();
@@ -858,11 +786,11 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
       break;
     }
     fBuffers++;
-    
+
     // If nBufs is given then stop conversion.
     if(fnBuf2Read==(Long64_t)fBuffers) break;
   }
-  
+
   // If run did not end correctly.
   if(!fRunEnd){
     printf("WARNING!!!  END RUN BUFFER NOT FOUND.  Run may be corrupt.\n");
@@ -872,13 +800,13 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
     type1Tree->GetUserInfo()->Add(nPauses);
     type1Tree->GetUserInfo()->Add(nResumes);
   }
-  
+
   cout << "Read " << fBuffers << " buffers." << endl;
-  
+
   sprintf(cBuf,"%llu",fBuffers);
   nBuffers->SetTitle(cBuf);
   type1Tree->GetUserInfo()->Add(nBuffers);
-  
+
   //Double_t timeTmp = atof(type1Tree->GetUserInfo()->FindObject("Elapsed Run Time")->GetTitle());
   sprintf(cBuf,"%llu",nTotEntities);
   nTotalEntities->SetTitle(cBuf);
@@ -901,7 +829,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
   sprintf(cBuf,"%lli",(Long64_t)fROOTFile->GetSize());
   rootSize->SetTitle(cBuf);
   type1Tree->GetUserInfo()->Add(nTotalEntities);
-  
+
   type1Tree->GetUserInfo()->Add(nTotalWords);
   type1Tree->GetUserInfo()->Add(avgEventRate);
   type1Tree->GetUserInfo()->Add(avgWordRate);
@@ -911,8 +839,8 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
   type1Tree->GetUserInfo()->Add(avgType1WordRate);
   type1Tree->GetUserInfo()->Add(evtSize);
   type1Tree->GetUserInfo()->Add(rootSize);
-  
-  
+
+
   type1Tree->SetBranchStatus("*",1);
   type0Tree->AutoSave();
   type1Tree->AutoSave();
@@ -921,17 +849,17 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFile, const Char_t *rootFil
   type4Tree->AutoSave();
   type5Tree->AutoSave();
   type6Tree->AutoSave();
-  
+
   fEvtFile.close();
-  
+
   ResetTrees();
-  
+
   // Write the histos.
   //  theA1900HistoManager->GetHistos()->Write("",2);
-  
+
   fROOTFile->Close();
   delete fROOTFile;
-  
+
   return kTRUE;
 }
 
@@ -943,25 +871,25 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFileList)
   // names of the event files to be converted.  IT SHOULD NOT CONTAIN THE FULL
   // PATH!!!  The location of the event files is set by calling the method
   // SetEventFilePath().
-  
+
   Char_t evtFile[200];
   Char_t rootFile[200];
-  
+
   ifstream listFile(evtFileList,ios::in);
-  
+
   cout << "#################################################################" << endl;
   while(!listFile.eof()){
     memset(evtFile,'\0',200);
     memset(rootFile,'\0',200);
     listFile.getline(evtFile,200);
-    
+
     for(Int_t i=0; i<200; i++){
       if(evtFile[i]=='.') break;
       rootFile[i] = evtFile[i];
     }
     strcat(rootFile,".root");
     cout << evtFile << " " << rootFile << endl;
-    
+
     if(ConvertEvtFile(evtFile,rootFile)){
       cout << "SUCCESS!!!" << endl;
       cout << "#################################################################" << endl;
@@ -970,9 +898,9 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFileList)
       cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
     }
   }
-  
+
   listFile.close();
-  
+
   return kTRUE;
 }
 
@@ -981,7 +909,7 @@ Bool_t RBExperiment::ConvertEvtFile(const Char_t *evtFileList)
 Bool_t RBExperiment::ConvertRingBufferEvtFile(const Char_t *evtFile, const Char_t *rootFile, Option_t *nBufs)
 {
   // -- NOT implemented through ROOT currently
-  
+
   return kFALSE;
 }
 
@@ -1012,14 +940,14 @@ Long64_t RBExperiment::LoadTree(Long64_t entry)
 {
   // -- Load an entry for a TChain.
   //
-  
+
   // Set the environment to read one entry
   if (!fChain) return -5;
   Long64_t centry = fChain->LoadTree(entry);
   //   hira->fChain->LoadTree(entry);
   //   for(Int_t i=0; i<16; i++) hira->tele[i].fChain->LoadTree(entry);
   //   for(Int_t i=0; i<16; i++) hira->tele[i].EF.fChain->LoadTree(entry);
-  
+
   if (centry < 0) return centry;
   if (!fChain->InheritsFrom(TChain::Class()))  return centry;
   TChain *chain = (TChain*)fChain;
@@ -1033,7 +961,7 @@ Long64_t RBExperiment::LoadTree(Long64_t entry)
 //______________________________________________________________________________
 Bool_t RBExperiment::SetEventFilePath(const Char_t *path)
 {
-  // -- Sets the event file source path.  
+  // -- Sets the event file source path.
   // This is the location from which event files will be read.
   evtFilePath = path;
   return kTRUE;
@@ -1044,7 +972,7 @@ Bool_t RBExperiment::SetEventFilePath(const Char_t *path)
 Bool_t RBExperiment::SetExperimentNumber(const Char_t *number)
 {
   // -- Sets the experiment number of this instance of RBExperiment.
-  expNumber->SetTitle(number);  
+  expNumber->SetTitle(number);
   return kTRUE;
 }
 
@@ -1052,41 +980,10 @@ Bool_t RBExperiment::SetExperimentNumber(const Char_t *number)
 //______________________________________________________________________________
 Bool_t RBExperiment::SetRootFilePath(const Char_t *path)
 {
-  // -- Sets the root file destination path.  
+  // -- Sets the root file destination path.
   // Any root file generated from an event file will be written to this directory.
-  
+
   rootFilePath = path;
-  
+
   return kTRUE;
 }
-
-
-// //______________________________________________________________________________
-// void A1900Experiment::SetName(const Char_t *name)
-// {
-//   // -- Change (i.e. set) the name of the A1900Experiment.
-//   //
-
-//   fName = name;
-// }
-
-
-// //______________________________________________________________________________
-// void A1900Experiment::SetNameTitle(const Char_t *name, const Char_t *title)
-// {
-//   // -- Change (i.e. set) all the A1900Experiment parameters (name and title).
-//   //
-
-//   fName  = name;
-//   fTitle = title;
-// }
-
-
-// //______________________________________________________________________________
-// void A1900Experiment::SetTitle(const Char_t *title)
-// {
-//   // -- Change (i.e. set) the title of the A1900Experiment.
-//   //
-
-//   fTitle = title;
-// }
