@@ -32,8 +32,8 @@ RBSetup::RBSetup(){
   fExperiment = new RBExperiment("NE");
   // Initialize data members.
   fExperiment->SetMergedData      (kTRUE);  // EVT files have been merged.
-  fExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190/experiment/");//TEMPORARY
-  fExperiment->SetRootFilePath    ("/mnt/analysis/e15190/rootfilesMerged/");//TEMPORARY
+  fExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190_2/experiment/");//TEMPORARY
+  fExperiment->SetRootFilePath    ("/mnt/analysis/e15190/TEST_rootfilesRIBbit2/");//TEMPORARY
   fExperiment->SetExperimentNumber("15190");
 
   //HiRA Stack

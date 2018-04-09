@@ -96,7 +96,6 @@ void Unpacker::operator() (uint64_t eventTimestamp, uint32_t sourceId,
 {
   // --
   //
-
   RBRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName,
                                   runNumber, timeOffset, timestamp, title);
 

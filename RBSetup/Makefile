@@ -25,7 +25,7 @@ RBSETUP_LIB         := libRBSetup.$(DllSuf).1.0
 
 RBSETUP_OBJS        := $(RBSETUP_SRCS:.$(SrcSuf)=.$(ObjSuf))
 
-RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBMcpTrack -lRBHiRA -lRBS800 -lRBNeutronWall -lRBMicroball -lRBForwardArray
+RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment
 
 INCLUDES += -I$(RIBbitSRC)
 INCLUDES += -I$(RIBbitSRC)/settings
@@ -33,14 +33,6 @@ INCLUDES += -I$(RIBbitSRC)/electronics
 INCLUDES += -I$(RIBbitSRC)/RBExperiment
 INCLUDES += -I$(RIBbitSRC)/utilities/RBNucleus
 INCLUDES += -I$(RIBbitSRC)/utilities/RBAme
-INCLUDES += -I$(RIBbitSRC)/detectors/RBDetector
-INCLUDES += -I$(RIBbitSRC)/detectors/RBA1900
-INCLUDES += -I$(RIBbitSRC)/detectors/RBHiRA
-INCLUDES += -I$(RIBbitSRC)/detectors/RBS800
-INCLUDES += -I$(RIBbitSRC)/detectors/RBMcp
-INCLUDES += -I$(RIBbitSRC)/detectors/RBNeutronWall
-INCLUDES += -I$(RIBbitSRC)/detectors/RBMicroball
-INCLUDES += -I$(RIBbitSRC)/detectors/RBForwardArray
 
 CXXFLAGS += $(INCLUDES) -g
 
@@ -78,4 +70,3 @@ distclean: clean
 
 clean:
 	@rm -f $(RBSETUP_OBJS) $(RBSETUP_DICTO) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_LIB)
-

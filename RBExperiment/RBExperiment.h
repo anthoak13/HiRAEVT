@@ -49,7 +49,8 @@ class RBExperiment : public TNamed {
 private:
   UShort_t *p;                                      //! Pointer to event buffers.
 
-  Int_t       fEvtFileNumber;                        //! Number of the current evt file
+  Int_t       fRunNumber;                           //! Number of the current run to be unpacked.
+  Int_t       fEvtFileNumber;                       //! Number of the current evt file.
   Long64_t    fEvtFileSize;                         //! Size of the evt file in bytes.
   Long64_t    fnBuf2Read;                           //! Number of buffers to unpack.
 

@@ -60,7 +60,7 @@ ClassImp(RBNSCLBufferHeader);
 
 //______________________________________________________________________________
 RBExperiment::RBExperiment(const char *name)
-: type0Tree(0),type1Tree(0),type2Tree(0),type3Tree(0),type4Tree(0),type5Tree(0),type6Tree(0){
+: fRunNumber(-1),fEvtFileNumber(-1),type0Tree(0),type1Tree(0),type2Tree(0),type3Tree(0),type4Tree(0),type5Tree(0),type6Tree(0),fBuffers(0){
   // -- Default constructor.
   // If a sub-class inherits from TObject and you do not want the fBits and
   // fUniqueID to be streamed out to the root file then it is advisable to
@@ -345,17 +345,22 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   // -- Initialize the TTrees and etc. for EVT file conversion.
   //
 
-  TString evtFileStr(evtFile);
-  TSTring evtFileName(evtFileStr.SubString(evtFileStr.Last("/")+1));
+  //DEBUG
+  printf("Initializing root converter\n");
+
+  std::string evtFileStr(evtFile);
+  std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
   // Determine run number from file name.
-  TString runNumStr(evtFileStr.SubString(evtFileStr.First("run-"),4));
-  Int_t runNum = runNumStr.Atoi();
+  std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-")+4,4));
+  fRunNumber = atoi(runNumStr.c_str());
 
   // Determine the evt file number.
-  TString evtNumStr(evtFileStr.SubString(evtFileStr.Last("-")+1,evtFileStr.Last(".evt")-evtFileStr.Last("-")-1));
-  fEvtFileNumber = evtNumStr.Atoi();
+  std::string evtNumStr(evtFileStr.substr(evtFileStr.find_last_of('-')+1,evtFileStr.find(".evt")-evtFileStr.find_last_of('-')-1));
+  fEvtFileNumber = atoi(evtNumStr.c_str());
 
-  Char_t   cBuf[200];
+  //DEBUG
+  printf("evt file = %s\n", evtFileName.c_str());
+  printf("num run = %d num evt file =%d\n", fRunNumber, fEvtFileNumber);
 
   // Set the number of buffers to unpack.
   fnBuf2Read = (Long64_t)atoi(nBufs);
@@ -368,6 +373,9 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
     rootFileStr.Append(evtFileName);
     rootFileStr.ReplaceAll(".evt",".root");
   }
+
+  //DEBUG
+  printf("Opening root file %s\n", rootFileStr.Data());
 
   // Open evt file for reading.
   fEvtFile.open(evtFile,ios::in | ios::binary);
@@ -388,9 +396,8 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   }
 
   // We must be careful here.  The file must be open before we create the tree.
-  sprintf(tempChar,"E%s",expNumber->GetTitle());
   type0Tree = new TTree("stateT",     "State transition items TTree            ",2);
-  type1Tree = new TTree(tempChar,     "Physics event items:  RBExperiment TTree",2);
+  type1Tree = new TTree(Form("E%s",expNumber->GetTitle()), "Physics event items:  RBExperiment TTree",2);
   type2Tree = new TTree("scalerT",    "Incremental scaler items TTree          ",2);
   type3Tree = new TTree("testListT",  "Text list items TTree                   ",2);
   type4Tree = new TTree("eventCountT","Event count items TTree                 ",2);
@@ -467,6 +474,11 @@ Bool_t RBExperiment::EndROOTConverter()
 //  sprintf(cBuf,"%llu",fBuffers);
 //  nBuffers->SetTitle(cBuf);
 //  type1Tree->GetUserInfo()->Add(nBuffers);
+
+  if(fROOTFile->IsZombie()) {
+    delete fROOTFile;
+    return kFALSE;
+  }
 
   Char_t   cBuf[200];
 //  Double_t timeTmp = atof(type1Tree->GetUserInfo()->FindObject("Elapsed Run Time")->GetTitle());
