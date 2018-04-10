@@ -17,26 +17,18 @@ const Int_t XLM2 =  0x2ff3;
 
 static UInt_t numChips;
 
-TClonesArray *RBHINPUnpacker::fgHits = 0;
-
 //______________________________________________________________________________
 RBHINPUnpacker::RBHINPUnpacker(const char* name, Int_t nMBs, Bool_t usingSISFADC)
 :fFoundBeginMarker(0),fReportNExtraMarkers(0),fTotalUnpackedData(0),fFaultyCount(0),fErrorCount(0),fChName(name)
 {
   // --
   //
-  
+
   SetGeo(-1);
   fnMBs         = nMBs;
-  for(Int_t i=0; i<fgMaxXLMs; i++){
-    fBankMB[i][0]    = -1;
-    fBankMB[i][1]    = -1;
-  }
+
   fUsingSISFADC = usingSISFADC;
-  
-  if(!fgHits) fgHits = new TClonesArray("RBHINPHit",10);
-  fHits  = fgHits;
-  fNHits = 0;
+
   fNUnpackedEvents = 0;
 
   cout << "RBHINPUnpacker constructed" << endl;
@@ -48,7 +40,7 @@ RBHINPUnpacker::~RBHINPUnpacker()
 {
   // --
   //
-  
+
   Clear();
 }
 
@@ -60,8 +52,7 @@ void RBHINPUnpacker::Clear(Option_t *option)
   //
 
   if(strcmp(option,"A")==0) fNUnpackedEvents = 0;
-  if(fHits) fHits->Clear("C");
-  fNHits = 0;
+  fHits.fNHits=0;
 }
 
 
@@ -70,12 +61,8 @@ void RBHINPUnpacker::InitBranch(TTree *tree)
 {
   // --
   //
-  
   if(GetFillData()){
-    Char_t tmp[500];
-    //sprintf(tmp,"%s[%i]/s",fChName.Data(),fnCh);
-    //tree->Branch(fChName, fData, tmp);
-    tree->Branch(TString(GetName())+".fHits","TClonesArray",&fHits,32000,99);
+    tree->Branch(fChName+".","RBHINPHit",&fHits,32000,2);
   }else{
     cout << "-->RBHINPUnpacker::InitBranch  Branches will not be created or filled." << endl;
   }
@@ -87,75 +74,28 @@ void RBHINPUnpacker::InitTree(TTree *tree)
 {
   // --
   //
-  
+
   fChain = tree;
 }
 
-
 //______________________________________________________________________________
-UShort_t RBHINPUnpacker::GetBankMB(Int_t xlm, char bank)
-{
-  // --
-  //
-  
-  if(xlm<0 || xlm>fgMaxXLMs) cerr << "-->RBHINPUnpacker::GetBankMB  Invalid xlm " << xlm << endl;
-  else if(bank=='A') return fBankMB[xlm][0];
-  else if(bank=='B') return fBankMB[xlm][1];
-  else cerr << "-->RBHINPUnpacker::GetBankMB  Invalid XLM("
-            << xlm << ") BANK(" << bank << endl;
-  
-  return -1;
-}
-
-
-//______________________________________________________________________________
-UShort_t RBHINPUnpacker::GetBankMBByIndex(Int_t xlm, Int_t bank)
-{
-  // --
-  //
-  
- // cout << "GetBankMB: " << xlm << " " << bank << " ";
-//  for(Int_t i=0; i<fgMaxXLMs; i++) cout << fBankMB[i][0] << " " << fBankMB[i][1] << " ";
-//  cout << endl;
-  if((bank==0 || bank==1) && xlm>=0 && fnMBs>=2*xlm) return fBankMB[xlm][bank];
-  else cerr << "-->RBHINPUnpacker::GetBankMBByIndex  Invalid XLM("
-            << xlm << ") BANK(" << bank << ")" << endl;
-  
-  return -1;
-}
-
-
-//______________________________________________________________________________
-void RBHINPUnpacker::SetBankMB(Int_t xlm, char bank, Int_t mb)
-{
-  // -- Map the motherboard to a specific XLM BANK.
-  //
-  
-  if(!(bank=='A' || bank=='B') &&
-     xlm>=0 && xlm<=fgMaxXLMs) cerr << "-->RBHINPUnpacker::SetBANKMap  Invalid XLM("
-                                  << xlm << ") BANK(" << bank << endl;
-  else{
-    if(bank == 'A') fBankMB[xlm][0] = mb;
-    if(bank == 'B') fBankMB[xlm][1] = mb;
-  }
-}
-
-
-//______________________________________________________________________________
-RBHINPHit* RBHINPUnpacker::AddHit(Int_t xlm, UShort_t bank, Bool_t mismatch, UShort_t ch,
+void RBHINPUnpacker::AddHit(Int_t xlm, UShort_t bank, Bool_t mismatch, UShort_t ch,
                                   UShort_t chip, UShort_t Hi, UShort_t Lo, UShort_t time)
 {
-  // --
+  // -- Add an entry to the fHits object increasing of 1 the number of hits
   //
-  //  cout << "Adding hit" << endl;
-  RBHINPHit *hit = (RBHINPHit*)fHits->ConstructedAt(fNHits);
-  fNHits++;
-  //  hit->Set(xlm, bank, mismatch, ch, chip, energy, time);
-  hit->Set(xlm, bank, mismatch, ch, chip, Hi,Lo, time);
-  
-  return hit;
-}
 
+  fHits.fBank       [fHits.fNHits]=bank;
+  fHits.fXLMIndex   [fHits.fNHits]=xlm;
+  fHits.fChip       [fHits.fNHits]=chip;
+  fHits.fChannel    [fHits.fNHits]=ch;
+  fHits.fChMismatch [fHits.fNHits]=mismatch;
+  fHits.fEnergyHi   [fHits.fNHits]=Hi;
+  fHits.fEnergyLo   [fHits.fNHits]=Lo;
+  fHits.fTime       [fHits.fNHits]=time;
+
+  fHits.fNHits++;
+}
 
 //______________________________________________________________________________
 Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
@@ -192,11 +132,11 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   //  ------------------------------------
   //
   //
-  
+
   Clear();
 
   //  cout << "Starting RBHINPUnpacker::Unpack" << endl;
-  
+
   /*
   UShort_t         xlmID[10];
   ULong64_t        xlmWordCount[10];
@@ -207,13 +147,13 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   */
   uint32_t  channelId, timeStamp[2], channelCount;
   uint32_t  dumpctr, dumpoff, bumflag=0;
-  uint32_t XLMID;
+  uint32_t  XLMID;
   static uint32_t bumcount;
   uint32_t xlmWordCount[10];
 
   uint32_t  initOffset = offset;  // get initial offset to XLM data packet to later compute end offset
- 
-    
+
+
   //Code below based on CHINPA.cpp (by Jon Elson), which unpacks data from the new
   //generation of HINP chips that has both a high and a low gain.
   //-JJM
@@ -221,7 +161,7 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
     {
       //It seems like Jon counts "banks" as simply being the MB numbers...whereas I consider banks
       //to be the banks on the individual XLMs. So for instance, if there were 4 MBs, Jon would count
-      //4 banks where as I would count 2 for each XLM. 
+      //4 banks where as I would count 2 for each XLM.
       int xlmNum = bank/2;
 
       //cout << "Unpacking bank " << bank << endl;
@@ -242,7 +182,7 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
       //12 CBs per MB * 32 channels per CB * 4 words per channel
       // = 1536
       if (xlmWordCount[bank] > 1536) return -1;
-      
+
       //  printf("wordcount is %d offset is %d\n",wordCount, offset);
       offset+=2;
       //
@@ -291,9 +231,9 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
       //cout << "Made it past timestamp " << endl;
       //      cout << "Channel count is " << channelCount << endl;
       for (int i =0; i < channelCount/4; i++) {
-        
+
 	fTotalUnpackedData++;
-      
+
         // get channel tag
         channelId      = event[offset];
         //    printf("Channel ID = %x\n",channelId);
@@ -352,7 +292,7 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
           printf("faulty chip %d board %d chan %d A %d B %d Time %d (numChips=%d)\n",chip,board,channel,Hi,Lo,time,numChips);
         }
       }
-	
+
 
       //  printf("offset at end = %d  ",offset);
       // figure out how much garbage to gobble from end of event
@@ -398,8 +338,8 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
       printf("%4x  ",event[iDump]);
     }
   }
-   
-  
+
+
   return offset;
 }
 
@@ -410,7 +350,6 @@ void RBHINPUnpacker::PrintSummary()
   printf("%llu total unpacked data\n", fTotalUnpackedData);
   printf("%llu faulty chip errors found\n",fFaultyCount);
   printf("%llu buffer errors found\n",fErrorCount);
-  
+
   printf("\n");
 }
-

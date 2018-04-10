@@ -61,13 +61,7 @@ private:
 
   TList      *fElectronics;                         //! List of registered electronics to process.
 
-  TTree      *type0Tree;                            //!
-  TTree      *type1Tree;                            //!
-  TTree      *type2Tree;                            //!
-  TTree      *type3Tree;                            //!
-  TTree      *type4Tree;                            //!
-  TTree      *type5Tree;                            //!
-  TTree      *type6Tree;                            //!
+  TTree      *fRootTree;                            //!
 
   // Buffer properties
   UShort_t nWords;               //! Number of used words in the buffer.
@@ -179,7 +173,7 @@ public:
   void         DumpInfo();                                        // Dump event info.
   void         DumpClassInfo();                                   // Dump class build and fill info.
   Bool_t       EndROOTConverter();
-  Int_t        Fill(Int_t type);                                  // Fill the TTrees for a given event item type.
+  void         Fill();                                            // Fill TTree
   void         InitClass();                                       // Calls all InitClass methods.
   Bool_t       InitializeROOTConverter(const Char_t *evtFile,
                                        const Char_t *rootFile="out.root",

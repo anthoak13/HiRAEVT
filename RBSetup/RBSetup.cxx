@@ -1,7 +1,6 @@
 //Preliminary RBSetup file for unpacking merged HiRA and NW file
 //Juan Manfredi, Daniele Dell Aquila
 
-
 #include "RBSetup.h"
 #include "RBUSBStack.h"
 #include "RBElectronics.h"
@@ -13,7 +12,6 @@
 #include "RBCAEN1x90Unpacker.h"
 #include "RBSisTimestampUnpacker.h"
 
-//#include "MCPSettings.C"
 
 //______________________________________________________________________________
 RBSetup::RBSetup(){

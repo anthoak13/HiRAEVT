@@ -250,7 +250,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  fExperiment->Fill(1); // This unpacker handles PHYSICS event items.
+  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize/2;
@@ -372,7 +372,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  fExperiment->Fill(1); // This unpacker handles PHYSICS event items.
+  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize;
@@ -447,7 +447,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
     while(readWords>0){*pBody++; readWords--;}
   }
 
-  fExperiment->Fill(1);
+  fExperiment->Fill();
 
   fReadWords += totalSize;
 }
