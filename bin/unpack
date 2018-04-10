@@ -13,6 +13,4 @@ fi
 #file_evt=$(printf run-%04d-00.evt $1)
 
 for file_evt in $(ls /mnt/misc/daqevents-ro/e15190_2/experiment/run$1/*.evt); do
-    eval '/projects/e15190/ribbitMerged/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///dev/null'
-done
-
+    eval '/projects/hira/Daniele/RIBbit2-dev/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///

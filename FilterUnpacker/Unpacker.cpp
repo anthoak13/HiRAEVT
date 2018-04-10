@@ -192,7 +192,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
           // This is actually the pointer to the RingItem body header.
           uint16_t* bodyAddr = it->s_itembody;
-	  uint16_t* bodyAddrJuan = it->s_itembody;
+	        uint16_t* bodyAddrJuan = it->s_itembody;
 
 	  //Check bodyAddr
 	  //	  cout << "Check bodyAddr before skipping " << endl;

@@ -124,7 +124,39 @@ RBSetup::RBSetup(){
 
   fExperiment->RegisterElectronics(NWStack);
   //The VMUSB stack is the only thing in the electronics list. All of the modules are part
-  //of the stack and are unpacked in RBUSBStack::Unpackz
+  //of the stack and are unpacked in RBUSBStack::Unpack
+
+  //______________________________________________________________________________
+  // Set the built data merged IDs.
+  hiraStack->SetMergedID(0);
+  NWStack->SetMergedID(1);
+  //______________________________________________________________________________
+  // Define components to be filled.
+  timestamp1 ->SetFillData(kTRUE);
+  hinp       ->SetFillData(kTRUE);
+  adc1       ->SetFillData(kTRUE);
+  adc2       ->SetFillData(kTRUE);
+  ATqdc      ->SetFillData(kTRUE);
+  MBqdc1     ->SetFillData(kTRUE);
+  MBqdc2     ->SetFillData(kTRUE);
+  MBqdc3     ->SetFillData(kTRUE);
+  MBqdc4     ->SetFillData(kTRUE);
+  MBqdc5     ->SetFillData(kTRUE);
+  MBqdc6     ->SetFillData(kTRUE);
+  MBtdc1     ->SetFillData(kTRUE);
+  MBtdc2     ->SetFillData(kTRUE);
+  MBtdc3     ->SetFillData(kTRUE);
+  timestamp2 ->SetFillData(kTRUE);
+  qdc1       ->SetFillData(kTRUE);
+  qdc2       ->SetFillData(kTRUE);
+  qdc3       ->SetFillData(kTRUE);
+  qdc4       ->SetFillData(kTRUE);
+  qdc5       ->SetFillData(kTRUE);
+  qdc6       ->SetFillData(kTRUE);
+  qdc7       ->SetFillData(kTRUE);
+  qdc8       ->SetFillData(kTRUE);
+  NWTDC      ->SetFillData(kTRUE);
+  VWTDC      ->SetFillData(kTRUE);
 
   //______________________________________________________________________________
   // Now initialize the class.

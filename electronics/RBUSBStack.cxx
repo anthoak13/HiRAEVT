@@ -1,6 +1,6 @@
 //
 //  RBUSBStackUnpacker.cpp
-//  
+//
 //
 //  Created by Andrew Rogers on 3/21/15.
 //  Modified by Juan Manfredi
@@ -60,7 +60,7 @@ static const UInt_t INVALID(6);
 
 
 //______________________________________________________________________________
-RBUSBStack::RBUSBStack() : 
+RBUSBStack::RBUSBStack() :
 fEventCount(0),
 fWordsCount(0),
 fVsnErrorCount(0),
@@ -69,10 +69,10 @@ fUSBTimestamp(0)
 {
   // --
   //
-  
+
   SetEnabled(kTRUE);
   SetFillData(kTRUE);
-  
+
   // Initialize the list of stacks.
   fStacks = new TList();
 }
@@ -83,7 +83,7 @@ Int_t RBUSBStack::AddStack()
 {
   // --
   //
-  
+
   fStacks->Add(new TList());
   return 1;
 }
@@ -95,7 +95,7 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, RBUSBStackMarker *marker)
 {
   // --
   //
-  
+
   return AddToStack(stackIdx, marker, -1);
 }
 
@@ -106,7 +106,7 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, RBUSBStackMarker *marker, Int_t idx
 {
   // --
   //
-  
+
   TList *stack = (TList*)fStacks->At(stackIdx);
   if(idx==-1){
     stack->AddLast(marker);
@@ -116,7 +116,7 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, RBUSBStackMarker *marker, Int_t idx
     cerr << "-->RBUSBStack::AddToStack  Invalid stack index." << endl;
     return 0;
   }
-  
+
   return 1;
 }
 
@@ -127,7 +127,7 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, Int_t geo, RBElectronics *module)
 {
   // --
   //
-  
+
   return AddToStack(stackIdx, geo, module, -1);
 }
 
@@ -138,8 +138,8 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, Int_t geo, RBElectronics *module, I
   // --
   //
 
-  //  cout << "Adding to RBUSBStack: " << module->ClassName() << endl; 
-  
+  //  cout << "Adding to RBUSBStack: " << module->ClassName() << endl;
+
   if(strcmp(module->ClassName(),"RBTimestamp")==0){
     fUSBTimestamp = (RBTimestamp*)module;
     cout << "RBUSBStack:: Added timestamp to stack." << endl;
@@ -155,7 +155,7 @@ Int_t RBUSBStack::AddToStack(Int_t stackIdx, Int_t geo, RBElectronics *module, I
     return 0;
   }
   module->SetGeo(geo);
-  
+
   return 1;
 }
 
@@ -165,7 +165,7 @@ Int_t RBUSBStack::RemoveFromStack()
 {
   // --
   //
-  
+
   return 1;
 }
 
@@ -175,7 +175,7 @@ void RBUSBStack::Clear(Option_t *option)
 {
   // --
   //
- 
+
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
     TIter nextModule(stack);
@@ -183,9 +183,9 @@ void RBUSBStack::Clear(Option_t *option)
       module->Clear(option);
     }
   }
-   
+
   fEventCount       = 0;
-  
+
 }
 
 
@@ -194,7 +194,7 @@ void RBUSBStack::InitClass()
 {
   // -- Initialize any additional components of this class.
   //
-  
+
   // Initialize the class for each module in each stack.
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
@@ -212,7 +212,7 @@ void RBUSBStack::InitBranch(TTree* tree)
 {
   // -- Initialize the branch pointers of this class.
   //
-  
+
   // Initialize the branches for each module in each stack.
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
@@ -231,9 +231,9 @@ void RBUSBStack::InitTree(TTree* tree)
 {
   // -- Initialize this class to a TTree.
   //
-  
+
   fChain = tree;
-  
+
   // Initialize the class for each module in each stack.
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
@@ -254,23 +254,23 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
   // pEvent should point to the USBStack header.
 
   //  cout << "Unpacking RBUSBStack: " << endl;
-  
+
   fEventCount++;          // event counter
   vector<UShort_t> event; // A vector of assembeled event data.
   StackInfo        info;  // Object containing the information about the USBStack.
-    
+
   Int_t sOffset = 0;
-  
+
   // Assemble the data into a vector of UShort_t's that we can use.
   //  cout << "Address of pEvent before assembling into vector: " << *pEvent << endl;
   info = assembleEvent(pEvent, event);
   //  cout << "Asembled event " << event[0] << endl;
   //  cout << "First value of event: " << event[0] << endl;
-  fWordsCount+=info.s_stackSize+14; // Number of words unpacked for the stack  
-  
+  fWordsCount+=info.s_stackSize+14; // Number of words unpacked for the stack
+
   // Unpack the fragment timestamp
   //  if(fUSBTimestamp) sOffset = fUSBTimestamp->Unpack(pEvent);
-  
+
   // Loop over all the defined USB stacks.
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
@@ -281,18 +281,18 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
     // If we still cannot locate the module's data in the buffer, then
     // report the error.
     TIter nextModule(stack);
-    
-    
+
+
     while(RBElectronics* module = (RBElectronics*)nextModule()){
       //      cout << "Within stack, module is " << module->GetBranchName() << endl;
-      
+
       //      cout << "Print out some of the buffer" << endl;
       /*
       for (int i=0; i<24; i++){
 	cout << hex << event[sOffset+i] << endl;
       }
       */
-      
+
       // Search the RingItem body for this module's data.
       // Get the 'header' .. ensure that it matches our VSN if module has a VSN.
       unsigned long header;
@@ -302,10 +302,10 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
       //DEBUG
       //      cout << "Module " << module << endl;
       //      cout << " is called " << module->ClassName() << endl;
-      
+
       // If this is a Marker, just read it.
       if(strcmp(module->ClassName(),"RBUSBStackMarker")==0){
-	cout << "Found marker: " << module->ClassName() << endl;
+	      cout << "Found marker: " << module->ClassName() << endl;
         RBUSBStackMarker *marker = (RBUSBStackMarker*)module;
         sOffset = marker->Unpack(event,sOffset);
       }else{
@@ -320,7 +320,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 	//want to escape
 	if (vsn == 0) {
 	  fVsnErrorCount++;
-	  return event.size(); 
+	  return event.size();
 	}
         //WARNING: if vsn = 0 the word is clearly corrupted, but no need to skip the whole event
         /*
@@ -328,7 +328,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
         {
           sOffset+=2;
           header  = getLong(event, sOffset);
-          vsn     = module->DecodeVSN(header);          
+          vsn     = module->DecodeVSN(header);
         }
 	*/
         // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed)!!!
@@ -339,7 +339,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
           module->SetUnpackError(10); // Error code.
           fUnpackErrorCount++;
 	  //	  cout << "Unpack "Error" Count up to " << fUnpackErrorCount << endl;
-        }else if(vsn == module->GetVSN() || module->GetVSN() == -1){sOffset = module->Unpack(event, sOffset);}
+  }else if(vsn == module->GetVSN() || module->GetVSN() == -1){sOffset = module->Unpack(event, sOffset);}
         else{
 	  //	  cout << "Scanning ringitem body for VSN " << endl;
           // Scan the RingItem body for the VSN of this module.
@@ -361,9 +361,9 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 //      }
 	}
   }
-  
+
 //  offset = event.size();
-  
+
   // Something went wrong if we didn't burn up the entire event:
   if(sOffset != event.size()) {
     fBufferMismatchCount++;
@@ -371,7 +371,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
          << sOffset << " SIZE: " << event.size() << " EVENT: " << fEventCount << endl;
     return event.size();
   }
-  
+
   return sOffset;
 }
 
@@ -382,14 +382,14 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 /*
  Assemble an event from the VMUSB event fragments.  While we're at it,
  extract the stack id and return it to the caller.
- 
+
  */
 RBUSBStack::StackInfo
 RBUSBStack::assembleEvent(UShort_t *p, vector<UShort_t>& event)
 {
   // --
   //
-  
+
   StackInfo result;
   bool done    = false;
   int  stackId = -1;
@@ -400,7 +400,7 @@ RBUSBStack::assembleEvent(UShort_t *p, vector<UShort_t>& event)
     done            = (header & VMUSB_CONTINUE) == 0;
     int fragmentSize = header & VMUSB_LENGTH;
     totalSize++;		// headers are a word of size...
-    
+
     // only pull the stackid out of the first header (just in case).
     if (stackId < 0) {
       stackId = (header & VMUSB_STACKID_MASK) >> VMUSB_STACKID_SHIFT;
@@ -413,10 +413,10 @@ RBUSBStack::assembleEvent(UShort_t *p, vector<UShort_t>& event)
     }
     totalSize += fragmentSize;	// Words in the fragment...
   }
-  
+
   result.s_stackNumber = stackId;
   result.s_stackSize   = totalSize;
-     
+
   return result;
 }
 
@@ -427,7 +427,7 @@ void RBUSBStack::PrintSummary()
   printf("-- %s summary --\n", GetBranchName());
   printf("%llu words read\n", fWordsCount);
   printf("%llu vsn errors\n", fVsnErrorCount);
-  printf("%llu events not entirely decoded\n\n",fBufferMismatchCount);  
+  printf("%llu events not entirely decoded\n\n",fBufferMismatchCount);
   TIter nextStack(fStacks);
   while(TList* stack = (TList*)nextStack()){
     TIter nextModule(stack);
@@ -436,6 +436,6 @@ void RBUSBStack::PrintSummary()
     }
   }
   printf("**********************************************\n");
-  
+
   return;
 }

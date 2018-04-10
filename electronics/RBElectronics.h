@@ -1,6 +1,6 @@
 //
 //  RBElectronics.h
-//  
+//
 //
 //  Created by Andrew Rogers on 3/20/15.
 //  Modified by Juan Manfredi
@@ -22,15 +22,15 @@ private:
   Int_t           kMergedID;               //! The merged data ID.
   Bool_t          fFill;                   //! Fill data when unpacking.
   Bool_t          fEnabled;                //! Is the module in the data stream?
-  
+
   UShort_t        fUnpackError;            // Unpacking error code.
 
 public:
   Int_t           fUnpackErrorCount;
-  
+
 public:
   virtual ~RBElectronics(){};
-  
+
   virtual void  InitClass()              = 0;
   virtual void  InitBranch(TTree* tree)  = 0;
   virtual void  InitTree(TTree* tree)    = 0;
@@ -40,7 +40,7 @@ public:
                        UInt_t offset)                  { return 0;};
 
   virtual Int_t   DecodeVSN(Int_t header){return -1;}
-  
+
   const char *GetBranchName(){return fBranchName;}
   Bool_t      GetEnabled()   {return fEnabled;}
   Bool_t      GetFillData()  {return fFill;}
@@ -48,7 +48,7 @@ public:
   Int_t       GetVSN()       {return fGeo;}
   UShort_t    GetUnpackError(){return fUnpackError;}
   Int_t       GetUnpackErrorCount(){return fUnpackErrorCount;}
-  
+
   void  SetBranchName(const char *bname){fBranchName = bname;}
   void  SetEnabled( Bool_t enabled)  {fEnabled     = enabled;}
   void  SetFillData(Bool_t fill)     {fFill        = fill;}
@@ -58,10 +58,10 @@ public:
 
   virtual Short_t  GetData(Int_t ch){return -1;}
   virtual Double_t GetDataf(Int_t ch){return -1;}
-  
+
   virtual void PrintSummary() {return;}
-  
-  
+
+
   ClassDef(RBElectronics,1);
 };
 #endif /* defined(____RBElectronics__) */
