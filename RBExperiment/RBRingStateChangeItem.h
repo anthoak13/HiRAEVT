@@ -2,11 +2,6 @@
 #ifndef __RBRINGSTATECHANGEITEM_H
 #define __RBRINGSTATECHANGEITEM_H
 
-#ifndef __ROOTDEFINE_H
-#define __ROOTDEFINE_H
-#include "rootDefine.h"
-#endif
-
 #include <ctime>
 
 #include <TROOT.h>
@@ -39,7 +34,7 @@ class RBRingStateChangeItem : public RBRingItem {
 
   TTree        *fChain;             //! pointer to the analyzed TTree or TChain
   Int_t         fCurrent;           //! current Tree number in a TChain
-  
+
  public:
   RBRingStateChangeItem() {}
   RBRingStateChangeItem(ULong64_t eventTimestamp, UInt_t sourceId, UInt_t barrierType,
@@ -48,15 +43,15 @@ class RBRingStateChangeItem : public RBRingItem {
   ~RBRingStateChangeItem() {}
 
   void         SetType(std::string reason){fReason = reason;}
-  
+
   UInt_t       GetRunNumber(){return fRunNumber;}
   TString      GetRunTitle() {return fRunTitle;}
   time_t       GetTimestamp(){return fTimestamp;}
-  
+
   void         Clear(Option_t *option="");
   void         InitClass();                                       // Calls all InitClass methods.
   void         InitTree(TTree *tree);
-  
+
   ClassDef(RBRingStateChangeItem,1)
 
 };

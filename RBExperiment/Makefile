@@ -29,12 +29,6 @@ RLIBS             := -L$(RIBbitLIB)
 
 INCLUDES += -I../
 INCLUDES += -I../electronics
-INCLUDES += -I../utilities/RBNucleus
-INCLUDES += -I../utilities/RBAme
-INCLUDES += -I../detectors/RBDetector
-INCLUDES += -I../detectors/RBA1900
-INCLUDES += -I../detectors/RBHiRA
-INCLUDES += -I../detectors/RBMcp
 
 CXXFLAGS += -g $(INCLUDES)
 
@@ -68,8 +62,7 @@ install:
 
 distclean: clean
 	@rm -f $(RBEXPERIMENT_LIB) $(RBEXPERIMENT_DICT) $(RBEXPERIMENT_DICTH)
-	@rm -f $(RIBbitLIB)/$(RBEXPERIMENT_LIB) 
+	@rm -f $(RIBbitLIB)/$(RBEXPERIMENT_LIB)
 
 clean:
 	@rm -f $(RBEXPERIMENT_OBJS) $(RBEXPERIMENT_DICTO) $(RBEXPERIMENT_DICT) $(RBEXPERIMENT_DICTH) $(RBEXPERIMENT_LIB)
-

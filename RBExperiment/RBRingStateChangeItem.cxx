@@ -5,10 +5,6 @@
 #include <TFile.h>
 #include <TEventList.h>
 
-#ifndef __PACKETID_H
-#define __PACKETID_H
-#include "packetID.h"
-#endif
 // #ifndef __RBRingStateChangeItem_H
 // #define __RBRingStateChangeItem_H
 #include "RBRingStateChangeItem.h"
@@ -50,7 +46,7 @@ void RBRingStateChangeItem::InitClass()
 {
   // -- Initialize the class to its default settings.
   //
-  
+
   Clear();
 }
 

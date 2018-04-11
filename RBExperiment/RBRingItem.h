@@ -2,11 +2,6 @@
 #ifndef __RBRINGITEM_H
 #define __RBRINGITEM_H
 
-#ifndef __ROOTDEFINE_H
-#define __ROOTDEFINE_H
-#include "rootDefine.h"
-#endif
-
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -40,7 +35,7 @@ class RBRingItem : public TObject {
 
   TTree        *fChain;             //! pointer to the analyzed TTree or TChain
   Int_t         fCurrent;           //! current Tree number in a TChain
-  
+
  public:
   RBRingItem() {}
   RBRingItem(UShort_t type, ULong64_t timestamp, UInt_t sourceId,
@@ -53,7 +48,7 @@ class RBRingItem : public TObject {
   virtual void Clear(Option_t *option="");
   virtual void InitClass();                                       // Calls all InitClass methods.
   virtual void InitTree(TTree *tree);
-  
+
   ClassDef(RBRingItem,1)
 
 };

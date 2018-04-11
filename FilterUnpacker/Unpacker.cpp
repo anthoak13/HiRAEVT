@@ -24,8 +24,11 @@ Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),m_lastTimestamp(0),fDeb
   // Set the RBExperiment pointer
   fSetup = new RBSetup();
   fExperiment = fSetup->GetInitializedExp();
-  if(fExperiment) cout << "Initialized experimental setup: " << fExperiment << endl;
-  else            cout << "Failed to initalize experimental setup." << endl;
+  if(fExperiment) cout << "Initialized experimental setup: " << endl;
+  else {
+    cout << "Failed to initalize experimental setup." << endl;
+    exit(-1);
+  }
 
   fMergedData = fExperiment->IsDataMerged();
 

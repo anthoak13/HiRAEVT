@@ -4,18 +4,21 @@
 #include <CFilterMain.h>
 
 #include "CUnpackerFilter.h"
+#include "RIBbit2Logo.h"
 
 /// The main function
 /**! main function
-  Creates a CFilterMain object and 
-  executes its operator()() method. 
+  Creates a CFilterMain object and
+  executes its operator()() method.
 
-  \return 0 for normal exit, 
-          1 for known fatal error, 
+  \return 0 for normal exit,
+          1 for known fatal error,
           2 for unknown fatal error
 */
 int main(int argc, char* argv[])
 {
+  PrintRIBbitUnpackerLogo();
+
   int status = 0;
 
 //  try {
@@ -34,7 +37,7 @@ int main(int argc, char* argv[])
     // one filter will be registered, the order of registration
     // will define the order of execution. If multiple filters are
     // registered, the output of the first filter will become the
-    // input of the second filter and so on. 
+    // input of the second filter and so on.
     theApp.registerFilter(&unpacker_filter);
     std::cout << "**Unpacker filter registered**" << std::endl;
 
@@ -50,4 +53,3 @@ int main(int argc, char* argv[])
 
   return status;
 }
-

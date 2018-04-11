@@ -14,11 +14,13 @@ root:
 	$(MAKE) -C electronics ; 		$(MAKE) -C electronics install
 	$(MAKE) -C RBExperiment ; 		$(MAKE) -C RBExperiment install
 	$(MAKE) -C RBSetup ;			$(MAKE) -C RBSetup install
+	$(MAKE) -C logo ;			$(MAKE) -C logo install
 
 install:
 	$(MAKE) -C electronics install
 	$(MAKE) -C RBExperiment install
 	$(MAKE) -C RBSetup install
+	$(MAKE) -C logo install
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  install
 endif
@@ -27,6 +29,7 @@ distclean:
 	$(MAKE) -C electronics distclean
 	$(MAKE) -C RBExperiment distclean
 	$(MAKE) -C RBSetup distclean
+	$(MAKE) -C logo distclean
 	@rm $(RIBbitLIB)/libRBSetup.so
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  distclean
@@ -36,6 +39,7 @@ clean:
 	$(MAKE) -C electronics  clean
 	$(MAKE) -C RBExperiment clean
 	$(MAKE) -C RBSetup clean
+	$(MAKE) -C logo clean
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  clean
 endif
@@ -46,6 +50,7 @@ debug:
 	$(MAKE) -C electronics
 	$(MAKE) -C RBExperiment
 	$(MAKE) -C RBSetup
+	$(MAKE) -C logo
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker
 endif

@@ -30,8 +30,6 @@ RBHINPUnpacker::RBHINPUnpacker(const char* name, Int_t nMBs, Bool_t usingSISFADC
   fUsingSISFADC = usingSISFADC;
 
   fNUnpackedEvents = 0;
-
-  cout << "RBHINPUnpacker constructed" << endl;
 }
 
 
@@ -230,7 +228,7 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
       //cout << "Made it past timestamp " << endl;
       //      cout << "Channel count is " << channelCount << endl;
-      for (int i =0; i < channelCount/4; i++) {
+      for (unsigned int i =0; i < channelCount/4; i++) {
 
 	fTotalUnpackedData++;
 

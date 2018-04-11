@@ -5,10 +5,6 @@
 #include <TFile.h>
 #include <TEventList.h>
 
-#ifndef __PACKETID_H
-#define __PACKETID_H
-#include "packetID.h"
-#endif
 // #ifndef __RBNSCLBUFFERHEADER_H
 // #define __RBNSCLBUFFERHEADER_H
 #include "RBNSCLBufferHeader.h"
@@ -19,10 +15,10 @@ ClassImp(RBNSCLBufferHeader);
 
 ////////////////////////////////////////////////////////////////////////////////
 /* BEGIN_HTML
-<p> The RBNSCLBufferHeader class provides the structure for holding a typical           
+<p> The RBNSCLBufferHeader class provides the structure for holding a typical
  event buffer header at the NSCL.
 </p>
-                                                          
+
 
 <h3><a name="unpack">I. Unpacking</a></h3>
 
@@ -52,7 +48,7 @@ void RBNSCLBufferHeader::InitClass()
 {
   // -- Initialize the class to its default settings.
   //
-  
+
   Clear();
 }
 

@@ -5,10 +5,6 @@
 #include <TFile.h>
 #include <TEventList.h>
 
-#ifndef __PACKETID_H
-#define __PACKETID_H
-#include "packetID.h"
-#endif
 // #ifndef __RBRingItem_H
 // #define __RBRingItem_H
 #include "RBRingItem.h"
@@ -47,7 +43,7 @@ void RBRingItem::Clear(Option_t *)
 {
   // -- Clear the data members
   //
-  
+
 }
 
 
@@ -56,7 +52,7 @@ void RBRingItem::InitClass()
 {
   // -- Initialize the class to its default settings.
   //
-  
+
   Clear();
 }
 

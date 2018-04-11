@@ -2,11 +2,6 @@
 #ifndef __RBNSCLBUFFERHEADER_H
 #define __RBNSCLBUFFERHEADER_H
 
-#ifndef __ROOTDEFINE_H
-#define __ROOTDEFINE_H
-#include "rootDefine.h"
-#endif
-
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -25,7 +20,7 @@ using namespace std;
 class RBNSCLBufferHeader : public TObject {
 
  private:
-  
+
 
  public:
   UShort_t     nwds;                // Number of used words in the buffer.
@@ -40,7 +35,7 @@ class RBNSCLBufferHeader : public TObject {
 
   TTree          *fChain;           //! pointer to the analyzed TTree or TChain
   Int_t           fCurrent;         //! current Tree number in a TChain
-  
+
  public:
   RBNSCLBufferHeader() {}
   ~RBNSCLBufferHeader() {}
@@ -48,7 +43,7 @@ class RBNSCLBufferHeader : public TObject {
   void         Clear(Option_t *option="");
   void         InitClass();                                       // Calls all InitClass methods.
   void         InitTree(TTree *itree);
-  
+
   ClassDef(RBNSCLBufferHeader,1)
 
 };

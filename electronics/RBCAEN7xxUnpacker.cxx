@@ -98,17 +98,13 @@ void RBCAEN7xxUnpacker::Clear(Option_t *option)
 
 //______________________________________________________________________________
 void RBCAEN7xxUnpacker::InitClass()
-{
-}
-
+{}
 
 //______________________________________________________________________________
 void RBCAEN7xxUnpacker::InitBranch(TTree *tree)
 {
   if(GetFillData()){
-    Char_t tmp[500];
-    sprintf(tmp,"%s[%i]/S",fChName.Data(),fnCh);
-    tree->Branch(fChName, fData, tmp);
+    tree->Branch(fChName, fData, Form("%s[%i]/S",fChName.Data(),fnCh));
   }else{
     cout << "-->RBCAEN7xxUnpacker::InitBranch  Branches will not be created or filled." << endl;
   }

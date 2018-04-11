@@ -6,14 +6,13 @@ include $(RIBbitDAQROOT)/filterkit/FilterIncludes
 
 #
 #  Add your own compilation/link flags here:
-RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup
+RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo
 
 INCLUDES  := -I$(RIBbitSRC)/
 INCLUDES  += -I$(RIBbitSRC)/electronics
-
 INCLUDES  += -I$(RIBbitSRC)/RBExperiment
 INCLUDES  += -I$(RIBbitSRC)/RBSetup
-#INCLUDES += -I/usr/opt/nscldaq/11.0-rc12/filterkit/FilterIncludes
+INCLUDES  += -I$(RIBbitSRC)/logo
 
 USERCXXFLAGS = -g $(INCLUDES) $(RLIBS)
 USERCCFLAGS  = $(USERCXXFLAGS)

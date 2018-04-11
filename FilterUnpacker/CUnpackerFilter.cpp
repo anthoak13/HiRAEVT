@@ -32,8 +32,6 @@ void CUnpackerFilter::PassArguments(int argc, char* argv[])
 {
   // Find the --source cmd argument and extract the file path.
 
-  std::cout << "**Pass Arguments to UnpackerFilter**" << std::endl;
-
   char *result = 0;
   char  temp[500];
   for(int i=1; i<argc; i++){

@@ -21,11 +21,6 @@
 #include <time.h>
 #include <sys/stat.h>
 
-#ifndef __PACKETID_H
-#define __PACKETID_H
-#include "packetID.h"
-#endif
-
 ClassImp(RBExperiment);
 ClassImp(RBNSCLBufferHeader);
 
@@ -161,6 +156,7 @@ void RBExperiment::CreateFolders()
   // run information . . . among other things.
   //
   // This method should call all sub-class CreateFolders methods.
+  // -- Obsolete
 }
 
 //______________________________________________________________________________
@@ -182,27 +178,8 @@ void RBExperiment::SetRunInfo(RBRingStateChangeItem *stateItem)
 //______________________________________________________________________________
 void RBExperiment::DumpClassInfo()
 {
-  // -- Output of currently built and fillable classes.
+  // -- Obsolete
   //
-
-  printf("**********************DUMPING CLASS MEMBERS INFO*****************************\n");
-  Bool_t kBuilt=kFALSE;
-
-#ifdef EPICSCLASS_FLAG
-  kBuilt=kTRUE;
-#endif
-  printf("* TEpics Class Built . . .     [%u] \t Filled . . . [%u]\n",kBuilt,kEpicsFill);
-  kBuilt=kFALSE;
-#ifdef SCALERCLASS_FLAG
-  kBuilt=kTRUE;
-#endif
-  printf("* TScaler Class Built . . .    [%u] \t Filled . . . [%u]\n",kBuilt,kScalerFill);
-  kBuilt=kFALSE;
-#ifdef ELOGCLASS_FLAG
-  kBuilt=kTRUE;
-#endif
-  printf("* TElog Class Built . . .      [%u] \t Filled . . . [%u]\n",kBuilt,kElogFill);
-  kBuilt=kFALSE;
 }
 
 
@@ -298,11 +275,11 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
 
   // Open evt file for reading.
   fEvtFile.open(evtFile,ios::in | ios::binary);
-  if(!fEvtFile.is_open()){printf("File %s could not be opened!\n", evtFile); return kFALSE;}
+  if(!fEvtFile.is_open()){printf("ERROR: File %s could not be opened!\n", evtFile); return kFALSE;}
 
   fEvtFile.seekg(0,ios::end);
   fEvtFileSize = fEvtFile.tellg();
-  cout << "Evt File size:        " << fEvtFileSize << " bytes" << endl;
+  cout << "**Evt File size:        " << fEvtFileSize << " bytes **" << endl;
 
   // Open ROOT file for writing.
   fROOTFile = new TFile(rootFileStr.Data(),"RECREATE");
@@ -311,7 +288,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
     cout << "Error opening file " << rootFileStr << endl;
     exit(-1);
   }else{
-    cout << "Opened ROOT file:     " << rootFileStr << endl;
+    cout << "**Opened ROOT file:     " << rootFileStr << " **" << endl;
   }
 
   // We must be careful here.  The file must be open before we create the tree.
@@ -323,8 +300,10 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   // Initialize the branches for the elctronics.
   TIter nextModule(fElectronics);
   while(RBElectronics *elc = (RBElectronics*)nextModule()){
-    cout << "RBExperiment: " << elc->GetBranchName() << " " << elc->GetFillData() << endl;
-    if(elc->GetFillData()) elc->InitBranch(fRootTree);
+    if(elc->GetFillData()) {
+      elc->InitBranch(fRootTree);
+      cout << "**TTree Branches initialized: " << elc->GetBranchName() << " **" <<  endl;
+    }
   }
 
 //  fRootTree->SetAutoSave(50000000);

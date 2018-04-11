@@ -157,11 +157,9 @@ RBSetup::RBSetup(){
   VWTDC      ->SetFillData(kTRUE);
 
   //______________________________________________________________________________
-  // Now initialize the class.
-  // NOTE:  We must do this before we initialize the scaler section.
-  printf("---------------- Initializing Classes ------------------------------------\n");
+  // Now initialize the classes.
   fExperiment->InitClass();
-  printf("--------------------------------------------------------------------------\n\n\n");
+  printf("Experiment classes correctly initialized\n");
 }
 
 RBSetup::~RBSetup(){

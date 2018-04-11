@@ -11,11 +11,6 @@
 
 #include <iostream>
 
-#ifndef __ROOTDEFINE_H
-#define __ROOTDEFINE_H
-#include "rootDefine.h"
-#endif
-
 #include "RBNSCLBufferHeader.h"
 
 //#include "RBA1900.h"

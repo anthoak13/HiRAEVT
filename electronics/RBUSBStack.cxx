@@ -221,7 +221,6 @@ void RBUSBStack::InitBranch(TTree* tree)
       module->InitBranch(tree);
     }
   }
-  cout << "-->RBUSBStack:: Initialized branches." << endl;
   cout.flush();
 }
 
@@ -324,14 +323,14 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 	}
         //WARNING: if vsn = 0 the word is clearly corrupted, but no need to skip the whole event
         /*
-	while (vsn == 0)
+	      while (vsn == 0)
         {
           sOffset+=2;
           header  = getLong(event, sOffset);
           vsn     = module->DecodeVSN(header);
         }
-	*/
-        // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed)!!!
+	      */
+        // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed by Daniele Dec2017)!!!
         if(getLong(event,sOffset)==0xffffffff && (getLong(event,sOffset+1)==0xffffffff || (sOffset>0 && getLong(event,sOffset-1)==0xffffffff))){
           // This event was not properly constructed. Possible missing module data. However, it could be that the modules are simply empty.
           // burn up a set of 0xffff's
