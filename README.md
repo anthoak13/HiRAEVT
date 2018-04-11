@@ -1,4 +1,4 @@
-#RIBbit2
+RIBbit2
 
 Contributors: Daniele Dell'Aquila, Juan Manfredi, ...
 
