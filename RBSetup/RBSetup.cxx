@@ -62,19 +62,19 @@ RBSetup::RBSetup(){
   //MAKE CAREFUL NOTE WHETHER OR NOT THIS LINE IS COMMENTED OR NOT
   hiraStack->AddToStack(0,-1,timestamp1);
   hiraStack->AddToStack(0,-1,hinp);
-  hiraStack->AddToStack(0,-1,adc1);
-  hiraStack->AddToStack(0,-1,adc2);
+  hiraStack->AddToStack(0,5,adc1);
+  hiraStack->AddToStack(0,6,adc2);
   hiraStack->AddToStack(0,7,csiTDC);
   //  hiraStack->AddToStack(0,-1,ATqdc);
-  hiraStack->AddToStack(0,-1,MBqdc1);
-  hiraStack->AddToStack(0,-1,MBqdc2);
-  hiraStack->AddToStack(0,-1,MBqdc3);
-  hiraStack->AddToStack(0,-1,MBqdc4);
-  hiraStack->AddToStack(0,-1,MBqdc5);
-  hiraStack->AddToStack(0,-1,MBqdc6);
-  hiraStack->AddToStack(0,-1,MBtdc1);
-  hiraStack->AddToStack(0,-1,MBtdc2);
-  hiraStack->AddToStack(0,-1,MBtdc3);
+  hiraStack->AddToStack(0,9,MBqdc1);
+  hiraStack->AddToStack(0,10,MBqdc2);
+  hiraStack->AddToStack(0,11,MBqdc3);
+  hiraStack->AddToStack(0,12,MBqdc4);
+  hiraStack->AddToStack(0,13,MBqdc5);
+  hiraStack->AddToStack(0,14,MBqdc6);
+  hiraStack->AddToStack(0,15,MBtdc1);
+  hiraStack->AddToStack(0,16,MBtdc2);
+  hiraStack->AddToStack(0,17,MBtdc3);
   //hiraStack->AddToStack(0,endMarker);
 
   hiraStack->SetBranchName("HiRA Stack");
@@ -106,17 +106,17 @@ RBSetup::RBSetup(){
   // Usage: AddToStack(<stackNum>, <slot>, <modulePtr>)
 
   NWStack->AddToStack(0,-1,timestamp2);
-  NWStack->AddToStack(0,-1,qdc1);
-  NWStack->AddToStack(0,-1,qdc2);
-  NWStack->AddToStack(0,-1,qdc3);
-  NWStack->AddToStack(0,-1,qdc4);
-  NWStack->AddToStack(0,-1,qdc5);
-  NWStack->AddToStack(0,-1,qdc6);
+  NWStack->AddToStack(0,4,qdc1);
+  NWStack->AddToStack(0,5,qdc2);
+  NWStack->AddToStack(0,6,qdc3);
+  NWStack->AddToStack(0,8,qdc4);
+  NWStack->AddToStack(0,9,qdc5);
+  NWStack->AddToStack(0,10,qdc6);
   NWStack->AddToStack(0,12,NWTDC);
-  NWStack->AddToStack(0,-1,qdc7);
-  NWStack->AddToStack(0,-1,qdc8);
+  NWStack->AddToStack(0,15,qdc7);
+  NWStack->AddToStack(0,16,qdc8);
   NWStack->AddToStack(0,14,VWTDC);
-  NWStack->AddToStack(0,-1,qdcfart);
+  NWStack->AddToStack(0,19,qdcfart);
 
   NWStack->SetBranchName("NW Stack");
 

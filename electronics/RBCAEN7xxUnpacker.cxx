@@ -150,23 +150,20 @@ Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 //   printf("called RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)\n");
 
   // Get the 'header' .. ensure that it is one and that it matches our VSN.
-  unsigned long header;
-  int           vsn = -1;
-  header  = getLong(event, offset);
-  vsn     = DecodeVSN(header);
-  if(vsn != GetVSN() && GetVSN() != -1) {
+  unsigned long header  = getLong(event, offset);
+  int vsn = DecodeVSN(header);
+
+  if(vsn != GetVSN()) {
+    printf("Sugnu %s e finiu a fetu\n", fChName.Data());
     fVSNMismatchCount++;
     return offset;
   }
-
-/////////////  if(vsn != pMap->vsn) return offset;
 
   // If we do not have a VSN and all we have are 0xffff's then return.
   if(GetVSN()==-1 && event[offset]==0xffff && event[offset+1]==0xffff) return offset+2;
 
   // Ok this is our data:
   offset += 2;			// Next longword..
-
 
   // I've seen cases where all I get is a _trailer_.. in that case
   // we're done so skip the analysis:
@@ -230,7 +227,6 @@ Int_t RBCAEN7xxUnpacker::DecodeVSN(Int_t header)
 {
   // --
   //
-
   return ((header & ALLH_GEOMASK) >> ALLH_GEOSHIFT);
 }
 
