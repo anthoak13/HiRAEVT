@@ -12,8 +12,6 @@ ROOTSYS = ../
 include $(ROOTSYS)/etc/Makefile.arch
 endif
 
-ROOTCLINGORCINT           := rootcint
-
 RBELECTRONICS_DICT        := RBElectronicsDict.$(SrcSuf)
 RBELECTRONICS_DICTH       := $(RBELECTRONICS_DICT:.$(SrcSuf)=.h)
 RBELECTRONICS_DICTO       := $(RBELECTRONICS_DICT:.$(SrcSuf)=.$(ObjSuf))
@@ -67,4 +65,3 @@ distclean: clean
 
 clean:
 	@rm -f $(RBELECTRONICS_OBJS) $(RBELECTRONICS_DICTO) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH) $(RBELECTRONICS_LIB)
-

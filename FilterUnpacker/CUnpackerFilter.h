@@ -7,7 +7,6 @@
 #include <CFilter.h>
 #include <stdint.h>
 
-class TH1;
 class CPhysicsEventItem;
 
 /**! \class CUnpackerFilter

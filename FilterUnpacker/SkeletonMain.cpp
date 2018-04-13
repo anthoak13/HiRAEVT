@@ -17,11 +17,9 @@
 */
 int main(int argc, char* argv[])
 {
-  PrintRIBbitUnpackerLogo();
+    PrintRIBbitUnpackerLogo();
 
-  int status = 0;
-
-//  try {
+    int status = 0;
 
     // Create the main
     CFilterMain theApp(argc,argv);
@@ -43,13 +41,6 @@ int main(int argc, char* argv[])
 
     // Run the main loop
     theApp();
-
-//  } catch (CFatalException exc) {
-//    status = 1;
-//  } catch (...) {
-//    std::cout << "Caught unknown fatal error...!" << std::endl;
-//    status = 2;
-//  }
 
   return status;
 }

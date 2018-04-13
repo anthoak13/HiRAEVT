@@ -66,12 +66,16 @@ void Unpacker::Clear()
 void Unpacker::InitializeUnpacker(char *sourceName)
 {
   // --
+  // Here the following objects are initialized:
+  // gRun : RBRunInfo class object containing all the info for the current run
+  // fSetup : RBSetup class object containing the DAQ configuration. The constructor of RBSetup initializes also gExperiment
+  // gExperiment : RBExperiment class object containing stack configurations and defining the structure of the output file
   //
   strcpy(fSourceFileName, sourceName);
 
   // NOTE
   // Here we need to initialize RunInfo
-  
+
   fSetup = new RBSetup();
   if(gExperiment==0) {
     cout << "Failed to initalize experimental setup." << endl;
@@ -81,7 +85,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   gExperiment->InitializeROOTConverter(fSourceFileName);
   gExperiment->Clear("A");
   time(&fStart);
-  
+
 }
 
 
