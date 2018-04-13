@@ -12,7 +12,6 @@
 #include "RBCAEN1x90Unpacker.h"
 #include "RBSisTimestampUnpacker.h"
 
-
 //______________________________________________________________________________
 RBSetup::RBSetup(){
 
@@ -27,12 +26,12 @@ RBSetup::RBSetup(){
   SetTitle("NSCL experiment 15190");
 
   // Instantiate a new RBExperiment object.
-  fExperiment = new RBExperiment("NE");
+  gExperiment = new RBExperiment("NE");
   // Initialize data members.
-  fExperiment->SetMergedData      (kTRUE);  // EVT files have been merged.
-  fExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190_2/experiment/");//TEMPORARY
-  fExperiment->SetRootFilePath    ("/mnt/analysis/e15190/TEST_rootfilesRIBbit2/");//TEMPORARY
-  fExperiment->SetExperimentNumber("15190");
+  gExperiment->SetMergedData      (kTRUE);  // EVT files have been merged.
+  gExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190_2/experiment/");//TEMPORARY
+  gExperiment->SetRootFilePath    ("/mnt/analysis/e15190/TEST_rootfilesRIBbit2/");//TEMPORARY
+  gExperiment->SetExperimentNumber("15190");
 
   //HiRA Stack
   RBSisTimestampUnpacker *timestamp1 = new RBSisTimestampUnpacker("timestamp1");
@@ -79,7 +78,7 @@ RBSetup::RBSetup(){
 
   hiraStack->SetBranchName("HiRA Stack");
 
-  fExperiment->RegisterElectronics(hiraStack);
+  gExperiment->RegisterElectronics(hiraStack);
 
   //NWVW Stack
   // Define the modules in the VME crate that are used in the VMUSB stack.
@@ -120,7 +119,7 @@ RBSetup::RBSetup(){
 
   NWStack->SetBranchName("NW Stack");
 
-  fExperiment->RegisterElectronics(NWStack);
+  gExperiment->RegisterElectronics(NWStack);
   //The VMUSB stack is the only thing in the electronics list. All of the modules are part
   //of the stack and are unpacked in RBUSBStack::Unpack
 
@@ -158,10 +157,10 @@ RBSetup::RBSetup(){
 
   //______________________________________________________________________________
   // Now initialize the classes.
-  fExperiment->InitClass();
+  gExperiment->InitClass();
   printf("Experiment classes correctly initialized\n");
 }
 
 RBSetup::~RBSetup(){
-  delete fExperiment;
+  delete gExperiment;
 }

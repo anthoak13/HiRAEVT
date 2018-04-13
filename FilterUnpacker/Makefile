@@ -1,18 +1,15 @@
-
-#INSTDIR=/usr/opt/nscldaq/11.0-rc12
-
 #include $(INSTDIR)/filterkit/FilterIncludes
 include $(RIBbitDAQROOT)/filterkit/FilterIncludes
-
 #
 #  Add your own compilation/link flags here:
-RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo
+RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo -lRBShared
 
 INCLUDES  := -I$(RIBbitSRC)/
 INCLUDES  += -I$(RIBbitSRC)/electronics
 INCLUDES  += -I$(RIBbitSRC)/RBExperiment
 INCLUDES  += -I$(RIBbitSRC)/RBSetup
 INCLUDES  += -I$(RIBbitSRC)/logo
+INCLUDES  += -I$(RIBbitSRC)/shared
 
 USERCXXFLAGS = -g $(INCLUDES) $(RLIBS)
 USERCCFLAGS  = $(USERCXXFLAGS)
@@ -22,7 +19,6 @@ USERLDFLAGS  = -g $(INCLUDES) $(RLIBS) $(shell root-config --libs)
 #  Add the names of objects you need here if you modified the name of the driver file,
 #  this should also reflect thtat.
 #
-
 
 OBJECTS = FragmentIndex.o CUnpackerFilter.o SkeletonMain.o
 

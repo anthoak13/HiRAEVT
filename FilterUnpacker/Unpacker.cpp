@@ -9,29 +9,14 @@
 #include <TH1.h>
 #include <TString.h>
 
-#include "RBExperiment.h"
-#include "RBSetup.h"
-
-// Instantiate the ROOT unpacker
-Unpacker gUnpacker;
+#include <RBExperiment.h>
+#include <RBSetup.h>
 
 //______________________________________________________________________________
 Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),m_lastTimestamp(0),fDebug(0)
 {
   // --
   //
-
-  // Set the RBExperiment pointer
-  fSetup = new RBSetup();
-  fExperiment = fSetup->GetInitializedExp();
-  if(fExperiment) cout << "Initialized experimental setup: " << endl;
-  else {
-    cout << "Failed to initalize experimental setup." << endl;
-    exit(-1);
-  }
-
-  fMergedData = fExperiment->IsDataMerged();
-
   Clear();
 }
 
@@ -56,13 +41,13 @@ Unpacker::~Unpacker()
   printf("%llu words read\n", fReadWords);
   printf("%llu timestamp mismatches found\n", fTimestampMismatch);
   printf("\n");
-  TIter nextModule(fExperiment->GetElectronicsList());
+  TIter nextModule(gExperiment->GetElectronicsList());
   while(RBElectronics *elc = (RBElectronics*)nextModule()){ //loop over the stacks
     //cout << " " << elc->GetName() << " " << elc->GetUnpackErrorCount() << endl;
     //Here we should print the error summaries for every stack in the DAQ
     elc->PrintSummary();
   }
-  fExperiment->EndROOTConverter();
+  gExperiment->EndROOTConverter();
 }
 
 
@@ -78,16 +63,25 @@ void Unpacker::Clear()
 }
 
 //______________________________________________________________________________
-void Unpacker::SetSource(char *sourceName)
+void Unpacker::InitializeUnpacker(char *sourceName)
 {
   // --
   //
-
   strcpy(fSourceFileName, sourceName);
-  //
-  fExperiment->InitializeROOTConverter(fSourceFileName);
-  fExperiment->Clear("A");
+
+  // NOTE
+  // Here we need to initialize RunInfo
+  
+  fSetup = new RBSetup();
+  if(gExperiment==0) {
+    cout << "Failed to initalize experimental setup." << endl;
+    exit(-1);
+  }
+  fMergedData = gExperiment->IsDataMerged();
+  gExperiment->InitializeROOTConverter(fSourceFileName);
+  gExperiment->Clear("A");
   time(&fStart);
+  
 }
 
 
@@ -102,7 +96,7 @@ void Unpacker::operator() (uint64_t eventTimestamp, uint32_t sourceId,
   RBRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName,
                                   runNumber, timeOffset, timestamp, title);
 
-  fExperiment->SetRunInfo(&stateItem);
+  gExperiment->SetRunInfo(&stateItem);
 }
 
 
@@ -124,7 +118,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
   char tempChar[10];
   if(fCounter == 100){
     time(&fNow);
-    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(fExperiment->GetEvtFileSize());
+    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
          << "  " << tempChar << "%"
@@ -134,10 +128,10 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
   }
   fCounter++;
 
-  fExperiment->Clear();
+  gExperiment->Clear();
 
-  fExperiment->SetBRISize     (totalSize);
-  fExperiment->SetBRITimestamp(eventTimestamp);
+  gExperiment->SetBRISize     (totalSize);
+  gExperiment->SetBRITimestamp(eventTimestamp);
 
   // Create iterators to loop through all the fragments
   FragmentIndex::iterator it, begin, end;
@@ -170,7 +164,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
     // Loop over all registered electronic modules and call their individual Unpacker methods.
     // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
-    TIter nextModule(fExperiment->GetElectronicsList());
+    TIter nextModule(gExperiment->GetElectronicsList());
     while(RBElectronics *elc = (RBElectronics*)nextModule()){
       //      cout << "Module is " << elc->GetBranchName() << endl;
 
@@ -253,7 +247,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
+  gExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize/2;
@@ -277,7 +271,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   char tempChar[10];
   if(fCounter == 50){
     time(&fNow);
-    fPercentDone = 100 * ((Long64_t)(fReadWords))/(fExperiment->GetEvtFileSize());
+    fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
     << "  " << tempChar << "%"
@@ -287,10 +281,10 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   }
   fCounter++;
 
-  fExperiment->Clear();
+  gExperiment->Clear();
 
-  fExperiment->SetBRISize     (totalSize);
-  fExperiment->SetBRITimestamp(eventTimestamp);
+  gExperiment->SetBRISize     (totalSize);
+  gExperiment->SetBRITimestamp(eventTimestamp);
 
   // Define an offset to keep track of where we the fragment is located
   // and to check that we are unpacking all the data in the buffer.
@@ -315,7 +309,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
   // Loop over all registered electronic modules and call their individual Unpacker methods.
   // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
-  TIter nextModule(fExperiment->GetElectronicsList());
+  TIter nextModule(gExperiment->GetElectronicsList());
   while(RBElectronics *elc = (RBElectronics*)nextModule()){
     // Check if the Merged ID matches that of the current module.
 //    if (it->s_sourceId == elc->GetMergedID()) {
@@ -375,7 +369,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
+  gExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize;
@@ -395,7 +389,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   char tempChar[10];
   if(fCounter == 1000){
     time(&fNow);
-    fPercentDone = 100 * ((Long64_t)(fReadWords))/(fExperiment->GetEvtFileSize());
+    fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
 
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
@@ -407,10 +401,10 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   }
   fCounter++;
 
-  fExperiment->Clear();
+  gExperiment->Clear();
 
-  fExperiment->SetBRISize     (totalSize);
-  //  fExperiment->SetBRITimestamp(eventTimestamp);
+  gExperiment->SetBRISize     (totalSize);
+  //  gExperiment->SetBRITimestamp(eventTimestamp);
 
   //  UShort_t bodySize = *pBody++;
   //Note: I commented out the line above because the HINPUnpacker was starting one word too late
@@ -437,7 +431,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   //  UShort_t hdrSize  = *pBody;
   //  cout << "Header size is " << hdrSize << endl;
   // Loop over all registered electronics modules and call their individual Unpacker methods.
-  TIter nextModule(fExperiment->GetElectronicsList());
+  TIter nextModule(gExperiment->GetElectronicsList());
 
 
   UInt_t readWords = 0;
@@ -450,7 +444,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
     while(readWords>0){*pBody++; readWords--;}
   }
 
-  fExperiment->Fill();
+  gExperiment->Fill();
 
   fReadWords += totalSize;
 }

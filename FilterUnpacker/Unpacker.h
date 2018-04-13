@@ -25,7 +25,7 @@ class FragmentIndex;
 class RBSetup;
 class RBExperiment;
 
-class Unpacker 
+class Unpacker
 {
   private:
     int      nevent;
@@ -35,41 +35,40 @@ class Unpacker
     time_t   fStart;                // Start conversion time.
     time_t   fNow;                  // Current time.
     uint64_t m_lastTimestamp;
-  
+
     uint64_t  fTimestampMismatch;
     bool      fFoundTimestampMismatch;
-  
+
     char fSourceFileName[1000];
     bool fDebug;
     bool fMergedData;
 //    double fDataFormatVersion;
-  
-    RBExperiment *fExperiment;
+
     RBSetup      *fSetup;
-  
+
   public:
     Unpacker();
     Unpacker(const Unpacker& rhs);
     ~Unpacker();
-  
+
     void Clear();
 
     void operator() (uint64_t eventTimestamp, uint32_t sourceId,
                      uint32_t barrierType,    std::string typeName,
                      uint32_t runNumber,      uint32_t timeOffset,
                      time_t   timestamp,      std::string  title);
-  
+
     void operator() (FragmentIndex& index,
                      uint32_t totalSize, uint64_t eventTimestamp);
     void operator() (uint16_t *pBody, uint32_t totalSize);
-    void operator() (uint16_t *pBody, 
- 		     uint32_t totalSize, uint64_t eventTimestamp);
-  
+    void operator() (uint16_t *pBody,
+ 		                 uint32_t totalSize, uint64_t eventTimestamp);
+
     static  unsigned long getLong(std::vector<unsigned short>& event, unsigned int offset);
 
-    void SetSource(char* sourceName);
+    void InitializeUnpacker(char* sourceName);
     void SetDebug(bool flag){fDebug=flag;}
-  
+
     bool IsDataMerged(){return fMergedData;}
 
   private:

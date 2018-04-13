@@ -4,21 +4,19 @@
 #include <stdio.h>
 
 #include <TNamed.h>
-
+#include <RBShared.h>
 #include <RBExperiment.h>
 
 class RBSetup : public TNamed
 {
 private:
-  RBExperiment *fExperiment;
-  
+
 public:
   RBSetup();
   ~RBSetup();
-  
-  RBExperiment* GetInitializedExp(){ return fExperiment;}
+
   void Print(){};
- 
+
   ClassDef(RBSetup,1);
 };
 
