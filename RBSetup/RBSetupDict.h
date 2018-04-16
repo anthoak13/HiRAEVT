@@ -55,6 +55,8 @@ extern G__linked_taginfo G__RBSetupDictLN_TVectorTlEfloatgR;
 extern G__linked_taginfo G__RBSetupDictLN_TVectorTlEdoublegR;
 extern G__linked_taginfo G__RBSetupDictLN_TMatrixTBaselEfloatgR;
 extern G__linked_taginfo G__RBSetupDictLN_TMatrixTBaselEdoublegR;
+extern G__linked_taginfo G__RBSetupDictLN_vectorlERBModuleInfomUcOallocatorlERBModuleInfomUgRsPgR;
+extern G__linked_taginfo G__RBSetupDictLN_reverse_iteratorlEvectorlERBModuleInfomUcOallocatorlERBModuleInfomUgRsPgRcLcLiteratorgR;
 extern G__linked_taginfo G__RBSetupDictLN_RBSetup;
 
 /* STUB derived class for protected member access */

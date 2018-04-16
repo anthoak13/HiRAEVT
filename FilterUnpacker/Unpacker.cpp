@@ -81,17 +81,19 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   int RunNumber = atoi(runNumStr.c_str());
 
   //Initialization of RBRunInfo class
-  RBExperimentInfo myExperimentInfo;
-  if(myExperimentInfo.InitClass("config/RIBbit2.conf")<=0) {
+  cout << "** Initializing Run Info **\n";
+  gExperimentInfo = new RBExperimentInfo();
+  if(gExperimentInfo->InitClass("config/RIBbit2.conf")<=0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }
-//   gRun=myExperimentInfo.GetRunInfo(RunNumber);
-//   if(gRun==0) {
-//     cout << "Failed to get run info." << endl;
-//     exit(-1);
-//   }
-  
+  gRun=gExperimentInfo->GetRunInfo(RunNumber);
+  if(gRun==0) {
+   cout << "Failed to get run info." << endl;
+   exit(-1);
+  }
+  cout << "** Run Info correctly initialized **\n";
+
   //Initialization of RBSetup class (RBExperiment is initialized in its constructor)
   fSetup = new RBSetup();
   if(gExperiment==0) {

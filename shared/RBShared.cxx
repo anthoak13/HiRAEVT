@@ -4,3 +4,4 @@
 Unpacker * gUnpacker;
 RBExperiment * gExperiment;
 RBRunInfo * gRun;
+RBExperimentInfo * gExperimentInfo;

@@ -31,19 +31,39 @@ public:
 
   int InitClass(const char *);                    //! Class Initializer
 
-  int LoadConfiguration(const char *);            //! Read configuration file of the experiment
+  int LoadSetupConfiguration(const char *);       //! Read general setup lines from configuration file of the experiment
+  int LoadRunConfiguration(const char *, int);    //! Read run configuration for a specific run
 
-  RBRunInfo * GetRunInfo(int);                    //! Get RBRunInfo class for a specific run number
-  
-  void Clear();                                   //!
+  void SetRunTitle(const char *);                 //!
+
+  RBRunInfo * GetRunInfo(int) const;                    //! Get RBRunInfo class for a specific run number
+  bool IsDataMerged() const;                            //!
+  const char * GetExperimentName() const;               //!
+  const char * GetExperimentTitle() const;              //!
+  const char * GetEvtFilePath() const;                  //!
+  const char * GetRootFilePath() const;                 //!
+
+  void Clear();                                         //!
 
 private:
   std::vector <const char *> fDAQConfigurationFileName;
   std::vector <const char *> fPedestalFileName;
   std::vector <const char *> fMappingFileName;
-  
+  std::vector <const char *> fRunEvtFilePath;
+  std::vector <const char *> fRunTitle;
+
+  bool fDataMerged;
+  std::string fExperimentName;
+  std::string fExperimentTitle;
+  std::string fEvtFilePath;
+  std::string fRootFilePath;
+
   int fFirstRun;
   int fLastRun;
+
+  void ParseSetConfigLine(const char *);              //! Parse a configuration line containing the command "set" and extract Experiment info
+  void ParseSetConfigLineRunInfo(const char *, int);  //! Parse a configuration line containing the command "set" and extract Run info
+  const char * RetrieveRunTitleFromEvtFile(const char *) const;     //! Returns run title taken from the evt file given as input
 
 };
 

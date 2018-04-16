@@ -11,6 +11,8 @@
 #include "RBCAEN7xxUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
 #include "RBSisTimestampUnpacker.h"
+#include <RBRunInfo.h>
+#include <RBExperimentInfo.h>
 
 //______________________________________________________________________________
 RBSetup::RBSetup(){
@@ -22,16 +24,16 @@ RBSetup::RBSetup(){
 ///////////////////////////////////////////////////////////////////////////////////////////
 
   // Set the setup name and title.
-  SetName ("testBeamSetup");
-  SetTitle("NSCL experiment 15190");
+  SetName (gExperimentInfo->GetExperimentName());
+  SetTitle(gExperimentInfo->GetExperimentTitle());
 
   // Instantiate a new RBExperiment object.
-  gExperiment = new RBExperiment("NE");
+  gExperiment = new RBExperiment(gExperimentInfo->GetExperimentName());
   // Initialize data members.
-  gExperiment->SetMergedData      (kTRUE);  // EVT files have been merged.
-  gExperiment->SetEventFilePath   ("/mnt/misc/daqevents-ro/e15190_2/experiment/");//TEMPORARY
-  gExperiment->SetRootFilePath    ("/mnt/analysis/e15190/TEST_rootfilesRIBbit2/");//TEMPORARY
-  gExperiment->SetExperimentNumber("15190");
+  gExperiment->SetMergedData      (gExperimentInfo->IsDataMerged());  // EVT files have been merged.
+  gExperiment->SetEventFilePath   (gExperimentInfo->GetEvtFilePath());
+  gExperiment->SetRootFilePath    (gExperimentInfo->GetRootFilePath());
+  gExperiment->SetExperimentNumber(gExperimentInfo->GetExperimentName());
 
   //HiRA Stack
   RBSisTimestampUnpacker *timestamp1 = new RBSisTimestampUnpacker("timestamp1");

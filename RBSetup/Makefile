@@ -34,7 +34,7 @@ INCLUDES += -I$(RIBbitSRC)/RBExperiment
 INCLUDES += -I$(RIBbitSRC)/shared
 INCLUDES += -I$(RIBbitSRC)/RBRunInfo
 
-CXXFLAGS += $(INCLUDES) -g
+CXXFLAGS += $(INCLUDES) -g -O2
 
 
 ############# RULES ###############

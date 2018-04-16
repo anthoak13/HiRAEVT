@@ -10,7 +10,7 @@ INCLUDES  += -I$(RIBbitSRC)/electronics
 
 RLIBS     := -L$(RIBbitLIB) -lRBElectronics
 
-CXXFLAGS  += -g $(INCLUDES) -fPIC
+CXXFLAGS  += -g $(INCLUDES) -fPIC -O2 -Wall
 
 RBRUNINFO_LIB := libRBRunInfo.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
@@ -28,11 +28,11 @@ $(OBJS): $(SRCS)
 
 install:
 	@cp $(RBRUNINFO_LIB) $(RIBbitLIB)/.
-	
+
 .PHONY: distclean
 distclean:
 	@rm -f $(RBRUNINFO_LIB)
-	@rm -f $(RIBbitLIB)/$(RBRUNINFO_LIB)	
+	@rm -f $(RIBbitLIB)/$(RBRUNINFO_LIB)
 
 .PHONY: clean
 clean:

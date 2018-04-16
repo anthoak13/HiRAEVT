@@ -1,58 +1,42 @@
-############# MACROS ##############
+CFLAGS    :=`root-config --cflags --libs`
 
-RC     := root-config
-ifeq ($(shell which $(RC) 2>&1 | sed -ne "s@.*/$(RC)@$(RC)@p"),$(RC))
-MKARCH := $(wildcard $(shell $(RC) --etcdir)/Makefile.arch)
-endif
-ifneq ($(MKARCH),)
-include $(MKARCH)
-else
-ROOTSYS = ..
-include $(ROOTSYS)/etc/Makefile.arch
-endif
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
 
-RIBBITSHARED_SRCS        := RBShared.$(SrcSuf)
+INCLUDES  := -I$(RIBbitSRC)/
 
-RIBBITSHARED_HDRS        := $(RIBBITSHARED_SRCS:.$(SrcSuf)=.h)
+RLIBS     := -L$(RIBbitLIB)
 
-RIBBITSHARED_OBJS        := $(RIBBITSHARED_SRCS:.$(SrcSuf)=.$(ObjSuf))
+CXXFLAGS  += -g $(INCLUDES) -fPIC -O2 -Wall -Wpedantic
 
-RIBBITSHARED_LIB         := libRBShared.$(DllSuf)
+RBRUNINFO_LIB := libRBShared.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
-INCLUDES += -I$(RIBbitSRC)
-INCLUDES += -I$(RIBbitSRC)/FilterUnpacker
-INCLUDES += -I$(RIBbitSRC)/RBExperiment
-INCLUDES += -I$(RIBbitSRC)/electronics
+all: $(RBRUNINFO_LIB)
 
-CXXFLAGS += $(INCLUDES) -g
+$(RBRUNINFO_LIB): $(OBJS)
+	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
+	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
-
-############# RULES ###############
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) -g $(CXXFLAGS) -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter -c $<
-
-############# TARGETS #############
-
-.SUFFIXES: .$(SrcSuf) .$(ObjSuf)
-
-all:  $(RIBBITSHARED_LIB)
-
-$(RIBBITSHARED_DICT): $(RIBBITSHARED_HDRS)
-	@echo "Generating dictionary $@... $(RIBBITSHARED_DICT) $(SrcSuf)"
-	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
-
-$(RIBBITSHARED_LIB): $(RIBBITSHARED_OBJS)
-ifeq ($(PLATFORM),macosx)
-	$(LD) $(SOFLAGS)$@ $(INCLUDES) $(LDFLAGS) $^ $(OutPutOpt) $@ $(GLIBS) $(RLIBS)
-else
-	$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(GLIBS) $(RLIBS) $(OutPutOpt)$@
-endif
+$(OBJS): $(SRCS)
+	@$(CXX) $(CXXFLAGS) -c $^ $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $^ $(CFLAGS)"
 
 install:
-	@cp $(RIBBITSHARED_LIB) $(RIBbitLIB)/.
+	@cp $(RBRUNINFO_LIB) $(RIBbitLIB)/.
 
-distclean: clean
+.PHONY: distclean
+distclean:
+	@rm -f $(RBRUNINFO_LIB)
+	@rm -f $(RIBbitLIB)/$(RBRUNINFO_LIB)
 
+.PHONY: clean
 clean:
-	@rm -f $(RIBBITSHARED_OBJS)
+	@$(RM) -f $(LIB) $(OBJS)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)
