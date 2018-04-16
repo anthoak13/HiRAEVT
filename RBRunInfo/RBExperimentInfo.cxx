@@ -14,9 +14,6 @@ RBExperimentInfo::~RBExperimentInfo()
 //________________________________________________
 void RBExperimentInfo::Clear()
 {
-  fDAQConfigurationFileName.clear();
-  fPedestalFileName.clear();
-  fMappingFileName.clear();
   fExperimentName.clear();
   fExperimentTitle.clear();
   fEvtFilePath.clear();
@@ -32,11 +29,20 @@ int RBExperimentInfo::InitClass(const char *file_name)
   //Set general setup configuration
   NLinesRead += LoadSetupConfiguration(file_name);
 
+  fDAQConfigurationFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
+  fPedestalFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
+  fMappingFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
+  fRunEvtFilePath=(std::string*)new std::string[fLastRun-fFirstRun+1];
+  fRunTitle=(std::string*)new std::string[fLastRun-fFirstRun+1];
+
   //Set run-by-run setup configuration
   for(int run_num=fFirstRun; run_num<=fLastRun; run_num++)
   {
-    SetRunTitle(RetrieveRunTitleFromEvtFile(Form("%srun%d/run-%04d-00.evt",fEvtFilePath.c_str(),run_num,run_num)));
     NLinesRead += LoadRunConfiguration(file_name,run_num);
+    const char * TempRunTitle=RetrieveRunTitleFromEvtFile(Form("%srun%d/run-%04d-00.evt",fRunEvtFilePath[run_num-fFirstRun].c_str(),run_num,run_num));
+    if(TempRunTitle!=0) {
+      fRunTitle[run_num-fFirstRun].assign(TempRunTitle);
+    }
   }
 
   return NLinesRead;
@@ -73,6 +79,7 @@ int RBExperimentInfo::LoadSetupConfiguration(const char *file_name)
 
     NRead++;
   }
+  FileIn.close();
 
   return NRead;
 }
@@ -101,6 +108,7 @@ int RBExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
 
     NRead++;
   }
+  FileIn.close();
 
   return NRead;
 }
@@ -108,25 +116,27 @@ int RBExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
 //________________________________________________
 RBRunInfo * RBExperimentInfo::GetRunInfo(int run_num) const
 {
-  RBRunInfo * newRunInfo = new RBRunInfo(run_num);
+  RBRunInfo * newRunInfo = new RBRunInfo(run_num,fRunTitle[run_num-fFirstRun].c_str());
 
-  if(!newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun])) {
+  if(!newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str())) {
     delete newRunInfo;
     return 0;
   }
-  if(!newRunInfo->LoadPedestals(fPedestalFileName[run_num-fFirstRun])) {
+  if(!newRunInfo->LoadPedestals(fPedestalFileName[run_num-fFirstRun].c_str())) {
     delete newRunInfo;
     return 0;
   }
-  if(!newRunInfo->LoadMapping(fMappingFileName[run_num-fFirstRun])) {
+  if(!newRunInfo->LoadMapping(fMappingFileName[run_num-fFirstRun].c_str())) {
     delete newRunInfo;
     return 0;
   }
   if(!fRunEvtFilePath[run_num-fFirstRun].empty()) {
-    newRunInfo->SetEventFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
+    newRunInfo->SetEvtFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
+  } else {
+    newRunInfo->SetEvtFilePath(fEvtFilePath.c_str());
   }
 
-  return 0;
+  return newRunInfo;
 }
 
 //________________________________________________
@@ -181,17 +191,17 @@ void RBExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
     if(run_num>=StartRunNum && run_num<=StopRunNum) {
       NewValue.assign(LineToParse.substr(LineToParse.find("\"")+1,LineToParse.find_last_of("\"")-(LineToParse.find("\"")+1)));
     } else return;
-  }
+  } else return;
 
   // if I'm here so run_num has been found in the configuration line
   if(ValueToSet.compare("DAQ_CONFIG")==0) {
-    fDAQConfigurationFileName.push_back(NewValue.c_str());
+    fDAQConfigurationFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("PEDESTAL_VALUES")==0) {
-    fPedestalFileName.push_back(NewValue.c_str());
+    fPedestalFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("PEDESTAL_VALUES")==0) {
-    fMappingFileName.push_back(NewValue.c_str());
+    fMappingFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("EVENT_FILE_PATH")==0) {
-    fRunEvtFilePath.push_back(NewValue.c_str());
+    fRunEvtFilePath[run_num-fFirstRun].assign(NewValue);
   }
 
   return;
@@ -226,13 +236,6 @@ const char * RBExperimentInfo::GetEvtFilePath() const
 const char * RBExperimentInfo::GetRootFilePath() const
 {
   return fRootFilePath.c_str();
-}
-
-
-//________________________________________________
-void RBExperimentInfo::SetRunTitle(const char * run_title)
-{
-  fRunTitle.push_back(run_title);
 }
 
 //________________________________________________
@@ -294,6 +297,8 @@ const char * RBExperimentInfo::RetrieveRunTitleFromEvtFile(const char * evtfile_
       break;
     }
   }
+
+  evtfile.close();
 
   return RunTitle.c_str();
 }

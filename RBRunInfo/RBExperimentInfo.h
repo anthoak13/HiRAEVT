@@ -34,8 +34,6 @@ public:
   int LoadSetupConfiguration(const char *);       //! Read general setup lines from configuration file of the experiment
   int LoadRunConfiguration(const char *, int);    //! Read run configuration for a specific run
 
-  void SetRunTitle(const char *);                 //!
-
   RBRunInfo * GetRunInfo(int) const;                    //! Get RBRunInfo class for a specific run number
   bool IsDataMerged() const;                            //!
   const char * GetExperimentName() const;               //!
@@ -46,11 +44,11 @@ public:
   void Clear();                                         //!
 
 private:
-  std::vector <const char *> fDAQConfigurationFileName;
-  std::vector <const char *> fPedestalFileName;
-  std::vector <const char *> fMappingFileName;
-  std::vector <const char *> fRunEvtFilePath;
-  std::vector <const char *> fRunTitle;
+  std::string * fDAQConfigurationFileName;
+  std::string * fPedestalFileName;
+  std::string * fMappingFileName;
+  std::string * fRunEvtFilePath;
+  std::string * fRunTitle;
 
   bool fDataMerged;
   std::string fExperimentName;

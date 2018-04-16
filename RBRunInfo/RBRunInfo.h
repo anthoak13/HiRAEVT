@@ -11,32 +11,34 @@
 class RBRunInfo
 {
 public:
-  RBRunInfo(int run_number);
-  ~RBRunInfo();
+  RBRunInfo(int run_number, const char * run_title="");                             //! Constructor
+  ~RBRunInfo();                                          //! Destructor
 
-  int LoadDAQSettings(const char *);
-  int LoadPedestals(const char *);
-  int LoadMapping(const char *);
+  int LoadDAQSettings(const char *);                     //! Read DAQ settings from file
+  int LoadPedestals(const char *);                       //! Read Pedetal settings from file
+  int LoadMapping(const char *);                         //! Read channel Mapping from file
 
-  const char * GetRunTitle();
-  int GetRunNumber();
-  const char * GetEvtFilePath();
-  int GetNStacks();
-  RBDAQStackInfo * GetStackInfo(int);
+  const char * GetRunTitle() const;                      //! Returns run title
+  int GetRunNumber() const;                              //! Returns run number
+  const char * GetEvtFilePath() const;                   //! Returns path containing evt files for the run
+  int GetNStacks() const;                                //! Returns number of stacks
+  RBDAQStackInfo * GetStackInfo(int) const;              //! Returns a RBDAQStackInfo object
 
-  void SetEvtFilePath(const char *);
+  void SetEvtFilePath(const char *);                     //! Set path for evt files of the run
+  void SetRunTitle(const char *);                        //! Set run title
 
-  void AddModuleToStackInfo(RBElectronics *);
+  void AddModuleToStackInfo(RBElectronics *);            //! Add a module to the RBDAQStackInfo object
 
 private:
-  const char * fRunTitle;
-  int fRunNumber;
-  const char * fEvtFilePath;
-  bool fDAQLoaded;
-  bool fPedestalsLoaded;
-  bool fMappingLoaded;
+  std::string fRunTitle;                                 //!
+  int fRunNumber;                                        //!
+  std::string fEvtFilePath;                              //!
+  int fNStacks;
+  bool fDAQLoaded;                                       //!
+  bool fPedestalsLoaded;                                 //!
+  bool fMappingLoaded;                                   //!
 
-  RBDAQStackInfo * fStackInfo;
+  std::vector <RBDAQStackInfo *> fStackInfo;             //!
 
 };
 
