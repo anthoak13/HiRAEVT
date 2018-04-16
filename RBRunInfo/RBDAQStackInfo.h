@@ -4,21 +4,27 @@
 #include <vector>
 
 #include <RBElectronics.h>
+#include <RBModuleInfo.h>
 
 class RBDAQStackInfo
 {
 public:
   RBDAQStackInfo();
   ~RBDAQStackInfo();
+  
+  void Clear();
 
-  int GetNModules();                  //! Returns the number of modules in the stack
-//  RBElectronics * GetModule(int);     //! Returns the pointer of the i-th module
-  int GetModuleVSN(int);              //! Returns the VSN of the i-th module
+  int GetNModules() const;                     //! Returns the number of modules in the stack
+  RBElectronics * GetModule(int) const;        //! Returns the pointer of the i-th module
+  const char * GetModuleType(int) const;       //! Returns a const char * indicating module type
+  int GetModuleVSN(int) const;                 //! Returns the VSN of the i-th module
+  RBModuleInfo  * GetModuleInfo(int) const;    //! Returns the pointer of the i-th module RBModuleInfo class
 
-//  void AddModule(RBElectronics *);    //! Add a new module to the stack info class
+  void AddModule(RBElectronics *);             //! Add a new module to the stack info class
 
 private:
-//  std::vector <RBElectronics *> fModuleInStack
+  int fNModules;                                //! Number of modules in stack 
+  std::vector <RBModuleInfo *> fModuleInStack;  //! RBModuleInfo objects
 
 };
 

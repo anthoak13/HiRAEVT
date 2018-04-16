@@ -6,6 +6,7 @@
 #include <TNamed.h>
 #include <RBShared.h>
 #include <RBExperiment.h>
+#include <RBRunInfo.h>
 
 class RBSetup : public TNamed
 {

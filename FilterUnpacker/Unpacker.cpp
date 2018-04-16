@@ -11,6 +11,8 @@
 
 #include <RBExperiment.h>
 #include <RBSetup.h>
+#include <RBExperimentInfo.h>
+#include <RBRunInfo.h>
 
 //______________________________________________________________________________
 Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),m_lastTimestamp(0),fDebug(0)
@@ -72,13 +74,28 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   // gExperiment : RBExperiment class object containing stack configurations and defining the structure of the output file
   //
   strcpy(fSourceFileName, sourceName);
+  std::string evtFileStr(fSourceFileName);
+  std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
+  // Determine run number from file name.
+  std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-")+4,4));
+  int RunNumber = atoi(runNumStr.c_str());
 
-  // NOTE
-  // Here we need to initialize RunInfo
-
+  //Initialization of RBRunInfo class
+  RBExperimentInfo myExperimentInfo;
+  if(myExperimentInfo.InitClass("config/RIBbit2.conf")<=0) {
+    cout << "Error while reading configuration file.\n";
+    exit (-1);
+  }
+//   gRun=myExperimentInfo.GetRunInfo(RunNumber);
+//   if(gRun==0) {
+//     cout << "Failed to get run info." << endl;
+//     exit(-1);
+//   }
+  
+  //Initialization of RBSetup class (RBExperiment is initialized in its constructor)
   fSetup = new RBSetup();
   if(gExperiment==0) {
-    cout << "Failed to initalize experimental setup." << endl;
+    cout << "Failed to initalize experiment electronics." << endl;
     exit(-1);
   }
   fMergedData = gExperiment->IsDataMerged();

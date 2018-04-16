@@ -3,8 +3,10 @@
 
 class Unpacker;
 class RBExperiment;
+class RBRunInfo;
 
 extern Unpacker * gUnpacker;
 extern RBExperiment * gExperiment;
+extern RBRunInfo * gRun;
 
 #endif

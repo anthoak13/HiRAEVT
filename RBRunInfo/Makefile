@@ -16,9 +16,11 @@ RBRUNINFO_LIB := libRBRunInfo.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
+all: $(RBRUNINFO_LIB)
+
 $(RBRUNINFO_LIB): $(OBJS)
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
-	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^"
+	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 $(OBJS): $(SRCS)
 	@$(CXX) $(CXXFLAGS) -c $^ $(CFLAGS)
@@ -26,6 +28,11 @@ $(OBJS): $(SRCS)
 
 install:
 	@cp $(RBRUNINFO_LIB) $(RIBbitLIB)/.
+	
+.PHONY: distclean
+distclean:
+	@rm -f $(RBRUNINFO_LIB)
+	@rm -f $(RIBbitLIB)/$(RBRUNINFO_LIB)	
 
 .PHONY: clean
 clean:

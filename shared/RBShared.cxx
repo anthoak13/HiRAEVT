@@ -3,3 +3,4 @@
 //Global variables
 Unpacker * gUnpacker;
 RBExperiment * gExperiment;
+RBRunInfo * gRun;

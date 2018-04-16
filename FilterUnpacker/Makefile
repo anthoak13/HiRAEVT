@@ -2,7 +2,7 @@
 include $(RIBbitDAQROOT)/filterkit/FilterIncludes
 #
 #  Add your own compilation/link flags here:
-RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo -lRBShared
+RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo -lRBShared -lRBRunInfo
 
 INCLUDES  := -I$(RIBbitSRC)/
 INCLUDES  += -I$(RIBbitSRC)/electronics
@@ -10,6 +10,7 @@ INCLUDES  += -I$(RIBbitSRC)/RBExperiment
 INCLUDES  += -I$(RIBbitSRC)/RBSetup
 INCLUDES  += -I$(RIBbitSRC)/logo
 INCLUDES  += -I$(RIBbitSRC)/shared
+INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
 
 USERCXXFLAGS = -g $(INCLUDES) $(RLIBS)
 USERCCFLAGS  = $(USERCXXFLAGS)

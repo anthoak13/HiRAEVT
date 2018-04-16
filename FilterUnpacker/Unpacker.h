@@ -15,7 +15,6 @@
 #endif
 #endif
 
-//#include "RBSetup.h"
 
 class FragmentIndex;
 

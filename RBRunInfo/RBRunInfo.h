@@ -21,6 +21,11 @@ public:
 private:
   const char * fRunTitle;
   int fRunNumber;
+  bool fDAQLoaded;
+  bool fPedestalsLoaded;
+  bool fMappingLoaded;
+  
+  RBDAQStackInfo * fStackInfo;
 
 };
 

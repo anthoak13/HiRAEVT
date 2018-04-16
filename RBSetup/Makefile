@@ -25,13 +25,14 @@ RBSETUP_LIB         := libRBSetup.$(DllSuf).1.0
 
 RBSETUP_OBJS        := $(RBSETUP_SRCS:.$(SrcSuf)=.$(ObjSuf))
 
-RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBShared
+RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBShared -lRBRunInfo
 
 INCLUDES += -I$(RIBbitSRC)
 INCLUDES += -I$(RIBbitSRC)/settings
 INCLUDES += -I$(RIBbitSRC)/electronics
 INCLUDES += -I$(RIBbitSRC)/RBExperiment
 INCLUDES += -I$(RIBbitSRC)/shared
+INCLUDES += -I$(RIBbitSRC)/RBRunInfo
 
 CXXFLAGS += $(INCLUDES) -g
 
