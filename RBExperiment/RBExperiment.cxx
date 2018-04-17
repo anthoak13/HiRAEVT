@@ -106,14 +106,6 @@ RBExperiment::RBExperiment(const char *name)
 
   //Set merged data flag (taken from Andy's code Aug 19 2016)
   SetMergedData(kFALSE);
-
-  // By default do not fill anything.
-  kA1900Fill   = kFALSE;
-  kS800Fill    = kFALSE;
-  kEpicsFill   = kFALSE;
-  kScalerFill  = kFALSE;
-  kElogFill    = kFALSE;
-
 }
 
 
@@ -160,22 +152,6 @@ void RBExperiment::CreateFolders()
 }
 
 //______________________________________________________________________________
-void RBExperiment::SetRunInfo(RBRingStateChangeItem *stateItem)
-{
-  // --
-  //
-  runNumber->SetTitle(Form("%u",stateItem->GetRunNumber()));
-  runTitle->SetTitle(stateItem->GetRunTitle());
-
-  struct tm *tptr;
-  time_t tstamp(stateItem->GetTimestamp());
-  tptr = gmtime(&tstamp);
-  dateTimestamp->SetTitle(asctime(gmtime(&tstamp)));
-  timeBegin->SetTitle(Form("%i:%i:%i",tptr->tm_hour,tptr->tm_min,tptr->tm_sec));
-  dateBegin->SetTitle(Form("%02i.%02i.%i",tptr->tm_mon,tptr->tm_mday,tptr->tm_year + 1900));
-}
-
-//______________________________________________________________________________
 void RBExperiment::DumpClassInfo()
 {
   // -- Obsolete
@@ -186,30 +162,7 @@ void RBExperiment::DumpClassInfo()
 //______________________________________________________________________________
 void RBExperiment::DumpInfo()
 {
-  // -- Output all run information.
-  // This output should include all information in the UserInfoList of the current TTree.
-  // In addition scaler values are output along with any quantities calculated with these
-  // values.
-
-  ofstream dumpFile("RUNDUMP.dat",ios::out);
-  Char_t outC[2000];
-
-  printf("***************************DUMPING RUN INFO**********************************\n");
-
-  // Dump UserInfo
-  fChain->GetUserInfo()->Print();
-  TNamed *namedTmp = (TNamed*)fChain->GetUserInfo()->FindObject("Elapsed Run Time");
-  if(namedTmp){
-    Double_t eTime   = atof(namedTmp->GetTitle());
-    TNamed *dumpN;
-    TIter next(fChain->GetUserInfo());
-    while((dumpN = (TNamed *)next())){
-      sprintf(outC,"%-35.35s \t%s\n",dumpN->GetName(),dumpN->GetTitle());
-      dumpFile << outC;
-    }
-  }
-  dumpFile.close();
-
+  // -- Obsolete
 }
 
 
@@ -292,7 +245,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   }
 
   // We must be careful here.  The file must be open before we create the tree.
-  fRootTree = new TTree(Form("E%s",expNumber->GetTitle()), "RIBbitUnpacker Tree created by RIBbit2",2);
+  fRootTree = new TTree(Form("E%s",expNumber->GetTitle()), gRun->GetRunTitle(),2);
 
   // Initialize the branches for EVB RingItem data.
   fRootTree->Branch("fBRI.Size",     &fBRI_Size,     "fBRI.Size/I");

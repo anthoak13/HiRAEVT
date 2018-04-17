@@ -1,6 +1,9 @@
 #ifndef RBRUNINFO_H
 #define RBRUNINFO_H
 
+#include <fstream>
+#include <sstream>
+
 #include <RBDAQStackInfo.h>
 #include <RBHINPUnpacker.h>
 #include <RBPh7xxUnpacker.h>
@@ -39,6 +42,9 @@ private:
   bool fMappingLoaded;                                   //!
 
   std::vector <RBDAQStackInfo *> fStackInfo;             //!
+
+  void ParseDefineDAQLine(const char *);
+  void ParseAddDAQLine(const char *);
 
 };
 

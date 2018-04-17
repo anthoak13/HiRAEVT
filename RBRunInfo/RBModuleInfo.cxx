@@ -50,6 +50,18 @@ void RBModuleInfo::SetModuleType(const char * modType)
 }
 
 //________________________________________________
+void RBModuleInfo::SetModuleName(std::string modName)
+{
+  fModuleName.assign(modName);
+}
+
+//________________________________________________
+void RBModuleInfo::SetModuleName(const char * modName)
+{
+  fModuleName.assign(modName);
+}
+
+//________________________________________________
 void RBModuleInfo::SetChannelMapping(int ch, std::string newChMapping)
 {
   fModuleMapping[ch].assign(newChMapping);
@@ -89,6 +101,12 @@ int RBModuleInfo::GetNumCh() const
 const char * RBModuleInfo::GetModuleType() const
 {
   return fModuleType.c_str();
+}
+
+//________________________________________________
+const char * RBModuleInfo::GetModuleName() const
+{
+  return fModuleName.c_str();
 }
 
 //________________________________________________

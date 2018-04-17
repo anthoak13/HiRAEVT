@@ -12,18 +12,10 @@
 #include <iostream>
 
 #include "RBNSCLBufferHeader.h"
-
-//#include "RBA1900.h"
-//#include "RBA1900HistoManager.h"
-//class A1900HistoManager;
-
 #include "RBRingStateChangeItem.h"
 #include "RBElectronics.h"
-
-
-//#ifdef SCALERCLASS_FLAG
-//#include  "TScaler.h"
-//#endif
+#include <RBShared.h>
+#include <RBRunInfo.h>
 
 #include <fstream>
 #include <string>
@@ -126,15 +118,6 @@ public:
   TNamed *note;                                     //! Run note.
   TObjArray notesArray;                             //! Array to hold run notes.
 
-  Bool_t  kA1900Fill;                               //! A1900 fill flag.
-  Bool_t  kS800Fill;                                //! S800 fill flag.
-  Bool_t  kEpicsFill;                               //! Epics fill flag.
-  Bool_t  kScalerFill;                              //! Scaler fill flag.
-  Bool_t  kElogFill;                                //! Elog fill flag.
-
-  TFolder f_constants;                              //!
-  TFolder f_scaler;                                 //!
-
 public:
   const Char_t *evtFilePath;                        //! Source of event files.
   const Char_t *rootFilePath;                       //! Destination of ROOT files.
@@ -190,7 +173,6 @@ public:
 
   void         SetMergedData(Bool_t mergedFlag){fMergedData = mergedFlag;} // Sets the merged data flag.
 
-  void         SetRunInfo(RBRingStateChangeItem *stateItem);      //
   Bool_t       SetEventFilePath(const Char_t *path);                    // Sets the event file path.
   Bool_t       SetExperimentNumber(const Char_t *number);               // Sets the experiment number.
   Bool_t       SetRootFilePath(const Char_t *path);                     // Sets the root file path.

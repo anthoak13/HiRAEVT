@@ -118,18 +118,20 @@ RBRunInfo * RBExperimentInfo::GetRunInfo(int run_num) const
 {
   RBRunInfo * newRunInfo = new RBRunInfo(run_num,fRunTitle[run_num-fFirstRun].c_str());
 
-  if(!newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str())) {
+  if(newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str())<=0) {
     delete newRunInfo;
     return 0;
   }
-  if(!newRunInfo->LoadPedestals(fPedestalFileName[run_num-fFirstRun].c_str())) {
+  /*
+  if(newRunInfo->LoadPedestals(fPedestalFileName[run_num-fFirstRun].c_str())<=0) {
     delete newRunInfo;
     return 0;
   }
-  if(!newRunInfo->LoadMapping(fMappingFileName[run_num-fFirstRun].c_str())) {
+  if(newRunInfo->LoadMapping(fMappingFileName[run_num-fFirstRun].c_str())<=0) {
     delete newRunInfo;
     return 0;
   }
+  */
   if(!fRunEvtFilePath[run_num-fFirstRun].empty()) {
     newRunInfo->SetEvtFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
   } else {

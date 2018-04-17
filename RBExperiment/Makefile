@@ -29,6 +29,8 @@ RLIBS             := -L$(RIBbitLIB)
 
 INCLUDES += -I../
 INCLUDES += -I../electronics
+INCLUDES += -I../shared
+INCLUDES += -I../RBRunInfo
 
 CXXFLAGS += -g $(INCLUDES)
 
