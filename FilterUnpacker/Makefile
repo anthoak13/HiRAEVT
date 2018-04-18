@@ -11,6 +11,7 @@ INCLUDES  += -I$(RIBbitSRC)/RBSetup
 INCLUDES  += -I$(RIBbitSRC)/logo
 INCLUDES  += -I$(RIBbitSRC)/shared
 INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
+INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
 
 USERCXXFLAGS = -g $(INCLUDES) $(RLIBS)
 USERCCFLAGS  = $(USERCXXFLAGS)

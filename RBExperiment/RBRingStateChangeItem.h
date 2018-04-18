@@ -47,6 +47,7 @@ class RBRingStateChangeItem : public RBRingItem {
   UInt_t       GetRunNumber(){return fRunNumber;}
   TString      GetRunTitle() {return fRunTitle;}
   time_t       GetTimestamp(){return fTimestamp;}
+  const char * GetType(){return fReason.Data();}
 
   void         Clear(Option_t *option="");
   void         InitClass();                                       // Calls all InitClass methods.

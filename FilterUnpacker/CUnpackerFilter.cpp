@@ -2,9 +2,9 @@
 #include <iostream>
 #include <CRingStateChangeItem.h>
 #include <CPhysicsEventItem.h>
-#include "CUnpackerFilter.h"
-#include "Unpacker.h"
-#include "FragmentIndex.h"
+#include <CUnpackerFilter.h>
+#include <Unpacker.h>
+#include <FragmentIndex.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -21,6 +21,12 @@
 */
 CUnpackerFilter::CUnpackerFilter()
 {}
+
+CUnpackerFilter::~CUnpackerFilter()
+{
+  //WARNING:
+  //For some reason this destructor is called twice.
+}
 
 void CUnpackerFilter::PassArguments(int argc, char* argv[])
 {

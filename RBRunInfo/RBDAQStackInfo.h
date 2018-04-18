@@ -23,7 +23,7 @@ public:
   int GetModuleVSN(int) const;                 //! Returns the VSN of the i-th module
   RBModuleInfo  * GetModuleInfo(int) const;    //! Returns the pointer of the i-th module RBModuleInfo class
 
-  void AddModuleInfo(RBModuleInfo *);             //! Add a new module to the stack info class
+  void AddModuleInfo(RBModuleInfo *);          //! Add a new module to the stack info class
 
 private:
   int fNModules;                                //! Number of modules in stack

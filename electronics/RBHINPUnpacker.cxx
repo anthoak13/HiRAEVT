@@ -351,3 +351,15 @@ void RBHINPUnpacker::PrintSummary()
 
   printf("\n");
 }
+
+//______________________________________________________________________________
+void RBHINPUnpacker::AddTTreeUserInfo(TTree *tree)
+{
+  TNamed * unpackedData      = new TNamed(Form("module %s : Total Unpacked Data",fChName.Data()), Form("%llu", fTotalUnpackedData));
+  TNamed * errorsChipFound   = new TNamed(Form("module %s : Faulty Chip Errors Found",fChName.Data()), Form("%llu", fFaultyCount));
+  TNamed * errorsBufFound    = new TNamed(Form("module %s : Buffer Errors Found",fChName.Data()), Form("%llu", fErrorCount));
+
+  tree->GetUserInfo()->Add(unpackedData);         //Total unpacked data in this module
+  tree->GetUserInfo()->Add(errorsChipFound);      //Faulty Chip Errors produced
+  tree->GetUserInfo()->Add(errorsBufFound);       //Buffer Errors found
+}

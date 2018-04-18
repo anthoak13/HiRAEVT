@@ -26,17 +26,17 @@ RBSetup::RBSetup(){
 ///////////////////////////////////////////////////////////////////////////////////////////
 
   // Set the setup name and title.
-  SetName (gExperimentInfo->GetExperimentName());
-  SetTitle(gExperimentInfo->GetExperimentTitle());
+  SetName (gExperimentInfo->GetName());
+  SetTitle(gExperimentInfo->GetTitle());
 
   // Instantiate a new RBExperiment object.
-  gExperiment = new RBExperiment(gExperimentInfo->GetExperimentName());
+  gExperiment = new RBExperiment(gExperimentInfo->GetName());
   // Initialize data members.
   gExperiment->SetMergedData      (gExperimentInfo->IsDataMerged());  // EVT files have been merged.
   gExperiment->SetEventFilePath   (gRun->GetEvtFilePath());
   gExperiment->SetRootFilePath    (gExperimentInfo->GetRootFilePath());
-  gExperiment->SetExperimentNumber(gExperimentInfo->GetExperimentName());
-  
+  gExperiment->SetExperimentNumber(gExperimentInfo->GetName());
+
   // Definition of electronic modules and stacks
   for(int NumStack=0; NumStack<gRun->GetNStacks(); NumStack++)
   {
@@ -65,6 +65,5 @@ RBSetup::RBSetup(){
   printf("Experiment classes correctly initialized\n");
 }
 
-RBSetup::~RBSetup(){
-  delete gExperiment;
-}
+RBSetup::~RBSetup()
+{}

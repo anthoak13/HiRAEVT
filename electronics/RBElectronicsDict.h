@@ -37,10 +37,10 @@ extern void G__set_cpp_environmentRBElectronicsDict();
 #include "RBSisTimestampUnpacker.h"
 #include "RBHINPUnpacker.h"
 #include "RBCCUSBPacket.h"
+#include "RBPh7xxUnpacker.h"
 #include "RBCAEN7xxUnpacker.h"
 #include "RBUSBStackMarker.h"
 #include "RBTimestamp.h"
-#include "RBPh7xxUnpacker.h"
 #include "RBUSBStack.h"
 #include "RBModuleUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
@@ -72,10 +72,10 @@ extern G__linked_taginfo G__RBElectronicsDictLN_RBModuleUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBSisTimestampUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBHINPUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBCCUSBPacket;
+extern G__linked_taginfo G__RBElectronicsDictLN_RBPh7xxUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBCAEN7xxUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackMarker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBTimestamp;
-extern G__linked_taginfo G__RBElectronicsDictLN_RBPh7xxUnpacker;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStack;
 extern G__linked_taginfo G__RBElectronicsDictLN_RBUSBStackcLcL_StackInfo;
 extern G__linked_taginfo G__RBElectronicsDictLN_TRandom3;

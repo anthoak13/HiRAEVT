@@ -401,3 +401,17 @@ void RBCAEN1x90Unpacker::PrintSummary()
   printf("%llu TDC data with no hit in reference found\n", fNoReferenceCount);
   printf("\n");
 }
+
+//______________________________________________________________________________
+void RBCAEN1x90Unpacker::AddTTreeUserInfo(TTree *tree)
+{
+  TNamed * unpackedData      = new TNamed(Form("module %s : Total Unpacked Data",fChName.Data()), Form("%llu", fTotalUnpackedData));
+  TNamed * errorsFound       = new TNamed(Form("module %s : Errors Produced",fChName.Data()), Form("%llu", fErrorCount));
+  TNamed * VSNMistmatches    = new TNamed(Form("module %s : VSN Mismatches Found",fChName.Data()), Form("%llu", fVSNMismatchCount));
+  TNamed * TDCNoReference    = new TNamed(Form("module %s : TDC Data With No Hit in Reference",fChName.Data()), Form("%llu", fNoReferenceCount));
+
+  tree->GetUserInfo()->Add(unpackedData);         //Total unpacked data in this module
+  tree->GetUserInfo()->Add(errorsFound);          //Errors produced
+  tree->GetUserInfo()->Add(VSNMistmatches);       //VSN mismatches found
+  tree->GetUserInfo()->Add(TDCNoReference);       //TDC data with no hit in reference
+}

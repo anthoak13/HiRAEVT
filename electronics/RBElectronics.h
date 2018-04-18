@@ -60,6 +60,7 @@ public:
   virtual Double_t GetDataf(Int_t ch){return -1;}
 
   virtual void PrintSummary() {return;}
+  virtual void AddTTreeUserInfo(TTree *) {return;}
 
 
   ClassDef(RBElectronics,1);

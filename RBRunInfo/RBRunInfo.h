@@ -21,7 +21,7 @@ public:
   int LoadPedestals(const char *);                       //! Read Pedetal settings from file
   int LoadMapping(const char *);                         //! Read channel Mapping from file
 
-  const char * GetRunTitle() const;                      //! Returns run title
+  const char * GetTitle() const;                         //! Returns run title
   int GetRunNumber() const;                              //! Returns run number
   const char * GetEvtFilePath() const;                   //! Returns path containing evt files for the run
   int GetNStacks() const;                                //! Returns number of stacks

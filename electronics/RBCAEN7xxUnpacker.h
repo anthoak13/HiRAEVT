@@ -11,7 +11,9 @@
 
 #include "RBElectronics.h"
 
-#include "TTree.h"
+#include <TTree.h>
+#include <TNamed.h>
+#include <TList.h>
 
 /*!
  This unpacker is responsible for unpacking CAEN 32 channel digitizers.  These modules
@@ -52,6 +54,7 @@ public:
   Short_t GetData(Int_t ch){return fData[ch];}
 
   void PrintSummary();
+  void AddTTreeUserInfo(TTree *);
 
   ClassDef(RBCAEN7xxUnpacker,1);
 };

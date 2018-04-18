@@ -1,6 +1,6 @@
 
-#include "FragmentIndex.h"
-#include "Unpacker.h"
+#include <FragmentIndex.h>
+#include <Unpacker.h>
 
 #include <iostream>
 #include <iomanip>
@@ -8,14 +8,20 @@
 #include <TFile.h>
 #include <TH1.h>
 #include <TString.h>
+#include <TTree.h>
+#include <TNamed.h>
+#include <TList.h>
 
 #include <RBExperiment.h>
 #include <RBSetup.h>
 #include <RBExperimentInfo.h>
 #include <RBRunInfo.h>
+#include <RBSetup.h>
+#include <RBExperimentInfo.h>
+#include <RBRunInfo.h>
 
 //______________________________________________________________________________
-Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),m_lastTimestamp(0),fDebug(0)
+Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),fTimeElapsed(0),m_lastTimestamp(0),fDebug(0)
 {
   // --
   //
@@ -37,21 +43,7 @@ Unpacker::~Unpacker()
 {
   // --
   //
-
-  cout << "\n\n--Unpacking summary--" << endl;
-  printf("%llu events unpacked\n", nevent);
-  printf("%llu words read\n", fReadWords);
-  printf("%llu timestamp mismatches found\n", fTimestampMismatch);
-  printf("\n");
-  TIter nextModule(gExperiment->GetElectronicsList());
-  while(RBElectronics *elc = (RBElectronics*)nextModule()){ //loop over the stacks
-    //cout << " " << elc->GetName() << " " << elc->GetUnpackErrorCount() << endl;
-    //Here we should print the error summaries for every stack in the DAQ
-    elc->PrintSummary();
-  }
-  gExperiment->EndROOTConverter();
 }
-
 
 //______________________________________________________________________________
 void Unpacker::Clear()
@@ -79,6 +71,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   // Determine run number from file name.
   std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-")+4,4));
   int RunNumber = atoi(runNumStr.c_str());
+  int EvtFileNumber = atoi(evtFileStr.substr(evtFileStr.find_last_of("-")+1,evtFileStr.find_last_of(".")-(evtFileStr.find_last_of("-")+1)).c_str());
 
   //Initialization of RBRunInfo class
   cout << "** Initializing Run Info **\n";
@@ -105,6 +98,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   gExperiment->Clear("A");
   time(&fStart);
 
+  printf("** Unpacking run %d-%02d : %s **\n", gRun->GetRunNumber(), EvtFileNumber, gRun->GetTitle());
 }
 
 
@@ -118,6 +112,8 @@ void Unpacker::operator() (uint64_t eventTimestamp, uint32_t sourceId,
   //
   RBRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName,
                                   runNumber, timeOffset, timestamp, title);
+
+  gExperiment->SetStateInfo(&stateItem);
 }
 
 
@@ -139,11 +135,12 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
   char tempChar[10];
   if(fCounter == 100){
     time(&fNow);
+    fTimeElapsed=difftime(fNow, fStart);
     fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
          << "  " << tempChar << "%"
-         << "   " << difftime(fNow, fStart) << " s" << "\r";
+         << "   " << fTimeElapsed << " s" << "\r";
     cout.flush();
     fCounter=0;
   }
@@ -292,11 +289,12 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   char tempChar[10];
   if(fCounter == 50){
     time(&fNow);
+    fTimeElapsed=difftime(fNow, fStart);
     fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
     << "  " << tempChar << "%"
-    << "   " << difftime(fNow, fStart) << " s" << "\r";
+    << "   " << fTimeElapsed << " s" << "\r";
     cout.flush();
     fCounter=0;
   }
@@ -393,7 +391,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   gExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
-  fReadWords += totalSize;
+  fReadWords += totalSize/2;
 
 }
 
@@ -410,12 +408,13 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   char tempChar[10];
   if(fCounter == 1000){
     time(&fNow);
+    fTimeElapsed=difftime(fNow, fStart);
     fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
 
     sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
          << "  " << tempChar << "%"
-         << "   " << difftime(fNow, fStart) << " s" << "\r";
+         << "   " << fTimeElapsed << " s" << "\r";
 
     cout.flush();
     fCounter=0;
@@ -467,7 +466,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
 
   gExperiment->Fill();
 
-  fReadWords += totalSize;
+  fReadWords += totalSize/2;
 }
 
 
@@ -483,4 +482,44 @@ Unpacker::getLong(std::vector<unsigned short>& event,
 
 
   return low | (hi << 16);
+}
+
+//______________________________________________________________________________
+void Unpacker::PrintSummary()
+{
+  // -- This method print a general final summary of the unpacking procedure
+  cout << "\n\n--Unpacking summary--" << endl;
+  printf("Unpacking time : %.0f s\n", fTimeElapsed);
+  printf("%llu events unpacked\n", nevent);
+  printf("%llu words read\n", fReadWords);
+  printf("%llu timestamp mismatches found\n", fTimestampMismatch);
+  printf("--End of Unpacking--\n\n");
+}
+
+//______________________________________________________________________________
+void Unpacker::AddTTreeUserInfo(TTree * tree)
+{
+   TNamed * elapsedTime         = new TNamed("Unpacking Time", Form("%.0f", fTimeElapsed));
+   TNamed * eventsUnpacked      = new TNamed("Events Unpacked", Form("%llu", nevent));
+   TNamed * wordsRead           = new TNamed("Words Read", Form("%llu", fReadWords));
+   TNamed * timestampMismatches = new TNamed("Timestamp Mismatches", Form("%llu", fTimestampMismatch));
+
+   tree->GetUserInfo()->Add(elapsedTime);              //Duration of the unpacking procedure
+   tree->GetUserInfo()->Add(eventsUnpacked);           //Number of events unpacked
+   tree->GetUserInfo()->Add(wordsRead);                //Number of words read
+   tree->GetUserInfo()->Add(timestampMismatches);      //Number of timestamp mismatches found
+}
+
+//______________________________________________________________________________
+void Unpacker::EndUnpacking()
+{
+  // -- This method is called at the end of the Unpacking process
+  //    It calls PrintSummary() and finally ends the ROOT conversion
+  time(&fNow);
+  fTimeElapsed= difftime(fNow, fStart);
+
+  AddTTreeUserInfo(gExperiment->GetTree());
+  gExperiment->AddTTreeUserInfo();
+  gExperiment->EndROOTConverter();
+  PrintSummary();
 }

@@ -14,27 +14,31 @@ RBModuleInfo::~RBModuleInfo()
 {
   delete fModule;
   for (int i=0; i<fNumCh; i++) {
-    delete fModuleMapping;
-    delete fModulePedestal;
+    if(fModuleMapping) {
+      delete fModuleMapping;
+    }
+    if(fModulePedestal){
+      delete fModulePedestal;
+    }
   }
 }
 
 //________________________________________________
 void RBModuleInfo::SetModule(RBElectronics * newModule)
 {
-  fModule=newModule; 
+  fModule=newModule;
 }
 
 //________________________________________________
 void RBModuleInfo::SetNumCh(int num_ch)
 {
-  fNumCh=num_ch; 
+  fNumCh=num_ch;
 }
 
 //________________________________________________
 void RBModuleInfo::SetVSN(int new_VSN)
 {
-  fModuleVSN=new_VSN; 
+  fModuleVSN=new_VSN;
 }
 
 //________________________________________________

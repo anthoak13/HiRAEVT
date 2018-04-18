@@ -85,11 +85,11 @@ void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
   LineToParse.assign(LineToParse.substr(LineToParse.find("add ")+4)); //remove add command
 
   std::istringstream LineStream(LineToParse);
-  
+
   std::string ValueToSet;
   LineStream>>ValueToSet;
 
-  if(ValueToSet.compare("module")==0) {     
+  if(ValueToSet.compare("module")==0) {
     int StackID;
     LineStream>>StackID;
     std::string ModuleType;
@@ -99,13 +99,13 @@ void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
     int VSN;
     LineStream>>VSN;
     ModuleName.assign(ModuleName.substr(ModuleName.find("\"")+1,ModuleName.find_last_of("\"")-(ModuleName.find("\"")+1)));
-    
+
     //Found a new module. RBModuleInfo is created and added to the corresponding fStackInfo.
     RBModuleInfo * newModuleInfo = new RBModuleInfo();
     newModuleInfo->SetVSN(VSN);
     newModuleInfo->SetModuleType(ModuleType);
     newModuleInfo->SetModuleName(ModuleName);
-        
+
     if(ModuleType.compare("RBSisTimestampUnpacker")==0) {
       RBSisTimestampUnpacker * newModule = new RBSisTimestampUnpacker(ModuleName.c_str());
       newModuleInfo->SetModule(newModule);
@@ -128,14 +128,14 @@ void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
     } else if (ModuleType.compare("RBCAEN1x90Unpacker")==0) {
       int depth, refch, Nchannels;
       double ns_per_ch;
-      LineStream>>depth>>refch>>Nchannels>>ns_per_ch;      
+      LineStream>>depth>>refch>>Nchannels>>ns_per_ch;
       RBCAEN1x90Unpacker * newModule = new RBCAEN1x90Unpacker(ModuleName.c_str(),depth, refch, Nchannels,ns_per_ch);
       newModuleInfo->SetModule(newModule);
       newModuleInfo->SetNumCh(Nchannels);
       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
       return;
     }
-    
+
     //In case none of the previous options was typed just delete the module
     delete newModuleInfo;
   }
@@ -178,7 +178,7 @@ const char * RBRunInfo::GetEvtFilePath() const
 }
 
 //________________________________________________
-const char * RBRunInfo::GetRunTitle() const
+const char * RBRunInfo::GetTitle() const
 {
   return fRunTitle.c_str();
 }

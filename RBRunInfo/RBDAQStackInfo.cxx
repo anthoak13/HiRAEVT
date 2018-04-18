@@ -17,7 +17,9 @@ RBDAQStackInfo::~RBDAQStackInfo()
 void RBDAQStackInfo::Clear()
 {
   for(int i=0; i<fNModules; i++) {
-    delete fModuleInStack[i];
+    if(fModuleInStack[i]) {
+      delete fModuleInStack[i];
+    }
   }
   fModuleInStack.clear();
   fNModules=0;

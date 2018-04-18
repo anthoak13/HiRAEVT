@@ -4,6 +4,7 @@
 //
 //  Created by Andrew Rogers on 4/21/14.
 //  Modified by Juan Manfredi
+//  Modified by Daniele Dell'Aquila (April 2018)
 //
 
 #ifndef ____RBExperiment__
@@ -11,11 +12,12 @@
 
 #include <iostream>
 
-#include "RBNSCLBufferHeader.h"
-#include "RBRingStateChangeItem.h"
-#include "RBElectronics.h"
+#include <RBNSCLBufferHeader.h>
+#include <RBRingStateChangeItem.h>
+#include <RBElectronics.h>
 #include <RBShared.h>
 #include <RBRunInfo.h>
+#include <RBExperimentInfo.h>
 
 #include <fstream>
 #include <string>
@@ -66,10 +68,8 @@ private:
 
   // Read buffer statistics
   ULong64_t fBuffers;            //! Number of read buffers.
-  ULong64_t nTotEntities;        //! Total number of entities of events in the run.
-  ULong64_t nTotType1Entities;   //! Total number of data entities of events in the run.
-  ULong64_t nTotWords;           //! Total number of words in run.
-  ULong64_t nTotType1Words;      //! Total number of data words in run.
+  ULong64_t fnTotEntities;       //! Total number of entities of events in the run.
+  ULong64_t fnTotWords;          //! Total number of words in run.
 
   Int_t    counter;              //! Counter for updating progress.
   Float_t  cent;                 //! Percent done.
@@ -85,50 +85,25 @@ private:
 
 
 public:
-  TNamed *analysisState;                            //! Number indicating current TTree analysis state. 0=RAW 1=CAL etc.
-
   TNamed *expNumber;                                //! Experiment ID number.
+  TNamed *expTitle;                                 //! Experiment title.
   TNamed *runTitle;                                 //! Run title.
   TNamed *runNumber;                                //! Run number.
+  TNamed *evtFileNumber;                            //! Evt file Number.
   TNamed *dateTimestamp;                            //! Date timestamp (UNIX time(2)).
-  TNamed *elapsedTime;                              //! Elapsed runtime (seconds).
   TNamed *dateBegin;                                //! Run creation date.
-  TNamed *dateEnded;                                //! Run end date.
   TNamed *timeBegin;                                //! Run creation time.
-  TNamed *timeEnded;                                //! Run end time.
-  TNamed *nPauses;                                  //! Number of times run was paused.
-  TNamed *nResumes;                                 //! Number of times run was resumed.
-  TNamed *nBuffers;                                 //! Total number of Buffers.
-  TNamed *nTotalEntities;                           //! Total number of entities.
-  TNamed *nTotalType1Entities;                      //! Total number of data entities.
-  TNamed *nTotalWords;                              //! Total number of used words.
-  TNamed *nTotalType1Words;                         //! Total number of used data words.
-  TNamed *avgEventRate;                             //! Average number of events/s.
-  TNamed *avgType1EventRate;                        //! Average number of data events/s.
-  TNamed *avgWordRate;                              //! Average number of words/s.
-  TNamed *avgType1WordRate;                         //! Average number of data words/s.
+  TNamed *dateEnd;                                  //! Run end date.
+  TNamed *timeEnd;                                  //! Run end time.
   TNamed *evtSize;                                  //! Event file size.
   TNamed *rootSize;                                 //! Root file size.
-  TNamed *runType;                                  //! Run type.
-  TNamed *runComments;                              //! Run Comments.
-  TNamed *primaryBeam;                              //! Primary beam.
-  TNamed *secondaryBeam;                            //! Secondary beam.
-  TNamed *primaryEnergy;                            //! Primary beam energy.
-  TNamed *secondaryEnergy;                          //! Secondary beam energy.
-  TNamed *note;                                     //! Run note.
-  TObjArray notesArray;                             //! Array to hold run notes.
 
 public:
   const Char_t *evtFilePath;                        //! Source of event files.
   const Char_t *rootFilePath;                       //! Destination of ROOT files.
 
-  RBNSCLBufferHeader *header;                            //  Buffer header class.
-
-//  A1900             *theA1900;              //!
-//  A1900HistoManager *theA1900HistoManager;  //!
-
-  TTree         *fChain;                //! Pointer to the analyzed TTree or TChain.
-  Int_t          fCurrent;              //! Current Tree number in a TChain.
+  TTree         *fChain;                            //! Pointer to the analyzed TTree or TChain.
+  Int_t          fCurrent;                          //! Current Tree number in a TChain.
 
 private:
 //  Bool_t ConvertRingBufferEvt(Char_t *evtFile, Char_t *rootFile,
@@ -151,6 +126,7 @@ public:
   void         DumpInfo();                                        // Dump event info.
   void         DumpClassInfo();                                   // Dump class build and fill info.
   Bool_t       EndROOTConverter();
+  void         AddTTreeUserInfo();
   void         Fill();                                            // Fill TTree
   void         InitClass();                                       // Calls all InitClass methods.
   Bool_t       InitializeROOTConverter(const Char_t *evtFile,
@@ -158,6 +134,7 @@ public:
                                        Option_t *nBufs="0");      // Initialized the TTrees and etc. for EVT file conversion.
   void         InitTree(TTree *itree);
   Long64_t     LoadTree(Long64_t entry);                          //
+  TTree *      GetTree();                                         //
   void         ResetTrees();                                      // Clear TTrees UserInfo and delete objects.
 
   RBElectronics*  RegisterElectronics(RBElectronics *elc);        //
@@ -176,6 +153,7 @@ public:
   Bool_t       SetEventFilePath(const Char_t *path);                    // Sets the event file path.
   Bool_t       SetExperimentNumber(const Char_t *number);               // Sets the experiment number.
   Bool_t       SetRootFilePath(const Char_t *path);                     // Sets the root file path.
+  void         SetStateInfo(RBRingStateChangeItem *);                   // Sets additional information such as run start time
 
   ClassDef(RBExperiment,1)     // NSCL event-data unpacker.
 };

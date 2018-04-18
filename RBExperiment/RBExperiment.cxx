@@ -4,6 +4,7 @@
 //
 //  Created by Andrew Rogers on 4/21/14.
 //  Modified by Juan Manfredi
+//  Modified by Daniele Dell'Aquila (April 2018)
 //
 
 #include "RBExperiment.h"
@@ -32,7 +33,7 @@ ClassImp(RBNSCLBufferHeader);
  S800 (RBS800).  An instance of  these classes is then instanciated in
  RBExperiment.</p>
 
- <p>RBExperiment is then a contruct that describes the entire experiment.   </p
+ <p>RBExperiment is then a contruct that describes the entire experiment.   </p>
 
  <p>Run information can be displayed using the command,
  tree->GetUserInfo()->Print()
@@ -55,7 +56,7 @@ ClassImp(RBNSCLBufferHeader);
 
 //______________________________________________________________________________
 RBExperiment::RBExperiment(const char *name)
-: fRunNumber(-1),fEvtFileNumber(-1),fRootTree(0),fBuffers(0){
+: fRunNumber(-1),fEvtFileNumber(-1),fRootTree(0),fBuffers(0),fnTotEntities(0),fnTotWords(0){
   // -- Default constructor.
   // If a sub-class inherits from TObject and you do not want the fBits and
   // fUniqueID to be streamed out to the root file then it is advisable to
@@ -72,37 +73,18 @@ RBExperiment::RBExperiment(const char *name)
   RBNSCLBufferHeader::Class()->IgnoreTObjectStreamer();
 
   // Allocate memory for objects that will be written to UserInfo list.
-  analysisState       = new TNamed("Analysis State","-1");
-  expNumber           = new TNamed("Experiment Number","unknown");
-  runTitle            = new TNamed("Run Title","");
-  runNumber           = new TNamed("Run Number","");
-  dateTimestamp       = new TNamed("Date timestamp","");
-  elapsedTime         = new TNamed("Elapsed Run Time","");
+  expTitle            = new TNamed("Experiment Title",gExperimentInfo->GetTitle());
+  expNumber           = new TNamed("Experiment Number",gExperimentInfo->GetName());
+  runTitle            = new TNamed("Run Title",gRun->GetTitle());
+  runNumber           = new TNamed("Run Number",Form("%d",gRun->GetRunNumber()));
+  evtFileNumber       = new TNamed("Evt File Number","");
+  dateTimestamp       = new TNamed("Date timestamp Begin","");
   dateBegin           = new TNamed("Run Begin Date","");
-  dateEnded           = new TNamed("Run End Date","");
   timeBegin           = new TNamed("Run Begin Time","");
-  timeEnded           = new TNamed("Run End Time","");
-  nPauses             = new TNamed("Pauses","-1");
-  nResumes            = new TNamed("Resumes","-1");
-  nBuffers            = new TNamed("Number of buffers read","-1");
-
-  nTotalEntities      = new TNamed("Total Entity Count","-1");
-  nTotalType1Entities = new TNamed("Total Type1 (Data) Entity Count","-1");
-  nTotalWords         = new TNamed("Total Word Count","-1");
-  nTotalType1Words    = new TNamed("Total Type1 (Data) Word Count","-1");
-  avgEventRate        = new TNamed("Average Event Rate","-1");
-  avgType1EventRate   = new TNamed("Average Type1 (Data) Event Rate","-1");
-  avgWordRate         = new TNamed("Average Word Rate","-1");
-  avgType1WordRate    = new TNamed("Average Type1 (Data) Word Rate","-1");
-  evtSize             = new TNamed("Event File Size","-1");
-  rootSize            = new TNamed("ROOT File Size","-1");
-
-
-  evtFilePath  = "./";
-  rootFilePath = "./";
-
-  // Allocate memory for detector classes. (?)
-  header = new RBNSCLBufferHeader();
+  dateEnd             = new TNamed("Run End Date","");
+  timeEnd             = new TNamed("Run End Time","");
+  evtSize             = new TNamed("Event File Size","");
+  rootSize            = new TNamed("ROOT File Size","");
 
   //Set merged data flag (taken from Andy's code Aug 19 2016)
   SetMergedData(kFALSE);
@@ -132,8 +114,6 @@ void RBExperiment::Clear(Option_t *option)
   fBRI_Size      = 0;
   fBRI_Timestamp = 0;
 
-  header->Clear();
-
   TIter nextModule(fElectronics);
   while(RBElectronics* elc = (RBElectronics*)nextModule()){
     elc->Clear(option);
@@ -158,6 +138,28 @@ void RBExperiment::DumpClassInfo()
   //
 }
 
+//______________________________________________________________________________
+void RBExperiment::SetStateInfo(RBRingStateChangeItem * stateItem)
+{
+  // -- This method sets additional information to TTRee UserInfo objects
+  //    dateTimestamp
+  //    timeBegin
+  //    dateBegin
+  struct tm *tptr;
+
+  if(strcmp(stateItem->GetType(),"Unknown (1)")==0) { //run begin
+    time_t tstamp(stateItem->GetTimestamp());
+    tptr = gmtime(&tstamp);
+    dateTimestamp->SetTitle(asctime(gmtime(&tstamp)));
+    timeBegin->SetTitle(Form("%02d:%02d:%02d",tptr->tm_hour,tptr->tm_min,tptr->tm_sec));
+    dateBegin->SetTitle(Form("%02d.%02d.%4d",tptr->tm_mon,tptr->tm_mday,tptr->tm_year + 1900));
+  } else if(strcmp(stateItem->GetType(),"Unknown (2)")==0) { //run end
+    time_t tstamp(stateItem->GetTimestamp());
+    tptr = gmtime(&tstamp);
+    timeEnd->SetTitle(Form("%02d:%02d:%02d",tptr->tm_hour,tptr->tm_min,tptr->tm_sec));
+    dateEnd->SetTitle(Form("%02d.%02d.%4d",tptr->tm_mon,tptr->tm_mday,tptr->tm_year + 1900));
+  }
+}
 
 //______________________________________________________________________________
 void RBExperiment::DumpInfo()
@@ -198,17 +200,22 @@ void RBExperiment::InitTree(TTree *itree)
   }
 }
 
+//______________________________________________________________________________
+TTree * RBExperiment::GetTree()
+{
+  return fRootTree;
+}
 
 //______________________________________________________________________________
 Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t *rootFile, Option_t *nBufs)
 {
-  // -- Initialize the TTrees and etc. for EVT file conversion.
+  // -- Initialize the TTree for EVT file conversion.
   //
   std::string evtFileStr(evtFile);
   std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
-  // Determine run number from file name.
-  std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-")+4,4));
-  fRunNumber = atoi(runNumStr.c_str());
+
+  // Setting run number
+  fRunNumber = gRun->GetRunNumber();
 
   // Determine the evt file number.
   std::string evtNumStr(evtFileStr.substr(evtFileStr.find_last_of('-')+1,evtFileStr.find(".evt")-evtFileStr.find_last_of('-')-1));
@@ -221,7 +228,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   TString rootFileStr(rootFile);
   if(rootFileStr=="out.root"){
     rootFileStr.Clear();
-    rootFileStr.Append(rootFilePath);
+    rootFileStr.Append(gExperimentInfo->GetRootFilePath());
     rootFileStr.Append(evtFileName);
     rootFileStr.ReplaceAll(".evt",".root");
   }
@@ -245,7 +252,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   }
 
   // We must be careful here.  The file must be open before we create the tree.
-  fRootTree = new TTree(Form("E%s",expNumber->GetTitle()), gRun->GetRunTitle(),2);
+  fRootTree = new TTree(Form("E%s",gExperimentInfo->GetName()), gRun->GetTitle(),2);
 
   // Initialize the branches for EVB RingItem data.
   fRootTree->Branch("fBRI.Size",     &fBRI_Size,     "fBRI.Size/I");
@@ -259,27 +266,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
     }
   }
 
-//  fRootTree->SetAutoSave(50000000);
-
-//  CreateFolders();
-
-  analysisState->SetTitle("0");  // Set the analysis state to 0=RAW data TTree.
-
-  fBuffers          = 0;
-  nTotEntities      = 0;
-  nTotType1Entities = 0;
-  nTotWords         = 0;
-  nTotType1Words    = 0;
-  nBuffers->SetTitle("0");
-  nTotalEntities->SetTitle("0");
-  nTotalType1Entities->SetTitle("0");
-  nTotalWords->SetTitle("0");
-  nTotalType1Words->SetTitle("0");
-
-  counter  = 0 ;                  // Counter for updating progress.
-  fPauses  = 0;                   // Number of times run was paused.
-  fResumes = 0;                   // Number of times run was resumed.
-  fRunEnd  = kFALSE;              // Did we find an end run buffer?
+  fRootTree->SetAutoSave(50000000);
 
   // Close file and open later during convsersion process.
   fEvtFile.close();
@@ -297,11 +284,44 @@ void RBExperiment::Fill()
 }
 
 //______________________________________________________________________________
+void RBExperiment::AddTTreeUserInfo()
+{
+  // -- This method sets UserInfo objects to the tree
+  evtSize->SetTitle(Form("%lli",(Long64_t)fEvtFileSize));
+  rootSize->SetTitle(Form("%lli",(Long64_t)fROOTFile->GetSize()));
+  evtFileNumber->SetTitle(Form("%d", fEvtFileNumber));
+
+  fRootTree->GetUserInfo()->Add(expTitle);
+  fRootTree->GetUserInfo()->Add(expNumber);
+  fRootTree->GetUserInfo()->Add(runTitle);
+  fRootTree->GetUserInfo()->Add(runNumber);
+  fRootTree->GetUserInfo()->Add(evtFileNumber);
+  fRootTree->GetUserInfo()->Add(dateBegin);
+  fRootTree->GetUserInfo()->Add(timeBegin);
+  fRootTree->GetUserInfo()->Add(dateEnd);
+  fRootTree->GetUserInfo()->Add(timeEnd);
+  fRootTree->GetUserInfo()->Add(evtSize);
+  fRootTree->GetUserInfo()->Add(rootSize);
+
+  //Adding summary information
+  TIter nextModule(fElectronics);
+  while(RBElectronics *elc = (RBElectronics*)nextModule()){
+    if(elc->GetFillData()) elc->AddTTreeUserInfo(fRootTree);
+  }
+
+}
+
+//______________________________________________________________________________
 Bool_t RBExperiment::EndROOTConverter()
 {
-  // -- Obsolete
+  // -- This method closes the TTree and saves the file
 
-  return kFALSE;
+  fRootTree->AutoSave();
+
+  fROOTFile->Close();
+  delete fROOTFile;
+
+  return kTRUE;
 
 }
 
@@ -344,7 +364,6 @@ Long64_t RBExperiment::LoadTree(Long64_t entry)
   return 0;
 }
 
-
 //______________________________________________________________________________
 Bool_t RBExperiment::SetEventFilePath(const Char_t *path)
 {
@@ -354,7 +373,6 @@ Bool_t RBExperiment::SetEventFilePath(const Char_t *path)
   return kTRUE;
 }
 
-
 //______________________________________________________________________________
 Bool_t RBExperiment::SetExperimentNumber(const Char_t *number)
 {
@@ -362,7 +380,6 @@ Bool_t RBExperiment::SetExperimentNumber(const Char_t *number)
   expNumber->SetTitle(number);
   return kTRUE;
 }
-
 
 //______________________________________________________________________________
 Bool_t RBExperiment::SetRootFilePath(const Char_t *path)

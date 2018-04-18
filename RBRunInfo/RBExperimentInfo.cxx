@@ -9,7 +9,23 @@ fLastRun(0)
 
 //________________________________________________
 RBExperimentInfo::~RBExperimentInfo()
-{}
+{
+  if(fDAQConfigurationFileName) {
+    delete [] fDAQConfigurationFileName;
+  }
+  if(fPedestalFileName) {
+    delete [] fPedestalFileName;
+  }
+  if(fMappingFileName) {
+    delete [] fMappingFileName;
+  }
+  if(fRunEvtFilePath) {
+    delete [] fRunEvtFilePath;
+  }
+  if(fRunTitle) {
+    delete [] fRunTitle;
+  }
+}
 
 //________________________________________________
 void RBExperimentInfo::Clear()
@@ -66,6 +82,8 @@ int RBExperimentInfo::LoadSetupConfiguration(const char *file_name)
 
     if(LineReadCommentLess.empty()) continue;
 
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
+
     if(LineReadCommentLess.find("set ")!=std::string::npos) {
       ParseSetConfigLine(LineReadCommentLess.c_str());
     }
@@ -101,6 +119,8 @@ int RBExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
     std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
 
     if(LineReadCommentLess.empty()) continue;
+
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
 
     if(LineReadCommentLess.find("set ")!=std::string::npos) {
       ParseSetConfigLineRunInfo(LineReadCommentLess.c_str(), run_num);
@@ -217,13 +237,13 @@ bool RBExperimentInfo::IsDataMerged() const
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetExperimentName() const
+const char * RBExperimentInfo::GetName() const
 {
   return fExperimentName.c_str();
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetExperimentTitle() const
+const char * RBExperimentInfo::GetTitle() const
 {
   return fExperimentTitle.c_str();
 }

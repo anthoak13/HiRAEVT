@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <stdio.h>
 
 #include <RBRunInfo.h>
@@ -34,14 +35,14 @@ public:
   int LoadSetupConfiguration(const char *);       //! Read general setup lines from configuration file of the experiment
   int LoadRunConfiguration(const char *, int);    //! Read run configuration for a specific run
 
-  RBRunInfo * GetRunInfo(int) const;                    //! Get RBRunInfo class for a specific run number
-  bool IsDataMerged() const;                            //!
-  const char * GetExperimentName() const;               //!
-  const char * GetExperimentTitle() const;              //!
-  const char * GetEvtFilePath() const;                  //!
-  const char * GetRootFilePath() const;                 //!
+  RBRunInfo * GetRunInfo(int) const;              //! Get RBRunInfo class for a specific run number
+  bool IsDataMerged() const;                      //!
+  const char * GetName() const;                   //!
+  const char * GetTitle() const;                  //!
+  const char * GetEvtFilePath() const;            //!
+  const char * GetRootFilePath() const;           //!
 
-  void Clear();                                         //!
+  void Clear();                                   //!
 
 private:
   std::string * fDAQConfigurationFileName;
@@ -62,7 +63,6 @@ private:
   void ParseSetConfigLine(const char *);              //! Parse a configuration line containing the command "set" and extract Experiment info
   void ParseSetConfigLineRunInfo(const char *, int);  //! Parse a configuration line containing the command "set" and extract Run info
   const char * RetrieveRunTitleFromEvtFile(const char *) const;     //! Returns run title taken from the evt file given as input
-
 };
 
 #endif

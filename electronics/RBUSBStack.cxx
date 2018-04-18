@@ -438,3 +438,27 @@ void RBUSBStack::PrintSummary()
 
   return;
 }
+
+//______________________________________________________________________________
+void RBUSBStack::AddTTreeUserInfo(TTree * tree)
+{
+  TNamed * wordsRead           = new TNamed(Form("%s : Words Read",GetBranchName()), Form("%llu", fWordsCount));
+  TNamed * VSNErrors           = new TNamed(Form("%s : VSN Errors",GetBranchName()), Form("%llu", fVsnErrorCount));
+  TNamed * bufferMismatches    = new TNamed(Form("%s : Events Not Entirely Decoded",GetBranchName()), Form("%llu", fBufferMismatchCount));
+
+  tree->GetUserInfo()->Add(wordsRead);              //Number of words read in the stack
+  tree->GetUserInfo()->Add(VSNErrors);              //Number of VSN errors found in the stack
+  tree->GetUserInfo()->Add(bufferMismatches);       //Number of events not entirely decoded by the unpacker for the current stack
+
+  TIter nextStack(fStacks);
+  while(TList* stack = (TList*)nextStack()){
+    TIter nextModule(stack);
+    while(RBElectronics* module = (RBElectronics*)nextModule()){
+      if(module->GetFillData()) {
+        module->AddTTreeUserInfo(tree);
+      }
+    }
+  }
+
+  return;
+}

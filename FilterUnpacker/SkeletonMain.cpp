@@ -3,8 +3,10 @@
 #include <CFatalException.h>
 #include <CFilterMain.h>
 
-#include "CUnpackerFilter.h"
-#include "RIBbit2Logo.h"
+#include <CUnpackerFilter.h>
+#include <RIBbit2Logo.h>
+#include <RBShared.h>
+#include <Unpacker.h>
 
 /// The main function
 /**! main function
@@ -41,6 +43,9 @@ int main(int argc, char* argv[])
 
     // Run the main loop
     theApp();
+    
+    // End unpacking process
+    gUnpacker->EndUnpacking();
 
   return status;
 }

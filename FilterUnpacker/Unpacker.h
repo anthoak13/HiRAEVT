@@ -6,14 +6,7 @@
 #include <stdint.h>
 #include <string>
 #include <string.h>
-
-
-#ifndef __STL_VECTOR
 #include <vector>
-#ifndef __STL_VECTOR
-#define __STL_VECTOR
-#endif
-#endif
 
 
 class FragmentIndex;
@@ -23,6 +16,7 @@ class FragmentIndex;
 
 class RBSetup;
 class RBExperiment;
+class TTree;
 
 class Unpacker
 {
@@ -33,6 +27,7 @@ class Unpacker
     float    fPercentDone;          // Percent done.
     time_t   fStart;                // Start conversion time.
     time_t   fNow;                  // Current time.
+    double   fTimeElapsed;          // Time elapsed from fStart to fNow
     uint64_t m_lastTimestamp;
 
     uint64_t  fTimestampMismatch;
@@ -43,7 +38,7 @@ class Unpacker
     bool fMergedData;
 //    double fDataFormatVersion;
 
-    RBSetup      *fSetup;
+    RBSetup  *fSetup;
 
   public:
     Unpacker();
@@ -69,6 +64,10 @@ class Unpacker
     void SetDebug(bool flag){fDebug=flag;}
 
     bool IsDataMerged(){return fMergedData;}
+
+    void PrintSummary();                 //! Print a general unpacking summary to standard output
+    void AddTTreeUserInfo(TTree *);      //! Add User Info to TTree
+    void EndUnpacking();                 //! Called at the end of the Unpacking process
 
   private:
 };

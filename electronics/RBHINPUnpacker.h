@@ -55,6 +55,7 @@ public:
   void InitTree(TTree*);
 
   void PrintSummary();
+  void AddTTreeUserInfo(TTree *);
 
   ClassDef(RBHINPUnpacker,2);
 };

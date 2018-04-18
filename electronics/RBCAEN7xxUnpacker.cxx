@@ -239,3 +239,15 @@ void RBCAEN7xxUnpacker::PrintSummary()
   printf("%.1f %% overflows data\n", 100*double(fOverflowCount)/double(fTotalUnpackedCount));
   printf("\n");
 }
+
+//______________________________________________________________________________
+void RBCAEN7xxUnpacker::AddTTreeUserInfo(TTree *tree)
+{
+  TNamed * unpackedData      = new TNamed(Form("module %s : Total Unpacked Data",fChName.Data()), Form("%llu", fTotalUnpackedCount));
+  TNamed * VSNMismatches     = new TNamed(Form("module %s : VSN Mismatches",fChName.Data()), Form("%llu", fVSNMismatchCount));
+  TNamed * overflowsFound    = new TNamed(Form("module %s : %% Overflow Data",fChName.Data()), Form("%.1f", 100*double(fOverflowCount)/double(fTotalUnpackedCount)));
+
+  tree->GetUserInfo()->Add(unpackedData);       //Total unpacked data in this module
+  tree->GetUserInfo()->Add(VSNMismatches);      //Number of VSN Mismatches
+  tree->GetUserInfo()->Add(overflowsFound);     //Percentage of Overflows found
+}

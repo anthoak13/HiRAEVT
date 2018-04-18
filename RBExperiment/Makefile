@@ -31,6 +31,8 @@ INCLUDES += -I../
 INCLUDES += -I../electronics
 INCLUDES += -I../shared
 INCLUDES += -I../RBRunInfo
+INCLUDES += -I../RBExperiment
+INCLUDES += -I../FilterUnpacker
 
 CXXFLAGS += -g $(INCLUDES)
 

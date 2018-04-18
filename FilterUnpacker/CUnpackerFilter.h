@@ -25,6 +25,7 @@ class CUnpackerFilter : public CFilter
 
   public:
     CUnpackerFilter();
+    ~CUnpackerFilter();
 
     void PassArguments(int argc, char* argv[]);
 
