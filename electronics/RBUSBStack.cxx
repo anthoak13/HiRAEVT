@@ -313,15 +313,26 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
         header  = getLong(event, sOffset);
         vsn     = module->DecodeVSN(header);
 
-	//DEBUG
-	//	cout << "VSN: " << vsn << " " << module->GetName() << " " << module->GetVSN() << " " << sOffset << " " << event[sOffset] << endl;
-	//If the VSN is 0, then this is definitely a junk event and I
-	//want to escape
-	if (vsn == 0) {
-	  fVsnErrorCount++;
-	  return event.size();
-	}
-        //WARNING: if vsn = 0 the word is clearly corrupted, but no need to skip the whole event
+	     //DEBUG
+	     //	cout << "VSN: " << vsn << " " << module->GetName() << " " << module->GetVSN() << " " << sOffset << " " << event[sOffset] << endl;
+       //WARNING : during experiment 15190 a mistake in the daqconfig file makes one of the modules having VSN 0.
+       // I will temporarly use the solution 3.) in the following block of code.
+       // Sometimes VSN can be 0. In such a case we can have at least 3 possibiliets:
+       // 1.) The rest of the buffer is corrupted. So we skip the rest (Juan Manfredi's solution)
+       // 2.) A bunch of words are corrupted bun then we will find good data. Just skip the words with VSN = 0 (Daniele Dell'Aquila's solution)
+       // 3.) If VSN=0 but also the VSN of the module is 0 so keep Unpacking the module. Otherwise just keep skipping VSN until the VSN of the module is found.
+       //
+       // 1.) Juan Manfredi's code
+       //If the VSN is 0, then this is definitely a junk event and I
+	     //want to escape
+        /*
+     	  if (vsn == 0) {
+	        fVsnErrorCount++;
+	        return event.size();
+    	  }
+        */
+        // 2.) Daniele Dell'Aquila's code
+        //If vsn = 0 the word is clearly corrupted, but no need to skip the whole event
         /*
 	      while (vsn == 0)
         {
@@ -330,6 +341,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
           vsn     = module->DecodeVSN(header);
         }
 	      */
+        // 3.) Daniele Dell'Aquila's code to handle the daqconfig mistake
         // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed by Daniele Dec2017)!!!
         if(getLong(event,sOffset)==0xffffffff && (getLong(event,sOffset+1)==0xffffffff || (sOffset>0 && getLong(event,sOffset-1)==0xffffffff))){
           // This event was not properly constructed. Possible missing module data. However, it could be that the modules are simply empty.
@@ -340,7 +352,6 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 	  //	  cout << "Unpack "Error" Count up to " << fUnpackErrorCount << endl;
   }else if(vsn == module->GetVSN() || module->GetVSN() == -1){sOffset = module->Unpack(event, sOffset);}
         else{
-	  //	  cout << "Scanning ringitem body for VSN " << endl;
           // Scan the RingItem body for the VSN of this module.
           while(sOffset<event.size() && vsn != module->GetVSN()){
             header  = getLong(event, sOffset);
