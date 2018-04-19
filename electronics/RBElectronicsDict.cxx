@@ -54,8 +54,6 @@ namespace std {} using namespace std;
 // Header files passed via #pragma extra_include
 
 namespace ROOT {
-   static TClass *RBTimestamp_Dictionary();
-   static void RBTimestamp_TClassManip(TClass*);
    static void delete_RBTimestamp(void *p);
    static void deleteArray_RBTimestamp(void *p);
    static void destruct_RBTimestamp(void *p);
@@ -64,11 +62,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBTimestamp*)
    {
       ::RBTimestamp *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBTimestamp));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBTimestamp >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBTimestamp", "RBTimestamp.h", 12,
+         instance("RBTimestamp", ::RBTimestamp::Class_Version(), "RBTimestamp.h", 12,
                   typeid(::RBTimestamp), DefineBehavior(ptr, ptr),
-                  &RBTimestamp_Dictionary, isa_proxy, 4,
+                  &::RBTimestamp::Dictionary, isa_proxy, 4,
                   sizeof(::RBTimestamp) );
       instance.SetDelete(&delete_RBTimestamp);
       instance.SetDeleteArray(&deleteArray_RBTimestamp);
@@ -81,22 +79,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBTimestamp*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBTimestamp_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBTimestamp*)0x0)->GetClass();
-      RBTimestamp_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBTimestamp_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBHINPUnpacker_Dictionary();
-   static void RBHINPUnpacker_TClassManip(TClass*);
    static void delete_RBHINPUnpacker(void *p);
    static void deleteArray_RBHINPUnpacker(void *p);
    static void destruct_RBHINPUnpacker(void *p);
@@ -105,11 +90,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBHINPUnpacker*)
    {
       ::RBHINPUnpacker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBHINPUnpacker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBHINPUnpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBHINPUnpacker", "RBHINPUnpacker.h", 14,
+         instance("RBHINPUnpacker", ::RBHINPUnpacker::Class_Version(), "RBHINPUnpacker.h", 14,
                   typeid(::RBHINPUnpacker), DefineBehavior(ptr, ptr),
-                  &RBHINPUnpacker_Dictionary, isa_proxy, 4,
+                  &::RBHINPUnpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBHINPUnpacker) );
       instance.SetDelete(&delete_RBHINPUnpacker);
       instance.SetDeleteArray(&deleteArray_RBHINPUnpacker);
@@ -122,17 +107,6 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBHINPUnpacker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0)->GetClass();
-      RBHINPUnpacker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBHINPUnpacker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
@@ -168,8 +142,6 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBCAEN7xxUnpacker_Dictionary();
-   static void RBCAEN7xxUnpacker_TClassManip(TClass*);
    static void *new_RBCAEN7xxUnpacker(void *p = 0);
    static void *newArray_RBCAEN7xxUnpacker(Long_t size, void *p);
    static void delete_RBCAEN7xxUnpacker(void *p);
@@ -180,11 +152,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBCAEN7xxUnpacker*)
    {
       ::RBCAEN7xxUnpacker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBCAEN7xxUnpacker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBCAEN7xxUnpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBCAEN7xxUnpacker", "RBCAEN7xxUnpacker.h", 25,
+         instance("RBCAEN7xxUnpacker", ::RBCAEN7xxUnpacker::Class_Version(), "RBCAEN7xxUnpacker.h", 25,
                   typeid(::RBCAEN7xxUnpacker), DefineBehavior(ptr, ptr),
-                  &RBCAEN7xxUnpacker_Dictionary, isa_proxy, 4,
+                  &::RBCAEN7xxUnpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBCAEN7xxUnpacker) );
       instance.SetNew(&new_RBCAEN7xxUnpacker);
       instance.SetNewArray(&newArray_RBCAEN7xxUnpacker);
@@ -199,22 +171,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBCAEN7xxUnpacker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0)->GetClass();
-      RBCAEN7xxUnpacker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBCAEN7xxUnpacker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBCAEN1x90Unpacker_Dictionary();
-   static void RBCAEN1x90Unpacker_TClassManip(TClass*);
    static void *new_RBCAEN1x90Unpacker(void *p = 0);
    static void *newArray_RBCAEN1x90Unpacker(Long_t size, void *p);
    static void delete_RBCAEN1x90Unpacker(void *p);
@@ -225,11 +184,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBCAEN1x90Unpacker*)
    {
       ::RBCAEN1x90Unpacker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBCAEN1x90Unpacker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBCAEN1x90Unpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBCAEN1x90Unpacker", "RBCAEN1x90Unpacker.h", 21,
+         instance("RBCAEN1x90Unpacker", ::RBCAEN1x90Unpacker::Class_Version(), "RBCAEN1x90Unpacker.h", 21,
                   typeid(::RBCAEN1x90Unpacker), DefineBehavior(ptr, ptr),
-                  &RBCAEN1x90Unpacker_Dictionary, isa_proxy, 4,
+                  &::RBCAEN1x90Unpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBCAEN1x90Unpacker) );
       instance.SetNew(&new_RBCAEN1x90Unpacker);
       instance.SetNewArray(&newArray_RBCAEN1x90Unpacker);
@@ -244,22 +203,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBCAEN1x90Unpacker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0)->GetClass();
-      RBCAEN1x90Unpacker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBCAEN1x90Unpacker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBPh7xxUnpacker_Dictionary();
-   static void RBPh7xxUnpacker_TClassManip(TClass*);
    static void *new_RBPh7xxUnpacker(void *p = 0);
    static void *newArray_RBPh7xxUnpacker(Long_t size, void *p);
    static void delete_RBPh7xxUnpacker(void *p);
@@ -270,11 +216,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBPh7xxUnpacker*)
    {
       ::RBPh7xxUnpacker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBPh7xxUnpacker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBPh7xxUnpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBPh7xxUnpacker", "RBPh7xxUnpacker.h", 28,
+         instance("RBPh7xxUnpacker", ::RBPh7xxUnpacker::Class_Version(), "RBPh7xxUnpacker.h", 28,
                   typeid(::RBPh7xxUnpacker), DefineBehavior(ptr, ptr),
-                  &RBPh7xxUnpacker_Dictionary, isa_proxy, 4,
+                  &::RBPh7xxUnpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBPh7xxUnpacker) );
       instance.SetNew(&new_RBPh7xxUnpacker);
       instance.SetNewArray(&newArray_RBPh7xxUnpacker);
@@ -289,22 +235,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBPh7xxUnpacker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0)->GetClass();
-      RBPh7xxUnpacker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBPh7xxUnpacker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBUSBStack_Dictionary();
-   static void RBUSBStack_TClassManip(TClass*);
    static void *new_RBUSBStack(void *p = 0);
    static void *newArray_RBUSBStack(Long_t size, void *p);
    static void delete_RBUSBStack(void *p);
@@ -315,11 +248,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBUSBStack*)
    {
       ::RBUSBStack *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBUSBStack));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBUSBStack >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBUSBStack", "RBUSBStack.h", 29,
+         instance("RBUSBStack", ::RBUSBStack::Class_Version(), "RBUSBStack.h", 29,
                   typeid(::RBUSBStack), DefineBehavior(ptr, ptr),
-                  &RBUSBStack_Dictionary, isa_proxy, 4,
+                  &::RBUSBStack::Dictionary, isa_proxy, 4,
                   sizeof(::RBUSBStack) );
       instance.SetNew(&new_RBUSBStack);
       instance.SetNewArray(&newArray_RBUSBStack);
@@ -334,22 +267,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBUSBStack*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBUSBStack_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBUSBStack*)0x0)->GetClass();
-      RBUSBStack_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBUSBStack_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBUSBStackMarker_Dictionary();
-   static void RBUSBStackMarker_TClassManip(TClass*);
    static void delete_RBUSBStackMarker(void *p);
    static void deleteArray_RBUSBStackMarker(void *p);
    static void destruct_RBUSBStackMarker(void *p);
@@ -358,11 +278,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBUSBStackMarker*)
    {
       ::RBUSBStackMarker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBUSBStackMarker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBUSBStackMarker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBUSBStackMarker", "RBUSBStackMarker.h", 12,
+         instance("RBUSBStackMarker", ::RBUSBStackMarker::Class_Version(), "RBUSBStackMarker.h", 12,
                   typeid(::RBUSBStackMarker), DefineBehavior(ptr, ptr),
-                  &RBUSBStackMarker_Dictionary, isa_proxy, 4,
+                  &::RBUSBStackMarker::Dictionary, isa_proxy, 4,
                   sizeof(::RBUSBStackMarker) );
       instance.SetDelete(&delete_RBUSBStackMarker);
       instance.SetDeleteArray(&deleteArray_RBUSBStackMarker);
@@ -375,22 +295,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBUSBStackMarker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0)->GetClass();
-      RBUSBStackMarker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBUSBStackMarker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBElectronics_Dictionary();
-   static void RBElectronics_TClassManip(TClass*);
    static void delete_RBElectronics(void *p);
    static void deleteArray_RBElectronics(void *p);
    static void destruct_RBElectronics(void *p);
@@ -399,11 +306,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBElectronics*)
    {
       ::RBElectronics *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBElectronics));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBElectronics >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBElectronics", "RBElectronics.h", 17,
+         instance("RBElectronics", ::RBElectronics::Class_Version(), "RBElectronics.h", 17,
                   typeid(::RBElectronics), DefineBehavior(ptr, ptr),
-                  &RBElectronics_Dictionary, isa_proxy, 4,
+                  &::RBElectronics::Dictionary, isa_proxy, 4,
                   sizeof(::RBElectronics) );
       instance.SetDelete(&delete_RBElectronics);
       instance.SetDeleteArray(&deleteArray_RBElectronics);
@@ -416,22 +323,9 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBElectronics*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBElectronics_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBElectronics*)0x0)->GetClass();
-      RBElectronics_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBElectronics_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *RBSisTimestampUnpacker_Dictionary();
-   static void RBSisTimestampUnpacker_TClassManip(TClass*);
    static void delete_RBSisTimestampUnpacker(void *p);
    static void deleteArray_RBSisTimestampUnpacker(void *p);
    static void destruct_RBSisTimestampUnpacker(void *p);
@@ -440,11 +334,11 @@ namespace ROOT {
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::RBSisTimestampUnpacker*)
    {
       ::RBSisTimestampUnpacker *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::RBSisTimestampUnpacker));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBSisTimestampUnpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBSisTimestampUnpacker", "RBSisTimestampUnpacker.h", 21,
+         instance("RBSisTimestampUnpacker", ::RBSisTimestampUnpacker::Class_Version(), "RBSisTimestampUnpacker.h", 21,
                   typeid(::RBSisTimestampUnpacker), DefineBehavior(ptr, ptr),
-                  &RBSisTimestampUnpacker_Dictionary, isa_proxy, 4,
+                  &::RBSisTimestampUnpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBSisTimestampUnpacker) );
       instance.SetDelete(&delete_RBSisTimestampUnpacker);
       instance.SetDeleteArray(&deleteArray_RBSisTimestampUnpacker);
@@ -457,18 +351,77 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0); R__UseDummy(_R__UNIQUE_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *RBSisTimestampUnpacker_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0)->GetClass();
-      RBSisTimestampUnpacker_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void RBSisTimestampUnpacker_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBTimestamp::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBTimestamp::Class_Name()
+{
+   return "RBTimestamp";
+}
+
+//______________________________________________________________________________
+const char *RBTimestamp::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBTimestamp*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBTimestamp::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBTimestamp*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBTimestamp::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBTimestamp*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBTimestamp::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBTimestamp*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBHINPUnpacker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBHINPUnpacker::Class_Name()
+{
+   return "RBHINPUnpacker";
+}
+
+//______________________________________________________________________________
+const char *RBHINPUnpacker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBHINPUnpacker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBHINPUnpacker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBHINPUnpacker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBHINPUnpacker*)0x0)->GetClass(); }
+   return fgIsA;
+}
 
 //______________________________________________________________________________
 atomic_TClass_ptr RBHINPHit::fgIsA(0);  // static to hold class pointer
@@ -505,6 +458,263 @@ TClass *RBHINPHit::Class()
    return fgIsA;
 }
 
+//______________________________________________________________________________
+atomic_TClass_ptr RBCAEN7xxUnpacker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBCAEN7xxUnpacker::Class_Name()
+{
+   return "RBCAEN7xxUnpacker";
+}
+
+//______________________________________________________________________________
+const char *RBCAEN7xxUnpacker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBCAEN7xxUnpacker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBCAEN7xxUnpacker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBCAEN7xxUnpacker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN7xxUnpacker*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBCAEN1x90Unpacker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBCAEN1x90Unpacker::Class_Name()
+{
+   return "RBCAEN1x90Unpacker";
+}
+
+//______________________________________________________________________________
+const char *RBCAEN1x90Unpacker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBCAEN1x90Unpacker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBCAEN1x90Unpacker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBCAEN1x90Unpacker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBCAEN1x90Unpacker*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBPh7xxUnpacker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBPh7xxUnpacker::Class_Name()
+{
+   return "RBPh7xxUnpacker";
+}
+
+//______________________________________________________________________________
+const char *RBPh7xxUnpacker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBPh7xxUnpacker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBPh7xxUnpacker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBPh7xxUnpacker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBPh7xxUnpacker*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBUSBStack::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBUSBStack::Class_Name()
+{
+   return "RBUSBStack";
+}
+
+//______________________________________________________________________________
+const char *RBUSBStack::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStack*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBUSBStack::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStack*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBUSBStack::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStack*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBUSBStack::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStack*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBUSBStackMarker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBUSBStackMarker::Class_Name()
+{
+   return "RBUSBStackMarker";
+}
+
+//______________________________________________________________________________
+const char *RBUSBStackMarker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBUSBStackMarker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBUSBStackMarker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBUSBStackMarker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBUSBStackMarker*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBElectronics::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBElectronics::Class_Name()
+{
+   return "RBElectronics";
+}
+
+//______________________________________________________________________________
+const char *RBElectronics::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBElectronics*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBElectronics::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBElectronics*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBElectronics::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBElectronics*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBElectronics::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBElectronics*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr RBSisTimestampUnpacker::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *RBSisTimestampUnpacker::Class_Name()
+{
+   return "RBSisTimestampUnpacker";
+}
+
+//______________________________________________________________________________
+const char *RBSisTimestampUnpacker::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int RBSisTimestampUnpacker::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *RBSisTimestampUnpacker::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *RBSisTimestampUnpacker::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD2(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::RBSisTimestampUnpacker*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+void RBTimestamp::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBTimestamp.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBTimestamp::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBTimestamp::Class(),this);
+   }
+}
+
 namespace ROOT {
    // Wrapper around operator delete
    static void delete_RBTimestamp(void *p) {
@@ -518,6 +728,18 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class ::RBTimestamp
+
+//______________________________________________________________________________
+void RBHINPUnpacker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBHINPUnpacker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBHINPUnpacker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBHINPUnpacker::Class(),this);
+   }
+}
 
 namespace ROOT {
    // Wrapper around operator delete
@@ -566,6 +788,18 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class ::RBHINPHit
 
+//______________________________________________________________________________
+void RBCAEN7xxUnpacker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBCAEN7xxUnpacker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBCAEN7xxUnpacker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBCAEN7xxUnpacker::Class(),this);
+   }
+}
+
 namespace ROOT {
    // Wrappers around operator new
    static void *new_RBCAEN7xxUnpacker(void *p) {
@@ -586,6 +820,18 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class ::RBCAEN7xxUnpacker
+
+//______________________________________________________________________________
+void RBCAEN1x90Unpacker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBCAEN1x90Unpacker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBCAEN1x90Unpacker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBCAEN1x90Unpacker::Class(),this);
+   }
+}
 
 namespace ROOT {
    // Wrappers around operator new
@@ -608,6 +854,18 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class ::RBCAEN1x90Unpacker
 
+//______________________________________________________________________________
+void RBPh7xxUnpacker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBPh7xxUnpacker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBPh7xxUnpacker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBPh7xxUnpacker::Class(),this);
+   }
+}
+
 namespace ROOT {
    // Wrappers around operator new
    static void *new_RBPh7xxUnpacker(void *p) {
@@ -628,6 +886,18 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class ::RBPh7xxUnpacker
+
+//______________________________________________________________________________
+void RBUSBStack::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBUSBStack.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBUSBStack::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBUSBStack::Class(),this);
+   }
+}
 
 namespace ROOT {
    // Wrappers around operator new
@@ -650,6 +920,18 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class ::RBUSBStack
 
+//______________________________________________________________________________
+void RBUSBStackMarker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBUSBStackMarker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBUSBStackMarker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBUSBStackMarker::Class(),this);
+   }
+}
+
 namespace ROOT {
    // Wrapper around operator delete
    static void delete_RBUSBStackMarker(void *p) {
@@ -664,6 +946,18 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class ::RBUSBStackMarker
 
+//______________________________________________________________________________
+void RBElectronics::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBElectronics.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBElectronics::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBElectronics::Class(),this);
+   }
+}
+
 namespace ROOT {
    // Wrapper around operator delete
    static void delete_RBElectronics(void *p) {
@@ -677,6 +971,18 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class ::RBElectronics
+
+//______________________________________________________________________________
+void RBSisTimestampUnpacker::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class RBSisTimestampUnpacker.
+
+   if (R__b.IsReading()) {
+      R__b.ReadClassBuffer(RBSisTimestampUnpacker::Class(),this);
+   } else {
+      R__b.WriteClassBuffer(RBSisTimestampUnpacker::Class(),this);
+   }
+}
 
 namespace ROOT {
    // Wrapper around operator delete

@@ -45,6 +45,8 @@ public:
   void    InitBranch(TTree* tree);
   void    InitTree(TTree* tree);
   Int_t   Unpack(UShort_t *pEvent);
+
+  ClassDef(RBPh7xxUnpacker,1);
 };
 
 // Simple utility functions (macros)

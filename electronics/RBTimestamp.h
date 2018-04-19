@@ -32,5 +32,7 @@ public:
   virtual void  InitTree(TTree* tree){fChain = tree;}
 
   Int_t Unpack(UShort_t *pEvent);
+
+  ClassDef(RBTimestamp,1);
 };
 #endif /* defined(____RBTimestamp__) */

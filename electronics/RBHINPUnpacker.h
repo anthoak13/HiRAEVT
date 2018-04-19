@@ -56,6 +56,8 @@ public:
 
   void PrintSummary();
   void AddTTreeUserInfo(TTree *);
+
+  ClassDef(RBHINPUnpacker,1);
 };
 
 

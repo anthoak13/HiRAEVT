@@ -45,6 +45,8 @@ public:
   virtual void InitTree(TTree* tree){fChain = tree;}
 
   ULong64_t GetTimestamp(){return fTimestamp;}
+
+  ClassDef(RBSisTimestampUnpacker,1);
 };
 
 #endif

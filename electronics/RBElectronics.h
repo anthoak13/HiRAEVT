@@ -61,5 +61,7 @@ public:
 
   virtual void PrintSummary() {return;}
   virtual void AddTTreeUserInfo(TTree *) {return;}
+
+  ClassDef(RBElectronics,1);
 };
 #endif /* defined(____RBElectronics__) */

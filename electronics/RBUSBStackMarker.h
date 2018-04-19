@@ -29,5 +29,7 @@ public:
   virtual void  InitTree(TTree* tree)  {}
 
   Int_t  Unpack(std::vector<UShort_t>& event, Int_t offset);
+
+  ClassDef(RBUSBStackMarker,1);
 };
 #endif /* defined(____RBUSBStackMarker__) */
