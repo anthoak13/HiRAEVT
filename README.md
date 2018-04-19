@@ -61,7 +61,20 @@ $ make install
 ````
 The binary file bin/RIBbitUnpacker.exe is generated in the compilation.
 ### Configure the program
-
+The program can run over different experimental configurations (DAQ, detectors, ...) without be re-compiled. All the information needed can be configured from the file "config/RIBbit2.conf". This is the only file that the user has to change to configure the program. In the special language used to read the file, the character '\*' is used to provide a comment. Following a detailed list of the fields to configure:
+* set RIBIT2_DIR : this command sets the directory of the RIBbit2 installation
+* set RIBBIT2UNPACKER_SUMMARY_PATH : use this command to specify a folder to store the standard output of the unpacking process when the code is run in batch mode (i.e. ember or seaside)
+* set RIBBIT2UNPACKER_ROOT_FILE_PATH : this command sets the location of the ROOT files obtained by RIBbit2Unpacker
+* set EXPERIMENT_NAME : the name of the experiment (i.e. 15190)
+* set EXPERIMENT_TITLE :
+* set MERGED_DATA :
+* set EVENT_FILE_PATH :
+* FIRST_RUN :
+* LAST_RUN :
+* set EVENT_FILE_PATH :
+* set DAQ_CONFIG :
+* set PEDESTAL_VALUES :
+* set CHANNEL_MAPPING :
 ## The RIBbitUnpacker Program
 ### Run the code
 It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main RIBbit2 folder):
