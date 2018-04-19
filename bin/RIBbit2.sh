@@ -6,7 +6,7 @@ ROOTVERSION=6.04.02
 # WARNING: the program works with ROOTVERSION>=6
 module unload root
 module load root/gnu/${ROOTVERSION}
-export ROOTSYS='/mnt/misc/sw/x86_64/Debian/8/root/gnu/${ROOTVERSION}'
+source "/mnt/misc/sw/x86_64/Debian/8/root/gnu/${ROOTVERSION}/bin/thisroot.sh"
 export ROOTCLINGORCINT='rootcling'
 ##################################################################
 
