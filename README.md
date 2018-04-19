@@ -29,6 +29,8 @@ Table of contents
   * [Configure the Program](#configure)
 * [The RIBbitUnpacker Program](#unpacker)
   * [Run the Code](#run-unpacker)
+  * [Output Data](#output-unpacker)
+  * [User Summary Information](#userinfo-unpacker)
 * [The RIBbitMapper Program](#mapper)
 * [The RIBbitAnalyzer Program](#analyzer)
 <!--te-->
@@ -85,6 +87,17 @@ where RUN_NUMBER indicates the number of run to unpack. A group of runs can be u
 $ RIBbitUnpacker FIRST_RUN LAST_RUN
 ````
 where FIRST_RUN and LAST_RUN define the range of runs to unpack. Please note that if FIRST_RUN=LAST=RUN, the second command is equivalent to the first.
+### Output Data
+Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
+### User Summary Information
+Useful user information and a general unpacking summary can be retrieved from the tree by using the following command after opening the tree with ROOT:
+````
+$ EXXXXX->GetUserInfo()
+````
+Where EXXXXX represents the TTree key with which the tree is saved on the file or a pointer to the TTree object retrieved from the file. Interactively, one can easily print those information via the command:
+````
+$ EXXXXX->GetUserInfo()->Print()
+````
 ## The RIBbitMapper Program
 The design and implementation of the program are in progress.
 ## The RIBbitAnalyzer Program
