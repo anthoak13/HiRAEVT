@@ -2,18 +2,42 @@
 
 clear
 
-re='^[0-9]+$'
+first_run=$1
 
-if ! [[ $1 =~ $re ]] ; then
-    echo "Error: Invalid run number" >&2; exit 1
+if [ -z "$2" ]; then
+  last_run=$1
+else
+  last_run=$2
 fi
 
-#TEMPORARY, contingent on premanent raw/ROOT file locations
-#eval '/projects/e16042/ribbit/bin/UnpackerFilter --source=file:///projects/e16042/rawfiles/\
-#run-0'$1'-00.evt --sink=file:///dev/null'
+for run_num in `seq $first_run $last_run`
+do
+re='^[0-9]+$'
 
-#file_evt=$(printf run-%04d-00.evt $1)
+if ! [[ $run_num =~ $re ]] ; then
+   echo "Error: Invalid run number" >&2; exit 1
+fi
 
-for file_evt in $(ls /mnt/misc/daqevents-ro/e15190/experiment/run$1/*.evt); do
+#determining evt files path from config/RIBbit2.conf
+while IFS= read -r line;do
+    fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
+    if [ ${fields[1]} ] && [ ${fields[1]} = "EVENT_FILE_PATH" ] ; then
+      if echo "${fields[2]}" | grep -q "run="; then
+        run_range=($(echo ${fields[2]}|cut -d'=' -f2-))
+        run_range_first=($(echo $run_range|cut -d'-' -f1))
+        run_range_last=($(echo $run_range|cut -d'-' -f2))
+        if [ $run_num -ge $run_range_first ] && [ $run_num -le $run_range_last ]; then
+          EvtFilesPath=$(echo ${fields[3]} | sed 's/[\"]//g')
+        fi
+      fi
+    fi
+done < config/RIBbit2.conf
+
+if [ ! -d "${EvtFilesPath}run$1/" ]; then #the directory of evt files does not exist
+    echo "Error: missing or incorrect evt files location for run $run_num"; continue
+fi
+
+for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
     eval '/projects/hira/Daniele/RIBbit2-dev/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///dev/null'
+done
 done

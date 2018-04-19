@@ -1,6 +1,4 @@
 ############# MACROS ##############
-
-
 RC     := root-config
 ifeq ($(shell which $(RC) 2>&1 | sed -ne "s@.*/$(RC)@$(RC)@p"),$(RC))
 MKARCH := $(wildcard $(shell $(RC) --etcdir)/Makefile.arch)
@@ -45,7 +43,7 @@ all:  $(RBELECTRONICS_LIB)
 
 $(RBELECTRONICS_DICT): $(RBELECTRONICS_HDRS)
 	@echo "Generating dictionary $@... $(RBELECTRONICS_DICT) $(SrcSuf)"
-	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
+	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
 $(RBELECTRONICS_LIB): $(RBELECTRONICS_OBJS) $(RBELECTRONICS_DICTO)
 ifeq ($(PLATFORM),macosx)

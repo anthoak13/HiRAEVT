@@ -8,7 +8,7 @@ INCLUDES  := -I$(RIBbitSRC)/
 
 RLIBS     := -L$(RIBbitLIB)
 
-CXXFLAGS  += -g $(INCLUDES) -fPIC -O2 -Wall -Wpedantic
+CXXFLAGS  += -g $(INCLUDES) -std=c++11 -fPIC -O2 -Wall -Wpedantic
 
 RBRUNINFO_LIB := libRBShared.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

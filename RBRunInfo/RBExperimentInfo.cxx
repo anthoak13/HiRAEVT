@@ -204,11 +204,21 @@ void RBExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
   LineStream>>ValueToSet;
   std::string NewValue;
 
-  //NOTE: for a future improvement take into account more possible options not only --run
+  //NOTE: for a future improvement take into account more possible options not only --run and --exclude
   if(LineToParse.find("--run")!=std::string::npos) { //found --run option
     LineToParse.assign(LineToParse.substr(LineToParse.find("--run")+5));
     int StartRunNum=atoi(LineToParse.substr(LineToParse.find("=")+1,LineToParse.find("-")).c_str());
     int StopRunNum=atoi(LineToParse.substr(LineToParse.find("-")+1,LineToParse.find("\"")-LineToParse.find("-")).c_str());
+    
+    if(LineToParse.find("--exclude")!=std::string::npos) { //found --exclude option
+      LineToParse.assign(LineToParse.substr(LineToParse.find("--exclude")+10));
+      std::istringstream LineExcludeStream(LineToParse.substr(0,LineToParse.find("--")!=std::string::npos ? LineToParse.find("--") : LineToParse.find("\"")));
+      std::string RunToExclude;
+
+      while(std::getline(LineExcludeStream, RunToExclude, ',')) {
+        if(run_num==std::stoi(RunToExclude)) return; //this run is excluded
+      }
+    }
 
     if(run_num>=StartRunNum && run_num<=StopRunNum) {
       NewValue.assign(LineToParse.substr(LineToParse.find("\"")+1,LineToParse.find_last_of("\"")-(LineToParse.find("\"")+1)));

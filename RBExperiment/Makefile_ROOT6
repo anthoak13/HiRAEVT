@@ -1,0 +1,59 @@
+CFLAGS    :=`root-config --cflags --libs`
+SYSLIB    := -lz -l TreePlayer -lMathMore
+
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
+
+INCLUDES  := -I$(RIBbitSRC)/
+INCLUDES  += -I$(RIBbitSRC)/electronics
+INCLUDES  += -I$(RIBbitSRC)/shared
+INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
+INCLUDES  += -I$(RIBbitSRC)/RBExperiment
+INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
+
+RLIBS     := -L$(RIBbitLIB)
+
+CXXFLAGS  += -g $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
+
+RBEXPERIMENT_DICT  := RBExperimentDict.$(SrcSuf)
+RBEXPERIMENT_DICTH := $(RBEXPERIMENT_DICT:.$(SrcSuf)=.h)
+RBEXPERIMENT_DICTO := $(RBEXPERIMENT_DICT:.$(SrcSuf)=.$(ObjSuf))
+
+RBEXPERIMENT_HDRS  := $(RBEXPERIMENT_SRCS:.$(SrcSuf)=.h) RBExperimentLinkDef.h
+RBEXPERIMENT_HDRS  := $(filter-out $(RBEXPERIMENT_DICTH),$(RBEXPERIMENT_HDRS))
+
+RBEXPERIMENT_LIB := libRBExperiment.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
+
+all: $(RBEXPERIMENT_LIB)
+
+$(RBEXPERIMENT_DICT): $(RBEXPERIMENT_HDRS)
+	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
+	@echo "$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^"
+
+$(RBEXPERIMENT_LIB): $(OBJS) $(RBEXPERIMENT_DICT)
+	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
+	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
+
+$(OBJS): $(SRCS)
+	@$(CXX) $(CXXFLAGS) -c $^ $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $^ $(CFLAGS)"
+
+install:
+	@cp $(RBEXPERIMENT_LIB) $(RIBbitLIB)/.
+
+.PHONY: distclean
+distclean:
+	@rm -f $(RBEXPERIMENT_LIB) $(RBEXPERIMENT_DICT) $(RBEXPERIMENT_DICTH)
+	@rm -f $(RIBbitLIB)/$(RBEXPERIMENT_LIB)
+
+.PHONY: clean
+clean:
+	@$(RM) -f $(LIB) $(OBJS) $(RBEXPERIMENT_DICTO) $(RBEXPERIMENT_DICT) $(RBEXPERIMENT_DICTH)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)

@@ -10,7 +10,7 @@ INCLUDES  += -I$(RIBbitSRC)/electronics
 
 RLIBS     := -L$(RIBbitLIB) -lRBElectronics
 
-CXXFLAGS  += -g $(INCLUDES) -fPIC -O2 -Wall
+CXXFLAGS  += -g $(INCLUDES) -std=c++11 -fPIC -O2 -Wall
 
 RBRUNINFO_LIB := libRBRunInfo.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
