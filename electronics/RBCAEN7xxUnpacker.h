@@ -55,8 +55,6 @@ public:
 
   void PrintSummary();
   void AddTTreeUserInfo(TTree *);
-
-  ClassDef(RBCAEN7xxUnpacker,1);
 };
 
 #endif

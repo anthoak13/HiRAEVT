@@ -18,7 +18,7 @@ if ! [[ $run_num =~ $re ]] ; then
    echo "Error: Invalid run number" >&2; exit 1
 fi
 
-#determining evt files path from config/RIBbit2.conf
+#extracting information from configuration file from config/RIBbit2.conf
 while IFS= read -r line;do
     fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
     if [ ${fields[1]} ] && [ ${fields[1]} = "EVENT_FILE_PATH" ] ; then
@@ -29,15 +29,20 @@ while IFS= read -r line;do
         if [ $run_num -ge $run_range_first ] && [ $run_num -le $run_range_last ]; then
           EvtFilesPath=$(echo ${fields[3]} | sed 's/[\"]//g')
         fi
+      else
+        EvtFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
       fi
+    fi
+    if [ ${fields[1]} ] && [ ${fields[1]} = "RIBBIT2_DIR" ] ; then
+      Ribbit2Path=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
 done < config/RIBbit2.conf
 
-if [ ! -d "${EvtFilesPath}run$1/" ]; then #the directory of evt files does not exist
+if [ ! -d "${EvtFilesPath}run$run_num/" ]; then #the directory of evt files does not exist
     echo "Error: missing or incorrect evt files location for run $run_num"; continue
 fi
 
 for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
-    eval '/projects/hira/Daniele/RIBbit2-dev/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///dev/null'
+    eval '${Ribbit2Path}bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
 done
 done

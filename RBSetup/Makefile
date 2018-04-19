@@ -1,72 +1,66 @@
-############# MACROS ##############
+CFLAGS    :=`root-config --cflags --libs`
+SYSLIB    := -lz -l TreePlayer -lMathMore
 
-RC     := root-config
-ifeq ($(shell which $(RC) 2>&1 | sed -ne "s@.*/$(RC)@$(RC)@p"),$(RC))
-MKARCH := $(wildcard $(shell $(RC) --etcdir)/Makefile.arch)
-endif
-ifneq ($(MKARCH),)
-include $(MKARCH)
-else
-ROOTSYS = ..
-include $(ROOTSYS)/etc/Makefile.arch
-endif
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
+PcmSuf    := _rdict.pcm
 
+INCLUDES  := -I$(RIBbitSRC)/
+INCLUDES  += -I$(RIBbitSRC)/electronics
+INCLUDES  += -I$(RIBbitSRC)/shared
+INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
+INCLUDES  += -I$(RIBbitSRC)/RBSetup
+INCLUDES  += -I$(RIBbitSRC)/RBExperiment
+INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
 
-RBSETUP_DICT        := RBSetupDict.$(SrcSuf)
-RBSETUP_DICTH       := $(RBSETUP_DICT:.$(SrcSuf)=.h)
-RBSETUP_DICTO       := $(RBSETUP_DICT:.$(SrcSuf)=.$(ObjSuf))
+RLIBS     := -L$(RIBbitLIB)
 
-RBSETUP_SRCS        := RBSetup.$(SrcSuf)
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
-RBSETUP_HDRS        := $(RBSETUP_SRCS:.$(SrcSuf)=.h) RBSetupLinkDef.h
-RBSETUP_HDRS        := $(filter-out $(RBSETUP_DICTH),$(RBSETUP_HDRS))
+RBSETUP_DICT  := RBSetupDict.$(SrcSuf)
+RBSETUP_DICTH := $(RBSETUP_DICT:.$(SrcSuf)=.h)
+RBSETUP_DICTO := $(RBSETUP_DICT:.$(SrcSuf)=.$(ObjSuf))
+RBSETUP_PCM   := RBSetupDict$(PcmSuf)
 
-RBSETUP_LIB         := libRBSetup.$(DllSuf).1.0
+RBSETUP_HDRS  := $(wildcard RB*.$(SrcSuf))
 
-RBSETUP_OBJS        := $(RBSETUP_SRCS:.$(SrcSuf)=.$(ObjSuf))
+RBSETUP_HDRS  := $(RBSETUP_HDRS:.$(SrcSuf)=.h) RBSetupLinkDef.h
+RBSETUP_HDRS  := $(filter-out $(RBSETUP_DICTH),$(RBSETUP_HDRS))
 
-RLIBS             := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBShared -lRBRunInfo
-
-INCLUDES += -I$(RIBbitSRC)
-INCLUDES += -I$(RIBbitSRC)/settings
-INCLUDES += -I$(RIBbitSRC)/electronics
-INCLUDES += -I$(RIBbitSRC)/RBExperiment
-INCLUDES += -I$(RIBbitSRC)/shared
-INCLUDES += -I$(RIBbitSRC)/RBRunInfo
-
-CXXFLAGS += $(INCLUDES) -g -O2
-
-
-############# RULES ###############
+RBSETUP_LIB := libRBSetup.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
-	$(CXX) -g $(CXXFLAGS) -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter -c $<
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-############# TARGETS #############
+all: $(RBSETUP_LIB)
 
-.SUFFIXES: .$(SrcSuf) .$(ObjSuf) $(ExeSuf) .$(DllSuf)
-
-all:  $(RBSETUP_LIB)
+.SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf) .$(PcmSuf)
 
 $(RBSETUP_DICT): $(RBSETUP_HDRS)
-	@echo "Generating dictionary $@... $(RBSETUP_DICT) $(SrcSuf)"
-	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
+	@echo "Generating dictionary $@..."
+	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
-$(RBSETUP_LIB): $(RBSETUP_OBJS) $(RBSETUP_DICTO)
-ifeq ($(PLATFORM),macosx)
-	$(LD) $(SOFLAGS)$@ $(INCLUDES) $(LDFLAGS) $^ $(OutPutOpt) $@ $(GLIBS) $(RLIBS)
-else
-	$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(GLIBS) $(RLIBS) $(OutPutOpt)$@
-endif
-
-RBSETUP:    $(RBSETUP_LIB)
+$(RBSETUP_LIB): $(OBJS) $(RBSETUP_DICTO)
+	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
+	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
 
 install:
-	@cp $(RBSETUP_LIB) $(RIBbitLIB)/.
+	@cp $(RBSETUP_LIB) $(RBSETUP_PCM) $(RIBbitLIB)/.
 
-distclean: clean
-	@rm -f $(RBSETUP_LIB) $(RBSETUP_DICT) $(RBSETUP_DICTH)
+.PHONY: distclean
+distclean:
+	@rm -f $(RBSETUP_LIB) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_PCM)
 	@rm -f $(RIBbitLIB)/$(RBSETUP_LIB)
 
+.PHONY: clean
 clean:
-	@rm -f $(RBSETUP_OBJS) $(RBSETUP_DICTO) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_LIB)
+	@$(RM) -f $(LIB) $(OBJS) $(RBSETUP_DICTO) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_PCM)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)

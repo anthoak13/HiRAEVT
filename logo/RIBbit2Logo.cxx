@@ -16,7 +16,7 @@ void PrintRIBbitUnpackerLogo()
   printf("//\n");
 
   printf("Welcome to RIBbit2Unpacker\n");
-  printf("Version 1.0\n");
+  printf("Version 1.0-beta.2.\n");
   printf("Contributors: Daniele Dell'Aquila, Juan Manfredi\n\n");
 
   printf("   (o)--(o)\n");

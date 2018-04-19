@@ -23,21 +23,21 @@ class RBSisTimestampUnpacker : public RBModuleUnpacker, public RBElectronics
 private:
   ULong64_t fTimestamp;
   ULong64_t fTimestampKoreans;
-  
+
   TTree               *fChain;                 //! Pointer to current TTree or TChain
   Int_t                fCurrent;               //! Current Tree number in a TChain
-  
+
 public:
   RBSisTimestampUnpacker(const char* chName);
   ~RBSisTimestampUnpacker();
-  
+
   Int_t   Unpack(std::vector<UShort_t>& event, UInt_t offset);
-  
+
   //  Int_t   *GetData()        {return fTimes;}
 
   virtual void InitBranch(TTree* tree);
   virtual void Clear();
-  
+
   virtual void InitClass(){}
   //  virtual void InitBranch(TTree* tree);
   //  virtual void InitBranch(TTree* tree){}
@@ -45,8 +45,6 @@ public:
   virtual void InitTree(TTree* tree){fChain = tree;}
 
   ULong64_t GetTimestamp(){return fTimestamp;}
-  
-  ClassDef(RBSisTimestampUnpacker,1);
 };
 
 #endif

@@ -184,7 +184,7 @@ void RBExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
     if(LineToParse.find("--run")==std::string::npos) { //EvtFileName might be different run-by-run, if --run is specified don't set it now but in ParseSetConfigLineRunInfo
       fEvtFilePath.assign(NewValue);
     }
-  } else if (ValueToSet.compare("ROOT_FILE_PATH")==0) {
+  } else if (ValueToSet.compare("RIBBIT2UNPACKER_ROOT_FILE_PATH")==0) {
     fRootFilePath.assign(NewValue);
   }
 
@@ -209,7 +209,7 @@ void RBExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
     LineToParse.assign(LineToParse.substr(LineToParse.find("--run")+5));
     int StartRunNum=atoi(LineToParse.substr(LineToParse.find("=")+1,LineToParse.find("-")).c_str());
     int StopRunNum=atoi(LineToParse.substr(LineToParse.find("-")+1,LineToParse.find("\"")-LineToParse.find("-")).c_str());
-    
+
     if(LineToParse.find("--exclude")!=std::string::npos) { //found --exclude option
       LineToParse.assign(LineToParse.substr(LineToParse.find("--exclude")+10));
       std::istringstream LineExcludeStream(LineToParse.substr(0,LineToParse.find("--")!=std::string::npos ? LineToParse.find("--") : LineToParse.find("\"")));
@@ -298,8 +298,8 @@ const char * RBExperimentInfo::RetrieveRunTitleFromEvtFile(const char * evtfile_
     // ===============================================
 
     // Reading the rest of the buffer until I find start of run ================
-    int dBufferBytes = nbytes - 8; //Skipping the inclusive size and data type
-    int dBufferWords = dBufferBytes/2; //Calculating 16 bit words from bytes
+    const int dBufferBytes = nbytes - 8; //Skipping the inclusive size and data type
+    const int dBufferWords = dBufferBytes/2; //Calculating 16 bit words from bytes
 
     unsigned short dBuffer[dBufferWords];
     evtfile.read((char*)dBuffer,dBufferBytes);

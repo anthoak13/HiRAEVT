@@ -1,6 +1,6 @@
 //
 //  RBElectronicsLinkDef.h
-//  
+//
 //
 //  Created by Andrew Rogers on 3/20/15.
 //
@@ -8,8 +8,6 @@
 
 #ifndef _RBElectronicsLinkDef_h
 #define _RBElectronicsLinkDef_h
-
-#ifdef __CINT__
 
 #pragma link off all globals;
 #pragma link off all classes;
@@ -25,5 +23,4 @@
 #pragma link C++ class RBElectronics+;
 #pragma link C++ class RBSisTimestampUnpacker+;
 
-#endif
 #endif

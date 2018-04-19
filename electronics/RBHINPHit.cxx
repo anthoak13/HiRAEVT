@@ -1,6 +1,8 @@
 #include "RBHINPHit.h"
 
+//WARNING: the maximum number of hits in hinp is for now set at 1000
 static const int NMAXHITS = 1000;
+////////////////////////////////////////////////////////////////////
 
 //______________________________________________________________________________
 RBHINPHit::RBHINPHit() : fNHits(0)

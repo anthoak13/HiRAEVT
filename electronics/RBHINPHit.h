@@ -6,7 +6,7 @@
 class RBHINPHit
 {
 public:
-  UInt_t   fNHits;      // Number of hits
+  Int_t     fNHits;      // Number of hits
   UShort_t *fXLMIndex;   //[fNHits] // XLM index
   UShort_t *fBank;       //[fNHits] // XLM BANK
   Bool_t   *fChMismatch; //[fNHits] // XLM/FADC ch mismatch
@@ -19,7 +19,7 @@ public:
   RBHINPHit();
   virtual ~RBHINPHit();
 
-  ClassDef(RBHINPHit,2);
+  ClassDef(RBHINPHit,1);
 };
 
 #endif

@@ -296,7 +296,6 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
       // Get the 'header' .. ensure that it matches our VSN if module has a VSN.
       unsigned long header;
       int           vsn = -99;
-      Int_t         moduleOffset = sOffset;
 
       //DEBUG
       //      cout << "Module " << module << endl;

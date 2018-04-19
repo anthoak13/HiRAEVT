@@ -60,7 +60,7 @@ void RBHINPUnpacker::InitBranch(TTree *tree)
   // --
   //
   if(GetFillData()){
-    tree->Branch(fChName+".","RBHINPHit",&fHits,32000,2);
+    tree->Branch(fChName+".","RBHINPHit",&fHits,32768,2);
   }else{
     cout << "-->RBHINPUnpacker::InitBranch  Branches will not be created or filled." << endl;
   }
@@ -144,8 +144,8 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   vector<UInt_t>   channelIds32[10];
   */
   uint32_t  channelId, timeStamp[2], channelCount;
-  uint32_t  dumpctr, dumpoff, bumflag=0;
-  uint32_t  XLMID;
+  uint32_t  bumflag=0;
+  //uint32_t  XLMID;
   static uint32_t bumcount;
   uint32_t xlmWordCount[10];
 
@@ -163,7 +163,7 @@ Int_t RBHINPUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
       int xlmNum = bank/2;
 
       //cout << "Unpacking bank " << bank << endl;
-      XLMID = event[offset] & 0x3fff;
+      //XLMID = event[offset] & 0x3fff;
       /*
       for (int i=0; i<24; i++){
 	cout << hex << event[offset+i] << endl;

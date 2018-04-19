@@ -2,7 +2,7 @@
 include $(RIBbitDAQROOT)/filterkit/FilterIncludes
 #
 #  Add your own compilation/link flags here:
-RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRIBbitLogo -lRBShared -lRBRunInfo
+RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRBLogo -lRBShared -lRBRunInfo
 
 INCLUDES  := -I$(RIBbitSRC)/
 INCLUDES  += -I$(RIBbitSRC)/electronics
@@ -13,9 +13,8 @@ INCLUDES  += -I$(RIBbitSRC)/shared
 INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
 INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
 
-USERCXXFLAGS = -g $(INCLUDES) $(RLIBS)
-USERCCFLAGS  = $(USERCXXFLAGS)
-USERLDFLAGS  = -g $(INCLUDES) $(RLIBS) $(shell root-config --libs)
+CFLAGS    :=`root-config --cflags --libs`
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 $(RLIBS)
 
 #
 #  Add the names of objects you need here if you modified the name of the driver file,
@@ -34,31 +33,22 @@ OBJECTS = FragmentIndex.o CUnpackerFilter.o SkeletonMain.o
 
 all : build
 
-build : UnpackerFilter
+build : RIBbitUnpacker.exe
 
 install:
-	@cp UnpackerFilter $(RIBbitBIN)/.
+	@cp RIBbitUnpacker.exe $(RIBbitBIN)/.
 	@cp gofilter $(RIBbitBIN)/.
 
 clean :
-	rm -f $(OBJECTS) Unpacker.o UnpackerFilter
+	rm -f $(OBJECTS) Unpacker.o RIBbitUnpacker.exe
 
 distclean: clean
-	@rm -f $(RIBbitBIN)/UnpackerFilter
+	@rm -f $(RIBbitBIN)/RIBbitUnpacker.exe
 	@rm -f $(RIBbitBIN)/gofilter
-
-
-# Build this separately and then link in later
-#Unpacker.o : Unpacker.cpp
-#	$(CXX) -g $(USERCXXFLAGS) $(LDFLAGS) -c $(shell root-config --cflags) -o $@ $< $(shell root-config --libs)
-
-#UnpackerFilter : $(OBJECTS) Unpacker.o
-#	$(CXX) -g -o $@ $(USERLDFLAGS) $(LDFLAGS) -Wl,-rpath=$(INSTDIR)  FragmentIndex.o SkeletonMain.o CUnpackerFilter.o Unpacker.o
-
 
 # Build this separately and then link in later
 Unpacker.o : Unpacker.cpp
-	$(CXX) -g $(USERCXXFLAGS) $(LDFLAGS) -c $(shell root-config --cflags) -o $@ $< $(shell root-config --libs)
+	$(CXX) $(CXXFLAGS) $(USERCXXFLAGS) $(LDFLAGS) -c $(shell root-config --cflags) -o $@ $< $(CFLAGS)
 
-UnpackerFilter : $(OBJECTS) Unpacker.o
-	$(CXX) -g $(OBJECTS) Unpacker.o -o $@ $(USERLDFLAGS) $(LDFLAGS) -Wl,-rpath=$(INSTDIR)
+RIBbitUnpacker.exe : $(OBJECTS) Unpacker.o
+	$(CXX) $(CXXFLAGS) $(OBJECTS) Unpacker.o -o $@ $(USERLDFLAGS) $(LDFLAGS) $(CFLAGS) -Wl,-rpath=$(INSTDIR)

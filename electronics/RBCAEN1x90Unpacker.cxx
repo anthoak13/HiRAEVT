@@ -213,8 +213,7 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   //
 
   bool done = false;
-  UInt_t    referenceTime = 0;
-  int       totalHits     = 0;
+  int  totalHits     = 0;
   while((offset < maxoffset) && !done) {
     UInt_t datum = getLong(event, offset);
     if (datum == 0xffffffff) break; // premature end of event.

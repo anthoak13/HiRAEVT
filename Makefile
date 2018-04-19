@@ -2,10 +2,6 @@ CXXFLAGS = -g
 
 all:
 	$(MAKE) root
-	@ln -sf libRBSetup.so.1.0 libRBSetup.so.1
-	@ln -sf libRBSetup.so.1 libRBSetup.so
-	@mv libRBSetup.so $(RIBbitLIB)/.
-	@mv libRBSetup.so.1 $(RIBbitLIB)/.
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  ;		$(MAKE) -C FilterUnpacker install
 endif

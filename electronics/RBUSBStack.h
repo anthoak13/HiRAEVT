@@ -70,9 +70,6 @@ public:
 
   void  PrintSummary();
   void  AddTTreeUserInfo(TTree *);
-
-  ClassDef(RBUSBStack,1);
-
 };
 
 

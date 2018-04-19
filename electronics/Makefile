@@ -1,65 +1,61 @@
-############# MACROS ##############
-RC     := root-config
-ifeq ($(shell which $(RC) 2>&1 | sed -ne "s@.*/$(RC)@$(RC)@p"),$(RC))
-MKARCH := $(wildcard $(shell $(RC) --etcdir)/Makefile.arch)
-endif
-ifneq ($(MKARCH),)
-include $(MKARCH)
-else
-ROOTSYS = ../
-include $(ROOTSYS)/etc/Makefile.arch
-endif
+CFLAGS    :=`root-config --cflags --libs`
+SYSLIB    := -lz -l TreePlayer -lMathMore
 
-RBELECTRONICS_DICT        := RBElectronicsDict.$(SrcSuf)
-RBELECTRONICS_DICTH       := $(RBELECTRONICS_DICT:.$(SrcSuf)=.h)
-RBELECTRONICS_DICTO       := $(RBELECTRONICS_DICT:.$(SrcSuf)=.$(ObjSuf))
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
+PcmSuf    := _rdict.pcm
 
-RBELECTRONICS_SRCS        := $(wildcard RB*.$(SrcSuf))
+INCLUDES  := -I$(RIBbitSRC)/
+INCLUDES  += -I$(RIBbitSRC)/electronics
 
-RBELECTRONICS_HDRS        := $(RBELECTRONICS_SRCS:.$(SrcSuf)=.h) RBElectronicsLinkDef.h
-RBELECTRONICS_HDRS        := $(filter-out $(RBELECTRONICS_DICTH),$(RBELECTRONICS_HDRS))
+RLIBS     := -L$(RIBbitLIB)
 
-RBELECTRONICS_LIB         := libRBElectronics.$(DllSuf)
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
-RBELECTRONICS_OBJS        := $(RBELECTRONICS_SRCS:.$(SrcSuf)=.$(ObjSuf))
+RBELECTRONICS_DICT  := RBElectronicsDict.$(SrcSuf)
+RBELECTRONICS_DICTH := $(RBELECTRONICS_DICT:.$(SrcSuf)=.h)
+RBELECTRONICS_DICTO := $(RBELECTRONICS_DICT:.$(SrcSuf)=.$(ObjSuf))
+RBELECTRONICS_PCM   := RBElectronicsDict$(PcmSuf)
 
-RLIBS             := -L$(RIBbitLIB)
+RBELECTRONICS_HDRS  := $(wildcard RB*.$(SrcSuf))
 
-INCLUDES += -I../..
+RBELECTRONICS_HDRS  := $(RBELECTRONICS_HDRS:.$(SrcSuf)=.h) RBElectronicsLinkDef.h
+RBELECTRONICS_HDRS  := $(filter-out $(RBELECTRONICS_DICTH),$(RBELECTRONICS_HDRS))
 
-CXXFLAGS += -g $(INCLUDES)
-
-
-############# RULES ###############
+RBELECTRONICS_LIB := libRBElectronics.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter -c $<
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-############# TARGETS #############
+all: $(RBELECTRONICS_LIB)
 
-.SUFFIXES: .$(SrcSuf) .$(ObjSuf) $(ExeSuf) .$(DllSuf)
-
-all:  $(RBELECTRONICS_LIB)
+.SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf) .$(PcmSuf)
 
 $(RBELECTRONICS_DICT): $(RBELECTRONICS_HDRS)
-	@echo "Generating dictionary $@... $(RBELECTRONICS_DICT) $(SrcSuf)"
-	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
+	@echo "Generating dictionary $@..."
+	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
-$(RBELECTRONICS_LIB): $(RBELECTRONICS_OBJS) $(RBELECTRONICS_DICTO)
-ifeq ($(PLATFORM),macosx)
-	$(LD) $(SOFLAGS)$@ $(INCLUDES) $(LDFLAGS) $^ $(OutPutOpt) $@ $(GLIBS) $(RLIBS)
-else
-	$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(GLIBS) $(RLIBS) $(OutPutOpt)$@
-endif
-
-RBELECTRONICS:    $(RBELECTRONICS_LIB)
+$(RBELECTRONICS_LIB): $(OBJS) $(RBELECTRONICS_DICTO)
+	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
+	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
 
 install:
-	@cp $(RBELECTRONICS_LIB) $(RIBbitLIB)/.
+	@cp $(RBELECTRONICS_LIB) $(RBELECTRONICS_PCM) $(RIBbitLIB)/.
 
-distclean: clean
-	@rm -f $(RBELECTRONICS_LIB) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH)
-	@rm -f $(RIBbitLIB)/$(RBELECTRONICS_LIB) $(RIBbitLIB)$(RBELECTRONICS_DICT) $(RIBbitLIB)/$(RBELECTRONICS_DICTH)
+.PHONY: distclean
+distclean:
+	@rm -f $(RBELECTRONICS_LIB) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH) $(RBELECTRONICS_PCM)
+	@rm -f $(RIBbitLIB)/$(RBELECTRONICS_LIB)
 
+.PHONY: clean
 clean:
-	@rm -f $(RBELECTRONICS_OBJS) $(RBELECTRONICS_DICTO) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH) $(RBELECTRONICS_LIB)
+	@$(RM) -f $(LIB) $(OBJS) $(RBELECTRONICS_DICTO) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH) $(RBELECTRONICS_PCM)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)

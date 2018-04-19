@@ -1,55 +1,44 @@
-############# MACROS ##############
+CFLAGS    :=`root-config --cflags --libs`
 
-RC     := root-config
-ifeq ($(shell which $(RC) 2>&1 | sed -ne "s@.*/$(RC)@$(RC)@p"),$(RC))
-MKARCH := $(wildcard $(shell $(RC) --etcdir)/Makefile.arch)
-endif
-ifneq ($(MKARCH),)
-include $(MKARCH)
-else
-ROOTSYS = ..
-include $(ROOTSYS)/etc/Makefile.arch
-endif
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
 
-RIBBITLOGO_SRCS        := RIBbit2Logo.$(SrcSuf)
+INCLUDES  := -I$(RIBbitSRC)/
 
-RIBBITLOGO_HDRS        := $(RIBBITLOGO_SRCS:.$(SrcSuf)=.h)
+RLIBS     := -L$(RIBbitLIB)
 
-RIBBITLOGO_OBJS        := $(RIBBITLOGO_SRCS:.$(SrcSuf)=.$(ObjSuf))
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
-RIBBITLOGO_LIB         := libRIBbitLogo.$(DllSuf)
-
-INCLUDES += -I$(RIBbitSRC)
-
-CXXFLAGS += $(INCLUDES) -g
-
-
-############# RULES ###############
+RBLOGO_LIB := libRBLogo.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
-	$(CXX) -g $(CXXFLAGS) -Wno-unused-variable -Wno-unused-value -Wno-unused-parameter -c $<
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-############# TARGETS #############
+all: $(RBLOGO_LIB)
 
-.SUFFIXES: .$(SrcSuf) .$(ObjSuf)
+.SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
-all:  $(RIBBITLOGO_LIB)
-
-$(RIBBITLOGO_DICT): $(RIBBITLOGO_HDRS)
-	@echo "Generating dictionary $@... $(RIBBITLOGO_DICT) $(SrcSuf)"
-	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
-
-$(RIBBITLOGO_LIB): $(RIBBITLOGO_OBJS)
-ifeq ($(PLATFORM),macosx)
-	$(LD) $(SOFLAGS)$@ $(INCLUDES) $(LDFLAGS) $^ $(OutPutOpt) $@ $(GLIBS) $(RLIBS)
-else
-	$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(GLIBS) $(RLIBS) $(OutPutOpt)$@
-endif
+$(RBLOGO_LIB): $(OBJS)
+	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
+	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(RIBBITLOGO_LIB) $(RIBbitLIB)/.
+	@cp $(RBLOGO_LIB) $(RIBbitLIB)/.
 
-distclean: clean
+.PHONY: distclean
+distclean:
+	@rm -f $(RBLOGO_LIB)
+	@rm -f $(RIBbitLIB)/$(RBLOGO_LIB)
 
+.PHONY: clean
 clean:
-	@rm -f $(RIBBITLOGO_OBJS)
+	@$(RM) -f $(LIB) $(OBJS)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)
