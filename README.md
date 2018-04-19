@@ -26,7 +26,9 @@ Table of contents
   * [Requirements](#requirements)
   * [Environment Variables](#env-variables)
   * [Compile the Code](#compilation)
+  * [Configure the Program](#configure)
 * [The RIBbitUnpacker Program](#unpacker)
+  * [Run the Code](#run-unpacker)
 * [The RIBbitMapper Program](#mapper)
 * [The RIBbitAnalyzer Program](#analyzer)
 <!--te-->
@@ -57,8 +59,21 @@ $ make clean
 $ make
 $ make install
 ````
+The binary file bin/RIBbitUnpacker.exe is generated in the compilation.
+### Configure the program
+
 ## The RIBbitUnpacker Program
+### Run the code
+It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main RIBbit2 folder):
+````
+$ RIBbitUnpacker RUN_NUMBER
+````
+where RUN_NUMBER indicates the number of run to unpack. A group of runs can be unpacked by using:
+````
+$ RIBbitUnpacker FIRST_RUN LAST_RUN
+````
+where FIRST_RUN and LAST_RUN define the range of runs to unpack. Please note that if FIRST_RUN=LAST=RUN, the second command is equivalent to the first.
 ## The RIBbitMapper Program
-The design and implementation of the program are in progress
+The design and implementation of the program are in progress.
 ## The RIBbitAnalyzer Program
-The program has to be designed
+The program has to be designed.
