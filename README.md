@@ -66,15 +66,14 @@ The program can run over different experimental configurations (DAQ, detectors, 
 * set RIBBIT2UNPACKER_SUMMARY_PATH : use this command to specify a folder to store the standard output of the unpacking process when the code is run in batch mode (i.e. ember or seaside)
 * set RIBBIT2UNPACKER_ROOT_FILE_PATH : this command sets the location of the ROOT files obtained by RIBbit2Unpacker
 * set EXPERIMENT_NAME : the name of the experiment (i.e. 15190)
-* set EXPERIMENT_TITLE :
-* set MERGED_DATA :
-* set EVENT_FILE_PATH :
-* FIRST_RUN :
-* LAST_RUN :
-* set EVENT_FILE_PATH :
-* set DAQ_CONFIG :
-* set PEDESTAL_VALUES :
-* set CHANNEL_MAPPING :
+* set EXPERIMENT_TITLE : a generic title to describe the experiment
+* set MERGED_DATA : this command can be "true" if data is merged or "false" if data is not merged
+* set EVENT_FILE_PATH : this command sets the path of the evt files. This path can be also set for individual group of runs by using the flag --run=FIRST_RUN-LAST-RUN. The flag --exclude=RUN1,RUN2,...,RUNN can be used to exclude a group of runs, namely 1,..., N, from this setting.
+* FIRST_RUN : this is the first run of the whole experiment
+* LAST_RUN : this is the last run of the whole experiment (the unpacker won't unpack runs after LAST_RUN)
+* set DAQ_CONFIG : set the DAQ config (see the input-file folder, which contains an example of daqconfig file well commented). This command supports the --run and --exclude flags.
+* set PEDESTAL_VALUES : set pedestal values for electronic channels. This command supports the --run and --exclude flags.
+* set CHANNEL_MAPPING : define detectors and set mapping. This command supports the --run and --exclude flags.
 ## The RIBbitUnpacker Program
 ### Run the code
 It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main RIBbit2 folder):
