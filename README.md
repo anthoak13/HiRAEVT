@@ -26,3 +26,10 @@ A full unpacker and data reduction program for the HiRA collaboration. The progr
 
 ## Getting the code
 ### Using git
+The latest version of the code can be obtained by using the git command. This is possible after installing git on a linux machine (see https://git-scm.com/download/linux for further documentation on how to install git). Use the following command to download RIBbit2:
+````
+$ git clone https://github.com/dellaquilamaster/RIBbit2.git
+````
+### Downloading from Git Hub
+The code can be downloaded also frm the Git Hub web page at the link: https://github.com/dellaquilamaster/RIBbit2, by
+clicking on the "Clone or Download" button on the right side of the page and then "Download ZIP". It is possible to donwload also a previous release of the code. For a complete list of all the releases please visit: https://github.com/adrien-matta/nptool/releases.
