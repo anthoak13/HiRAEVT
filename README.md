@@ -12,17 +12,22 @@ A full unpacker and data reduction program for the HiRA collaboration. The progr
   * [NSCL DAQ](http://docs.nscl.msu.edu/daq/) : NSCL Data Acquisition (DAQ) documentation
   * [HiRA Webpage](https://groups.nscl.msu.edu/hira/) : High Resolution Array (HiRA) group website
   
-# Contents
-1. [Getting the code](#getting-the-code)
-  1. [Using git](#using-git)
-  2. [Downloading from Git Hub](#downloading-from-git-hub)
-2. [Setup](#setup)
-  1. [Requirements](#requirements)
-  2. [Environment Variables](#env-variables)
-  3. [Compile the Code](#compilation)
-3. [The RIBbitUnpacker Program](#unpacker)
-4. [The RIBbitMapper Program](#mapper)
-5. [The RIBbitAnalyzer Program](#analyzer)
+Table of contents
+=================
+<!--ts-->
+* [Getting the code](#getting-the-code)
+  * [Using git](#using-git)
+  * [Downloading from Git Hub](#downloading-from-git-hub)
+* [Setup](#setup)
+  * [Requirements](#requirements)
+  * [Environment Variables](#env-variables)
+  * [Compile the Code](#compilation)
+* [The RIBbitUnpacker Program](#unpacker)
+* [The RIBbitMapper Program](#mapper)
+* [The RIBbitAnalyzer Program](#analyzer)
+<!--te-->
+
+
 
 ## Getting the code
 ### Using git
