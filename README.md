@@ -9,8 +9,8 @@ A full unpacker and data reduction program for the HiRA collaboration. The progr
  * RIBbitAnalyzer : Introduces detector calibrations and pixellation/track recognition algorithms and create a final TTRee with physical data
 
 # Useful links:
-  * [nscl_daq](http://docs.nscl.msu.edu/daq/) : NSCL Data Acquisition (DAQ) documentation
-  * [hira webpage](https://groups.nscl.msu.edu/hira/) : High Resolution Array (HiRA) group website
+  * [NSCL DAQ](http://docs.nscl.msu.edu/daq/) : NSCL Data Acquisition (DAQ) documentation
+  * [HiRA Webpage](https://groups.nscl.msu.edu/hira/) : High Resolution Array (HiRA) group website
   
 # Contents
 1. [Getting the code](#getting-the-code)
@@ -18,6 +18,11 @@ A full unpacker and data reduction program for the HiRA collaboration. The progr
   2. [Downloading from Git Hub](#downloading-from-git-hub)
 2. [Setup](#setup)
   1. [Requirements](#requirements)
+  2. [Environment Variables](#env-variables)
+  3. [Compile the Code](#compilation)
+3. [RIBbitUnpacker](#unpacker)
+4. [RIBbitMapper](#mapper)
+5. [RIBbitAnalyzer](#analyzer)
 
 ## Getting the code
 ### Using git
