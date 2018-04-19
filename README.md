@@ -1,9 +1,12 @@
 RIBbit2
 ===
 
-Contributors: Daniele Dell'Aquila, Juan Manfredi, ...
+Contributors: Daniele Dell'Aquila, Juan Manfredi, Zbigniew Chajecki
 
-RIBbit2 will be a full unpacker and analysis program used by the HiRA collaboration. It will be based on the Juan Manfredi's RIBbit program as the initial unpacker (first stage). Further stages will be developed on it to allow detector mapping, calibrations and the extraction of physical information.
+A full unpacker and data reduction program for the HiRA collaboration. The program consists in the following sub-programs:
+ - RIBbitUnpacker : NSCL DAQ ROOT Unpacking software based on Juan Manfredi's RIBbit
+ - RIBbitMapper : Reads data from ROOT TTrees created by RIBbitUnpacker to create fully mapped TTrees with detector definitions. The objects stored to the tree are optimized to make easier calibration and data reduction procedures
+ - RIBbitAnalyzer : Introduces detector calibrations and pixellation/track recognition algorithms and create a final TTRee with physical data
 
 # Useful links:
   * [temporary website](http://link.org) : Find the latest information on the program
