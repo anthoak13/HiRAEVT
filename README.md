@@ -20,9 +20,9 @@ A full unpacker and data reduction program for the HiRA collaboration. The progr
   1. [Requirements](#requirements)
   2. [Environment Variables](#env-variables)
   3. [Compile the Code](#compilation)
-3. [RIBbitUnpacker](#unpacker)
-4. [RIBbitMapper](#mapper)
-5. [RIBbitAnalyzer](#analyzer)
+3. [The RIBbitUnpacker Program](#unpacker)
+4. [The RIBbitMapper Program](#mapper)
+5. [The RIBbitAnalyzer Program](#analyzer)
 
 ## Getting the code
 ### Using git
@@ -32,4 +32,8 @@ $ git clone https://github.com/dellaquilamaster/RIBbit2.git
 ````
 ### Downloading from Git Hub
 The code can be downloaded also frm the Git Hub web page at the link: https://github.com/dellaquilamaster/RIBbit2, by
-clicking on the "Clone or Download" button on the right side of the page and then "Download ZIP". It is possible to donwload also a previous release of the code. For a complete list of all the releases please visit: https://github.com/adrien-matta/nptool/releases.
+clicking on the "Clone or Download" button on the right side of the page and then "Download ZIP". It is possible to donwload also a previous release of the code. For a complete list of all the releases please visit: https://github.com/dellaquilamaster/RIBbit2/releases.
+## Setup
+## The RIBbitUnpacker Program
+## The RIBbitMapper Program
+## The RIBbitAnalyzer Program
