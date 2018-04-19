@@ -44,7 +44,12 @@ clicking on the "Clone or Download" button on the right side of the page and the
 ### Requirements
 The code is compiled using the g++ compiler.
 In order to compile and run the code ROOT 6 is required (the program has been tested with version 6.04.02). Please note that, since the program uses advanced ROOT 6 features, it is not possible to run or compile it by using an installation of ROOT 5. ROOT 6 is required when exporting environment variables (see section "Environment Variables").
-### 
+### Environment Variables
+Before compiling or running the code, it is required to export the needed environment variables and aliases. This can be done by launching, from the main folder of RIBbit2, the command:
+````
+$ source bin/RIBbit2.sh
+````
+Please note that the current version of the program requires ROOT6 and cannot be used under ROOT5 or previous versions. RIBbit2.sh is currently set to use ROOT-6.04.02, to change the ROOT version used please modify the variable ROOTVERSION in RIBbit2.sh.
 ## The RIBbitUnpacker Program
 ## The RIBbitMapper Program
 The design and implementation of the program are in progress
