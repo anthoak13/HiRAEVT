@@ -18,7 +18,7 @@ Table of contents
 * [Getting the code](#getting-the-code)
   * [Using git](#using-git)
   * [Downloading from Git Hub](#downloading-from-git-hub)
-* [Setup](#setup)
+* [Setup and Configuration](#setup)
   * [Requirements](#requirements)
   * [Environment Variables](#env-variables)
   * [Compile the Code](#compilation)
@@ -38,7 +38,10 @@ $ git clone https://github.com/dellaquilamaster/RIBbit2.git
 ### Downloading from Git Hub
 The code can be downloaded also frm the Git Hub web page at the link: https://github.com/dellaquilamaster/RIBbit2, by
 clicking on the "Clone or Download" button on the right side of the page and then "Download ZIP". It is possible to donwload also a previous release of the code. For a complete list of all the releases please visit: https://github.com/dellaquilamaster/RIBbit2/releases.
-## Setup
+## Setup and Configuration
+### 
 ## The RIBbitUnpacker Program
 ## The RIBbitMapper Program
+The design and implementation of the program are in progress
 ## The RIBbitAnalyzer Program
+The program has to be designed
