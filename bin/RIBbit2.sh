@@ -1,9 +1,12 @@
 #For questions, talk to Juan Manfredi or Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 
-#Set ROOT version to 6.04.02 #####################################
+ROOTVERSION=6.04.02
+
+#Set ROOT version to $ROOTVERSION ################################
+# WARNING: the program works with ROOTVERSION>=6
 module unload root
-module load root/gnu/6.04.02
-export ROOTSYS='/mnt/misc/sw/x86_64/Debian/8/root/gnu/6.04.02'
+module load root/gnu/${ROOTVERSION}
+export ROOTSYS='/mnt/misc/sw/x86_64/Debian/8/root/gnu/${ROOTVERSION}'
 export ROOTCLINGORCINT='rootcling'
 ##################################################################
 
