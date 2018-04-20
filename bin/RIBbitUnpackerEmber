@@ -47,7 +47,7 @@ fi
 
 i=0
 
-for file_evt in $(ls "${EvtFilesPath}run$run_num/*.evt"); do
+for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
 
 cat > submit.sh << EOF
 #!/usr/bin/env bash
@@ -59,11 +59,12 @@ cat > submit.sh << EOF
 #SBATCH --output=${Ribbit2SummaryPath}slurm-%A_%a.out
 module add intel
 
+cd ${Ribbit2Path}
 source ${Ribbit2Path}/bin/RIBbit2.sh
-${Ribbit2Path}/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///dev/null
+eval '${Ribbit2Path}/bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
 EOF
    ((i++))
-   qsub submit.sh
+   sbatch submit.sh
    sleep 0.1
 
 done

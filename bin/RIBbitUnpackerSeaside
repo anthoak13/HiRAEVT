@@ -47,7 +47,7 @@ fi
 
 i=0
 
-for file_evt in $(ls "${EvtFilesPath}run$run_num/*.evt"); do
+for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
 
 #erase output and error files if already exist
 if [ -f "${Ribbit2SummaryPath}Summary_${file_evt##*/}" ]; then
@@ -70,8 +70,9 @@ cat > submit.sh << EOF
 #PBS -S /bin/bash
 module add intel
 
+cd ${Ribbit2Path}
 source ${Ribbit2Path}/bin/RIBbit2.sh
-${Ribbit2Path}/bin/UnpackerFilter --source=file://'$file_evt' --sink=file:///dev/null
+eval '${Ribbit2Path}/bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
 EOF
    ((i++))
    qsub submit.sh
