@@ -71,8 +71,8 @@ cat > submit.sh << EOF
 module add intel
 
 cd ${Ribbit2Path}
-source ${Ribbit2Path}/bin/RIBbit2.sh
-eval '${Ribbit2Path}/bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
+source ${Ribbit2Path}bin/RIBbit2.sh
+eval '${Ribbit2Path}bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
 EOF
    ((i++))
    qsub submit.sh
