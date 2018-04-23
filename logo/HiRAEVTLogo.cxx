@@ -8,7 +8,7 @@ void PrintHiRAEVTUnpackerLogo()
   printf("//  ██╔══██║██║██╔══██╗██╔══██║██╔══╝  ╚██╗ ██╔╝   ██║   \n");
   printf("//  ██║  ██║██║██║  ██║██║  ██║███████╗ ╚████╔╝    ██║   \n");
   printf("//  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  ╚═══╝     ╚═╝   \n");
-  printf("// HiRA Extremely Versatile Tool (for Unpacking and Reduction of Experiment Data)");
+  printf("// HiRA Extremely Versatile Tool (for Unpacking and Reduction of Experiment Data)\n");
   printf("//\n");
 
   printf("Welcome to HiRAEVTUnpacker\n");

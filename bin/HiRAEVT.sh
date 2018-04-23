@@ -22,8 +22,8 @@ export LD_LIBRARY_PATH=$ROOTSYS/lib/root:$LD_LIBRARY_PATH:./
 
 #Set environmental variables for HiRAEVT
 export HiRAEVTSRC=${HiRAEVTPath}
-export HiRAEVTLIB=${HiRAEVTPath}lib
-export HiRAEVTBIN=${HiRAEVTPath}bin
+export HiRAEVTLIB=${HiRAEVTPath}/lib
+export HiRAEVTBIN=${HiRAEVTPath}/bin
 export HiRAEVTDAQROOT=/usr/opt/nscldaq/current
 export DAQROOT=/usr/opt/nscldaq/current
 

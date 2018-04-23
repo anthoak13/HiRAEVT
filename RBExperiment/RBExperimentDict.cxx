@@ -455,12 +455,12 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/projects/hira/Daniele/HiRAEVT//",
-"/projects/hira/Daniele/HiRAEVT//electronics",
-"/projects/hira/Daniele/HiRAEVT//shared",
-"/projects/hira/Daniele/HiRAEVT//HTRunInfo",
-"/projects/hira/Daniele/HiRAEVT//RBExperiment",
-"/projects/hira/Daniele/HiRAEVT//FilterUnpacker",
+"/projects/hira/Daniele/HiRAEVT/",
+"/projects/hira/Daniele/HiRAEVT/electronics",
+"/projects/hira/Daniele/HiRAEVT/shared",
+"/projects/hira/Daniele/HiRAEVT/HTRunInfo",
+"/projects/hira/Daniele/HiRAEVT/RBExperiment",
+"/projects/hira/Daniele/HiRAEVT/FilterUnpacker",
 "/mnt/misc/sw/x86_64/Debian/8/root/gnu/6.04.02/include/root",
 "/projects/hira/Daniele/HiRAEVT/RBExperiment/",
 0

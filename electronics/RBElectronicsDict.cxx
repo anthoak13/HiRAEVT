@@ -1016,8 +1016,8 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/projects/hira/Daniele/HiRAEVT//",
-"/projects/hira/Daniele/HiRAEVT//electronics",
+"/projects/hira/Daniele/HiRAEVT/",
+"/projects/hira/Daniele/HiRAEVT/electronics",
 "/mnt/misc/sw/x86_64/Debian/8/root/gnu/6.04.02/include/root",
 "/projects/hira/Daniele/HiRAEVT/electronics/",
 0
