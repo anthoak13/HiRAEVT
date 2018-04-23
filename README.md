@@ -1,6 +1,6 @@
 HiRAEVT
 ===
-
+HiRA Extremely Versatile Tool (for Unpacking and Reduction of experiment Data)
 Contributors: Daniele Dell'Aquila(1), Juan Manfredi, Zbigniew Chajecki
 
 (1) dellaqui@nscl.msu.edu 
