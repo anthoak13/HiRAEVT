@@ -76,7 +76,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   //Initialization of RBRunInfo class
   cout << "** Initializing Run Info **\n";
   gExperimentInfo = new RBExperimentInfo();
-  if(gExperimentInfo->InitClass("config/RIBbit2.conf")<=0) {
+  if(gExperimentInfo->InitClass("config/HiRAEVT.conf")<=0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }

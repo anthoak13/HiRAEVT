@@ -455,14 +455,14 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/projects/hira/Daniele/RIBbit2-dev//",
-"/projects/hira/Daniele/RIBbit2-dev//electronics",
-"/projects/hira/Daniele/RIBbit2-dev//shared",
-"/projects/hira/Daniele/RIBbit2-dev//RBRunInfo",
-"/projects/hira/Daniele/RIBbit2-dev//RBExperiment",
-"/projects/hira/Daniele/RIBbit2-dev//FilterUnpacker",
+"/projects/hira/Daniele/HiRAEVT//",
+"/projects/hira/Daniele/HiRAEVT//electronics",
+"/projects/hira/Daniele/HiRAEVT//shared",
+"/projects/hira/Daniele/HiRAEVT//RBRunInfo",
+"/projects/hira/Daniele/HiRAEVT//RBExperiment",
+"/projects/hira/Daniele/HiRAEVT//FilterUnpacker",
 "/mnt/misc/sw/x86_64/Debian/8/root/gnu/6.04.02/include/root",
-"/projects/hira/Daniele/RIBbit2-dev/RBExperiment/",
+"/projects/hira/Daniele/HiRAEVT/RBExperiment/",
 0
     };
     static const char* fwdDeclCode = 

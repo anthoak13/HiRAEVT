@@ -32,7 +32,7 @@ distclean:
 	$(MAKE) -C logo distclean
 	$(MAKE) -C shared distclean
 	$(MAKE) -C RBRunInfo distclean
-	@rm $(RIBbitLIB)/libRBSetup.so
+	@rm $(HiRAEVTLIB)/libRBSetup.so
 ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  distclean
 endif

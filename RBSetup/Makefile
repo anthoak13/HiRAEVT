@@ -6,15 +6,15 @@ SrcSuf    := cxx
 ObjSuf    := o
 PcmSuf    := _rdict.pcm
 
-INCLUDES  := -I$(RIBbitSRC)/
-INCLUDES  += -I$(RIBbitSRC)/electronics
-INCLUDES  += -I$(RIBbitSRC)/shared
-INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
-INCLUDES  += -I$(RIBbitSRC)/RBSetup
-INCLUDES  += -I$(RIBbitSRC)/RBExperiment
-INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
+INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
+INCLUDES  += -I$(HiRAEVTSRC)/shared
+INCLUDES  += -I$(HiRAEVTSRC)/RBRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/RBSetup
+INCLUDES  += -I$(HiRAEVTSRC)/RBExperiment
+INCLUDES  += -I$(HiRAEVTSRC)/FilterUnpacker
 
-RLIBS     := -L$(RIBbitLIB)
+RLIBS     := -L$(HiRAEVTLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
@@ -49,12 +49,12 @@ $(RBSETUP_LIB): $(OBJS) $(RBSETUP_DICTO)
 	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
 
 install:
-	@cp $(RBSETUP_LIB) $(RBSETUP_PCM) $(RIBbitLIB)/.
+	@cp $(RBSETUP_LIB) $(RBSETUP_PCM) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
 	@rm -f $(RBSETUP_LIB) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_PCM)
-	@rm -f $(RIBbitLIB)/$(RBSETUP_LIB)
+	@rm -f $(HiRAEVTLIB)/$(RBSETUP_LIB)
 
 .PHONY: clean
 clean:

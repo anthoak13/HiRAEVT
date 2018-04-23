@@ -4,11 +4,11 @@ DllSuf    := so
 SrcSuf    := cxx
 ObjSuf    := o
 
-INCLUDES  := -I$(RIBbitSRC)/
-INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
-INCLUDES  += -I$(RIBbitSRC)/electronics
+INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/RBRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
 
-RLIBS     := -L$(RIBbitLIB) -lRBElectronics
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
@@ -29,12 +29,12 @@ $(RBRUNINFO_LIB): $(OBJS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(RBRUNINFO_LIB) $(RIBbitLIB)/.
+	@cp $(RBRUNINFO_LIB) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
 	@rm -f $(RBRUNINFO_LIB)
-	@rm -f $(RIBbitLIB)/$(RBRUNINFO_LIB)
+	@rm -f $(HiRAEVTLIB)/$(RBRUNINFO_LIB)
 
 .PHONY: clean
 clean:

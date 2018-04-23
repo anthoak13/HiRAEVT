@@ -1,17 +1,17 @@
 #include $(INSTDIR)/filterkit/FilterIncludes
-include $(RIBbitDAQROOT)/filterkit/FilterIncludes
+include $(HiRAEVTDAQROOT)/filterkit/FilterIncludes
 #
 #  Add your own compilation/link flags here:
-RLIBS     := -L$(RIBbitLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRBLogo -lRBShared -lRBRunInfo
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRBLogo -lRBShared -lRBRunInfo
 
-INCLUDES  := -I$(RIBbitSRC)/
-INCLUDES  += -I$(RIBbitSRC)/electronics
-INCLUDES  += -I$(RIBbitSRC)/RBExperiment
-INCLUDES  += -I$(RIBbitSRC)/RBSetup
-INCLUDES  += -I$(RIBbitSRC)/logo
-INCLUDES  += -I$(RIBbitSRC)/shared
-INCLUDES  += -I$(RIBbitSRC)/RBRunInfo
-INCLUDES  += -I$(RIBbitSRC)/FilterUnpacker
+INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
+INCLUDES  += -I$(HiRAEVTSRC)/RBExperiment
+INCLUDES  += -I$(HiRAEVTSRC)/RBSetup
+INCLUDES  += -I$(HiRAEVTSRC)/logo
+INCLUDES  += -I$(HiRAEVTSRC)/shared
+INCLUDES  += -I$(HiRAEVTSRC)/RBRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/FilterUnpacker
 
 CFLAGS    :=`root-config --cflags --libs`
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 $(RLIBS)
@@ -33,22 +33,22 @@ OBJECTS = FragmentIndex.o CUnpackerFilter.o SkeletonMain.o
 
 all : build
 
-build : RIBbitUnpacker.exe
+build : HiRAEVTUnpacker.exe
 
 install:
-	@cp RIBbitUnpacker.exe $(RIBbitBIN)/.
-	@cp gofilter $(RIBbitBIN)/.
+	@cp HiRAEVTUnpacker.exe $(HiRAEVTBIN)/.
+	@cp gofilter $(HiRAEVTBIN)/.
 
 clean :
-	rm -f $(OBJECTS) Unpacker.o RIBbitUnpacker.exe
+	rm -f $(OBJECTS) Unpacker.o HiRAEVTUnpacker.exe
 
 distclean: clean
-	@rm -f $(RIBbitBIN)/RIBbitUnpacker.exe
-	@rm -f $(RIBbitBIN)/gofilter
+	@rm -f $(HiRAEVTBIN)/HiRAEVTUnpacker.exe
+	@rm -f $(HiRAEVTBIN)/gofilter
 
 # Build this separately and then link in later
 Unpacker.o : Unpacker.cpp
 	$(CXX) $(CXXFLAGS) $(USERCXXFLAGS) $(LDFLAGS) -c $(shell root-config --cflags) -o $@ $< $(CFLAGS)
 
-RIBbitUnpacker.exe : $(OBJECTS) Unpacker.o
+HiRAEVTUnpacker.exe : $(OBJECTS) Unpacker.o
 	$(CXX) $(CXXFLAGS) $(OBJECTS) Unpacker.o -o $@ $(USERLDFLAGS) $(LDFLAGS) $(CFLAGS) -Wl,-rpath=$(INSTDIR)

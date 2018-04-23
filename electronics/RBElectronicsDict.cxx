@@ -39,7 +39,6 @@ namespace std {} using namespace std;
 
 // Header files passed as explicit arguments
 #include "RBElectronics.h"
-#include "RBHINPHit.h"
 #include "RBSisTimestampUnpacker.h"
 #include "RBHINPUnpacker.h"
 #include "RBCCUSBPacket.h"
@@ -48,6 +47,7 @@ namespace std {} using namespace std;
 #include "RBUSBStackMarker.h"
 #include "RBTimestamp.h"
 #include "RBUSBStack.h"
+#include "RBHINPHit.h"
 #include "RBModuleUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
 
@@ -1002,7 +1002,6 @@ namespace {
   void TriggerDictionaryInitialization_RBElectronicsDict_Impl() {
     static const char* headers[] = {
 "RBElectronics.h",
-"RBHINPHit.h",
 "RBSisTimestampUnpacker.h",
 "RBHINPUnpacker.h",
 "RBCCUSBPacket.h",
@@ -1011,15 +1010,16 @@ namespace {
 "RBUSBStackMarker.h",
 "RBTimestamp.h",
 "RBUSBStack.h",
+"RBHINPHit.h",
 "RBModuleUnpacker.h",
 "RBCAEN1x90Unpacker.h",
 0
     };
     static const char* includePaths[] = {
-"/projects/hira/Daniele/RIBbit2-dev//",
-"/projects/hira/Daniele/RIBbit2-dev//electronics",
+"/projects/hira/Daniele/HiRAEVT//",
+"/projects/hira/Daniele/HiRAEVT//electronics",
 "/mnt/misc/sw/x86_64/Debian/8/root/gnu/6.04.02/include/root",
-"/projects/hira/Daniele/RIBbit2-dev/electronics/",
+"/projects/hira/Daniele/HiRAEVT/electronics/",
 0
     };
     static const char* fwdDeclCode = 
@@ -1030,7 +1030,7 @@ R"DICTFWDDCLS(
 extern int __Cling_Autoloading_Map;
 class __attribute__((annotate("$clingAutoload$RBTimestamp.h")))  RBTimestamp;
 class __attribute__((annotate("$clingAutoload$RBHINPUnpacker.h")))  RBHINPUnpacker;
-class __attribute__((annotate("$clingAutoload$RBHINPHit.h")))  RBHINPHit;
+class __attribute__((annotate("$clingAutoload$RBHINPUnpacker.h")))  RBHINPHit;
 class __attribute__((annotate("$clingAutoload$RBCAEN7xxUnpacker.h")))  RBCAEN7xxUnpacker;
 class __attribute__((annotate("$clingAutoload$RBCAEN1x90Unpacker.h")))  RBCAEN1x90Unpacker;
 class __attribute__((annotate("$clingAutoload$RBPh7xxUnpacker.h")))  RBPh7xxUnpacker;
@@ -1047,7 +1047,6 @@ class __attribute__((annotate("$clingAutoload$RBSisTimestampUnpacker.h")))  RBSi
 
 #define _BACKWARD_BACKWARD_WARNING_H
 #include "RBElectronics.h"
-#include "RBHINPHit.h"
 #include "RBSisTimestampUnpacker.h"
 #include "RBHINPUnpacker.h"
 #include "RBCCUSBPacket.h"
@@ -1056,6 +1055,7 @@ class __attribute__((annotate("$clingAutoload$RBSisTimestampUnpacker.h")))  RBSi
 #include "RBUSBStackMarker.h"
 #include "RBTimestamp.h"
 #include "RBUSBStack.h"
+#include "RBHINPHit.h"
 #include "RBModuleUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
 

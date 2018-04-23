@@ -4,9 +4,9 @@ DllSuf    := so
 SrcSuf    := cxx
 ObjSuf    := o
 
-INCLUDES  := -I$(RIBbitSRC)/
+INCLUDES  := -I$(HiRAEVTSRC)/
 
-RLIBS     := -L$(RIBbitLIB)
+RLIBS     := -L$(HiRAEVTLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
@@ -27,12 +27,12 @@ $(RBLOGO_LIB): $(OBJS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(RBLOGO_LIB) $(RIBbitLIB)/.
+	@cp $(RBLOGO_LIB) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
 	@rm -f $(RBLOGO_LIB)
-	@rm -f $(RIBbitLIB)/$(RBLOGO_LIB)
+	@rm -f $(HiRAEVTLIB)/$(RBLOGO_LIB)
 
 .PHONY: clean
 clean:

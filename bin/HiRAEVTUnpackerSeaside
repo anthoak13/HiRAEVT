@@ -18,7 +18,7 @@ if ! [[ $run_num =~ $re ]] ; then
    echo "Error: Invalid run number" >&2; exit 1
 fi
 
-#extracting information from configuration file from config/RIBbit2.conf
+#extracting information from configuration file from config/HiRAEVT.conf
 while IFS= read -r line;do
     fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
     if [ ${fields[1]} ] && [ ${fields[1]} = "EVENT_FILE_PATH" ] ; then
@@ -33,13 +33,13 @@ while IFS= read -r line;do
         EvtFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
       fi
     fi
-    if [ ${fields[1]} ] && [ ${fields[1]} = "RIBBIT2_DIR" ] ; then
-      Ribbit2Path=$(echo ${fields[2]} | sed 's/[\"]//g')
+    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
+      HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
-    if [ ${fields[1]} ] && [ ${fields[1]} = "RIBBIT2UNPACKER_SUMMARY_PATH" ] ; then
-      Ribbit2SummaryPath=$(echo ${fields[2]} | sed 's/[\"]//g')
+    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTUNPACKER_SUMMARY_PATH" ] ; then
+      HiRAEVTSummaryPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
-done < config/RIBbit2.conf
+done < config/HiRAEVT.conf
 
 if [ ! -d "${EvtFilesPath}run$run_num/" ]; then #the directory of evt files does not exist
     echo "Error: missing or incorrect evt files location for run $run_num"; continue
@@ -50,11 +50,11 @@ i=0
 for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
 
 #erase output and error files if already exist
-if [ -f "${Ribbit2SummaryPath}Summary_${file_evt##*/}" ]; then
-  rm "${Ribbit2SummaryPath}Summary_${file_evt##*/}"
+if [ -f "${HiRAEVTSummaryPath}Summary_${file_evt##*/}" ]; then
+  rm "${HiRAEVTSummaryPath}Summary_${file_evt##*/}"
 fi
-if [ -f "${Ribbit2SummaryPath}Error_${file_evt##*/}" ]; then
-  rm "${Ribbit2SummaryPath}Error_${file_evt##*/}"
+if [ -f "${HiRAEVTSummaryPath}Error_${file_evt##*/}" ]; then
+  rm "${HiRAEVTSummaryPath}Error_${file_evt##*/}"
 fi
 
 cat > submit.sh << EOF
@@ -62,17 +62,17 @@ cat > submit.sh << EOF
 #PBS -m a
 #PBS -l nodes=1:ppn=1,mem=2gb,walltime=02:00:00
 #PBS -N Unpacking_${file_evt##*/}
-#PBS -o ${Ribbit2SummaryPath}Summary_${file_evt##*/}
-#PBS -e ${Ribbit2SummaryPath}Error_${file_evt##*/}
+#PBS -o ${HiRAEVTSummaryPath}Summary_${file_evt##*/}
+#PBS -e ${HiRAEVTSummaryPath}Error_${file_evt##*/}
 #PBS -W umask=002
 #PBS -W group_list=e15190g
 #PBS -j oe
 #PBS -S /bin/bash
 module add intel
 
-cd ${Ribbit2Path}
-source ${Ribbit2Path}bin/RIBbit2.sh
-eval '${Ribbit2Path}bin/RIBbitUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
+cd ${HiRAEVTPath}
+source ${HiRAEVTPath}bin/HiRAEVT.sh
+eval '${HiRAEVTPath}bin/HiRAEVTUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
 EOF
    ((i++))
    qsub submit.sh

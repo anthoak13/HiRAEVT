@@ -6,10 +6,10 @@ SrcSuf    := cxx
 ObjSuf    := o
 PcmSuf    := _rdict.pcm
 
-INCLUDES  := -I$(RIBbitSRC)/
-INCLUDES  += -I$(RIBbitSRC)/electronics
+INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
 
-RLIBS     := -L$(RIBbitLIB)
+RLIBS     := -L$(HiRAEVTLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
@@ -44,12 +44,12 @@ $(RBELECTRONICS_LIB): $(OBJS) $(RBELECTRONICS_DICTO)
 	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
 
 install:
-	@cp $(RBELECTRONICS_LIB) $(RBELECTRONICS_PCM) $(RIBbitLIB)/.
+	@cp $(RBELECTRONICS_LIB) $(RBELECTRONICS_PCM) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
 	@rm -f $(RBELECTRONICS_LIB) $(RBELECTRONICS_DICT) $(RBELECTRONICS_DICTH) $(RBELECTRONICS_PCM)
-	@rm -f $(RIBbitLIB)/$(RBELECTRONICS_LIB)
+	@rm -f $(HiRAEVTLIB)/$(RBELECTRONICS_LIB)
 
 .PHONY: clean
 clean:

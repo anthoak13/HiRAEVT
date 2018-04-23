@@ -184,7 +184,7 @@ void RBExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
     if(LineToParse.find("--run")==std::string::npos) { //EvtFileName might be different run-by-run, if --run is specified don't set it now but in ParseSetConfigLineRunInfo
       fEvtFilePath.assign(NewValue);
     }
-  } else if (ValueToSet.compare("RIBBIT2UNPACKER_ROOT_FILE_PATH")==0) {
+  } else if (ValueToSet.compare("HiRAEVTUNPACKER_ROOT_FILE_PATH")==0) {
     fRootFilePath.assign(NewValue);
   }
 
