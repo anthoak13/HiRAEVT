@@ -4,8 +4,8 @@
 #include <CFilterMain.h>
 
 #include <CUnpackerFilter.h>
-#include <RIBbit2Logo.h>
-#include <RBShared.h>
+#include <HiRAEVTLogo.h>
+#include <HTShared.h>
 #include <Unpacker.h>
 
 /// The main function
@@ -19,7 +19,7 @@
 */
 int main(int argc, char* argv[])
 {
-    PrintRIBbitUnpackerLogo();
+    PrintHiRAEVTUnpackerLogo();
 
     int status = 0;
 

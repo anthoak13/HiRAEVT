@@ -10,7 +10,7 @@ RLIBS     := -L$(HiRAEVTLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
-RBRUNINFO_LIB := libRBShared.$(DllSuf)
+HTRUNINFO_LIB := libHTShared.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
@@ -18,21 +18,21 @@ OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
 	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-all: $(RBRUNINFO_LIB)
+all: $(HTRUNINFO_LIB)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
-$(RBRUNINFO_LIB): $(OBJS)
+$(HTRUNINFO_LIB): $(OBJS)
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(RBRUNINFO_LIB) $(HiRAEVTLIB)/.
+	@cp $(HTRUNINFO_LIB) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
-	@rm -f $(RBRUNINFO_LIB)
-	@rm -f $(HiRAEVTLIB)/$(RBRUNINFO_LIB)
+	@rm -f $(HTRUNINFO_LIB)
+	@rm -f $(HiRAEVTLIB)/$(HTRUNINFO_LIB)
 
 .PHONY: clean
 clean:

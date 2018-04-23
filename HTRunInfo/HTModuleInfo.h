@@ -1,13 +1,13 @@
-#ifndef RBMODULEINFO_H
-#define RBMODULEINFO_H
+#ifndef HTMODULEINFO_H
+#define HTMODULEINFO_H
 
 #include <RBElectronics.h>
 
-class RBModuleInfo
+class HTModuleInfo
 {
 public:
-  RBModuleInfo();
-  ~RBModuleInfo();
+  HTModuleInfo();
+  ~HTModuleInfo();
   
   RBElectronics * GetModule() const;
   int GetVSN() const;

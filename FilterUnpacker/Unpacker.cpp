@@ -12,13 +12,11 @@
 #include <TNamed.h>
 #include <TList.h>
 
+#include <RBSetup.h>
 #include <RBExperiment.h>
-#include <RBSetup.h>
-#include <RBExperimentInfo.h>
-#include <RBRunInfo.h>
-#include <RBSetup.h>
-#include <RBExperimentInfo.h>
-#include <RBRunInfo.h>
+#include <HTExperimentInfo.h>
+#include <HTExperimentInfo.h>
+#include <HTRunInfo.h>
 
 //______________________________________________________________________________
 Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),fTimeElapsed(0),m_lastTimestamp(0),fDebug(0)
@@ -75,7 +73,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
 
   //Initialization of RBRunInfo class
   cout << "** Initializing Run Info **\n";
-  gExperimentInfo = new RBExperimentInfo();
+  gExperimentInfo = new HTExperimentInfo();
   if(gExperimentInfo->InitClass("config/HiRAEVT.conf")<=0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);

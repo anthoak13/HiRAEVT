@@ -4,9 +4,9 @@
 #include <stdio.h>
 
 #include <TNamed.h>
-#include <RBShared.h>
+#include <HTShared.h>
 #include <RBExperiment.h>
-#include <RBRunInfo.h>
+#include <HTRunInfo.h>
 
 class RBSetup : public TNamed
 {

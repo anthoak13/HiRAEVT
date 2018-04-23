@@ -2,7 +2,7 @@
 include $(HiRAEVTDAQROOT)/filterkit/FilterIncludes
 #
 #  Add your own compilation/link flags here:
-RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lRBLogo -lRBShared -lRBRunInfo
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lHTLogo -lHTShared -lHTRunInfo
 
 INCLUDES  := -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
@@ -10,7 +10,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/RBExperiment
 INCLUDES  += -I$(HiRAEVTSRC)/RBSetup
 INCLUDES  += -I$(HiRAEVTSRC)/logo
 INCLUDES  += -I$(HiRAEVTSRC)/shared
-INCLUDES  += -I$(HiRAEVTSRC)/RBRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/FilterUnpacker
 
 CFLAGS    :=`root-config --cflags --libs`

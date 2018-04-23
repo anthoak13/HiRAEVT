@@ -1,14 +1,14 @@
-#include <RBExperimentInfo.h>
+#include <HTExperimentInfo.h>
 
 //________________________________________________
-RBExperimentInfo::RBExperimentInfo() :
+HTExperimentInfo::HTExperimentInfo() :
 fDataMerged(false),
 fFirstRun(0),
 fLastRun(0)
 {}
 
 //________________________________________________
-RBExperimentInfo::~RBExperimentInfo()
+HTExperimentInfo::~HTExperimentInfo()
 {
   if(fDAQConfigurationFileName) {
     delete [] fDAQConfigurationFileName;
@@ -28,7 +28,7 @@ RBExperimentInfo::~RBExperimentInfo()
 }
 
 //________________________________________________
-void RBExperimentInfo::Clear()
+void HTExperimentInfo::Clear()
 {
   fExperimentName.clear();
   fExperimentTitle.clear();
@@ -37,7 +37,7 @@ void RBExperimentInfo::Clear()
 }
 
 //________________________________________________
-int RBExperimentInfo::InitClass(const char *file_name)
+int HTExperimentInfo::InitClass(const char *file_name)
 {
   Clear();
   int NLinesRead=0;
@@ -65,7 +65,7 @@ int RBExperimentInfo::InitClass(const char *file_name)
 }
 
 //________________________________________________
-int RBExperimentInfo::LoadSetupConfiguration(const char *file_name)
+int HTExperimentInfo::LoadSetupConfiguration(const char *file_name)
 {
   std::ifstream FileIn(file_name);
   if(!FileIn.is_open()) {
@@ -103,7 +103,7 @@ int RBExperimentInfo::LoadSetupConfiguration(const char *file_name)
 }
 
 //________________________________________________
-int RBExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
+int HTExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
 {
   std::ifstream FileIn(file_name);
   if(!FileIn.is_open()) {
@@ -134,9 +134,9 @@ int RBExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
 }
 
 //________________________________________________
-RBRunInfo * RBExperimentInfo::GetRunInfo(int run_num) const
+HTRunInfo * HTExperimentInfo::GetRunInfo(int run_num) const
 {
-  RBRunInfo * newRunInfo = new RBRunInfo(run_num,fRunTitle[run_num-fFirstRun].c_str());
+  HTRunInfo * newRunInfo = new HTRunInfo(run_num,fRunTitle[run_num-fFirstRun].c_str());
 
   if(newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str())<=0) {
     delete newRunInfo;
@@ -162,7 +162,7 @@ RBRunInfo * RBExperimentInfo::GetRunInfo(int run_num) const
 }
 
 //________________________________________________
-void RBExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
+void HTExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
 {
   std::string LineToParse(line_to_parse);
 
@@ -192,7 +192,7 @@ void RBExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
 }
 
 //________________________________________________
-void RBExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int run_num)
+void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int run_num)
 {
   std::string LineToParse(line_to_parse);
 
@@ -241,37 +241,37 @@ void RBExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
 }
 
 //________________________________________________
-bool RBExperimentInfo::IsDataMerged() const
+bool HTExperimentInfo::IsDataMerged() const
 {
   return fDataMerged;
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetName() const
+const char * HTExperimentInfo::GetName() const
 {
   return fExperimentName.c_str();
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetTitle() const
+const char * HTExperimentInfo::GetTitle() const
 {
   return fExperimentTitle.c_str();
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetEvtFilePath() const
+const char * HTExperimentInfo::GetEvtFilePath() const
 {
   return fEvtFilePath.c_str();
 }
 
 //________________________________________________
-const char * RBExperimentInfo::GetRootFilePath() const
+const char * HTExperimentInfo::GetRootFilePath() const
 {
   return fRootFilePath.c_str();
 }
 
 //________________________________________________
-const char * RBExperimentInfo::RetrieveRunTitleFromEvtFile(const char * evtfile_name) const
+const char * HTExperimentInfo::RetrieveRunTitleFromEvtFile(const char * evtfile_name) const
 {
   std::ifstream evtfile;
   evtfile.open(evtfile_name,std::ios::binary);

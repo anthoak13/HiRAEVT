@@ -1,17 +1,17 @@
-#ifndef RBDAQSTACKINFO_H
-#define RBDAQSTACKINFO_H
+#ifndef HTDAQSTACKINFO_H
+#define HTDAQSTACKINFO_H
 
 #include <vector>
 #include <string>
 
 #include <RBElectronics.h>
-#include <RBModuleInfo.h>
+#include <HTModuleInfo.h>
 
-class RBDAQStackInfo
+class HTDAQStackInfo
 {
 public:
-  RBDAQStackInfo(const char * name, int stackID);
-  ~RBDAQStackInfo();
+  HTDAQStackInfo(const char * name, int stackID);
+  ~HTDAQStackInfo();
 
   void Clear();
 
@@ -21,15 +21,15 @@ public:
   RBElectronics * GetModule(int) const;        //! Returns the pointer of the i-th module
   const char * GetModuleType(int) const;       //! Returns a const char * indicating module type
   int GetModuleVSN(int) const;                 //! Returns the VSN of the i-th module
-  RBModuleInfo  * GetModuleInfo(int) const;    //! Returns the pointer of the i-th module RBModuleInfo class
+  HTModuleInfo  * GetModuleInfo(int) const;    //! Returns the pointer of the i-th module HTModuleInfo class
 
-  void AddModuleInfo(RBModuleInfo *);          //! Add a new module to the stack info class
+  void AddModuleInfo(HTModuleInfo *);          //! Add a new module to the stack info class
 
 private:
   int fNModules;                                //! Number of modules in stack
   std::string fStackName;                       //! Name of the stack
   int fStackID;                                 //! ID of the stack
-  std::vector <RBModuleInfo *> fModuleInStack;  //! RBModuleInfo objects
+  std::vector <HTModuleInfo *> fModuleInStack;  //! HTModuleInfo objects
 
 };
 

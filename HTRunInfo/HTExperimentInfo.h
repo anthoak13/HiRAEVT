@@ -1,14 +1,14 @@
-#ifndef RBEXPERIMENTINFO_H
-#define RBEXPERIMENTINFO_H
+#ifndef HTEXPERIMENTINFO_H
+#define HTEXPERIMENTINFO_H
 
 /*
-* RBExperimentInfo class
+* HTExperimentInfo class
 * Implemented by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 * v1.0 04/13/2018
 *
 * The class contains information for each
 * configuration file to read run-by-run.
-* It can return a RBRunInfo object with the
+* It can return a HTRunInfo object with the
 * information of a specific run.
 *
 */
@@ -22,20 +22,20 @@
 #include <iomanip>
 #include <stdio.h>
 
-#include <RBRunInfo.h>
+#include <HTRunInfo.h>
 
-class RBExperimentInfo
+class HTExperimentInfo
 {
 public:
-  RBExperimentInfo();                             //! Constructor
-  ~RBExperimentInfo();                            //! Destructor
+  HTExperimentInfo();                             //! Constructor
+  ~HTExperimentInfo();                            //! Destructor
 
   int InitClass(const char *);                    //! Class Initializer
 
   int LoadSetupConfiguration(const char *);       //! Read general setup lines from configuration file of the experiment
   int LoadRunConfiguration(const char *, int);    //! Read run configuration for a specific run
 
-  RBRunInfo * GetRunInfo(int) const;              //! Get RBRunInfo class for a specific run number
+  HTRunInfo * GetRunInfo(int) const;              //! Get HTRunInfo class for a specific run number
   bool IsDataMerged() const;                      //!
   const char * GetName() const;                   //!
   const char * GetTitle() const;                  //!

@@ -1,7 +1,7 @@
-#include <RBRunInfo.h>
+#include <HTRunInfo.h>
 
 //________________________________________________
-RBRunInfo::RBRunInfo(int run_number, const char * run_title) :
+HTRunInfo::HTRunInfo(int run_number, const char * run_title) :
 fRunNumber(run_number),
 fNStacks(0),
 fDAQLoaded(false),
@@ -12,7 +12,7 @@ fMappingLoaded(false)
 }
 
 //________________________________________________
-RBRunInfo::~RBRunInfo()
+HTRunInfo::~HTRunInfo()
 {
   for(int i=0; i< fNStacks; i++) {
     if (fStackInfo[i]) {
@@ -22,7 +22,7 @@ RBRunInfo::~RBRunInfo()
 }
 
 //________________________________________________
-int RBRunInfo::LoadDAQSettings(const char * file_name)
+int HTRunInfo::LoadDAQSettings(const char * file_name)
 {
   std::ifstream FileIn(file_name);
   if(!FileIn.is_open()) {
@@ -53,7 +53,7 @@ int RBRunInfo::LoadDAQSettings(const char * file_name)
 }
 
 //________________________________________________
-void RBRunInfo::ParseDefineDAQLine(const char * line_to_parse)
+void HTRunInfo::ParseDefineDAQLine(const char * line_to_parse)
 {
   std::string LineToParse(line_to_parse);
 
@@ -69,8 +69,8 @@ void RBRunInfo::ParseDefineDAQLine(const char * line_to_parse)
     std::string NewStackName(LineToParse.substr(LineToParse.find("\"")+1,LineToParse.find_last_of("\"")-(LineToParse.find("\"")+1)));
     int stackID=atoi(LineToParse.substr(LineToParse.find_last_of("\"")+1).c_str());
 
-    // found a new stack. RBDAQStackInfo is being added to the fStackInfo vector
-    RBDAQStackInfo * newStack = new RBDAQStackInfo(NewStackName.c_str(), stackID);
+    // found a new stack. HTDAQStackInfo is being added to the fStackInfo vector
+    HTDAQStackInfo * newStack = new HTDAQStackInfo(NewStackName.c_str(), stackID);
     fStackInfo.push_back(newStack);
   }
 
@@ -78,7 +78,7 @@ void RBRunInfo::ParseDefineDAQLine(const char * line_to_parse)
 }
 
 //________________________________________________
-void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
+void HTRunInfo::ParseAddDAQLine(const char * line_to_parse)
 {
   std::string LineToParse(line_to_parse);
 
@@ -100,8 +100,8 @@ void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
     LineStream>>VSN;
     ModuleName.assign(ModuleName.substr(ModuleName.find("\"")+1,ModuleName.find_last_of("\"")-(ModuleName.find("\"")+1)));
 
-    //Found a new module. RBModuleInfo is created and added to the corresponding fStackInfo.
-    RBModuleInfo * newModuleInfo = new RBModuleInfo();
+    //Found a new module. HTModuleInfo is created and added to the corresponding fStackInfo.
+    HTModuleInfo * newModuleInfo = new HTModuleInfo();
     newModuleInfo->SetVSN(VSN);
     newModuleInfo->SetModuleType(ModuleType);
     newModuleInfo->SetModuleName(ModuleName);
@@ -144,7 +144,7 @@ void RBRunInfo::ParseAddDAQLine(const char * line_to_parse)
 }
 
 //________________________________________________
-int RBRunInfo::LoadPedestals(const char * file_name)
+int HTRunInfo::LoadPedestals(const char * file_name)
 {
   if(!fDAQLoaded) return -1;
   fMappingLoaded=true;
@@ -152,7 +152,7 @@ int RBRunInfo::LoadPedestals(const char * file_name)
 }
 
 //________________________________________________
-int RBRunInfo::LoadMapping(const char * file_name)
+int HTRunInfo::LoadMapping(const char * file_name)
 {
   if(!fDAQLoaded) return -1;
   fPedestalsLoaded=true;
@@ -160,43 +160,43 @@ int RBRunInfo::LoadMapping(const char * file_name)
 }
 
 //________________________________________________
-void RBRunInfo::SetRunTitle(const char * run_title)
+void HTRunInfo::SetRunTitle(const char * run_title)
 {
   fRunTitle.assign(run_title);
 }
 
 //________________________________________________
-void RBRunInfo::SetEvtFilePath(const char * file_name)
+void HTRunInfo::SetEvtFilePath(const char * file_name)
 {
   fEvtFilePath.assign(file_name);
 }
 
 //________________________________________________
-const char * RBRunInfo::GetEvtFilePath() const
+const char * HTRunInfo::GetEvtFilePath() const
 {
   return fEvtFilePath.c_str();
 }
 
 //________________________________________________
-const char * RBRunInfo::GetTitle() const
+const char * HTRunInfo::GetTitle() const
 {
   return fRunTitle.c_str();
 }
 
 //________________________________________________
-int RBRunInfo::GetRunNumber() const
+int HTRunInfo::GetRunNumber() const
 {
   return fRunNumber;
 }
 
 //________________________________________________
-int RBRunInfo::GetNStacks() const
+int HTRunInfo::GetNStacks() const
 {
   return fNStacks;
 }
 
 //________________________________________________
-RBDAQStackInfo * RBRunInfo::GetStackInfo(int num_stack) const
+HTDAQStackInfo * HTRunInfo::GetStackInfo(int num_stack) const
 {
   return fStackInfo[num_stack];
 }

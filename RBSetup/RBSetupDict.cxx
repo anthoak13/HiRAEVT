@@ -152,7 +152,7 @@ namespace {
 "/projects/hira/Daniele/HiRAEVT//",
 "/projects/hira/Daniele/HiRAEVT//electronics",
 "/projects/hira/Daniele/HiRAEVT//shared",
-"/projects/hira/Daniele/HiRAEVT//RBRunInfo",
+"/projects/hira/Daniele/HiRAEVT//HTRunInfo",
 "/projects/hira/Daniele/HiRAEVT//RBSetup",
 "/projects/hira/Daniele/HiRAEVT//RBExperiment",
 "/projects/hira/Daniele/HiRAEVT//FilterUnpacker",

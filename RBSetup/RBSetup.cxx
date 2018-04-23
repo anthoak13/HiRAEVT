@@ -11,10 +11,10 @@
 #include "RBCAEN7xxUnpacker.h"
 #include "RBCAEN1x90Unpacker.h"
 #include "RBSisTimestampUnpacker.h"
-#include <RBRunInfo.h>
-#include <RBExperimentInfo.h>
-#include <RBDAQStackInfo.h>
-#include <RBModuleInfo.h>
+#include <HTRunInfo.h>
+#include <HTExperimentInfo.h>
+#include <HTDAQStackInfo.h>
+#include <HTModuleInfo.h>
 
 //______________________________________________________________________________
 RBSetup::RBSetup(){
@@ -42,13 +42,13 @@ RBSetup::RBSetup(){
   {
     RBUSBStack * newStack = new RBUSBStack();
     newStack->AddStack();
-    RBDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
+    HTDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
     for(int NumModule=0; NumModule<newStackInfo->GetNModules(); NumModule++)
     {
       // Register electronics which should/can be unpacked as raw channels.
       // If adding electronics to a USBStack, the order matters unless directly specified
       // as an optional argument when calling AddToStack().
-      RBModuleInfo * newModuleInfo = newStackInfo->GetModuleInfo(NumModule);
+      HTModuleInfo * newModuleInfo = newStackInfo->GetModuleInfo(NumModule);
       newStack->AddToStack(0,newModuleInfo->GetVSN(),newModuleInfo->GetModule());
       newModuleInfo->GetModule()->SetFillData(kTRUE);
     }
