@@ -27,12 +27,12 @@ Table of contents
   * [Environment Variables](#env-variables)
   * [Compile the Code](#compilation)
   * [Configure the Program](#configure)
-* [The RIBbitUnpacker Program](#unpacker)
+* [The HiRAEVTUnpacker Program](#unpacker)
   * [Run the Code](#run-unpacker)
   * [Output Data](#output-unpacker)
   * [User Summary Information](#userinfo-unpacker)
-* [The RIBbitMapper Program](#mapper)
-* [The RIBbitAnalyzer Program](#analyzer)
+* [The HiRAEVTMapper Program](#mapper)
+* [The HiRAEVTAnalyzer Program](#analyzer)
 <!--te-->
 
 ## Getting the code
