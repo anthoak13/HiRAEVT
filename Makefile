@@ -2,9 +2,8 @@ CXXFLAGS = -g
 
 all:
 	$(MAKE) root
-ifdef DAQROOT
 	$(MAKE) -C FilterUnpacker  ;		$(MAKE) -C FilterUnpacker install
-endif
+	$(MAKE) -C HTMapper ;			$(MAKE) -C HTMapper install
 
 root:
 	$(MAKE) -C electronics ; 		$(MAKE) -C electronics install
@@ -13,6 +12,10 @@ root:
 	$(MAKE) -C logo ;			$(MAKE) -C logo install
 	$(MAKE) -C shared ;			$(MAKE) -C shared install
 	$(MAKE) -C HTRunInfo ;			$(MAKE) -C HTRunInfo install
+	$(MAKE) -C HTDetectorMap ;			$(MAKE) -C HTDetectorMap install
+	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
+	$(MAKE) -C HTRootElectronics ;			$(MAKE) -C HTRootElectronics install
+	$(MAKE) -C detectors/HTDetector ;			$(MAKE) -C detectors/HTDetector install
 
 install:
 	$(MAKE) -C electronics install
@@ -21,9 +24,10 @@ install:
 	$(MAKE) -C logo install
 	$(MAKE) -C shared install
 	$(MAKE) -C HTRunInfo install
-ifdef DAQROOT
-	$(MAKE) -C FilterUnpacker  install
-endif
+	$(MAKE) -C HTDetectorMap install
+	$(MAKE) -C HTExperimentalSetup install
+	$(MAKE) -C HTRootElectronics install
+	$(MAKE) -C detectors/HTDetector install
 
 distclean:
 	$(MAKE) -C electronics distclean
@@ -32,10 +36,13 @@ distclean:
 	$(MAKE) -C logo distclean
 	$(MAKE) -C shared distclean
 	$(MAKE) -C HTRunInfo distclean
-	@rm $(HiRAEVTLIB)/libRBSetup.so
-ifdef DAQROOT
+	$(MAKE) -C HTDetectorMap distclean
+	$(MAKE) -C HTExperimentalSetup distclean
+	$(MAKE) -C HTRootElectronics distclean
+	$(MAKE) -C detectors/HTDetector distclean
+
 	$(MAKE) -C FilterUnpacker  distclean
-endif
+	$(MAKE) -C HTMapper  distclean
 
 clean:
 	$(MAKE) -C electronics  clean
@@ -44,9 +51,13 @@ clean:
 	$(MAKE) -C logo clean
 	$(MAKE) -C shared clean
 	$(MAKE) -C HTRunInfo clean
-ifdef DAQROOT
+	$(MAKE) -C HTDetectorMap clean
+	$(MAKE) -C HTExperimentalSetup clean
+	$(MAKE) -C HTRootElectronics clean
+	$(MAKE) -C detectors/HTDetector clean
+
 	$(MAKE) -C FilterUnpacker  clean
-endif
+	$(MAKE) -C HTMapper  clean
 
 debug:	CXXFLAGS += -DDEBUG -g
 
@@ -57,6 +68,10 @@ debug:
 	$(MAKE) -C logo
 	$(MAKE) -C shared
 	$(MAKE) -C HTRunInfo
-ifdef DAQROOT
+	$(MAKE) -C HTDetectorMap
+	$(MAKE) -C HTExperimentalSetup
+	$(MAKE) -C HTRootElectronics
+	$(MAKE) -C detectors/HTDetector
+
 	$(MAKE) -C FilterUnpacker
-endif
+	$(MAKE) -C HTMapper  clean

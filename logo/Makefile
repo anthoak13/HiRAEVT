@@ -5,6 +5,7 @@ SrcSuf    := cxx
 ObjSuf    := o
 
 INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  := -I$(HiRAEVTSRC)/logo
 
 RLIBS     := -L$(HiRAEVTLIB)
 

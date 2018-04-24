@@ -1,4 +1,4 @@
-#include "HiRAEVTLogo.h"
+#include <HiRAEVTLogo.h>
 
 void PrintHiRAEVTUnpackerLogo()
 {
@@ -9,9 +9,25 @@ void PrintHiRAEVTUnpackerLogo()
   printf("//  ██║  ██║██║██║  ██║██║  ██║███████╗ ╚████╔╝    ██║   \n");
   printf("//  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  ╚═══╝     ╚═╝   \n");
   printf("// HiRA Extremely Versatile Tool (for Unpacking and Reduction of Experiment Data)\n");
-  printf("//\n");
+  printf("// Version 1.0-beta.3.\n");
+  printf("// Contributors: Daniele Dell'Aquila, Juan Manfredi\n");
+  printf("//\n\n");
 
-  printf("Welcome to HiRAEVTUnpacker\n");
-  printf("Version 1.0-beta.3.\n");
-  printf("Contributors: Daniele Dell'Aquila, Juan Manfredi\n\n");
+  printf("Welcome to HiRAEVTUnpacker\n\n");
+}
+
+void PrintHiRAEVTMapperLogo()
+{
+  printf("//  ██╗  ██╗██╗██████╗  █████╗ ███████╗██╗   ██╗████████╗\n");
+  printf("//  ██║  ██║██║██╔══██╗██╔══██╗██╔════╝██║   ██║╚══██╔══╝\n");
+  printf("//  ███████║██║██████╔╝███████║█████╗  ██║   ██║   ██║   \n");
+  printf("//  ██╔══██║██║██╔══██╗██╔══██║██╔══╝  ╚██╗ ██╔╝   ██║   \n");
+  printf("//  ██║  ██║██║██║  ██║██║  ██║███████╗ ╚████╔╝    ██║   \n");
+  printf("//  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  ╚═══╝     ╚═╝   \n");
+  printf("// HiRA Extremely Versatile Tool (for Unpacking and Reduction of Experiment Data)\n");
+  printf("// Version 1.0-beta.3.\n");
+  printf("// Contributors: Daniele Dell'Aquila, Juan Manfredi\n");
+  printf("//\n\n");
+
+  printf("Welcome to HiRAEVTMapper\n\n");
 }
