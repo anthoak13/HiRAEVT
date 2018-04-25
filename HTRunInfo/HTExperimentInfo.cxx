@@ -33,7 +33,8 @@ void HTExperimentInfo::Clear()
   fExperimentName.clear();
   fExperimentTitle.clear();
   fEvtFilePath.clear();
-  fRootFilePath.clear();
+  fUnpackedRootFilePath.clear();
+  fMappedRootFilePath.clear();
 }
 
 //________________________________________________
@@ -142,12 +143,12 @@ HTRunInfo * HTExperimentInfo::GetRunInfo(int run_num) const
     delete newRunInfo;
     return 0;
   }
-  /*
-  if(newRunInfo->LoadPedestals(fPedestalFileName[run_num-fFirstRun].c_str())<=0) {
+  if(newRunInfo->SetPedestalsFile(fPedestalFileName[run_num-fFirstRun].c_str())!=0) {
     delete newRunInfo;
     return 0;
   }
-  if(newRunInfo->LoadMapping(fMappingFileName[run_num-fFirstRun].c_str())<=0) {
+  /*
+  if(newRunInfo->SetMappingFile(fMappingFileName[run_num-fFirstRun].c_str())!=0) {
     delete newRunInfo;
     return 0;
   }
@@ -185,7 +186,9 @@ void HTExperimentInfo::ParseSetConfigLine(const char *line_to_parse)
       fEvtFilePath.assign(NewValue);
     }
   } else if (ValueToSet.compare("HiRAEVTUNPACKER_ROOT_FILE_PATH")==0) {
-    fRootFilePath.assign(NewValue);
+    fUnpackedRootFilePath.assign(NewValue);
+  } else if (ValueToSet.compare("HiRAEVTMAPPER_ROOT_FILE_PATH")==0) {
+    fMappedRootFilePath.assign(NewValue);
   }
 
   return;
@@ -267,7 +270,13 @@ const char * HTExperimentInfo::GetEvtFilePath() const
 //________________________________________________
 const char * HTExperimentInfo::GetRootFilePath() const
 {
-  return fRootFilePath.c_str();
+  return fUnpackedRootFilePath.c_str();
+}
+
+//________________________________________________
+const char * HTExperimentInfo::GetMappedRootFilePath() const
+{
+  return fMappedRootFilePath.c_str();
 }
 
 //________________________________________________

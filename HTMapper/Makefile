@@ -8,13 +8,15 @@ INCLUDES  := -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/HTMapper
 INCLUDES  += -I$(HiRAEVTSRC)/logo
 INCLUDES  += -I$(HiRAEVTSRC)/shared
+INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTExperimentalSetup
 INCLUDES  += -I$(HiRAEVTSRC)/HTRawDataReader
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTLogo
+RLIBS     := -L$(HiRAEVTLIB) -lHTLogo -lHTShared -lHTRunInfo -lHTExperimentalSetup -lHTRootElectronics
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))

@@ -5,8 +5,8 @@ HTRunInfo::HTRunInfo(int run_number, const char * run_title) :
 fRunNumber(run_number),
 fNStacks(0),
 fDAQLoaded(false),
-fPedestalsLoaded(false),
-fMappingLoaded(false)
+fPedestalsFileSet(false),
+fMappingFileSet(false)
 {
   SetRunTitle(run_title);
 }
@@ -144,18 +144,18 @@ void HTRunInfo::ParseAddDAQLine(const char * line_to_parse)
 }
 
 //________________________________________________
-int HTRunInfo::LoadPedestals(const char * file_name)
+int HTRunInfo::SetPedestalsFile(const char * file_name)
 {
-  if(!fDAQLoaded) return -1;
-  fMappingLoaded=true;
+  fPedestalsFilePath.assign(file_name);
+  fPedestalsFileSet=true;
   return 0;
 }
 
 //________________________________________________
-int HTRunInfo::LoadMapping(const char * file_name)
+int HTRunInfo::SetMappingFile(const char * file_name)
 {
-  if(!fDAQLoaded) return -1;
-  fPedestalsLoaded=true;
+  fMappingFilePath.assign(file_name);
+  fMappingFileSet=true;
   return 0;
 }
 
@@ -175,6 +175,22 @@ void HTRunInfo::SetEvtFilePath(const char * file_name)
 const char * HTRunInfo::GetEvtFilePath() const
 {
   return fEvtFilePath.c_str();
+}
+
+//________________________________________________
+const char * HTRunInfo::GetPedestalFile() const
+{
+  if(fPedestalsFileSet) {
+    return fPedestalsFilePath.c_str();
+  } else return 0;
+}
+
+//________________________________________________
+const char * HTRunInfo::GetMappingFile() const
+{
+  if(fMappingFileSet) {
+    return fMappingFilePath.c_str();
+  } else return 0;
 }
 
 //________________________________________________

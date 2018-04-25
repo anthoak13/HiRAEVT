@@ -9,12 +9,14 @@
 class HTRootElectronics
 {
 public :
-  HTRootElectronics();                          //!Constructor
+  HTRootElectronics(const char *);              //!Constructor
   ~HTRootElectronics();                         //!Destructor
 
+  const char * GetName() const;                 //!Returns module name
   virtual void * GetDataPointer() const;        //!Returns the pointer of the fData object
 
 private :
+  const char * fName;
 
 };
 

@@ -1,7 +1,8 @@
 #include <HTDetector.h>
 
 //________________________________________________
-HTDetector::HTDetector() :
+HTDetector::HTDetector(const char * name) :
+fName(name),
 fDetectorMapping(0)
 {}
 
@@ -21,4 +22,10 @@ void HTDetector::AssignModule(HTRootElectronics * newModule)
 void HTDetector::SetMapping(HTDetectorMap * detMapping)
 {
   fDetectorMapping=detMapping;
+}
+
+//________________________________________________
+const char * HTDetector::GetName() const
+{
+  return fName;
 }

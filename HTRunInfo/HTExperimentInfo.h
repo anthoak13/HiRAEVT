@@ -41,6 +41,7 @@ public:
   const char * GetTitle() const;                  //!
   const char * GetEvtFilePath() const;            //!
   const char * GetRootFilePath() const;           //!
+  const char * GetMappedRootFilePath() const;     //!
 
   void Clear();                                   //!
 
@@ -55,7 +56,8 @@ private:
   std::string fExperimentName;
   std::string fExperimentTitle;
   std::string fEvtFilePath;
-  std::string fRootFilePath;
+  std::string fUnpackedRootFilePath;
+  std::string fMappedRootFilePath;
 
   int fFirstRun;
   int fLastRun;

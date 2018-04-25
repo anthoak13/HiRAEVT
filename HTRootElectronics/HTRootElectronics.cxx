@@ -1,7 +1,8 @@
 #include <HTRootElectronics.h>
 
 //________________________________________________
-HTRootElectronics::HTRootElectronics()
+HTRootElectronics::HTRootElectronics(const char * name) :
+fName(name)
 {}
 
 //________________________________________________
@@ -12,4 +13,10 @@ HTRootElectronics::~HTRootElectronics()
 void * HTRootElectronics::GetDataPointer() const
 {
   return 0;
+}
+
+//________________________________________________
+const char * HTRootElectronics::GetName() const
+{
+  return fName;
 }

@@ -1,0 +1,38 @@
+** Pedestal values for e15190 **
+** Written by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
+** Short guide *****************************************************************
+** To define the pedestal value of a module RBCAEN7xxUnpacker use the "set" command as follows:
+** set pedestal module_name ch value
+** for example, if I want to set to 351.4 the pedestal of channel 4 of module "qdc2":
+** set pedestal qdc2 4 351.4
+********************************************************************************
+set pedestal qdc1 0	216
+set pedestal qdc1 2	210
+set pedestal qdc1 3	218
+set pedestal qdc1 4	220
+set pedestal qdc1 5	210
+set pedestal qdc1 6	224
+set pedestal qdc1 7	244
+set pedestal qdc1 8	248
+set pedestal qdc1 9	228
+set pedestal qdc1 10	236
+set pedestal qdc1 11	208
+set pedestal qdc1 12	230
+set pedestal qdc1 14	242
+set pedestal qdc1 15	240
+set pedestal qdc1 16	224
+set pedestal qdc1 17	227
+set pedestal qdc1 18	214
+set pedestal qdc1 19	213
+set pedestal qdc1 20	226
+set pedestal qdc1 21	219
+set pedestal qdc1 22	214
+set pedestal qdc1 23	202
+set pedestal qdc1 24	229
+set pedestal qdc1 25	207
+set pedestal qdc1 26	231
+set pedestal qdc1 27	238
+set pedestal qdc1 28	220
+set pedestal qdc1 29	233
+set pedestal qdc1 30	208
+set pedestal qdc1 31	211
