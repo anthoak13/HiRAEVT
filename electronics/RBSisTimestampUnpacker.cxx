@@ -7,7 +7,7 @@
 //#include <Event.h>
 //#include <stdint.h>
 #include <iostream>
-#include <stdint.h> 
+#include <stdint.h>
 
 using namespace std;
 
@@ -22,7 +22,7 @@ using std::string;
 
 /*!
  Construction is a no-op.
- 
+
  */
 RBSisTimestampUnpacker::RBSisTimestampUnpacker(const char* chName){
 
@@ -43,10 +43,10 @@ void RBSisTimestampUnpacker::InitBranch(TTree* tree)
 
   if (GetFillData()){
     Char_t tmp[500];
-    sprintf(tmp,"%s/l",GetBranchName());
+    sprintf(tmp,"%s/L",GetBranchName());
     std::string KoreanElectronics(GetBranchName());
     KoreanElectronics += "Koreans";
-    tree->Branch(KoreanElectronics.c_str(), &fTimestampKoreans, (KoreanElectronics + "/l").c_str());
+    tree->Branch(KoreanElectronics.c_str(), &fTimestampKoreans, (KoreanElectronics + "/L").c_str());
     tree->Branch(GetBranchName(), &fTimestamp, tmp);
 }else{
     cout << "RBSisTimestamp InitBranch problem" << endl;
@@ -80,14 +80,7 @@ Int_t RBSisTimestampUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   uint64_t timestampKoreans = low0 | (mid0 << 16) | (high << 32);
   fTimestamp = timestamp;
   fTimestampKoreans = timestampKoreans;
-  
+
   return offset;
-  
-} 
 
-
-
-
-
-
-
+}

@@ -2,7 +2,10 @@
 #include <stdlib.h>
 
 #include <HiRAEVTLogo.h>
+#include <HTShared.h>
+#include <HTRunInfo.h>
 #include <HTMapper.h>
+#include <HTRawDataReader.h>
 
 int main (int argc, char ** argv)
 {
@@ -19,22 +22,35 @@ int main (int argc, char ** argv)
   }
 
   //Initialize HTMapper object
+  printf("** Initializing Mapper **\n");
   if(TheMapper->InitializeMapper("config/HiRAEVT.conf")!=0) {
-    printf("Error: error while configuring program\n");
+    printf("Error while configuring program\n");
     return -2;
   }
+  printf("** Mapper correctly initialized **\n");
 
   //Create HTRawDataReader object
+  HTRawDataReader * TheReader = new HTRawDataReader();
+
+  printf("** Initializing Reader **\n");
+  //Set Mapper to HTRawDataReader object
+  TheReader->SetMapper(TheMapper);
 
   //Initialize HTRawDataReader object
-
-  //Set Mapper to HTRawDataReader object
-
+  if(TheReader->InitReader()!=0) {
+    printf("Error while initializing HTRawDataReader class\n");
+    TheReader->EndProcess();
+    return -3;
+  }
+  printf("** Reader correctly initialized **\n");
 
   //Main loop HTRawDataReader::ProcessRawTree()
+  printf("** Mapping run %d **\n", gRun->GetRunNumber());
+  TheReader->ProcessRawTree();
 
 
   //End mapping process HTRawDataReader::EndProcess()
+  TheReader->EndProcess();
 
   return 0;
 }

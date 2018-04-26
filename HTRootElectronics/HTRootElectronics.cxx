@@ -6,17 +6,27 @@ fName(name)
 {}
 
 //________________________________________________
+HTRootElectronics::HTRootElectronics()
+{}
+
+//________________________________________________
 HTRootElectronics::~HTRootElectronics()
 {}
 
 //________________________________________________
-void * HTRootElectronics::GetDataPointer() const
+const char * HTRootElectronics::GetName() const
 {
-  return 0;
+  return fName.c_str();
 }
 
 //________________________________________________
-const char * HTRootElectronics::GetName() const
+void HTRootElectronics::InitTreeOutputBranch(TTree * theTree) const
 {
-  return fName;
+  return;
+}
+
+//________________________________________________
+void HTRootElectronics::InitTreeInputBranch(TTreeReader & theReader)
+{
+  return;
 }

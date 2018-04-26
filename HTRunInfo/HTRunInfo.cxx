@@ -111,6 +111,11 @@ void HTRunInfo::ParseAddDAQLine(const char * line_to_parse)
       newModuleInfo->SetModule(newModule);
       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
       return;
+    } else if (ModuleType.compare("RBTimestamp")==0) {
+      RBTimestamp * newModule = new RBTimestamp(ModuleName.c_str());
+      newModuleInfo->SetModule(newModule);
+      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+      return;
     } else if (ModuleType.compare("RBHINPUnpacker")==0) {
       int NumMotherboard;
       std::string usingFADC;

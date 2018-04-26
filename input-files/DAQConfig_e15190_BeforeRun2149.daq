@@ -4,15 +4,26 @@
 ** To add a new stack: define stack "name of the stack" stackID
 ** Prototype add new module
 ** add module stackID RBSisTimestampUnpacker "name" vsn
+** add module stackID RBRimestamp "name" vsn
 ** add module stackID RBHINPUnpacker "name" vsn #motherboards usingFADC(true, false)
 ** add module stackID RBCAEN7xxUnpacker "name" vsn
 ** add module stackID RBCAEN1x90Unpacker "name" vsn depth refch #Nchannels ns_per_ch
+** WARNING: RBSisTimestampUnpacker, RBRimestamp and RBHINPUnpacker must have a negative VSN
+**          different (in absolute value) to any other VSN in the same stack
+**          For example this is correct:
+**          add module 0 RBSisTimestampUnpacker "mytimestamp" -1
+**          add module 0 RBHINPUnpacker "myhinp" -2 2 false
+**          add module 0 RBCAEN7xxUnpacker "myQDC" 3
+**          For example this is wrong:
+**          add module 0 RBSisTimestampUnpacker "mytimestamp" -1
+**          add module 0 RBHINPUnpacker "myhinp" -2 2 false
+**          add module 0 RBCAEN7xxUnpacker "myQDC" 2 *****VSN=-2 is used by myhinp
 ********************************************************************************
 
 ** HiRA STACK
 define stack "HiRA Stack" 0
 add module 0 RBSisTimestampUnpacker "timestamp1" -1
-add module 0 RBHINPUnpacker "hinp" -1 2 false
+add module 0 RBHINPUnpacker "hinp" -2 2 false
 add module 0 RBCAEN7xxUnpacker "adc1" 5
 add module 0 RBCAEN7xxUnpacker "adc2" 6
 add module 0 RBCAEN1x90Unpacker "csiTDC" 7 1 48 128 0.1

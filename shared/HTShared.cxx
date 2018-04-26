@@ -5,3 +5,4 @@ Unpacker * gUnpacker;
 RBExperiment * gExperiment;
 HTRunInfo * gRun;
 HTExperimentInfo * gExperimentInfo;
+HTExperimentalSetup * gExpSetup;

@@ -1,6 +1,12 @@
 //
 //  RBSisTimestampUnpacker.h
 //
+// WARNING: This class has been introduced during experiment 15190 to handle
+// 2 different timestamps, one for the conventional electronics and another one
+// for the Korean electronics (that was under test during e15190)
+// For a future experiment this should be taken into account.
+//
+
 
 #ifndef __RBSisTimestampUNPACKER_H
 #define __RBSisTimestampUNPACKER_H

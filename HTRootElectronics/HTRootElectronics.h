@@ -5,18 +5,24 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <string>
+#include <TTreeReader.h>
+#include <TTreeReaderArray.h>
+#include <TTree.h>
 
 class HTRootElectronics
 {
 public :
   HTRootElectronics(const char *);              //!Constructor
-  ~HTRootElectronics();                         //!Destructor
+  HTRootElectronics();                          //!Constructor without arguments
+  virtual ~HTRootElectronics();                 //!Destructor
 
-  const char * GetName() const;                 //!Returns module name
-  virtual void * GetDataPointer() const;        //!Returns the pointer of the fData object
+  const char * GetName() const;                        //!Returns module name
+  virtual void InitTreeOutputBranch(TTree*) const;     //!Initialize branch in the output tree
+  virtual void InitTreeInputBranch(TTreeReader&);      //!Initialize TTreeReaderArray or TTreeReaderValue in the input tree
 
-private :
-  const char * fName;
+protected :
+  std::string fName;
 
 };
 

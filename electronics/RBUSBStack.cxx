@@ -306,7 +306,7 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 	      cout << "Found marker: " << module->ClassName() << endl;
         RBUSBStackMarker *marker = (RBUSBStackMarker*)module;
         sOffset = marker->Unpack(event,sOffset);
-      }else{
+      } else {
         // Try to unpack the module given the order it was defined in the stack.
         // If the VSN does not match, then search for the VSN in rest of the body.
         header  = getLong(event, sOffset);
@@ -342,19 +342,21 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 	      */
         // 3.) Daniele Dell'Aquila's code to handle the daqconfig mistake
         // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed by Daniele Dec2017)!!!
-        if(getLong(event,sOffset)==0xffffffff && (getLong(event,sOffset+1)==0xffffffff || (sOffset>0 && getLong(event,sOffset-1)==0xffffffff))){
+        if(getLong(event,sOffset)==0xffffffff && (getLong(event,sOffset+1)==0xffffffff || (sOffset>0 && getLong(event,sOffset-1)==0xffffffff))) {
           // This event was not properly constructed. Possible missing module data. However, it could be that the modules are simply empty.
           // burn up a set of 0xffff's
           sOffset += 2;
           module->SetUnpackError(10); // Error code.
           fUnpackErrorCount++;
 	  //	  cout << "Unpack "Error" Count up to " << fUnpackErrorCount << endl;
-  }else if(vsn == module->GetVSN() || module->GetVSN() == -1){sOffset = module->Unpack(event, sOffset);}
-        else{
+        } else if(vsn == module->GetVSN() || module->GetVSN() == -1) {
+          sOffset = module->Unpack(event, sOffset);
+        } else {
           // Scan the RingItem body for the VSN of this module.
-          while(sOffset<event.size() && vsn != module->GetVSN()){
+          while(sOffset<event.size() && vsn != module->GetVSN()) {
             header  = getLong(event, sOffset);
             vsn     = module->DecodeVSN(header);
+            fVsnErrorCount++;
             sOffset += 2;
           }
         }

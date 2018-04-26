@@ -336,7 +336,7 @@ namespace ROOT {
       ::RBSisTimestampUnpacker *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RBSisTimestampUnpacker >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RBSisTimestampUnpacker", ::RBSisTimestampUnpacker::Class_Version(), "RBSisTimestampUnpacker.h", 21,
+         instance("RBSisTimestampUnpacker", ::RBSisTimestampUnpacker::Class_Version(), "RBSisTimestampUnpacker.h", 27,
                   typeid(::RBSisTimestampUnpacker), DefineBehavior(ptr, ptr),
                   &::RBSisTimestampUnpacker::Dictionary, isa_proxy, 4,
                   sizeof(::RBSisTimestampUnpacker) );

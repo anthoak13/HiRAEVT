@@ -9,7 +9,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 
-RLIBS     := -L$(HiRAEVTLIB)
+RLIBS     := -L$(HiRAEVTLIB) -lHTDetectorMap
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

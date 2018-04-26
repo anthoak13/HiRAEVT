@@ -19,7 +19,7 @@
 #include <HTRunInfo.h>
 
 //______________________________________________________________________________
-Unpacker::Unpacker():nevent(0),fCounter(0),fReadWords(0),fTimeElapsed(0),m_lastTimestamp(0),fDebug(0)
+Unpacker::Unpacker():nevent(0),fReadWords(0),fTimeElapsed(0),m_lastTimestamp(0),fDebug(0)
 {
   // --
   //
@@ -130,19 +130,15 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
   //cout << "**Unpacking timestamp " << eventTimestamp<< endl;
 
   // Display progress
-  char tempChar[10];
-  if(fCounter == 100){
+  if(nevent%1000==0){
     time(&fNow);
     fTimeElapsed=difftime(fNow, fStart);
     fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
-    sprintf(tempChar,"%02.2f",fPercentDone);
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
-         << "  " << tempChar << "%"
+         << "  " << Form("%02.2f",fPercentDone) << "%"
          << "   " << fTimeElapsed << " s" << "\r";
     cout.flush();
-    fCounter=0;
   }
-  fCounter++;
 
   gExperiment->Clear();
 
@@ -284,19 +280,15 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   ++nevent;
 
   // Display progress
-  char tempChar[10];
-  if(fCounter == 50){
+  if(nevent%1000==0){
     time(&fNow);
     fTimeElapsed=difftime(fNow, fStart);
-    fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
-    sprintf(tempChar,"%02.2f",fPercentDone);
+    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
-    << "  " << tempChar << "%"
-    << "   " << fTimeElapsed << " s" << "\r";
+         << "  " << Form("%02.2f",fPercentDone) << "%"
+         << "   " << fTimeElapsed << " s" << "\r";
     cout.flush();
-    fCounter=0;
   }
-  fCounter++;
 
   gExperiment->Clear();
 
@@ -403,21 +395,15 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   //  cout << "**Unpacking timestamp " << eventTimestamp<< endl;
 
   // Display progress
-  char tempChar[10];
-  if(fCounter == 1000){
+  if(nevent%1000==0){
     time(&fNow);
     fTimeElapsed=difftime(fNow, fStart);
-    fPercentDone = 100 * ((Long64_t)(fReadWords))/(gExperiment->GetEvtFileSize());
-
-    sprintf(tempChar,"%02.2f",fPercentDone);
+    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
     cout << "Processing Event: " << setw(10) << nevent << setw(10)
-         << "  " << tempChar << "%"
+         << "  " << Form("%02.2f",fPercentDone) << "%"
          << "   " << fTimeElapsed << " s" << "\r";
-
     cout.flush();
-    fCounter=0;
   }
-  fCounter++;
 
   gExperiment->Clear();
 

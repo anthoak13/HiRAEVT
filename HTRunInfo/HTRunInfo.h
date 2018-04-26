@@ -10,6 +10,7 @@
 #include <RBCAEN7xxUnpacker.h>
 #include <RBCAEN1x90Unpacker.h>
 #include <RBSisTimestampUnpacker.h>
+#include <RBTimestamp.h>
 
 class HTRunInfo
 {

@@ -8,9 +8,12 @@ INCLUDES  := -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/HTExperimentalSetup
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
+INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
+INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 
-RLIBS     := -L$(HiRAEVTLIB)
+RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

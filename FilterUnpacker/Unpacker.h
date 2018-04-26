@@ -22,7 +22,6 @@ class Unpacker
 {
   private:
     int      nevent;
-    uint64_t fCounter;              // Event counter.
     uint64_t fReadWords;            //
     float    fPercentDone;          // Percent done.
     time_t   fStart;                // Start conversion time.

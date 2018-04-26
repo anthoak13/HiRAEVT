@@ -16,6 +16,7 @@ root:
 	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRootElectronics ;			$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector ;			$(MAKE) -C detectors/HTDetector install
+	$(MAKE) -C HTRawDataReader ; 	$(MAKE) -C HTRawDataReader install
 
 install:
 	$(MAKE) -C electronics install
@@ -28,6 +29,7 @@ install:
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector install
+	$(MAKE) -C HTRawDataReader install
 
 distclean:
 	$(MAKE) -C electronics distclean
@@ -40,6 +42,7 @@ distclean:
 	$(MAKE) -C HTExperimentalSetup distclean
 	$(MAKE) -C HTRootElectronics distclean
 	$(MAKE) -C detectors/HTDetector distclean
+	$(MAKE) -C HTRawDataReader distclean
 
 	$(MAKE) -C FilterUnpacker  distclean
 	$(MAKE) -C HTMapper  distclean
@@ -55,6 +58,7 @@ clean:
 	$(MAKE) -C HTExperimentalSetup clean
 	$(MAKE) -C HTRootElectronics clean
 	$(MAKE) -C detectors/HTDetector clean
+	$(MAKE) -C HTRawDataReader clean
 
 	$(MAKE) -C FilterUnpacker  clean
 	$(MAKE) -C HTMapper  clean
@@ -72,6 +76,7 @@ debug:
 	$(MAKE) -C HTExperimentalSetup
 	$(MAKE) -C HTRootElectronics
 	$(MAKE) -C detectors/HTDetector
+	$(MAKE) -C HTRawDataReader
 
 	$(MAKE) -C FilterUnpacker
 	$(MAKE) -C HTMapper  clean

@@ -20,10 +20,10 @@ public :
 
   const char * GetName() const;                   //!Returns detector name
 
-  virtual void InitTTreeBranch(TTree *);          //!Individually implemented in specific detector class
-  virtual void BuildEvent();                      //!Individually implemented in specific detector class
+  virtual void InitTTreeBranch(TTree *) =0;       //!Individually implemented in specific detector class
+  virtual void BuildEvent() =0;                   //!Individually implemented in specific detector class
 
-private :
+protected :
   const char * fName;                             //!Detector Name
   std::vector<HTRootElectronics *> fModules;      //!HTRootElectronics modules
   HTDetectorMap * fDetectorMapping;               //!Detector Mapping

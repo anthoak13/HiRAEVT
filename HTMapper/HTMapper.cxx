@@ -4,7 +4,6 @@
 HTMapper::HTMapper() :
 fMappedTree(0),
 fFileOut(0),
-fExpSetup(0),
 fRunNumber(-1)
 {}
 
@@ -66,15 +65,17 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
 //________________________________________________
 int HTMapper::BuildExperimentalSetup()
 {
-  fExpSetup=new HTExperimentalSetup();
+  gExpSetup=new HTExperimentalSetup();
 
-  if(fExpSetup==0) return -1;
+  if(gExpSetup==0) return -1;
 
-  if(fExpSetup->BuildElectronicModules()<=0) return -2;
+  if(gExpSetup->BuildElectronicModules()<=0) return -2;
 
+  /*
   if(fExpSetup->BuildDetectors()<=0) return -3;
 
   if(fExpSetup->BuildDetectorMaps()<=0) return -4;
+  */
 
   return 0;
 }
@@ -92,6 +93,12 @@ int HTMapper::InitRootOutput()
 
   //call individual detectors InitTTreeBranch
   return 0;
+}
+
+//________________________________________________
+TTree * HTMapper::GetMappedTree() const
+{
+  return fMappedTree;
 }
 
 //________________________________________________
