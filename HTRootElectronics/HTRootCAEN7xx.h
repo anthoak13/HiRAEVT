@@ -3,6 +3,7 @@
 
 #include <TROOT.h>
 #include <HTRootElectronics.h>
+#include <sstream>
 
 class HTRootCAEN7xx : public HTRootElectronics
 {
@@ -12,10 +13,15 @@ public :
 
   TTreeReaderArray<Short_t> * GetDataPointer() const;  //!Get the pointer to TTreeReaderArray
   Short_t GetData(int) const;                          //!Get the data corresponding to a given channel
+  void InitTreeInputBranch(TTreeReader&) override;     //!Set Input TTreeReader Branch
+  int LoadPedestals(const char *);                     //!Load Module Pedestals
 
 private :
   int fNumCh;
   TTreeReaderArray<Short_t> * fData;
+  double * fPedestals;
+  bool fPedestalsLoaded;
+  Short_t fOverflow;
 
 };
 

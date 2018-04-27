@@ -12,8 +12,9 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector
+RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTDetectorMap
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

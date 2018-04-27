@@ -13,18 +13,21 @@ class HTDetector
 {
 public :
   HTDetector(const char *);                       //!Constructor
-  ~HTDetector();                                  //!Destructor
+  virtual ~HTDetector();                          //!Destructor
 
   void AssignModule(HTRootElectronics *);         //!Assign a module to the detector
   void SetMapping(HTDetectorMap *);               //!SetDetector Mapping
 
   const char * GetName() const;                   //!Returns detector name
+  const char * GetType() const;                   //!Returns detector type
 
-  virtual void InitTTreeBranch(TTree *) =0;       //!Individually implemented in specific detector class
-  virtual void BuildEvent() =0;                   //!Individually implemented in specific detector class
+  virtual void InitTTreeBranch(TTree *);          //!Individually implemented in specific detector classes
+  virtual void BuildEvent();                      //!Individually implemented in specific detector classes
+  virtual void FillMappedData();                  //!Individually implemented in specific detector classes
 
 protected :
-  const char * fName;                             //!Detector Name
+  std::string fName;                              //!Detector Name
+  std::string fType;                              //!Detector Type
   std::vector<HTRootElectronics *> fModules;      //!HTRootElectronics modules
   HTDetectorMap * fDetectorMapping;               //!Detector Mapping
 };

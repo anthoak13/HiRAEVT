@@ -39,6 +39,8 @@ int HTRunInfo::LoadDAQSettings(const char * file_name)
 
     if(LineReadCommentLess.empty()) continue;
 
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
+
     if(LineReadCommentLess.find("define ")!=std::string::npos) {
       ParseDefineDAQLine(LineReadCommentLess.c_str()); //adding a new stack
     }

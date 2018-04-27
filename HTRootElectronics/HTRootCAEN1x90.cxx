@@ -23,3 +23,8 @@ TTreeReaderArray<Double_t> * HTRootCAEN1x90::GetDataPointer() const
 {
   return fData;
 }
+
+void HTRootCAEN1x90::InitTreeInputBranch(TTreeReader& theReader)
+{
+  fData = new TTreeReaderArray<Double_t>(theReader, GetName());
+}

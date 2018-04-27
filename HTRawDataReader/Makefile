@@ -14,6 +14,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
 
 RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTRootElectronics
 

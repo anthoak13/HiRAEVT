@@ -71,11 +71,9 @@ int HTMapper::BuildExperimentalSetup()
 
   if(gExpSetup->BuildElectronicModules()<=0) return -2;
 
-  /*
-  if(fExpSetup->BuildDetectors()<=0) return -3;
+  if(gExpSetup->BuildDetectors()<=0) return -3;
 
-  if(fExpSetup->BuildDetectorMaps()<=0) return -4;
-  */
+  if(gExpSetup->BuildDetectorMaps()<=0) return -4;
 
   return 0;
 }

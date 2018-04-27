@@ -27,5 +27,29 @@ void HTDetector::SetMapping(HTDetectorMap * detMapping)
 //________________________________________________
 const char * HTDetector::GetName() const
 {
-  return fName;
+  return fName.c_str();
+}
+
+//________________________________________________
+const char * HTDetector::GetType() const
+{
+  return fType.c_str();
+}
+
+//________________________________________________
+void HTDetector::InitTTreeBranch(TTree * theTree)
+{
+  return;
+}
+
+//________________________________________________
+void HTDetector::BuildEvent()
+{
+  return;
+}
+
+//________________________________________________
+void HTDetector::FillMappedData()
+{
+  return;
 }

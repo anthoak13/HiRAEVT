@@ -16,6 +16,7 @@ root:
 	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRootElectronics ;			$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector ;			$(MAKE) -C detectors/HTDetector install
+	$(MAKE) -C detectors/HTSisTimestampe15190 ;			$(MAKE) -C detectors/HTSisTimestampe15190 install
 	$(MAKE) -C HTRawDataReader ; 	$(MAKE) -C HTRawDataReader install
 
 install:
@@ -29,6 +30,7 @@ install:
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector install
+	$(MAKE) -C detectors/HTSisTimestampe15190 install
 	$(MAKE) -C HTRawDataReader install
 
 distclean:
@@ -42,6 +44,7 @@ distclean:
 	$(MAKE) -C HTExperimentalSetup distclean
 	$(MAKE) -C HTRootElectronics distclean
 	$(MAKE) -C detectors/HTDetector distclean
+	$(MAKE) -C detectors/HTSisTimestampe15190 distclean
 	$(MAKE) -C HTRawDataReader distclean
 
 	$(MAKE) -C FilterUnpacker  distclean
@@ -58,6 +61,7 @@ clean:
 	$(MAKE) -C HTExperimentalSetup clean
 	$(MAKE) -C HTRootElectronics clean
 	$(MAKE) -C detectors/HTDetector clean
+	$(MAKE) -C detectors/HTSisTimestampe15190 clean
 	$(MAKE) -C HTRawDataReader clean
 
 	$(MAKE) -C FilterUnpacker  clean
@@ -76,6 +80,7 @@ debug:
 	$(MAKE) -C HTExperimentalSetup
 	$(MAKE) -C HTRootElectronics
 	$(MAKE) -C detectors/HTDetector
+	$(MAKE) -C detectors/HTSisTimestampe15190
 	$(MAKE) -C HTRawDataReader
 
 	$(MAKE) -C FilterUnpacker

@@ -50,7 +50,7 @@ RBSetup::RBSetup(){
       // as an optional argument when calling AddToStack().
       // WARNING: RBHINPUnpacker, RBSisTimestampUnpacker and RBTimestamp have negative VSN. In such a case we give to RBUSBStack::AddToStack() vsn=-1
       HTModuleInfo * newModuleInfo = newStackInfo->GetModuleInfo(NumModule);
-      newStack->AddToStack(0,newModuleInfo->GetVSN()>=0 ? newModuleInfo->GetVSN() : -1,newModuleInfo->GetModule());
+      newStack->AddToStack(0,newModuleInfo->GetVSN(),newModuleInfo->GetModule());
       newModuleInfo->GetModule()->SetFillData(kTRUE);
     }
     newStack->SetMergedID(newStackInfo->GetStackID());

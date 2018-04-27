@@ -147,12 +147,10 @@ HTRunInfo * HTExperimentInfo::GetRunInfo(int run_num) const
     delete newRunInfo;
     return 0;
   }
-  /*
   if(newRunInfo->SetMappingFile(fMappingFileName[run_num-fFirstRun].c_str())!=0) {
     delete newRunInfo;
     return 0;
   }
-  */
   if(!fRunEvtFilePath[run_num-fFirstRun].empty()) {
     newRunInfo->SetEvtFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
   } else {
@@ -233,7 +231,7 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
     fDAQConfigurationFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("PEDESTAL_VALUES")==0) {
     fPedestalFileName[run_num-fFirstRun].assign(NewValue);
-  } else if (ValueToSet.compare("PEDESTAL_VALUES")==0) {
+  } else if (ValueToSet.compare("CHANNEL_MAPPING")==0) {
     fMappingFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("EVENT_FILE_PATH")==0) {
     fRunEvtFilePath[run_num-fFirstRun].assign(NewValue);
