@@ -14,7 +14,7 @@ HTSisTimestampe15190Map::~HTSisTimestampe15190Map()
 int HTSisTimestampe15190Map::ParseMapLine(const char * line_to_parse)
 {
   std::string LineReadCommentLess(line_to_parse);
-  std::istringstream LineStream(LineReadCommentLess);
+  std::istringstream LineStream(LineReadCommentLess.substr(LineReadCommentLess.find("map ")+4));
   std::string DetectorName;
   std::string ChName;
   std::string ModuleName;

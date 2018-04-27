@@ -74,6 +74,12 @@ void HTRawDataReader::ProcessRawTree()
       std::cout.flush();
     }
 
+    //Map all the detectors
+    fDataMapper->MapDetectors();
+
+    //Fill the mapped tree entry
+    fDataMapper->FillMappedEvent();
+
     fCurrEvent++;
   }
 }

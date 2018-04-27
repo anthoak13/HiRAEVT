@@ -197,6 +197,7 @@ int HTExperimentalSetup::BuildDetectorMaps()
         HTSisTimestampe15190Map * newMapping = new HTSisTimestampe15190Map(DetectorName.c_str());
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       }
     }
   }
@@ -207,6 +208,12 @@ int HTExperimentalSetup::BuildDetectorMaps()
 std::map<std::string, HTRootElectronics *> * HTExperimentalSetup::GetModules() const
 {
   return fModules;
+}
+
+//________________________________________________
+std::map<std::string, HTDetector *> * HTExperimentalSetup::GetDetectors() const
+{
+  return fDetectors;
 }
 
 //________________________________________________
@@ -237,4 +244,15 @@ HTDetector * HTExperimentalSetup::GetDetector(std::string name) const
 int HTExperimentalSetup::GetNDetectors() const
 {
   return fDetectors->size();
+}
+
+//________________________________________________
+void HTExperimentalSetup::InitDetectorBranches(TTree * theTree)
+{
+  //Loop over all the define detectors to call their individual InitTTreeBranch(TTree *)
+  if(fDetectors) {
+    for(std::map<std::string, HTDetector *>::iterator TheDetector=fDetectors->begin(); TheDetector!=fDetectors->end(); TheDetector++) {
+      (*TheDetector).second->InitTTreeBranch(theTree);
+    }
+  }
 }

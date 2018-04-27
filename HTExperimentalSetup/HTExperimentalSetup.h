@@ -33,6 +33,7 @@ public :
   int BuildElectronicModules();                      //!Called by HTMapper::BuildExperimentalSetup()
   int BuildDetectors();                              //!Called by HTMapper::BuildExperimentalSetup()
   int BuildDetectorMaps();                           //!Called by HTMapper::BuildExperimentalSetup()
+  void InitDetectorBranches(TTree *);                //!Called by HTMapper::InitRootOutput()
 
   int ParseDefineMappingLine(const char *);          //!Parse a define line in .map file. Returns 1 if a detector is add, otherwise 0.
   int ParseAssignMappingLine(const char *);          //!Parse a assign line in .map file. Returns the number of module assigned.
@@ -40,7 +41,8 @@ public :
   std::map<std::string, HTRootElectronics *> * GetModules() const; //!Get a std::map<std::string, HTRootElectronics *> pointer to the defined modules
   HTRootElectronics * GetModule(std::string) const;                //!Get a module by name.
   HTRootElectronics * GetModule(const char *) const;               //!Get a module by name.
-  HTDetector * GetDetector(std::string) const;                    //!Get a detector by name
+  std::map<std::string, HTDetector *> * GetDetectors() const;      //!Get a std::map<std::string, HTDetector *> pointer to the defined modules
+  HTDetector * GetDetector(std::string) const;                     //!Get a detector by name
   HTDetector * GetDetector(const char *) const;                    //!Get a detector by name
   int GetNDetectors() const;                                       //!Get the number of defined detectors
 

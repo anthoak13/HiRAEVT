@@ -9,6 +9,7 @@
 #include <TChain.h>
 #include <ctime>
 #include <map>
+#include <HTExperimentalSetup.h>
 
 class HTRawDataReader
 {

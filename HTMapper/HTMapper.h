@@ -28,9 +28,9 @@ public :
   int BuildExperimentalSetup();                //! Initialize ExperimentalSetup. Returns -1 if failed to allocate experimental setup, -2 falied to build modules, -3 failed to build detectors, -4 failed to build detector map
   int InitRootOutput();                        //! Initialize ROOT TTree and TFile for output
 
-  void MapDetectors();                         //! Called Event-by-event
-  void FillMappedEvent();                      //! Called by MapDetectors after mapping detectors
-  void EndMapping();                           //! Called at the end of the entire mapping process
+  void MapDetectors();                         //! Called Event-by-event by HTDataReader
+  void FillMappedEvent();                      //! Called Event-by-event after mapping detectors by HTDataReader
+  void EndMapping();                           //! Called at the end of the entire mapping process by HTDataReader
 
 private :
   TTree * fMappedTree;                         //! TTree with mapped data

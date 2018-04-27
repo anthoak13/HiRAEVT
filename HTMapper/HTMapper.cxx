@@ -90,6 +90,8 @@ int HTMapper::InitRootOutput()
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch
+  gExpSetup->InitDetectorBranches(fMappedTree);
+
   return 0;
 }
 
@@ -105,6 +107,28 @@ void HTMapper::EndMapping()
   //Writing TTree to file and close file
   fMappedTree->AutoSave();
   fMappedTree->GetCurrentFile()->Close();
+
+  return;
+}
+
+//________________________________________________
+void HTMapper::MapDetectors()
+{
+  //Loop over the defined detectors to call their individual HTDetector::BuildEvent()
+  std::map<std::string, HTDetector *> * DefinedDetectors = gExpSetup->GetDetectors();
+  for(std::map<std::string, HTDetector *>::iterator TheDetector=DefinedDetectors->begin(); TheDetector!=DefinedDetectors->end(); TheDetector++)
+  {
+    (TheDetector)->second->BuildEvent();
+  }
+
+  return;
+}
+
+//________________________________________________
+void HTMapper::FillMappedEvent()
+{
+  //Calling TTree::Fill() with mapped data
+  fMappedTree->Fill();
 
   return;
 }

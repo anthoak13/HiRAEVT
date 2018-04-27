@@ -49,7 +49,6 @@ namespace ROOT {
    static void delete_HTTSe15190Data(void *p);
    static void deleteArray_HTTSe15190Data(void *p);
    static void destruct_HTTSe15190Data(void *p);
-   static void streamer_HTTSe15190Data(TBuffer &buf, void *obj);
 
    // Function generating the singleton type initializer
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::HTTSe15190Data*)
@@ -59,14 +58,13 @@ namespace ROOT {
       static ::ROOT::TGenericClassInfo 
          instance("HTTSe15190Data", ::HTTSe15190Data::Class_Version(), "HTTSe15190RootEvent.h", 6,
                   typeid(::HTTSe15190Data), DefineBehavior(ptr, ptr),
-                  &::HTTSe15190Data::Dictionary, isa_proxy, 16,
+                  &::HTTSe15190Data::Dictionary, isa_proxy, 4,
                   sizeof(::HTTSe15190Data) );
       instance.SetNew(&new_HTTSe15190Data);
       instance.SetNewArray(&newArray_HTTSe15190Data);
       instance.SetDelete(&delete_HTTSe15190Data);
       instance.SetDeleteArray(&deleteArray_HTTSe15190Data);
       instance.SetDestructor(&destruct_HTTSe15190Data);
-      instance.SetStreamerFunc(&streamer_HTTSe15190Data);
       return &instance;
    }
    TGenericClassInfo *GenerateInitInstance(const ::HTTSe15190Data*)
@@ -83,7 +81,6 @@ namespace ROOT {
    static void delete_HTTSe15190RootEvent(void *p);
    static void deleteArray_HTTSe15190RootEvent(void *p);
    static void destruct_HTTSe15190RootEvent(void *p);
-   static void streamer_HTTSe15190RootEvent(TBuffer &buf, void *obj);
 
    // Function generating the singleton type initializer
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::HTTSe15190RootEvent*)
@@ -93,14 +90,13 @@ namespace ROOT {
       static ::ROOT::TGenericClassInfo 
          instance("HTTSe15190RootEvent", ::HTTSe15190RootEvent::Class_Version(), "HTTSe15190RootEvent.h", 18,
                   typeid(::HTTSe15190RootEvent), DefineBehavior(ptr, ptr),
-                  &::HTTSe15190RootEvent::Dictionary, isa_proxy, 16,
+                  &::HTTSe15190RootEvent::Dictionary, isa_proxy, 4,
                   sizeof(::HTTSe15190RootEvent) );
       instance.SetNew(&new_HTTSe15190RootEvent);
       instance.SetNewArray(&newArray_HTTSe15190RootEvent);
       instance.SetDelete(&delete_HTTSe15190RootEvent);
       instance.SetDeleteArray(&deleteArray_HTTSe15190RootEvent);
       instance.SetDestructor(&destruct_HTTSe15190RootEvent);
-      instance.SetStreamerFunc(&streamer_HTTSe15190RootEvent);
       return &instance;
    }
    TGenericClassInfo *GenerateInitInstance(const ::HTTSe15190RootEvent*)
@@ -186,17 +182,10 @@ void HTTSe15190Data::Streamer(TBuffer &R__b)
 {
    // Stream an object of class HTTSe15190Data.
 
-   UInt_t R__s, R__c;
    if (R__b.IsReading()) {
-      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
-      R__b >> fTimestamp;
-      R__b >> fTimestampKoreans;
-      R__b.CheckByteCount(R__s, R__c, HTTSe15190Data::IsA());
+      R__b.ReadClassBuffer(HTTSe15190Data::Class(),this);
    } else {
-      R__c = R__b.WriteVersion(HTTSe15190Data::IsA(), kTRUE);
-      R__b << fTimestamp;
-      R__b << fTimestampKoreans;
-      R__b.SetByteCount(R__c, kTRUE);
+      R__b.WriteClassBuffer(HTTSe15190Data::Class(),this);
    }
 }
 
@@ -219,10 +208,6 @@ namespace ROOT {
       typedef ::HTTSe15190Data current_t;
       ((current_t*)p)->~current_t();
    }
-   // Wrapper around a custom streamer member function.
-   static void streamer_HTTSe15190Data(TBuffer &buf, void *obj) {
-      ((::HTTSe15190Data*)obj)->::HTTSe15190Data::Streamer(buf);
-   }
 } // end of namespace ROOT for class ::HTTSe15190Data
 
 //______________________________________________________________________________
@@ -230,15 +215,10 @@ void HTTSe15190RootEvent::Streamer(TBuffer &R__b)
 {
    // Stream an object of class HTTSe15190RootEvent.
 
-   UInt_t R__s, R__c;
    if (R__b.IsReading()) {
-      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
-      fSisTimestamp.Streamer(R__b);
-      R__b.CheckByteCount(R__s, R__c, HTTSe15190RootEvent::IsA());
+      R__b.ReadClassBuffer(HTTSe15190RootEvent::Class(),this);
    } else {
-      R__c = R__b.WriteVersion(HTTSe15190RootEvent::IsA(), kTRUE);
-      fSisTimestamp.Streamer(R__b);
-      R__b.SetByteCount(R__c, kTRUE);
+      R__b.WriteClassBuffer(HTTSe15190RootEvent::Class(),this);
    }
 }
 
@@ -260,10 +240,6 @@ namespace ROOT {
    static void destruct_HTTSe15190RootEvent(void *p) {
       typedef ::HTTSe15190RootEvent current_t;
       ((current_t*)p)->~current_t();
-   }
-   // Wrapper around a custom streamer member function.
-   static void streamer_HTTSe15190RootEvent(TBuffer &buf, void *obj) {
-      ((::HTTSe15190RootEvent*)obj)->::HTTSe15190RootEvent::Streamer(buf);
    }
 } // end of namespace ROOT for class ::HTTSe15190RootEvent
 
