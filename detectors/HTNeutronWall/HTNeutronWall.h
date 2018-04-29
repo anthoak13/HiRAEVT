@@ -29,6 +29,7 @@
 
 #include <TROOT.h>
 #include <TTree.h>
+#include <math.h>
 #include <HTNeutronWallRootEvent.h>
 #include <HTNeutronWallMap.h>
 #include <HTRootCAEN7xx.h>

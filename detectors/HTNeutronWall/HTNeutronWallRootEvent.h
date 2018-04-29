@@ -14,7 +14,6 @@ public:
   Short_t  *ffastRight;   //[fmulti]
   Double_t *fTimeLeft;    //[fmulti]
   Double_t *fTimeRight;   //[fmulti]
-  Double_t *ftmean;       //[fmulti]
   Double_t *fGeoMean;     //[fmulti]
   Double_t *ffastGeoMean; //[fmulti]
 

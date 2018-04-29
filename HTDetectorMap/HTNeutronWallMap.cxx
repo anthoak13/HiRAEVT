@@ -90,22 +90,22 @@ int HTNeutronWallMap::ParseMapLine(const char * line_to_parse)
   int ModuleNumber=(*fModuleAssignmentOrder)[ModuleName];
   int ModuleChannel=std::stoi(ModuleChannelString);
 
-  if(ChName.compare("LEFT")) {
+  if(ChName.compare("LEFT")==0) {
     fLeftModule[DetectorNumber]=ModuleNumber;
     fLeftChannel[DetectorNumber]=ModuleChannel;
-  } else if (ChName.compare("LEFTFAST")) {
+  } else if (ChName.compare("LEFTFAST")==0) {
     fLeftFastModule[DetectorNumber]=ModuleNumber;
     fLeftFastChannel[DetectorNumber]=ModuleChannel;
-  } else if (ChName.compare("LEFTTIME")) {
+  } else if (ChName.compare("LEFTTIME")==0) {
     fLeftTimeModule[DetectorNumber]=ModuleNumber;
     fRightTimeChannel[DetectorNumber]=ModuleChannel;
-  } else if (ChName.compare("RIGHT")) {
+  } else if (ChName.compare("RIGHT")==0) {
     fRightModule[DetectorNumber]=ModuleNumber;
     fRightChannel[DetectorNumber]=ModuleChannel;
-  } else if (ChName.compare("RIGHTFAST")) {
+  } else if (ChName.compare("RIGHTFAST")==0) {
     fRightFastModule[DetectorNumber]=ModuleNumber;
     fRightFastChannel[DetectorNumber]=ModuleChannel;
-  } else if (ChName.compare("RIGHTTIME")) {
+  } else if (ChName.compare("RIGHTTIME")==0) {
     fRightTimeModule[DetectorNumber]=ModuleNumber;
     fRightTimeChannel[DetectorNumber]=ModuleChannel;
   }

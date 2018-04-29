@@ -11,7 +11,6 @@ fmulti(0)
   ffastRight   =new Short_t [num_bars];
   fTimeLeft    =new Double_t[num_bars];
   fTimeRight   =new Double_t[num_bars];
-  ftmean       =new Double_t[num_bars];
   fGeoMean     =new Double_t[num_bars];
   ffastGeoMean =new Double_t[num_bars];
 }
@@ -24,7 +23,6 @@ HTNeutronWallData::~HTNeutronWallData()
   delete [] fRight    ;
   delete [] ffastLeft ;
   delete [] ffastRight;
-  delete [] ftmean;
   delete [] fTimeLeft ;
   delete [] fTimeRight;
   delete [] fGeoMean  ;
