@@ -7,7 +7,7 @@ class HTForwardArrayData
 {
 public:
 
-  HTForwardArrayData();
+  HTForwardArrayData(int);
   virtual ~HTForwardArrayData();
 
   ClassDef(HTForwardArrayData,1);
@@ -16,11 +16,12 @@ public:
 class HTForwardArrayRootEvent
 {
  private:
+ int fNumDetectors;
 
  public:
  HTForwardArrayData fForwardArray;
 
- HTForwardArrayRootEvent();
+ HTForwardArrayRootEvent(int);
  virtual ~HTForwardArrayRootEvent();
 
  ClassDef(HTForwardArrayRootEvent,1);

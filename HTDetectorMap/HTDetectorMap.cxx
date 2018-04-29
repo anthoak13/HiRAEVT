@@ -68,7 +68,6 @@ int HTDetectorMap::ParseAssignLine(const char * line_to_parse)
     if(DetectorName.compare(fName)!=0) return 0;
     while(LineStream>>ModuleName) {
       (*fModuleAssignmentOrder)[ModuleName]=NModulesAdded;
-      printf("Added module %s to detector map %s at position %d\n", ModuleName.c_str(), fName.c_str(), NModulesAdded);
       NModulesAdded++;
     }
   }
@@ -80,4 +79,10 @@ int HTDetectorMap::ParseAssignLine(const char * line_to_parse)
 int HTDetectorMap::ParseMapLine(const char * line_to_parse)
 {
   return 0;
+}
+
+//________________________________________________
+void HTDetectorMap::Clear()
+{
+  fModuleAssignmentOrder->clear();
 }

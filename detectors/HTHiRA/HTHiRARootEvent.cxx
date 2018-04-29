@@ -1,7 +1,7 @@
 #include <HTHiRARootEvent.h>
 
 //________________________________________________
-HTHiRAData::HTHiRAData()
+HTHiRAData::HTHiRAData(int num_telescopes)
 {}
 
 //________________________________________________
@@ -9,7 +9,9 @@ HTHiRAData::~HTHiRAData()
 {}
 
 //________________________________________________
-HTHiRARootEvent::HTHiRARootEvent()
+HTHiRARootEvent::HTHiRARootEvent(int num_telescopes) :
+fNumTelescopes(num_telescopes),
+fHiRA(fNumTelescopes)
 {}
 
 //________________________________________________

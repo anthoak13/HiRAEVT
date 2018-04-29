@@ -16,6 +16,7 @@ public:
 class HTMicroballRootEvent
 {
  private:
+ int fNumDetectors;
 
  public:
  HTMicroballData fMicroball;

@@ -16,6 +16,8 @@ public :
   HTDetectorMap(const char *);                       //!Constructor
   virtual ~HTDetectorMap();                          //!Destructor
 
+  virtual void Clear();                              //!Clear mapping
+
   int LoadMapping(const char *);                     //!Loads detector mapping. Calls individual ParseAssignLine and ParseMapLine of the specific detector mappings
   int ParseAssignLine(const char *);                 //!Initializes module assignment order as it is defined within each individual detector
   virtual int ParseMapLine(const char *);            //!Implemented in specific detector mappings

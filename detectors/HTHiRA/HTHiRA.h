@@ -13,8 +13,10 @@
 class HTHiRA : public HTDetector
 {
 public :
-  HTHiRA(const char *);                            //!Constructor
-  ~HTHiRA();                                       //!Destructor
+  HTHiRA(const char *, int);                        //!Constructor
+  ~HTHiRA();                                        //!Destructor
+
+  void Clear() override;                           //!Clear to -9999  
 
   void InitTTreeBranch(TTree *) override;          //!Initialize TTree Branch containing detector ROOT type
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches

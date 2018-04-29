@@ -12,8 +12,10 @@
 class HTForwardArray : public HTDetector
 {
 public :
-  HTForwardArray(const char *);                    //!Constructor
+  HTForwardArray(const char *, int);               //!Constructor
   ~HTForwardArray();                               //!Destructor
+
+  void Clear() override;                           //!Clear to -9999  
 
   void InitTTreeBranch(TTree *) override;          //!Initialize TTree Branch containing detector ROOT type
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches
@@ -21,7 +23,6 @@ public :
 
 private :
   HTForwardArrayRootEvent * fevt;                  //!RootEvent type of the detector
-
 };
 
 #endif

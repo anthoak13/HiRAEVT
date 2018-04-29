@@ -1,10 +1,10 @@
 #include <HTHiRA.h>
 
 //________________________________________________
-HTHiRA::HTHiRA(const char * name) : HTDetector(name),
+HTHiRA::HTHiRA(const char * name, int num_telescopes) : HTDetector(name, num_telescopes),
 fevt(0)
 {
-  fevt=new HTHiRARootEvent();
+  fevt=new HTHiRARootEvent(fNumDetectors);
   fType.assign("HTHiRA");
 }
 
@@ -13,6 +13,13 @@ HTHiRA::~HTHiRA()
 {
   if(fevt) delete fevt;
 }
+
+//________________________________________________
+void HTHiRA::Clear()
+{
+
+}
+
 
 //________________________________________________
 void HTHiRA::InitTTreeBranch(TTree * theTree)

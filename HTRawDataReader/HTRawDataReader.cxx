@@ -24,7 +24,7 @@ int HTRawDataReader::InitReader()
 {
   //Opening input TFile and TTree to read data
   if(InitRootInput()<=0) return -2;
-  printf("** Correctly retrieved %d evt files for mapping from folder %s **\n", fNEvtFiles, gExperimentInfo->GetRootFilePath());
+  printf("** Correctly retrieved %d evt file(s) for mapping from folder %s **\n", fNEvtFiles, gExperimentInfo->GetRootFilePath());
 
   //Seting TTreeReader to the opened TChain
   fDataReader=new TTreeReader(fDataTree);

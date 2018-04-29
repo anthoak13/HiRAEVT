@@ -1,5 +1,8 @@
 #include <HTSisTimestampe15190.h>
 
+#define dModuleTimestamp ((HTSisTimestampe15190Map *)fDetectorMapping)->GetTimestampModule()
+#define dModuleTimestampKoreans ((HTSisTimestampe15190Map *)fDetectorMapping)->GetTimestampKoreansModule()
+
 //________________________________________________
 HTSisTimestampe15190::HTSisTimestampe15190(const char * name) : HTDetector(name),
 fevt(0)
@@ -15,6 +18,10 @@ HTSisTimestampe15190::~HTSisTimestampe15190()
 }
 
 //________________________________________________
+void HTSisTimestampe15190::Clear()
+{}
+
+//________________________________________________
 void HTSisTimestampe15190::InitTTreeBranch(TTree * theTree)
 {
   theTree->Branch(Form("%s.",fName.c_str()),"HTTSe15190Data",&(fevt->fSisTimestamp),32768,1);
@@ -24,9 +31,12 @@ void HTSisTimestampe15190::InitTTreeBranch(TTree * theTree)
 //________________________________________________
 void HTSisTimestampe15190::BuildEvent()
 {
+  //Clear detector
+  //Clear();
+
   //Retrieving information from HTRootModule types
-  fTimestamp=((HTRootSisTimestamp*)fModules[((HTSisTimestampe15190Map *)fDetectorMapping)->GetTimestampModule()])->GetData();
-  fTimestampKoreans=((HTRootSisTimestamp*)fModules[((HTSisTimestampe15190Map *)fDetectorMapping)->GetTimestampKoreansModule()])->GetData();
+  fTimestamp=dModuleTimestamp >=0 ? ((HTRootSisTimestamp*)fModules[dModuleTimestamp])->GetData() : -9999;
+  fTimestampKoreans=dModuleTimestampKoreans >=0 ? ((HTRootSisTimestamp*)fModules[dModuleTimestampKoreans])->GetData() : -9999;
 
   //Fill Root Event structure to be written on the tree
   FillMappedData();

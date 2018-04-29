@@ -1,5 +1,11 @@
 #include <HTMicroball.h>
 
+/* WARNING: uBall number of rings and detectors per ring is fixed */
+const int N_RINGS = 9;
+const int N_DETS[] = {6, 10, 12, 12, 14, 14, 12, 10, 6};
+// Detector numbering within a ring starts from 1 but the arrays start from 0
+/******************************************************************/
+
 //________________________________________________
 HTMicroball::HTMicroball(const char * name) : HTDetector(name),
 fevt(0)
@@ -12,6 +18,12 @@ fevt(0)
 HTMicroball::~HTMicroball()
 {
   if(fevt) delete fevt;
+}
+
+//________________________________________________
+void HTMicroball::Clear()
+{
+
 }
 
 //________________________________________________

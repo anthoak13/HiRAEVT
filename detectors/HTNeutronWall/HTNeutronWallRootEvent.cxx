@@ -1,7 +1,7 @@
 #include <HTNeutronWallRootEvent.h>
 
 //________________________________________________
-HTNeutronWallData::HTNeutronWallData()
+HTNeutronWallData::HTNeutronWallData(int num_bars)
 {}
 
 //________________________________________________
@@ -9,7 +9,9 @@ HTNeutronWallData::~HTNeutronWallData()
 {}
 
 //________________________________________________
-HTNeutronWallRootEvent::HTNeutronWallRootEvent()
+HTNeutronWallRootEvent::HTNeutronWallRootEvent(int num_bars) :
+fNumBars(num_bars),
+fNeutronWall(fNumBars)
 {}
 
 //________________________________________________

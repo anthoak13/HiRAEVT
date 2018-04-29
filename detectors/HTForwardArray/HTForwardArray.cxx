@@ -1,10 +1,10 @@
 #include <HTForwardArray.h>
 
 //________________________________________________
-HTForwardArray::HTForwardArray(const char * name) : HTDetector(name),
+HTForwardArray::HTForwardArray(const char * name, int num_detectors) : HTDetector(name, num_detectors),
 fevt(0)
 {
-  fevt=new HTForwardArrayRootEvent();
+  fevt=new HTForwardArrayRootEvent(fNumDetectors);
   fType.assign("HTForwardArray");
 }
 
@@ -12,6 +12,12 @@ fevt(0)
 HTForwardArray::~HTForwardArray()
 {
   if(fevt) delete fevt;
+}
+
+//________________________________________________
+void HTForwardArray::Clear()
+{
+
 }
 
 //________________________________________________

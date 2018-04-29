@@ -7,7 +7,7 @@ class HTNeutronWallData
 {
 public:
 
-  HTNeutronWallData();
+  HTNeutronWallData(int);
   virtual ~HTNeutronWallData();
 
   ClassDef(HTNeutronWallData,1);
@@ -16,11 +16,12 @@ public:
 class HTNeutronWallRootEvent
 {
  private:
+ int fNumBars;
 
  public:
  HTNeutronWallData fNeutronWall;
 
- HTNeutronWallRootEvent();
+ HTNeutronWallRootEvent(int);
  virtual ~HTNeutronWallRootEvent();
 
  ClassDef(HTNeutronWallRootEvent,1);

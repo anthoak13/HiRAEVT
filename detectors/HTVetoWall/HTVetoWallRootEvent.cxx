@@ -1,7 +1,7 @@
 #include <HTVetoWallRootEvent.h>
 
 //________________________________________________
-HTVetoWallData::HTVetoWallData()
+HTVetoWallData::HTVetoWallData(int num_bars)
 {}
 
 //________________________________________________
@@ -9,7 +9,9 @@ HTVetoWallData::~HTVetoWallData()
 {}
 
 //________________________________________________
-HTVetoWallRootEvent::HTVetoWallRootEvent()
+HTVetoWallRootEvent::HTVetoWallRootEvent(int num_bars) :
+fNumBars(num_bars),
+fVetoWall(fNumBars)
 {}
 
 //________________________________________________

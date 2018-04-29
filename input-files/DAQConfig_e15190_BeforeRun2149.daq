@@ -1,4 +1,4 @@
-** DAQ Config for experiment E15190 after run 2148 **
+** DAQ Config for experiment E15190 before run 2148 **
 ** Written by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 ** Short guide *****************************************************************
 ** To add a new stack: define stack "name of the stack" stackID

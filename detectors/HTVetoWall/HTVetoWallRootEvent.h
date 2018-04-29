@@ -7,7 +7,7 @@ class HTVetoWallData
 {
 public:
 
-  HTVetoWallData();
+  HTVetoWallData(int);
   virtual ~HTVetoWallData();
 
   ClassDef(HTVetoWallData,1);
@@ -16,11 +16,12 @@ public:
 class HTVetoWallRootEvent
 {
  private:
+ int fNumBars;
 
  public:
  HTVetoWallData fVetoWall;
 
- HTVetoWallRootEvent();
+ HTVetoWallRootEvent(int);
  virtual ~HTVetoWallRootEvent();
 
  ClassDef(HTVetoWallRootEvent,1);

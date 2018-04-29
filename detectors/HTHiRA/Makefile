@@ -7,6 +7,7 @@ ObjSuf    := o
 PcmSuf    := _rdict.pcm
 
 INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector

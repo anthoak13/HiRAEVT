@@ -1,10 +1,10 @@
 #include <HTVetoWall.h>
 
 //________________________________________________
-HTVetoWall::HTVetoWall(const char * name) : HTDetector(name),
+HTVetoWall::HTVetoWall(const char * name, int num_bars) : HTDetector(name, num_bars),
 fevt(0)
 {
-  fevt=new HTVetoWallRootEvent();
+  fevt=new HTVetoWallRootEvent(fNumDetectors);
   fType.assign("HTVetoWall");
 }
 
@@ -12,6 +12,12 @@ fevt(0)
 HTVetoWall::~HTVetoWall()
 {
   if(fevt) delete fevt;
+}
+
+//________________________________________________
+void HTVetoWall::Clear()
+{
+
 }
 
 //________________________________________________

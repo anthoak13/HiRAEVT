@@ -121,26 +121,32 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
     std::string DetectorType;
     std::string DetectorName;
     LineStream>>DetectorType>>DetectorName;
+
     DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
 
     if(DetectorType.compare("HiRA")==0) {
       int NumTelescopes;
       LineStream>>NumTelescopes;
-      // TO BE COMPLETED WITH THE HIRA DETECTOR
+      HTHiRA * newDetector = new HTHiRA(DetectorName.c_str(), NumTelescopes);
+      (*fDetectors)[DetectorName]=newDetector;
     } else if(DetectorType.compare("NeutronWall")==0) {
-      int NumTelescopes;
-      LineStream>>NumTelescopes;
-      // TO BE COMPLETED
+      int NumBars;
+      LineStream>>NumBars;
+      HTNeutronWall * newDetector = new HTNeutronWall(DetectorName.c_str(), NumBars);
+      (*fDetectors)[DetectorName]=newDetector;
     } else if(DetectorType.compare("VetoWall")==0) {
-      int NumTelescopes;
-      LineStream>>NumTelescopes;
-      // TO BE COMPLETED
+      int NumBars;
+      LineStream>>NumBars;
+      HTVetoWall * newDetector = new HTVetoWall(DetectorName.c_str(), NumBars);
+      (*fDetectors)[DetectorName]=newDetector;
     } else if(DetectorType.compare("ForwardArray")==0) {
-      int NumTelescopes;
-      LineStream>>NumTelescopes;
-      // TO BE COMPLETED
+      int NumDetectors;
+      LineStream>>NumDetectors;
+      HTForwardArray * newDetector = new HTForwardArray(DetectorName.c_str(), NumDetectors);
+      (*fDetectors)[DetectorName]=newDetector;
     } else if(DetectorType.compare("Microball")==0) {
-      // TO BE COMPLETED
+      HTMicroball * newDetector = new HTMicroball(DetectorName.c_str());
+      (*fDetectors)[DetectorName]=newDetector;
     } else if(DetectorType.compare("SisTimestampe15190")==0) {
       HTSisTimestampe15190 * newDetector = new HTSisTimestampe15190(DetectorName.c_str());
       (*fDetectors)[DetectorName]=newDetector;
@@ -182,17 +188,33 @@ int HTExperimentalSetup::BuildDetectorMaps()
     for(std::map<std::string, HTDetector *>::iterator TheDetector=fDetectors->begin(); TheDetector!=fDetectors->end(); TheDetector++) {
       std::string DetectorName((*TheDetector).second->GetName());
       std::string DetectorType((*TheDetector).second->GetType());
+      int NumIndividualDetectionObjects((*TheDetector).second->GetNumDetectors());
 
       if(DetectorType.compare("HTHiRA")==0) {
-
+        HTHiRAMap * newMapping = new HTHiRAMap(DetectorName.c_str(), NumIndividualDetectionObjects);
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       } else if(DetectorType.compare("HTNeutronWall")==0) {
-
+        HTNeutronWallMap * newMapping = new HTNeutronWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       } else if(DetectorType.compare("HTVetoWall")==0) {
-
+        HTVetoWallMap * newMapping = new HTVetoWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       } else if(DetectorType.compare("HTForwardArray")==0) {
-
+        HTForwardArrayMap * newMapping = new HTForwardArrayMap(DetectorName.c_str(), NumIndividualDetectionObjects);
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       } else if(DetectorType.compare("HTMicroball")==0) {
-
+        HTMicroballMap * newMapping = new HTMicroballMap(DetectorName.c_str());
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
       } else if(DetectorType.compare("HTSisTimestampe15190")==0) {
         HTSisTimestampe15190Map * newMapping = new HTSisTimestampe15190Map(DetectorName.c_str());
         newMapping->LoadMapping(gRun->GetMappingFile());

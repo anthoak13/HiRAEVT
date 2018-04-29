@@ -1,24 +1,73 @@
 #include <HTNeutronWallMap.h>
 
 //________________________________________________
-HTNeutronWallMap::HTNeutronWallMap(const char * name) : HTDetectorMap(name),
-fLeftModule(-1),
-fLeftChannel(-1),
-fLeftFastModule(-1),
-fLeftFastChannel(-1),
-fRightModule(-1),
-fRightChannel(-1),
-fRightFastModule(-1),
-fRightFastChannel(-1),
-fLeftTimeModule(-1),
-fLeftTimeChannel(-1),
-fRightTimeModule(-1),
-fRightTimeChannel(-1)
-{}
+HTNeutronWallMap::HTNeutronWallMap(const char * name, int num_bars) : HTDetectorMap(name),
+fNumBars(num_bars),
+fLeftModule(0),
+fLeftChannel(0),
+fLeftFastModule(0),
+fLeftFastChannel(0),
+fRightModule(0),
+fRightChannel(0),
+fRightFastModule(0),
+fRightFastChannel(0),
+fLeftTimeModule(0),
+fLeftTimeChannel(0),
+fRightTimeModule(0),
+fRightTimeChannel(0)
+{
+  fLeftModule=new int[fNumBars];
+  fLeftChannel=new int[fNumBars];
+  fLeftFastModule=new int[fNumBars];
+  fLeftFastChannel=new int[fNumBars];
+  fRightModule=new int[fNumBars];
+  fRightChannel=new int[fNumBars];
+  fRightFastModule=new int[fNumBars];
+  fRightFastChannel=new int[fNumBars];
+  fLeftTimeModule=new int[fNumBars];
+  fLeftTimeChannel=new int[fNumBars];
+  fRightTimeModule=new int[fNumBars];
+  fRightTimeChannel=new int[fNumBars];
+
+  Clear();
+}
 
 //________________________________________________
 HTNeutronWallMap::~HTNeutronWallMap()
-{}
+{
+  if(fLeftModule) delete [] fLeftModule;
+  if(fLeftChannel) delete [] fLeftChannel;
+  if(fLeftFastModule) delete [] fLeftFastModule;
+  if(fLeftFastChannel) delete [] fLeftFastChannel;
+  if(fRightModule) delete [] fRightModule;
+  if(fRightChannel) delete [] fRightChannel;
+  if(fRightFastModule) delete [] fRightFastModule;
+  if(fRightFastChannel) delete [] fRightFastChannel;
+  if(fLeftTimeModule) delete [] fLeftTimeModule;
+  if(fLeftTimeChannel) delete [] fLeftTimeChannel;
+  if(fRightTimeModule) delete [] fRightTimeModule;
+  if(fRightTimeChannel) delete [] fRightTimeChannel;
+}
+
+//________________________________________________
+void HTNeutronWallMap::Clear()
+{
+  fModuleAssignmentOrder->clear();
+  for(int i=0; i<fNumBars; i++) {
+    fLeftModule[i]=-1;
+    fLeftChannel[i]=-1;
+    fLeftFastModule[i]=-1;
+    fLeftFastChannel[i]=-1;
+    fRightModule[i]=-1;
+    fRightChannel[i]=-1;
+    fRightFastModule[i]=-1;
+    fRightFastChannel[i]=-1;
+    fLeftTimeModule[i]=-1;
+    fLeftTimeChannel[i]=-1;
+    fRightTimeModule[i]=-1;
+    fRightTimeChannel[i]=-1;
+  }
+}
 
 //________________________________________________
 int HTNeutronWallMap::ParseMapLine(const char * line_to_parse)
@@ -27,37 +76,38 @@ int HTNeutronWallMap::ParseMapLine(const char * line_to_parse)
   std::istringstream LineStream(LineReadCommentLess.substr(LineReadCommentLess.find("map ")+4));
   std::string DetectorName;
   std::string ChName;
+  std::string DetectorToSet;
   std::string ModuleName;
   std::string ModuleChannelString;
-  LineStream>>DetectorName>>ChName>>ModuleName>>ModuleChannelString;
+  LineStream>>DetectorName>>ChName>>DetectorToSet>>ModuleName>>ModuleChannelString;
   if(DetectorName.compare(fName)!=0) return 0;
 
-  DetectorName.assign(DetectorName.substr(DetectorName.find("detector=\"")+10,DetectorName.find_last_of("\"")-(DetectorName.find("detector=\"")+10)));
+  DetectorToSet.assign(DetectorToSet.substr(DetectorToSet.find("detector=\"")+10,DetectorToSet.find_last_of("\"")-(DetectorToSet.find("detector=\"")+10)));
   ModuleName.assign(ModuleName.substr(ModuleName.find("module=\"")+8,ModuleName.find_last_of("\"")-(ModuleName.find("module=\"")+8)));
   ModuleChannelString.assign(ModuleChannelString.substr(ModuleChannelString.find("channel=\"")+9,ModuleChannelString.find_last_of("\"")-(ModuleChannelString.find("channel=\"")+9)));
 
-  int DetectorNumber=std::stoi(DetectorName);
+  int DetectorNumber=std::stoi(DetectorToSet);
   int ModuleNumber=(*fModuleAssignmentOrder)[ModuleName];
   int ModuleChannel=std::stoi(ModuleChannelString);
 
   if(ChName.compare("LEFT")) {
-    fLeftModule=ModuleNumber;
-    fLeftChannel=ModuleChannel;
+    fLeftModule[DetectorNumber]=ModuleNumber;
+    fLeftChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("LEFTFAST")) {
-    fLeftFastModule=ModuleNumber;
-    fLeftFastChannel=ModuleChannel;
+    fLeftFastModule[DetectorNumber]=ModuleNumber;
+    fLeftFastChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("LEFTTIME")) {
-    fLeftTimeModule=ModuleNumber;
-    fRightTimeChannel=ModuleChannel;
+    fLeftTimeModule[DetectorNumber]=ModuleNumber;
+    fRightTimeChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("RIGHT")) {
-    fRightModule=ModuleNumber;
-    fRightChannel=ModuleChannel;
+    fRightModule[DetectorNumber]=ModuleNumber;
+    fRightChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("RIGHTFAST")) {
-    fRightFastModule=ModuleNumber;
-    fRightFastChannel=ModuleChannel;
+    fRightFastModule[DetectorNumber]=ModuleNumber;
+    fRightFastChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("RIGHTTIME")) {
-    fRightTimeModule=ModuleNumber;
-    fRightTimeChannel=ModuleChannel;
+    fRightTimeModule[DetectorNumber]=ModuleNumber;
+    fRightTimeChannel[DetectorNumber]=ModuleChannel;
   }
 
   return 1;

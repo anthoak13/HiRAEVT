@@ -12,8 +12,10 @@
 class HTVetoWall : public HTDetector
 {
 public :
-  HTVetoWall(const char *);                        //!Constructor
+  HTVetoWall(const char *, int);                   //!Constructor
   ~HTVetoWall();                                   //!Destructor
+
+  void Clear() override;                           //!Clear to -9999  
 
   void InitTTreeBranch(TTree *) override;          //!Initialize TTree Branch containing detector ROOT type
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches

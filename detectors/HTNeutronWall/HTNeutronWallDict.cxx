@@ -44,8 +44,6 @@ namespace std {} using namespace std;
 // Header files passed via #pragma extra_include
 
 namespace ROOT {
-   static void *new_HTNeutronWallData(void *p = 0);
-   static void *newArray_HTNeutronWallData(Long_t size, void *p);
    static void delete_HTNeutronWallData(void *p);
    static void deleteArray_HTNeutronWallData(void *p);
    static void destruct_HTNeutronWallData(void *p);
@@ -60,8 +58,6 @@ namespace ROOT {
                   typeid(::HTNeutronWallData), DefineBehavior(ptr, ptr),
                   &::HTNeutronWallData::Dictionary, isa_proxy, 4,
                   sizeof(::HTNeutronWallData) );
-      instance.SetNew(&new_HTNeutronWallData);
-      instance.SetNewArray(&newArray_HTNeutronWallData);
       instance.SetDelete(&delete_HTNeutronWallData);
       instance.SetDeleteArray(&deleteArray_HTNeutronWallData);
       instance.SetDestructor(&destruct_HTNeutronWallData);
@@ -76,8 +72,6 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
-   static void *new_HTNeutronWallRootEvent(void *p = 0);
-   static void *newArray_HTNeutronWallRootEvent(Long_t size, void *p);
    static void delete_HTNeutronWallRootEvent(void *p);
    static void deleteArray_HTNeutronWallRootEvent(void *p);
    static void destruct_HTNeutronWallRootEvent(void *p);
@@ -92,8 +86,6 @@ namespace ROOT {
                   typeid(::HTNeutronWallRootEvent), DefineBehavior(ptr, ptr),
                   &::HTNeutronWallRootEvent::Dictionary, isa_proxy, 4,
                   sizeof(::HTNeutronWallRootEvent) );
-      instance.SetNew(&new_HTNeutronWallRootEvent);
-      instance.SetNewArray(&newArray_HTNeutronWallRootEvent);
       instance.SetDelete(&delete_HTNeutronWallRootEvent);
       instance.SetDeleteArray(&deleteArray_HTNeutronWallRootEvent);
       instance.SetDestructor(&destruct_HTNeutronWallRootEvent);
@@ -190,13 +182,6 @@ void HTNeutronWallData::Streamer(TBuffer &R__b)
 }
 
 namespace ROOT {
-   // Wrappers around operator new
-   static void *new_HTNeutronWallData(void *p) {
-      return  p ? new(p) ::HTNeutronWallData : new ::HTNeutronWallData;
-   }
-   static void *newArray_HTNeutronWallData(Long_t nElements, void *p) {
-      return p ? new(p) ::HTNeutronWallData[nElements] : new ::HTNeutronWallData[nElements];
-   }
    // Wrapper around operator delete
    static void delete_HTNeutronWallData(void *p) {
       delete ((::HTNeutronWallData*)p);
@@ -223,13 +208,6 @@ void HTNeutronWallRootEvent::Streamer(TBuffer &R__b)
 }
 
 namespace ROOT {
-   // Wrappers around operator new
-   static void *new_HTNeutronWallRootEvent(void *p) {
-      return  p ? new(p) ::HTNeutronWallRootEvent : new ::HTNeutronWallRootEvent;
-   }
-   static void *newArray_HTNeutronWallRootEvent(Long_t nElements, void *p) {
-      return p ? new(p) ::HTNeutronWallRootEvent[nElements] : new ::HTNeutronWallRootEvent[nElements];
-   }
    // Wrapper around operator delete
    static void delete_HTNeutronWallRootEvent(void *p) {
       delete ((::HTNeutronWallRootEvent*)p);

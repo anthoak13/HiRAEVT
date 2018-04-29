@@ -1,10 +1,10 @@
 #include <HTNeutronWall.h>
 
 //________________________________________________
-HTNeutronWall::HTNeutronWall(const char * name) : HTDetector(name),
+HTNeutronWall::HTNeutronWall(const char * name, int num_bars) : HTDetector(name, num_bars),
 fevt(0)
 {
-  fevt=new HTNeutronWallRootEvent();
+  fevt=new HTNeutronWallRootEvent(fNumDetectors);
   fType.assign("HTNeutronWall");
 }
 
@@ -12,6 +12,12 @@ fevt(0)
 HTNeutronWall::~HTNeutronWall()
 {
   if(fevt) delete fevt;
+}
+
+//________________________________________________
+void HTNeutronWall::Clear()
+{
+
 }
 
 //________________________________________________

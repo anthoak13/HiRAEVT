@@ -12,8 +12,10 @@
 class HTNeutronWall : public HTDetector
 {
 public :
-  HTNeutronWall(const char *);                     //!Constructor
+  HTNeutronWall(const char *, int);                //!Constructor
   ~HTNeutronWall();                                //!Destructor
+
+  void Clear() override;                           //!Clear to -9999  
 
   void InitTTreeBranch(TTree *) override;          //!Initialize TTree Branch containing detector ROOT type
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches

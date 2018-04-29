@@ -1,8 +1,9 @@
 #include <HTDetector.h>
 
 //________________________________________________
-HTDetector::HTDetector(const char * name) :
+HTDetector::HTDetector(const char * name, int num_detectors) :
 fName(name),
+fNumDetectors(num_detectors),
 fDetectorMapping(0)
 {}
 
@@ -10,6 +11,12 @@ fDetectorMapping(0)
 HTDetector::~HTDetector()
 {
   if(fDetectorMapping) delete fDetectorMapping;
+}
+
+//________________________________________________
+void HTDetector::Clear()
+{
+  return;
 }
 
 //________________________________________________
@@ -34,6 +41,12 @@ const char * HTDetector::GetName() const
 const char * HTDetector::GetType() const
 {
   return fType.c_str();
+}
+
+//________________________________________________
+int HTDetector::GetNumDetectors() const
+{
+  return fNumDetectors;
 }
 
 //________________________________________________

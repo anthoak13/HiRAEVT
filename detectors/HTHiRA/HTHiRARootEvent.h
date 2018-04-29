@@ -7,7 +7,7 @@ class HTHiRAData
 {
 public:
 
-  HTHiRAData();
+  HTHiRAData(int);
   virtual ~HTHiRAData();
 
   ClassDef(HTHiRAData,1);
@@ -16,11 +16,12 @@ public:
 class HTHiRARootEvent
 {
  private:
+ int fNumTelescopes;
 
  public:
- HTHiRAData fNeutronWall;
+ HTHiRAData fHiRA;
 
- HTHiRARootEvent();
+ HTHiRARootEvent(int);
  virtual ~HTHiRARootEvent();
 
  ClassDef(HTHiRARootEvent,1);

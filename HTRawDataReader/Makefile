@@ -15,6 +15,11 @@ INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTNeutronWall
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTVetoWall
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTForwardArray
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
 
 RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTRootElectronics
 
