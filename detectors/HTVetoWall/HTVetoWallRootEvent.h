@@ -6,6 +6,13 @@
 class HTVetoWallData
 {
 public:
+  Int_t    fmulti;
+  Int_t    *fnumbar;     //[fmulti]
+  Short_t  *fTop;        //[fmulti]
+  Short_t  *fBottom;     //[fmulti]
+  Double_t *fTimeTop;    //[fmulti]
+  Double_t *fTimeBottom; //[fmulti]
+  Double_t *fGeoMean;    //[fmulti]
 
   HTVetoWallData(int);
   virtual ~HTVetoWallData();

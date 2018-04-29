@@ -2,8 +2,10 @@
 
 //________________________________________________
 HTNeutronWall::HTNeutronWall(const char * name, int num_bars) : HTDetector(name, num_bars),
+fNeutronWall(0),
 fevt(0)
 {
+  fNeutronWall=new HTNeutronWallArray(fNumDetectors);
   fevt=new HTNeutronWallRootEvent(fNumDetectors);
   fType.assign("HTNeutronWall");
 }
@@ -11,6 +13,7 @@ fevt(0)
 //________________________________________________
 HTNeutronWall::~HTNeutronWall()
 {
+  if(fNeutronWall) delete fNeutronWall;
   if(fevt) delete fevt;
 }
 

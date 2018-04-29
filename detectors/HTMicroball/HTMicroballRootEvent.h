@@ -6,8 +6,14 @@
 class HTMicroballData
 {
 public:
+  Int_t    fmulti;
+  Int_t    *fnumring;     //[fmulti]
+  Int_t    *fnumdet;      //[fmulti]
+  Short_t  *fTail;        //[fmulti]
+  Short_t  *fE;           //[fmulti]
+  Short_t  *fTime;        //[fmulti]
 
-  HTMicroballData();
+  HTMicroballData(int);
   virtual ~HTMicroballData();
 
   ClassDef(HTMicroballData,1);
@@ -21,7 +27,7 @@ class HTMicroballRootEvent
  public:
  HTMicroballData fMicroball;
 
- HTMicroballRootEvent();
+ HTMicroballRootEvent(int);
  virtual ~HTMicroballRootEvent();
 
  ClassDef(HTMicroballRootEvent,1);

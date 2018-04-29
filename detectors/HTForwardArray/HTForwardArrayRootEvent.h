@@ -6,6 +6,10 @@
 class HTForwardArrayData
 {
 public:
+  Int_t    fmulti;
+  Int_t    *fnumdet;      //[fmulti]
+  Short_t  *fE;           //[fmulti]
+  Double_t *fTime;        //[fmulti]
 
   HTForwardArrayData(int);
   virtual ~HTForwardArrayData();

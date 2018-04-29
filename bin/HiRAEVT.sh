@@ -44,7 +44,7 @@ case $HOSTNAME in
     export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperSeaside.exe'
   ;;
   (*)
-    export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerFishtank.exe'
-    export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperFishtank.exe'  
+    export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpacker.exe'
+    export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapper.exe'  
   ;;
 esac

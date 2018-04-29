@@ -2,8 +2,10 @@
 
 //________________________________________________
 HTForwardArray::HTForwardArray(const char * name, int num_detectors) : HTDetector(name, num_detectors),
+fForwardArray(0),
 fevt(0)
 {
+  fForwardArray=new HTForwardArrayCluster(fNumDetectors);
   fevt=new HTForwardArrayRootEvent(fNumDetectors);
   fType.assign("HTForwardArray");
 }
@@ -11,14 +13,13 @@ fevt(0)
 //________________________________________________
 HTForwardArray::~HTForwardArray()
 {
+  if(fForwardArray) delete fForwardArray;
   if(fevt) delete fevt;
 }
 
 //________________________________________________
 void HTForwardArray::Clear()
-{
-
-}
+{}
 
 //________________________________________________
 void HTForwardArray::InitTTreeBranch(TTree * theTree)

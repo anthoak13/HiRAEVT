@@ -3,20 +3,25 @@
 /* WARNING: uBall number of rings and detectors per ring is fixed */
 const int N_RINGS = 9;
 const int N_DETS[] = {6, 10, 12, 12, 14, 14, 12, 10, 6};
+const int TOT_NUMER_DETECTORS = 96;
 // Detector numbering within a ring starts from 1 but the arrays start from 0
 /******************************************************************/
 
 //________________________________________________
 HTMicroball::HTMicroball(const char * name) : HTDetector(name),
-fevt(0)
+fMicroball(0),
+fevt(0),
+fNumDetectors(TOT_NUMER_DETECTORS)
 {
-  fevt=new HTMicroballRootEvent();
+  fMicroball=new HTMicroballArray();
+  fevt=new HTMicroballRootEvent(fNumDetectors);
   fType.assign("HTMicroball");
 }
 
 //________________________________________________
 HTMicroball::~HTMicroball()
 {
+  if(fMicroball) delete [] fMicroball;
   if(fevt) delete fevt;
 }
 

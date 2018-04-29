@@ -66,8 +66,6 @@ int HTVetoWallMap::ParseMapLine(const char * line_to_parse)
   LineStream>>DetectorName>>ChName>>DetectorToSet>>ModuleName>>ModuleChannelString;
   if(DetectorName.compare(fName)!=0) return 0;
 
-  printf("Sempre colpa di zibibbi: %s %s %s %s %s\n", DetectorName.c_str(), ChName.c_str(), DetectorToSet.c_str(), ModuleName.c_str(), ModuleChannelString.c_str());
-
   DetectorToSet.assign(DetectorToSet.substr(DetectorToSet.find("detector=\"")+10,DetectorToSet.find_last_of("\"")-(DetectorToSet.find("detector=\"")+10)));
   ModuleName.assign(ModuleName.substr(ModuleName.find("module=\"")+8,ModuleName.find_last_of("\"")-(ModuleName.find("module=\"")+8)));
   ModuleChannelString.assign(ModuleChannelString.substr(ModuleChannelString.find("channel=\"")+9,ModuleChannelString.find_last_of("\"")-(ModuleChannelString.find("channel=\"")+9)));

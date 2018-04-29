@@ -92,6 +92,8 @@ int HTMapper::InitRootOutput()
   //call individual detectors InitTTreeBranch
   gExpSetup->InitDetectorBranches(fMappedTree);
 
+  printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", gExperimentInfo->GetMappedRootFilePath(), fRunNumber));
+
   return 0;
 }
 

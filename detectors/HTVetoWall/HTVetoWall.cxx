@@ -2,8 +2,10 @@
 
 //________________________________________________
 HTVetoWall::HTVetoWall(const char * name, int num_bars) : HTDetector(name, num_bars),
+fVetoWall(0),
 fevt(0)
 {
+  fVetoWall=new HTVetoWallArray(fNumDetectors);
   fevt=new HTVetoWallRootEvent(fNumDetectors);
   fType.assign("HTVetoWall");
 }
@@ -11,6 +13,7 @@ fevt(0)
 //________________________________________________
 HTVetoWall::~HTVetoWall()
 {
+  if(fVetoWall) delete fVetoWall;
   if(fevt) delete fevt;
 }
 

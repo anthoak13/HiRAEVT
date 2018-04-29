@@ -30,7 +30,7 @@
 define detector HiRA "HiRA" 12
 define detector NeutronWall "NWA" 25
 define detector NeutronWall "NWB" 25
-define detector VetoWall"VetoWall" 25
+define detector VetoWall "VetoWall" 25
 define detector ForwardArray "ForwardArray" 18
 define detector Microball "uBall"
 define detector SisTimestampe15190 "Timestamp0"

@@ -1,21 +1,29 @@
 #include <HTMicroballRootEvent.h>
 
-/* WARNING: uBall number of rings and detectors per ring is fixed */
-const int N_RINGS = 9;
-const int N_DETS[] = {6, 10, 12, 12, 14, 14, 12, 10, 6};
-// Detector numbering within a ring starts from 1 but the arrays start from 0
-/******************************************************************/
-
 //________________________________________________
-HTMicroballData::HTMicroballData()
-{}
+HTMicroballData::HTMicroballData(int num_detectors)
+{
+  fnumring =new Int_t   [num_detectors];
+  fnumdet  =new Int_t   [num_detectors];
+  fTail    =new Short_t [num_detectors];
+  fE       =new Short_t [num_detectors];
+  fTime    =new Short_t [num_detectors];
+}
 
 //________________________________________________
 HTMicroballData::~HTMicroballData()
-{}
+{
+  delete [] fnumring;
+  delete [] fnumdet ;
+  delete [] fTail   ;
+  delete [] fE      ;
+  delete [] fTime   ;
+}
 
 //________________________________________________
-HTMicroballRootEvent::HTMicroballRootEvent()
+HTMicroballRootEvent::HTMicroballRootEvent(int num_detectors) :
+fNumDetectors(num_detectors),
+fMicroball(fNumDetectors)
 {}
 
 //________________________________________________
