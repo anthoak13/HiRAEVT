@@ -33,13 +33,18 @@ export PATH=$HiRAEVTBIN:$PATH
 #Making scripts executable
 chmod +x ${HiRAEVTBIN}/HiRAEVT*
 
-if [ "$hostname" = "ember" ]; then
-  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerEmber.exe'
-  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperEmber.exe'
-elif [ "$hostname" = "seaside" ]; then
-  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerSeaside.exe'
-  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperSeaside.exe'
-else
-  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerFishtank.exe'
-  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperFishtank.exe'
-fi
+#Setting executable file name
+case $HOSTNAME in
+  (ember) 
+    export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerEmber.exe'
+    export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperEmber.exe'
+  ;;
+  (seaside)
+    export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerSeaside.exe'
+    export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperSeaside.exe'
+  ;;
+  (*)
+    export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerFishtank.exe'
+    export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperFishtank.exe'  
+  ;;
+esac
