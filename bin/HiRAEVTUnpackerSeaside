@@ -72,7 +72,7 @@ module add intel
 
 cd ${HiRAEVTPath}
 source ${HiRAEVTPath}/bin/HiRAEVT.sh
-eval '${HiRAEVTPath}/bin/HiRAEVTUnpacker.exe --source=file://'$file_evt' --sink=file:///dev/null'
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTUNPACKEREXECUTABLE} --source=file://'$file_evt' --sink=file:///dev/null'
 EOF
    ((i++))
    qsub submit.sh

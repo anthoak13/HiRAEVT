@@ -33,8 +33,13 @@ export PATH=$HiRAEVTBIN:$PATH
 #Making scripts executable
 chmod +x ${HiRAEVTBIN}/HiRAEVT*
 
-#Set the compiler
-#if [ "$(hostname)" = "seaside" ]
-#then export ROOTCLINGORCINT='rootcint'
-#else export ROOTCLINGORCINT='rootcling'
-#fi
+if [ "$hostname" = "ember" ]; then
+  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerEmber.exe'
+  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperEmber.exe'
+elif [ "$hostname" = "seaside" ]; then
+  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerSeaside.exe'
+  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperSeaside.exe'
+else
+  export NAMEHIRAEVTUNPACKEREXECUTABLE='HiRAEVTUnpackerFishtank.exe'
+  export NAMEHIRAEVTMAPPEREXECUTABLE='HiRAEVTMapperFishtank.exe'
+fi

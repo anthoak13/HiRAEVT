@@ -33,6 +33,6 @@ if [ ! -d "${RootFilesPath}" ]; then #the directory of ROOT files does not exist
     echo "Error: missing or incorrect ROOT files location"; continue
 fi
 
-eval '${HiRAEVTPath}/bin/HiRAEVTMapper.exe --run='${run_num}''
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
 
 done

@@ -44,7 +44,7 @@ HiRAEVTMapper.exe : $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(CFLAGS) $(RLIBS)
 
 install:
-	@cp HiRAEVTMapper.exe $(HiRAEVTBIN)/.
+	@cp HiRAEVTMapper.exe $(HiRAEVTBIN)/${NAMEHIRAEVTMAPPEREXECUTABLE}
 
 .PHONY: clean
 clean :
@@ -52,7 +52,7 @@ clean :
 
 .PHONY: distclean
 distclean: clean
-	@rm -f $(HiRAEVTBIN)/HiRAEVTMapper.exe
+	@rm -f $(HiRAEVTBIN)/${NAMEHIRAEVTMAPPEREXECUTABLE}
 
 .PHONY: lint
 lint:

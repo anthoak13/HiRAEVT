@@ -36,14 +36,14 @@ all : build
 build : HiRAEVTUnpacker.exe
 
 install:
-	@cp HiRAEVTUnpacker.exe $(HiRAEVTBIN)/.
+	@cp HiRAEVTUnpacker.exe $(HiRAEVTBIN)/${NAMEHIRAEVTUNPACKEREXECUTABLE}
 	@cp gofilter $(HiRAEVTBIN)/.
 
 clean :
 	rm -f $(OBJECTS) Unpacker.o HiRAEVTUnpacker.exe
 
 distclean: clean
-	@rm -f $(HiRAEVTBIN)/HiRAEVTUnpacker.exe
+	@rm -f $(HiRAEVTBIN)/${NAMEHIRAEVTUNPACKEREXECUTABLE}
 	@rm -f $(HiRAEVTBIN)/gofilter
 
 # Build this separately and then link in later
