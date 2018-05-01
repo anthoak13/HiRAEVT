@@ -177,7 +177,7 @@ Output data is stored in a tree called EXXXXX, where XXXXX represents the experi
 The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.  
 Here a summary of the data structures for each individual detector:
 
-HiRA  
+**__HiRA__**  
 |- fDE  
 |   + int fmulti  
 |   + int fnumstrip\[fmulti\]  
