@@ -78,8 +78,10 @@ WARNING: it is temporarly not possible to compile and run the program from NSCL 
 ### Configure the program
 The program can run over different experimental configurations (DAQ, detectors, ...) without be re-compiled. All the information needed can be configured from the file "config/RIBbit2.conf". This is the only file that the user has to change to configure the program. In the special language used to read the file, the character '\*' is used to provide a comment. Following a detailed list of the fields to configure:
 * set HiRAEVT_DIR : this command sets the directory of the RIBbit2 installation
-* set HiRAEVTUNPACKER_SUMMARY_PATH : use this command to specify a folder to store the standard output of the unpacking process when the code is run in batch mode (i.e. ember or seaside)
+* set HiRAEVTUNPACKER_SUMMARY_PATH : use this command to specify a folder to store the standard output of the unpacking process (HiRAEVTUnpacker) when the code is run in batch mode (i.e. ember or seaside)
 * set HiRAEVTUNPACKER_ROOT_FILE_PATH : this command sets the location of the ROOT files obtained by HiRAEVTUnpacker
+* set HiRAEVTMAPPER_SUMMARY_PATH : use this command to specify a folder to store the standard output of the mapping process (HiRAEVTMapper) when the code is run in batch mode (i.e. ember or seaside)
+* set HiRAEVTMAPPER_ROOT_FILE_PATH : this command sets the location of the ROOT files obtained by HiRAEVTMapper
 * set EXPERIMENT_NAME : the name of the experiment (i.e. 15190)
 * set EXPERIMENT_TITLE : a generic title to describe the experiment
 * set MERGED_DATA : this command can be "true" if data is merged or "false" if data is not merged
@@ -122,9 +124,11 @@ This works for a single run (RUN_NUMBER). For a group of runs FIRST_RUN~LAST_RUN
 ````
 $ HiRAEVTUnpackerSeaside FIRST_RUN LAST_RUN
 ````
+When the program is launched in batch mode, the video output is saved in a summary file, whose location can be configured by setting HiRAEVTUNPACKER_SUMMARY_PATH in the configuration file (see section "Configure the Program"). The summary files are individually named by including run number and evt file number.
+
 WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Output Data
-Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
+Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTUNPACKER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
 ### User Summary Information
 Useful user information and a general unpacking summary can be retrieved from the tree by using the following command after opening the tree with ROOT:
 ````
@@ -135,6 +139,38 @@ Where EXXXXX represents the TTree key with which the tree is saved on the file o
 $ EXXXXX->GetUserInfo()->Print()
 ````
 ## The HiRAEVTMapper Program
-The design and implementation of the program are in progress.
+### Run the code
+It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main HiRAEVT folder):
+````
+$ HiRAEVTMapper RUN_NUMBER
+````
+where RUN_NUMBER indicates the number of run to unpack. A group of runs can be unpacked by using:
+````
+$ HiRAEVTMapper FIRST_RUN LAST_RUN
+````
+where FIRST_RUN and LAST_RUN define the range of runs to unpack. Please note that if FIRST_RUN=LAST=RUN, the second command is equivalent to the first.
+### Run the Code on NSCL ember or seaside
+The program is designed to run interactively on NSCL fishtank-like machines or interactively or in batch on NSCL clusters like ember or seaside. The above mentioned commands work in the same way when one wants to launch the program interactively on ember or seaside. When on ember or seaside, the program can be also launched in batch mode, respectively using SLURM or PBS queue systems.
+To launch the program with SLURM batch mode in ember use the command:
+````
+$ HiRAEVTMapperEmber RUN_NUMBER
+````
+This works for a single run (RUN_NUMBER). For a group of runs FIRST_RUN~LAST_RUN instead use the command:
+````
+$ HiRAEVTMapperEmber FIRST_RUN LAST_RUN
+````
+Analogous commands can be used to launch the program in seaside by using PBS queue system:
+````
+$ HiRAEVTMapperSeaside RUN_NUMBER
+````
+This works for a single run (RUN_NUMBER). For a group of runs FIRST_RUN~LAST_RUN instead use the command:
+````
+$ HiRAEVTMapperSeaside FIRST_RUN LAST_RUN
+````
+When the program is launched in batch mode, the video output is saved in a summary file, whose location can be configured by setting HiRAEVTMAPPER_SUMMARY_PATH in the configuration file (see section "Configure the Program"). The summary files are individually named by including run number.
+
+WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
+### Output Data
+Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
 ## The HiRAEVTAnalyzer Program
 The program has to be designed.
