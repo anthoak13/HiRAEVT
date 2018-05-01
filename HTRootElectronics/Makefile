@@ -5,10 +5,11 @@ SrcSuf    := cxx
 ObjSuf    := o
 
 INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  := -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 
-RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lHTShared
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

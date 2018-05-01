@@ -65,7 +65,7 @@ void HTNeutronWall::BuildEvent()
 //________________________________________________
 void HTNeutronWall::FillMappedData()
 {
-  //Retrieving information from HTNeutronWallArray to fill HTNeutronWallRootEvent object
+  //Retrieving information from HTNeutronWallArray to fill HTNeutronWallData object
   fevt->fNeutronWall.fmulti=0;
   for(int NumBar=0; NumBar<fNumDetectors; NumBar++) {
     HTNeutronWallBar * BarToFill = fNeutronWall->GetBar(NumBar);

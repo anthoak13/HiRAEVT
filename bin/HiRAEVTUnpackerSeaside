@@ -80,3 +80,5 @@ EOF
 
 done
 done
+
+rm submit.sh

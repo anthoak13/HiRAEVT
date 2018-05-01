@@ -1,17 +1,19 @@
 #include <HTMicroball.h>
 
-/* WARNING: uBall number of rings and detectors per ring is fixed */
-const int N_RINGS = 9;
-const int N_DETS[] = {6, 10, 12, 12, 14, 14, 12, 10, 6};
-const int TOT_NUMER_DETECTORS = 96;
-// Detector numbering within a ring starts from 1 but the arrays start from 0
-/******************************************************************/
+// WARNING: Detector numbering within a ring starts from 1 but the arrays start from 0
+
+#define dModuleFast(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetFastModule(ring, det)
+#define dChannelFast(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetFastChannel(ring, det)
+#define dModuleTail(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetTailModule(ring, det)
+#define dChannelTail(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetTailChannel(ring, det)
+#define dModuleTime(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetTimeModule(ring, det)
+#define dChannelTime(ring, det) ((HTMicroballMap *)fDetectorMapping)->GetTimeChannel(ring, det)
 
 //________________________________________________
 HTMicroball::HTMicroball(const char * name) : HTDetector(name),
 fMicroball(0),
 fevt(0),
-fNumDetectors(TOT_NUMER_DETECTORS)
+fNumDetectors(TOT_NUMER_MICROBALL_DETECTORS)
 {
   fMicroball=new HTMicroballArray();
   fevt=new HTMicroballRootEvent(fNumDetectors);
@@ -42,6 +44,15 @@ void HTMicroball::InitTTreeBranch(TTree * theTree)
 void HTMicroball::BuildEvent()
 {
   //Retrieving information from HTRootModule types
+  for(int NumRing=0; NumRing<N_MICROBALL_RINGS; NumRing++) {
+    HTMicroballRing * currRing =fMicroball->GetRing(NumRing);
+    for(int NumDet=0; NumDet<N_MICROBALL_DETS_PER_RING[NumRing]; NumDet++) {
+      HTMicroballDetector * currDet = currRing->GetDetector(NumDet+1); //WARNING: uBall detectors start from 1
+      currDet->SetTail(dModuleTail(NumRing, NumDet)>=0 ? ((HTRootCAEN7xx *)fModules[dModuleTail(NumRing, NumDet)])->GetData(dChannelTail(NumRing, NumDet)) : -9999);
+      currDet->SetFast(dModuleFast(NumRing, NumDet)>=0 ? ((HTRootCAEN7xx *)fModules[dModuleFast(NumRing, NumDet)])->GetData(dChannelFast(NumRing, NumDet)) : -9999);
+      currDet->SetTime(dModuleTime(NumRing, NumDet)>=0 ? ((HTRootCAEN7xx *)fModules[dModuleTime(NumRing, NumDet)])->GetData(dChannelTime(NumRing, NumDet)) : -9999);
+    }
+  }
 
   //Fill Root Event structure to be written on the tree
   FillMappedData();
@@ -52,6 +63,22 @@ void HTMicroball::BuildEvent()
 //________________________________________________
 void HTMicroball::FillMappedData()
 {
+  //Retrieving information from HTMicroballArray to fill HTMicroballData object
+  fevt->fMicroball.fmulti=0;
+  for(int NumRing=0; NumRing<N_MICROBALL_RINGS; NumRing++) {
+    HTMicroballRing * RingToFill =fMicroball->GetRing(NumRing);
+    for(int NumDet=0; NumDet<N_MICROBALL_DETS_PER_RING[NumRing]; NumDet++) {
+      HTMicroballDetector * DetToFill = RingToFill->GetDetector(NumDet+1); //WARNING: uBall detectors start from 1
+      if(DetToFill->GetTail()>0 && DetToFill->GetFast()>0 && DetToFill->GetTime()>0)
+      {
+        fevt->fMicroball.fnumdet[fevt->fMicroball.fmulti]=NumDet+1; //WARNING: detectors are counted from 1 in each ring
+        fevt->fMicroball.fTail[fevt->fMicroball.fmulti]=DetToFill->GetTail();
+        fevt->fMicroball.fFast[fevt->fMicroball.fmulti]=DetToFill->GetFast();
+        fevt->fMicroball.fTime[fevt->fMicroball.fmulti]=DetToFill->GetTime();
+        fevt->fMicroball.fmulti++;
+      }
+    }
+  }
 
   return;
 }

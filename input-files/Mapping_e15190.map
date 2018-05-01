@@ -18,7 +18,7 @@
 **************************************************
 **
 ** Possible values of ChName for each detector:
-** HiRA: EF EFTIME CSIENE CSITIME
+** HiRA: EF EB DE CSIENE CSITIME
 ** NeutronWall: LEFT LEFTFAST LEFTTIME RIGHT RIGHTFAST RIGHTTIME
 ** VetoWall: TOP TOPTIME BOTTOM BOTTOMTIME
 ** ForwardArray: ENERGY TIME

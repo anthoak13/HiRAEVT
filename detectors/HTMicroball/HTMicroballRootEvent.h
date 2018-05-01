@@ -10,7 +10,7 @@ public:
   Int_t    *fnumring;     //[fmulti]
   Int_t    *fnumdet;      //[fmulti]
   Short_t  *fTail;        //[fmulti]
-  Short_t  *fE;           //[fmulti]
+  Short_t  *fFast;        //[fmulti]
   Short_t  *fTime;        //[fmulti]
 
   HTMicroballData(int);

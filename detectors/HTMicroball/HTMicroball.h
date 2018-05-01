@@ -7,6 +7,7 @@
 #include <HTMicroballMap.h>
 #include <HTRootCAEN7xx.h>
 #include <HTDetector.h>
+#include <HTShared.h>
 
 #include <HTMicroballArray.h>
 

@@ -28,7 +28,7 @@ Short_t HTRootCAEN7xx::GetData(int ch) const
   if(datum!=fOverflow) {
     datum-=fPedestals[ch];
   }
-  return datum;
+  return datum>=0 ? datum : -9999;
 }
 
 //________________________________________________

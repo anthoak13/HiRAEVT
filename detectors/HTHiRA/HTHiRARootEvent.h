@@ -2,8 +2,9 @@
 #define HTHIRAROOTEVENT_H
 
 #include <TROOT.h>
+#include <HTShared.h>
 
-class HTHiRAStrip
+class HTHiRAStripData
 {
 public:
   Int_t    fmulti;
@@ -12,13 +13,13 @@ public:
   UShort_t *fEnergyLo;   //[fmulti]
   UShort_t *fTime;       //[fmulti]
 
-  HTHiRAStrip();
-  virtual ~HTHiRAStrip();
+  HTHiRAStripData();
+  virtual ~HTHiRAStripData();
 
-  ClassDef(HTHiRAStrip,1);
+  ClassDef(HTHiRAStripData,1);
 };
 
-class HTHiRACsI
+class HTHiRACsIData
 {
 public:
   Int_t    fmulti;
@@ -26,19 +27,19 @@ public:
   UShort_t *fEnergy;     //[fmulti]
   Double_t *fTime;       //[fmulti]
 
-  HTHiRACsI();
-  virtual ~HTHiRACsI();
+  HTHiRACsIData();
+  virtual ~HTHiRACsIData();
 
-  ClassDef(HTHiRACsI,1);
+  ClassDef(HTHiRACsIData,1);
 };
 
 class HTHiRAData
 {
 public:
-  HTHiRAStrip fDE;
-  HTHiRAStrip fEF;
-  HTHiRAStrip fEB;
-  HTHiRACsI   fCsI;
+  HTHiRAStripData fDE;
+  HTHiRAStripData fEF;
+  HTHiRAStripData fEB;
+  HTHiRACsIData   fCsI;
 
   HTHiRAData();
   virtual ~HTHiRAData();

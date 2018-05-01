@@ -16,10 +16,10 @@ public :
   int GetBottomChannel(int num_bar) const {return fBottomChannel[num_bar];}
   int GetTopModule(int num_bar) const {return fTopModule[num_bar];}
   int GetTopChannel(int num_bar) const {return fTopChannel[num_bar];}
-  int GetBottomTimeModule(int num_bar) const {return fBottomTimeModule[num_bar];}
-  int GetBottomTimeChannel(int num_bar) const {return fBottomTimeChannel[num_bar];}
-  int GetTopTimeModule(int num_bar) const {return fTopTimeModule[num_bar];}
-  int GetTopTimeChannel(int num_bar) const {return fTopTimeChannel[num_bar];}
+  int GetTimeBottomModule(int num_bar) const {return fBottomTimeModule[num_bar];}
+  int GetTimeBottomChannel(int num_bar) const {return fBottomTimeChannel[num_bar];}
+  int GetTimeTopModule(int num_bar) const {return fTopTimeModule[num_bar];}
+  int GetTimeTopChannel(int num_bar) const {return fTopTimeChannel[num_bar];}
 
 private :
   int fNumBars;

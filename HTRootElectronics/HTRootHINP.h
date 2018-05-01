@@ -11,7 +11,8 @@ public :
   HTRootHINP(const char *);
   ~HTRootHINP();
 
-  TTreeReaderValue<RBHINPHit> * GetDataPointer() const;
+  TTreeReaderValue<RBHINPHit> * GetDataPointer() const;    //!Get a pointer to the TTreeReader value 
+  void InitTreeInputBranch(TTreeReader&) override;         //!Set Input TTreeReader Branch
 
 private :
   TTreeReaderValue<RBHINPHit> * fData;

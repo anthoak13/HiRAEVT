@@ -16,9 +16,9 @@ void HTMicroballDetector::SetTail (Short_t new_value)
 }
 
 //______________________________________________________________________________
-void HTMicroballDetector::SetE (Short_t new_value)
+void HTMicroballDetector::SetFast (Short_t new_value)
 {
-  fE=new_value;
+  fFast=new_value;
 }
 
 //______________________________________________________________________________
@@ -34,9 +34,9 @@ Short_t HTMicroballDetector::GetTail () const
 }
 
 //______________________________________________________________________________
-Short_t HTMicroballDetector::GetE () const
+Short_t HTMicroballDetector::GetFast () const
 {
-  return fE;
+  return fFast;
 }
 
 //______________________________________________________________________________
@@ -49,6 +49,6 @@ Short_t HTMicroballDetector::GetTime () const
 void HTMicroballDetector::Clear ()
 {
   fTail=-9999;
-  fE=-9999;
+  fFast=-9999;
   fTime=-9999;
 }

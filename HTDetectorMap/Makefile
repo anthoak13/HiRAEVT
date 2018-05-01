@@ -5,9 +5,10 @@ SrcSuf    := cxx
 ObjSuf    := o
 
 INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  := -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 
-RLIBS     := -L$(HiRAEVTLIB)
+RLIBS     := -L$(HiRAEVTLIB) -lHTShared
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

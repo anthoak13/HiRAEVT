@@ -2,6 +2,7 @@
 #define HTMICROBALLARRAY_H
 
 #include <TROOT.h>
+#include <HTShared.h>
 
 #include <HTMicroballRing.h>
 

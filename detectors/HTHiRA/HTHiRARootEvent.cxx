@@ -1,21 +1,16 @@
 #include <HTHiRARootEvent.h>
 
-/* WARNING: HiRA number of strips and CsIs per telescope is fixed */
-const int N_STRIPS = 32;
-const int N_CSI = 4;
-/******************************************************************/
-
 //________________________________________________
-HTHiRAStrip::HTHiRAStrip() : fmulti(0)
+HTHiRAStripData::HTHiRAStripData() : fmulti(0)
 {
-  fnumstrip =new Int_t    [N_STRIPS];
-  fEnergyHi =new UShort_t [N_STRIPS];
-  fEnergyLo =new UShort_t [N_STRIPS];
-  fTime     =new UShort_t [N_STRIPS];
+  fnumstrip =new Int_t    [N_STRIPS_PER_TELESCOPE];
+  fEnergyHi =new UShort_t [N_STRIPS_PER_TELESCOPE];
+  fEnergyLo =new UShort_t [N_STRIPS_PER_TELESCOPE];
+  fTime     =new UShort_t [N_STRIPS_PER_TELESCOPE];
 }
 
 //________________________________________________
-HTHiRAStrip::~HTHiRAStrip()
+HTHiRAStripData::~HTHiRAStripData()
 {
   delete [] fnumstrip;
   delete [] fEnergyHi;
@@ -24,15 +19,15 @@ HTHiRAStrip::~HTHiRAStrip()
 }
 
 //________________________________________________
-HTHiRACsI::HTHiRACsI() : fmulti(0)
+HTHiRACsIData::HTHiRACsIData() : fmulti(0)
 {
-  fnumcsi =new Int_t    [N_CSI];
-  fEnergy =new UShort_t [N_CSI];
-  fTime   =new Double_t [N_CSI];
+  fnumcsi =new Int_t    [N_CSIS_PER_TELESCOPE];
+  fEnergy =new UShort_t [N_CSIS_PER_TELESCOPE];
+  fTime   =new Double_t [N_CSIS_PER_TELESCOPE];
 }
 
 //________________________________________________
-HTHiRACsI::~HTHiRACsI()
+HTHiRACsIData::~HTHiRACsIData()
 {
   delete [] fnumcsi;
   delete [] fEnergy;
