@@ -27,6 +27,7 @@ Table of contents
   * [Requirements](#requirements)
   * [Environment Variables](#env-variables)
   * [Compile the Code](#compilation)
+  * [Compile the Code on NSCL ember or seaside](#compilation-nscl)
   * [Configure the Program](#configure)
 * [The HiRAEVTUnpacker Program](#unpacker)
   * [Run the Code](#run-unpacker)
@@ -67,6 +68,8 @@ $ make
 $ make install
 ````
 The binary file bin/HiRAEVTUnpacker.exe is generated in the compilation.
+### Compile the Code on NSCL ember or seaside
+The code can be independently compiled on the NSCL clusters emeber or seaside.
 ### Configure the program
 The program can run over different experimental configurations (DAQ, detectors, ...) without be re-compiled. All the information needed can be configured from the file "config/RIBbit2.conf". This is the only file that the user has to change to configure the program. In the special language used to read the file, the character '\*' is used to provide a comment. Following a detailed list of the fields to configure:
 * set HiRAEVT_DIR : this command sets the directory of the RIBbit2 installation
