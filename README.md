@@ -175,6 +175,17 @@ WARNING: it is temporarly not possible to compile and run the program from NSCL 
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTMAPPER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
 
 The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.
+
+Here a summary of the data structures for each individual detector:
+
+HiRA
+|- fDE
+|   + int fmulti\n
+|   + int fnumstrip\[fmulti\]
+|   + UShort_t fEnergyHi\[fmulti\]
+|   + UShort_t fEnergyLo\[fmulti\]
+|   + UShort_t fTime\[fmulti\]
+
 ## Notes for Developers
  - The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm is used to produce (telescope, motherboard, chip, channel) -> (strip) associations. Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char \*).
  - Despite the output tree and related structures contain a branch for the DE stage of HiRA (Single Sided Silicon Strip Detector), mapping algorithms and maps have to be implemented. For a future extension of the program features to this detection stage the following files have to be modified: detectors/HTHiRA.cxx HTDetectorMap/HTHiRAMap.h HTDetectorMap/HTHiRAMap.cxx.
