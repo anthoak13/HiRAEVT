@@ -93,7 +93,24 @@ $ HiRAEVTUnpacker FIRST_RUN LAST_RUN
 ````
 where FIRST_RUN and LAST_RUN define the range of runs to unpack. Please note that if FIRST_RUN=LAST=RUN, the second command is equivalent to the first.
 ### Run the Code on NSCL ember or seaside
-The program is designed to run interactively on fishtank-like machines or interactively or in batch on NSCL clusters like ember or seaside. The above mentioned commands work in the same way when one wants to launch the program interactively on ember or seaside. When on ember or seaside, the program can be also launched in batch mode, respectively using SLURM or PBS queue systems.
+The program is designed to run interactively on NSCL fishtank-like machines or interactively or in batch on NSCL clusters like ember or seaside. The above mentioned commands work in the same way when one wants to launch the program interactively on ember or seaside. When on ember or seaside, the program can be also launched in batch mode, respectively using SLURM or PBS queue systems.
+To launch the program with SLURM batch mode in ember use the command:
+````
+$ HiRAEVTUnpackerEmber RUN_NUMBER
+````
+This works for a single run (RUN_NUMBER). For a group of runs FIRST_RUN~LAST_RUN instead use the command:
+````
+$ HiRAEVTUnpackerEmber FIRST_RUN LAST_RUN
+````
+Analogous commands can be used to launch the program in seaside by using PBS queue system:
+````
+$ HiRAEVTUnpackerSeaside RUN_NUMBER
+````
+This works for a single run (RUN_NUMBER). For a group of runs FIRST_RUN~LAST_RUN instead use the command:
+````
+$ HiRAEVTUnpackerSeaside FIRST_RUN LAST_RUN
+````
+WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Output Data
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
 ### User Summary Information
