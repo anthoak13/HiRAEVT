@@ -138,6 +138,7 @@ Where EXXXXX represents the TTree key with which the tree is saved on the file o
 ````
 $ EXXXXX->GetUserInfo()->Print()
 ````
+## Notes for Developers
 ## The HiRAEVTMapper Program
 ### Run the code
 It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main HiRAEVT folder):
@@ -171,6 +172,10 @@ When the program is launched in batch mode, the video output is saved in a summa
 
 WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Output Data
-Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
+Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTMAPPER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
+
+The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.
+## Notes for Developers
+--The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm used to produce (telescope, motherboard, chip, channel) -> (strip). Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char *).
 ## The HiRAEVTAnalyzer Program
 The program has to be designed.
