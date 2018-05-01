@@ -176,6 +176,6 @@ Output data is stored in a tree called EXXXXX, where XXXXX represents the experi
 
 The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.
 ## Notes for Developers
--The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm used to produce (telescope, motherboard, chip, channel) -> (strip). Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char *).
+ -The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm used to produce (telescope, motherboard, chip, channel) -> (strip). Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char *).
 ## The HiRAEVTAnalyzer Program
 The program has to be designed.
