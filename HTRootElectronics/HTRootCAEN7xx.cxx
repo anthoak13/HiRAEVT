@@ -6,7 +6,7 @@ fNumCh(32),
 fData(0),
 fPedestals(0),
 fPedestalsLoaded(false),
-fOverflow(4095)
+fOverflow(4096)
 {
   fPedestals = new double[fNumCh];
   for(int i=0; i<fNumCh; i++) {
