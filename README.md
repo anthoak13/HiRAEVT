@@ -74,7 +74,7 @@ The binary files bin/HiRAEVTUnpacker.exe bin/HiRAEVTMapper.exe are generated in 
 ### Compile the Code on NSCL ember or seaside
 The code can be independently compiled on the NSCL clusters ember or seaside. A compilation under ember or seaside does not erase a previous compilation under a third machine. Compiling the code on ember or seaside will generate, respectively, the bineary files bin/HiRAEVTUnpackerEmber.exe bin/HiRAEVTMapperEmber.exe or bin/HiRAEVTUnpackerSeaside.exe bin/HiRAEVTMapperSeaside.exe.
 
-WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
+**_WARNING_**: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Configure the program
 The program can run over different experimental configurations (DAQ, detectors, ...) without be re-compiled. All the information needed can be configured from the file "config/RIBbit2.conf". This is the only file that the user has to change to configure the program. In the special language used to read the file, the character '\*' is used to provide a comment. Following a detailed list of the fields to configure:
 * set HiRAEVT_DIR : this command sets the directory of the RIBbit2 installation
@@ -126,7 +126,7 @@ $ HiRAEVTUnpackerSeaside FIRST_RUN LAST_RUN
 ````
 When the program is launched in batch mode, the video output is saved in a summary file, whose location can be configured by setting HiRAEVTUNPACKER_SUMMARY_PATH in the configuration file (see section "Configure the Program"). The summary files are individually named by including run number and evt file number.
 
-WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
+**_WARNING_**: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Output Data
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTUNPACKER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
 ### User Summary Information
@@ -170,7 +170,7 @@ $ HiRAEVTMapperSeaside FIRST_RUN LAST_RUN
 ````
 When the program is launched in batch mode, the video output is saved in a summary file, whose location can be configured by setting HiRAEVTMAPPER_SUMMARY_PATH in the configuration file (see section "Configure the Program"). The summary files are individually named by including run number.
 
-WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
+**_WARNING_**: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Output Data
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTMAPPER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
 
@@ -184,7 +184,55 @@ Here a summary of the data structures for each individual detector:
 |&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyHi\[fmulti\]  
 |&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyLo\[fmulti\]  
 |&nbsp;&nbsp;&nbsp;+ UShort_t fTime\[fmulti\]  
-
+|- **fEF**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumstrip\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyHi\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyLo\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fTime\[fmulti\]  
+|- **fEB**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumstrip\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyHi\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyLo\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fTime\[fmulti\]  
+|- **fCsI**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumcsi\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fEnergy\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fTime\[fmulti\]  
+**_NeutronWall_**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumbar\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fLeft\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fRight\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fFastLeft\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fFastRight\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fTimeLeft\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fTimeRight\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fGeoMean\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fFastGeoMean\[fmulti\]  
+**_VetoWall_**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumbar\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fBottom\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fTop\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fTimeBottom\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Double_t fTimeTop\[fmulti\]  
+**_ForwardArray_**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumdet\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fEnergy\[fmulti\]  
+**_Microball_**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumring\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ int fnumdet\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fFast\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fTail\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ Short_t fTime\[fmulti\]  
+**_HTSisTimestampe15190_**
+|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestamp  
+|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestampKoreans
 ## Notes for Developers
  - The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm is used to produce (telescope, motherboard, chip, channel) -> (strip) associations. Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char \*).
  - Despite the output tree and related structures contain a branch for the DE stage of HiRA (Single Sided Silicon Strip Detector), mapping algorithms and maps have to be implemented. For a future extension of the program features to this detection stage the following files have to be modified: detectors/HTHiRA.cxx HTDetectorMap/HTHiRAMap.h HTDetectorMap/HTHiRAMap.cxx.
