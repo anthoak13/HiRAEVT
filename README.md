@@ -177,13 +177,13 @@ Output data is stored in a tree called EXXXXX, where XXXXX represents the experi
 The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.  
 Here a summary of the data structures for each individual detector:
 
-**__HiRA__**  
-|- fDE  
-|   + int fmulti  
-|   + int fnumstrip\[fmulti\]  
-|   + UShort_t fEnergyHi\[fmulti\]  
-|   + UShort_t fEnergyLo\[fmulti\]  
-|   + UShort_t fTime\[fmulti\]  
+**_HiRA_**  
+|- **fDE**  
+|&nbsp;&nbsp;&nbsp;+ int fmulti  
+|&nbsp;&nbsp;&nbsp;+ int fnumstrip\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyHi\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fEnergyLo\[fmulti\]  
+|&nbsp;&nbsp;&nbsp;+ UShort_t fTime\[fmulti\]  
 
 ## Notes for Developers
  - The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm is used to produce (telescope, motherboard, chip, channel) -> (strip) associations. Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char \*).
