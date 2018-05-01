@@ -98,7 +98,7 @@ int HTNeutronWallMap::ParseMapLine(const char * line_to_parse)
     fLeftFastChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("LEFTTIME")==0) {
     fLeftTimeModule[DetectorNumber]=ModuleNumber;
-    fRightTimeChannel[DetectorNumber]=ModuleChannel;
+    fLeftTimeChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("RIGHT")==0) {
     fRightModule[DetectorNumber]=ModuleNumber;
     fRightChannel[DetectorNumber]=ModuleChannel;

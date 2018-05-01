@@ -79,7 +79,7 @@ int HTVetoWallMap::ParseMapLine(const char * line_to_parse)
     fBottomChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("BOTTOMTIME")==0) {
     fBottomTimeModule[DetectorNumber]=ModuleNumber;
-    fTopTimeChannel[DetectorNumber]=ModuleChannel;
+    fBottomTimeChannel[DetectorNumber]=ModuleChannel;
   } else if (ChName.compare("TOP")==0) {
     fTopModule[DetectorNumber]=ModuleNumber;
     fTopChannel[DetectorNumber]=ModuleChannel;
