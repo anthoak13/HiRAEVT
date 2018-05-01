@@ -90,7 +90,7 @@ The program can run over different experimental configurations (DAQ, detectors, 
 * set PEDESTAL_VALUES : set pedestal values for electronic channels. This command supports the --run and --exclude flags.
 * set CHANNEL_MAPPING : define detectors and set mapping. This command supports the --run and --exclude flags.
 ### Limitations
-The code is explicitly designed to by a highly versatile tool. Anyway, some limitations are present (and maybe more limitations will be found in more specific cases):
+The code is explicitly designed to by a highly versatile tool. Anyway, some limitations are present (and maybe more limitations will be found in the future in more specific cases):
  - The code needs to be launched from the program main folder;
  - The class RBSisTimestamp is specificallu designed for the timestamp configuration used in e15190.
 ## The HiRAEVTUnpacker Program
