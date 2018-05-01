@@ -53,6 +53,7 @@ install:
 distclean:
 	@rm -f $(HTVETOWALL_LIB) $(HTVETOWALL_DICT) $(HTVETOWALL_DICTH) $(HTVETOWALL_PCM)
 	@rm -f $(HiRAEVTLIB)/$(HTVETOWALL_LIB)
+	@rm -f $(HiRAEVTLIB)/$(HTVETOWALL_PCM)
 
 .PHONY: clean
 clean:

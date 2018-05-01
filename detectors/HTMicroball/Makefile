@@ -54,6 +54,7 @@ install:
 distclean:
 	@rm -f $(HTMICROBALL_LIB) $(HTMICROBALL_DICT) $(HTMICROBALL_DICTH) $(HTMICROBALL_PCM)
 	@rm -f $(HiRAEVTLIB)/$(HTMICROBALL_LIB)
+	@rm -f $(HiRAEVTLIB)/$(HTMICROBALL_PCM)
 
 .PHONY: clean
 clean:

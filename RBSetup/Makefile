@@ -55,6 +55,7 @@ install:
 distclean:
 	@rm -f $(RBSETUP_LIB) $(RBSETUP_DICT) $(RBSETUP_DICTH) $(RBSETUP_PCM)
 	@rm -f $(HiRAEVTLIB)/$(RBSETUP_LIB)
+	@rm -f $(HiRAEVTLIB)/$(RBSETUP_PCM)	
 
 .PHONY: clean
 clean:

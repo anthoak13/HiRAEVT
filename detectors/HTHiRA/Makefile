@@ -55,6 +55,7 @@ install:
 distclean:
 	@rm -f $(HTHIRA_LIB) $(HTHIRA_DICT) $(HTHIRA_DICTH) $(HTHIRA_PCM)
 	@rm -f $(HiRAEVTLIB)/$(HTHIRA_LIB)
+	@rm -f $(HiRAEVTLIB)/$(HTHIRA_PCM)
 
 .PHONY: clean
 clean:
