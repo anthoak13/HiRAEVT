@@ -29,15 +29,18 @@ Table of contents
   * [Compile the Code](#compilation)
   * [Compile the Code on NSCL ember or seaside](#compilation-nscl)
   * [Configure the Program](#configure)
+  * [Limitations](#limitations)
 * [The HiRAEVTUnpacker Program](#unpacker)
   * [Run the Code](#run-unpacker)
   * [Run the Code on NSCL ember or seaside](#run-nscl-unpacker)
   * [Output Data](#output-unpacker)
   * [User Summary Information](#userinfo-unpacker)
+  * [Notes for Developers](#dev-unpacker)
 * [The HiRAEVTMapper Program](#mapper)
   * [Run the Code](#run-mapper)
   * [Run the Code on NSCL ember or seaside](#run-nscl-mapper)
   * [Output Data](#output-mapper)
+  * [Notes for Developers](#dev-mapper)
 * [The HiRAEVTAnalyzer Program](#analyzer)
 <!--te-->
 
@@ -67,9 +70,11 @@ $ make clean
 $ make
 $ make install
 ````
-The binary file bin/HiRAEVTUnpacker.exe is generated in the compilation.
+The binary files bin/HiRAEVTUnpacker.exe bin/HiRAEVTMapper.exe are generated in the compilation.
 ### Compile the Code on NSCL ember or seaside
-The code can be independently compiled on the NSCL clusters emeber or seaside.
+The code can be independently compiled on the NSCL clusters ember or seaside. A compilation under ember or seaside does not erase a previous compilation under a third machine. Compiling the code on ember or seaside will generate, respectively, the bineary files bin/HiRAEVTUnpackerEmber.exe bin/HiRAEVTMapperEmber.exe or bin/HiRAEVTUnpackerSeaside.exe bin/HiRAEVTMapperSeaside.exe.
+
+WARNING: it is temporarly not possible to compile and run the program from NSCL seaside. It will be soon possible after the ROOT version will be updated to 6.
 ### Configure the program
 The program can run over different experimental configurations (DAQ, detectors, ...) without be re-compiled. All the information needed can be configured from the file "config/RIBbit2.conf". This is the only file that the user has to change to configure the program. In the special language used to read the file, the character '\*' is used to provide a comment. Following a detailed list of the fields to configure:
 * set HiRAEVT_DIR : this command sets the directory of the RIBbit2 installation
@@ -84,6 +89,10 @@ The program can run over different experimental configurations (DAQ, detectors, 
 * set DAQ_CONFIG : set the DAQ config (see the input-file folder, which contains an example of daqconfig file well commented). This command supports the --run and --exclude flags.
 * set PEDESTAL_VALUES : set pedestal values for electronic channels. This command supports the --run and --exclude flags.
 * set CHANNEL_MAPPING : define detectors and set mapping. This command supports the --run and --exclude flags.
+### Limitations
+The code is explicitly designed to by a highly versatile tool. Anyway, some limitations are present (and maybe more limitations will be found in more specific cases):
+ - The code needs to be launched from the program main folder;
+ - The class RBSisTimestamp is specificallu designed for the timestamp configuration used in e15190.
 ## The HiRAEVTUnpacker Program
 ### Run the code
 It is possible to interactively unpack a run or a group of runs by using the script bin/RIBbitUnpacker. To run the script and unpack a single run (looping over all the evt files) use the command (from the main HiRAEVT folder):
