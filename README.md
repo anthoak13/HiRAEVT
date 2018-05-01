@@ -30,9 +30,13 @@ Table of contents
   * [Configure the Program](#configure)
 * [The HiRAEVTUnpacker Program](#unpacker)
   * [Run the Code](#run-unpacker)
+  * [Run the Code on NSCL ember or seaside](#run-nscl-unpacker)
   * [Output Data](#output-unpacker)
   * [User Summary Information](#userinfo-unpacker)
 * [The HiRAEVTMapper Program](#mapper)
+  * [Run the Code](#run-mapper)
+  * [Run the Code on NSCL ember or seaside](#run-nscl-mapper)
+  * [Output Data](#output-mapper)
 * [The HiRAEVTAnalyzer Program](#analyzer)
 <!--te-->
 
@@ -88,6 +92,8 @@ where RUN_NUMBER indicates the number of run to unpack. A group of runs can be u
 $ HiRAEVTUnpacker FIRST_RUN LAST_RUN
 ````
 where FIRST_RUN and LAST_RUN define the range of runs to unpack. Please note that if FIRST_RUN=LAST=RUN, the second command is equivalent to the first.
+### Run the Code on NSCL ember or seaside
+The program is designed to run interactively on fishtank-like machines or interactively or in batch on NSCL clusters like ember or seaside. The above mentioned commands work in the same way when one wants to launch the program interactively on ember or seaside. When on ember or seaside, the program can be also launched in batch mode, respectively using SLURM or PBS queue systems.
 ### Output Data
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file (see section "Configure the Program").
 ### User Summary Information
