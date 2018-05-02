@@ -23,7 +23,7 @@ HTMicroballArray::~HTMicroballArray()
 //______________________________________________________________________________
 HTMicroballRing * HTMicroballArray::GetRing(Int_t num_ring) const
 {
-  return fMicroballRing[num_ring];
+  return fMicroballRing[num_ring-1];
 }
 
 //______________________________________________________________________________

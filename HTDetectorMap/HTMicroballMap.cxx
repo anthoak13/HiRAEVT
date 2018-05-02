@@ -85,8 +85,8 @@ int HTMicroballMap::ParseMapLine(const char * line_to_parse)
   ModuleName.assign(ModuleName.substr(ModuleName.find("module=\"")+8,ModuleName.find_last_of("\"")-(ModuleName.find("module=\"")+8)));
   ModuleChannelString.assign(ModuleChannelString.substr(ModuleChannelString.find("channel=\"")+9,ModuleChannelString.find_last_of("\"")-(ModuleChannelString.find("channel=\"")+9)));
 
-  int RingNumber=std::stoi(DetectorToSet.substr(DetectorToSet.find("R")+1, DetectorToSet.find("_")-(DetectorToSet.find("R")+1)));
-  int DetectorNumber=std::stoi(DetectorToSet.substr(DetectorToSet.find("_")+1));
+  int RingNumber=std::stoi(DetectorToSet.substr(DetectorToSet.find("R")+1, DetectorToSet.find("_")-(DetectorToSet.find("R")+1)))-1;
+  int DetectorNumber=std::stoi(DetectorToSet.substr(DetectorToSet.find("_")+1))-1;
   int ModuleNumber=(*fModuleAssignmentOrder)[ModuleName];
   int ModuleChannel=std::stoi(ModuleChannelString);
 
