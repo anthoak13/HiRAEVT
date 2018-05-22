@@ -232,7 +232,7 @@ Here a summary of the data structures for each individual detector:
 |&nbsp;&nbsp;&nbsp;+ Short_t fTime\[fmulti\]  
 **_HTSisTimestampe15190_**  
 |&nbsp;&nbsp;&nbsp;+ Long64_t fTimestamp  
-|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestampKoreans
+|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestampKoreans  
 **_HTTDCSpare_**  
 |&nbsp;&nbsp;&nbsp;+ Double_t (...)  
 ## Notes for Developers
