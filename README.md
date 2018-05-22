@@ -174,7 +174,7 @@ When the program is launched in batch mode, the video output is saved in a summa
 ### Output Data
 Output data is stored in a tree called EXXXXX, where XXXXX represents the experiment name (i.e. E15190). The folder where the tree is stored is configured in the config file by setting HiRAEVTMAPPER_ROOT_FILE_PATH in the configuration file (see section "Configure the Program").
 
-The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope.  
+The structure of the output tree is constituted by an individual branch for each detector defined in the mapping file. In the presence of an "HiRA" detector, a sub-branch will be created for each telescope. For convenience, timestamp and TDC spare channels are treated like detectors. The second can map (see the map file contained in the folder "input") individual TDC channels that are used as benchmark, containing for example experiment triggers.
 Here a summary of the data structures for each individual detector:
 
 **_HiRA_**  
@@ -232,7 +232,9 @@ Here a summary of the data structures for each individual detector:
 |&nbsp;&nbsp;&nbsp;+ Short_t fTime\[fmulti\]  
 **_HTSisTimestampe15190_**  
 |&nbsp;&nbsp;&nbsp;+ Long64_t fTimestamp  
-|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestampKoreans
+|&nbsp;&nbsp;&nbsp;+ Long64_t fTimestampKoreans  
+**_HTTDCSpare_**  
+|&nbsp;&nbsp;&nbsp;+ Double_t (...)  
 ## Notes for Developers
  - The mapping of HiRA strips does not occour in a "channel-by-channel" philosophy, but individual blocks of channels (namely DE, EF, EB), belonging to a single physical detector, are mapped to a unique specific motherboard(bank) and chipboard. For this reason, an algorithm is used to produce (telescope, motherboard, chip, channel) -> (strip) associations. Any future changes of the algorithm should be made to the method int HTHiRAMap::ParseMapLine(const char \*).
  - Despite the output tree and related structures contain a branch for the DE stage of HiRA (Single Sided Silicon Strip Detector), mapping algorithms and maps have to be implemented. For a future extension of the program features to this detection stage the following files have to be modified: detectors/HTHiRA.cxx HTDetectorMap/HTHiRAMap.h HTDetectorMap/HTHiRAMap.cxx.
