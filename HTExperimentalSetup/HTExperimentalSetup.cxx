@@ -124,7 +124,10 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
 
     DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
 
-    if(DetectorType.compare("HiRA")==0) {
+    if(DetectorType.compare("TDCSpare")==0) {
+      HTTDCSpare * newDetector = new HTTDCSpare(DetectorName.c_str());
+      (*fDetectors)[DetectorName]=newDetector;
+    } else if(DetectorType.compare("HiRA")==0) {
       int NumTelescopes;
       LineStream>>NumTelescopes;
       HTHiRA * newDetector = new HTHiRA(DetectorName.c_str(), NumTelescopes);
@@ -189,8 +192,12 @@ int HTExperimentalSetup::BuildDetectorMaps()
       std::string DetectorName((*TheDetector).second->GetName());
       std::string DetectorType((*TheDetector).second->GetType());
       int NumIndividualDetectionObjects((*TheDetector).second->GetNumDetectors());
-
-      if(DetectorType.compare("HTHiRA")==0) {
+      if(DetectorType.compare("HTTDCSpare")==0) {
+        HTTDCSpareMap * newMapping = new HTTDCSpareMap(DetectorName.c_str());
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
+      } else if(DetectorType.compare("HTHiRA")==0) {
         HTHiRAMap * newMapping = new HTHiRAMap(DetectorName.c_str(), NumIndividualDetectionObjects);
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;

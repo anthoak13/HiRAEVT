@@ -21,6 +21,7 @@ root:
 	$(MAKE) -C detectors/HTVetoWall ;			$(MAKE) -C detectors/HTVetoWall install
 	$(MAKE) -C detectors/HTForwardArray ;			$(MAKE) -C detectors/HTForwardArray install
 	$(MAKE) -C detectors/HTMicroball ;			$(MAKE) -C detectors/HTMicroball install
+	$(MAKE) -C detectors/HTTDCSpare ;			$(MAKE) -C detectors/HTTDCSpare install
 	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader ; 	$(MAKE) -C HTRawDataReader install
 
@@ -40,6 +41,7 @@ install:
 	$(MAKE) -C detectors/HTVetoWall install
 	$(MAKE) -C detectors/HTForwardArray install
 	$(MAKE) -C detectors/HTMicroball install
+	$(MAKE) -C detectors/HTTDCSpare install
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader install
 
@@ -59,6 +61,7 @@ distclean:
 	$(MAKE) -C detectors/HTVetoWall distclean
 	$(MAKE) -C detectors/HTForwardArray distclean
 	$(MAKE) -C detectors/HTMicroball distclean
+	$(MAKE) -C detectors/HTTDCSpare distclean
 	$(MAKE) -C HTExperimentalSetup distclean
 	$(MAKE) -C HTRawDataReader distclean
 
@@ -81,6 +84,7 @@ clean:
 	$(MAKE) -C detectors/HTVetoWall clean
 	$(MAKE) -C detectors/HTForwardArray clean
 	$(MAKE) -C detectors/HTMicroball clean
+	$(MAKE) -C detectors/HTTDCSpare clean
 	$(MAKE) -C HTExperimentalSetup clean
 	$(MAKE) -C HTRawDataReader clean
 
@@ -105,6 +109,7 @@ debug:
 	$(MAKE) -C detectors/HTVetoWall
 	$(MAKE) -C detectors/HTForwardArray
 	$(MAKE) -C detectors/HTMicroball
+	$(MAKE) -C detectors/HTTDCSpare	
 	$(MAKE) -C HTExperimentalSetup
 	$(MAKE) -C HTRawDataReader
 

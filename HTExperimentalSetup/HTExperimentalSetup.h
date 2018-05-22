@@ -22,8 +22,10 @@
 #include <HTForwardArray.h>
 #include <HTForwardArray.h>
 #include <HTMicroball.h>
+#include <HTTDCSpare.h>
 #include <HTDetectorMap.h>
 #include <HTSisTimestampe15190Map.h>
+#include <HTTDCSpareMap.h>
 #include <HTHiRAMap.h>
 #include <HTNeutronWallMap.h>
 #include <HTVetoWallMap.h>
