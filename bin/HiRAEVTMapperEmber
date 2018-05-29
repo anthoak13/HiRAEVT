@@ -21,34 +21,19 @@ fi
 #extracting information from configuration file from config/HiRAEVT.conf
 while IFS= read -r line;do
     fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
-    if [ ${fields[1]} ] && [ ${fields[1]} = "EVENT_FILE_PATH" ] ; then
-      if echo "${fields[2]}" | grep -q "run="; then
-        run_range=($(echo ${fields[2]}|cut -d'=' -f2-))
-        run_range_first=($(echo $run_range|cut -d'-' -f1))
-        run_range_last=($(echo $run_range|cut -d'-' -f2))
-        if [ $run_num -ge $run_range_first ] && [ $run_num -le $run_range_last ]; then
-          EvtFilesPath=$(echo ${fields[3]} | sed 's/[\"]//g')
-        fi
-      else
-        EvtFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-      fi
+    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTUNPACKER_ROOT_FILE_PATH" ] ; then
+      RootFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
     if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
       HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
-    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTMAPPER_SUMMARY_PATH" ] ; then
-      HiRAEVTSummaryPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-    fi
 done < config/HiRAEVT.conf
 
-if [ ! -d "${EvtFilesPath}run$run_num/" ]; then #the directory of evt files does not exist
-    echo "Error: missing or incorrect evt files location for run $run_num"; continue
+if [ ! -d "${RootFilesPath}" ]; then #the directory of ROOT files does not exist
+    echo "Error: missing or incorrect ROOT files location"; continue
 fi
 
-i=0
-
-for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
-
+run_name="run_${run_num}"
 
 cat > submit.sh << EOF
 #!/usr/bin/env bash
@@ -56,15 +41,14 @@ cat > submit.sh << EOF
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=5000
-#SBATCH --job-name=${run_num}-$i
-#SBATCH --output=$(echo ${HiRAEVTSummaryPath}Summary_${file_evt##*/} | sed 's/\(.*\.\)evt/\1out/')
+#SBATCH --job-name=${run_num}
+#SBATCH --output=$(echo ${HiRAEVTSummaryPath}Summary_${run_name##*/} | sed 's/\(.*\.\)evt/\1out/')
 module add intel
 
 cd ${HiRAEVTPath}
 source ${HiRAEVTPath}/bin/HiRAEVT.sh
-eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --source=file://'$file_evt' --sink=file:///dev/null'
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
 EOF
-   ((i++))
    sbatch submit.sh
    sleep 0.1
 

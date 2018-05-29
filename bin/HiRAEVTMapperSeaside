@@ -21,49 +21,35 @@ fi
 #extracting information from configuration file from config/HiRAEVT.conf
 while IFS= read -r line;do
     fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
-    if [ ${fields[1]} ] && [ ${fields[1]} = "EVENT_FILE_PATH" ] ; then
-      if echo "${fields[2]}" | grep -q "run="; then
-        run_range=($(echo ${fields[2]}|cut -d'=' -f2-))
-        run_range_first=($(echo $run_range|cut -d'-' -f1))
-        run_range_last=($(echo $run_range|cut -d'-' -f2))
-        if [ $run_num -ge $run_range_first ] && [ $run_num -le $run_range_last ]; then
-          EvtFilesPath=$(echo ${fields[3]} | sed 's/[\"]//g')
-        fi
-      else
-        EvtFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-      fi
+    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTUNPACKER_ROOT_FILE_PATH" ] ; then
+      RootFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
     if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
       HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
-    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTMAPPER_SUMMARY_PATH" ] ; then
-      HiRAEVTSummaryPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-    fi
 done < config/HiRAEVT.conf
 
-if [ ! -d "${EvtFilesPath}run$run_num/" ]; then #the directory of evt files does not exist
-    echo "Error: missing or incorrect evt files location for run $run_num"; continue
+if [ ! -d "${RootFilesPath}" ]; then #the directory of ROOT files does not exist
+    echo "Error: missing or incorrect ROOT files location"; continue
 fi
 
-i=0
-
-for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
+run_name="run_${run_num}"
 
 #erase output and error files if already exist
-if [ -f "${HiRAEVTSummaryPath}Summary_${file_evt##*/}" ]; then
-  rm "${HiRAEVTSummaryPath}Summary_${file_evt##*/}"
+if [ -f "${HiRAEVTSummaryPath}Summary_${run_name##*/}" ]; then
+  rm "${HiRAEVTSummaryPath}Summary_${run_name##*/}"
 fi
-if [ -f "${HiRAEVTSummaryPath}Error_${file_evt##*/}" ]; then
-  rm "${HiRAEVTSummaryPath}Error_${file_evt##*/}"
+if [ -f "${HiRAEVTSummaryPath}Error_${run_name##*/}" ]; then
+  rm "${HiRAEVTSummaryPath}Error_${run_name##*/}"
 fi
 
 cat > submit.sh << EOF
 #!/usr/bin/env bash
 #PBS -m a
 #PBS -l nodes=1:ppn=1,mem=2gb,walltime=02:00:00
-#PBS -N Unpacking_${file_evt##*/}
-#PBS -o ${HiRAEVTSummaryPath}Summary_${file_evt##*/}
-#PBS -e ${HiRAEVTSummaryPath}Error_${file_evt##*/}
+#PBS -N Unpacking_${run_name##*/}
+#PBS -o ${HiRAEVTSummaryPath}Summary_${run_name##*/}
+#PBS -e ${HiRAEVTSummaryPath}Error_${run_name##*/}
 #PBS -W umask=002
 #PBS -W group_list=e15190g
 #PBS -j oe
@@ -72,9 +58,8 @@ module add intel
 
 cd ${HiRAEVTPath}
 source ${HiRAEVTPath}/bin/HiRAEVT.sh
-eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --source=file://'$file_evt' --sink=file:///dev/null'
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
 EOF
-   ((i++))
    qsub submit.sh
    sleep 0.2
 
