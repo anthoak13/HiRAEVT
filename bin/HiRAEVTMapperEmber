@@ -53,6 +53,5 @@ EOF
    sleep 0.1
 
 done
-done
 
 rm submit.sh
