@@ -27,6 +27,9 @@ while IFS= read -r line;do
     if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
       HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
+    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTMAPPER_SUMMARY_PATH" ] ; then
+      HiRAEVTSummaryPath=$(echo ${fields[2]} | sed 's/[\"]//g')
+    fi    
 done < config/HiRAEVT.conf
 
 if [ ! -d "${RootFilesPath}" ]; then #the directory of ROOT files does not exist

@@ -1,13 +1,13 @@
 ** Mapping for experiment E15190 after run 2057 **
 ** Written by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 ** Short guide *****************************************************************
-**** To define a new detector: define detector DetType"name" options
+**** To define a new detector: define detector DetType "name" options
 **** To assign modules to a given detector: assign module DetName ModuleName1 ModuleName2 ...
 **** To map a single detector channel to a given module channel: map DetName ChName detector="SingleDetName" module="ModuleName" channel="ch"
 **** WARNING: in the case of the hinp module, the"channel" command is replaced by motherboard="#motherboard" chipboard="#chipboard". Motherboard number starts from 0, chipboard starts from 1
 **** WARNING: TDC spare channels can be mapped in the output tree by using the TDCSpare detector. "SingleDetName" will indicate here the name of the detector branch in the output tree.
 **
-** Possible DetType values: HiRA, NeutronWall, VetoWall, Microball, ForwardArray, SisTimestampe15190
+** Possible DetType values: HiRA, NeutronWall, VetoWall, Microball, ForwardArray, SisTimestampe15190, TDCSpare
 ** options differ detector-by-detector
 ** Examples: *************************************
 ** define detector HiRA "HiRA" NumTelescopes
