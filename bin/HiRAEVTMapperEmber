@@ -41,16 +41,17 @@ run_name="run_${run_num}"
 cat > submit.sh << EOF
 #!/usr/bin/env bash
 #--- sbatch option ---#
+#SBATCH --time=100:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=5000
 #SBATCH --job-name=${run_num}
-#SBATCH --output=$(echo ${HiRAEVTSummaryPath}Summary_${run_name}.out 
+#SBATCH --output=${HiRAEVTSummaryPath}Summary_${run_name}.out
 module add intel
 
 cd ${HiRAEVTPath}
 source ${HiRAEVTPath}/bin/HiRAEVT.sh
-eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run=${run_num}'
 EOF
    sbatch submit.sh
    sleep 0.1

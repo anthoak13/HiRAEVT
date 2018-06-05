@@ -61,7 +61,7 @@ module add intel
 
 cd ${HiRAEVTPath}
 source ${HiRAEVTPath}/bin/HiRAEVT.sh
-eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
+eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run=${run_num}'
 EOF
    qsub submit.sh
    sleep 0.2
