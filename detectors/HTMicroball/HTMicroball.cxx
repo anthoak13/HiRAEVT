@@ -69,7 +69,7 @@ void HTMicroball::FillMappedData()
     HTMicroballRing * RingToFill =fMicroball->GetRing(NumRing+1);
     for(int NumDet=0; NumDet<N_MICROBALL_DETS_PER_RING[NumRing]; NumDet++) {
       HTMicroballDetector * DetToFill = RingToFill->GetDetector(NumDet+1); //WARNING: uBall detectors start from 1
-      if(DetToFill->GetTail()>0 && DetToFill->GetFast()>0 && DetToFill->GetTime()>0)
+      if(DetToFill->GetTail()>0 || DetToFill->GetFast()>0 || DetToFill->GetTime()>0)
       {
         fevt->fMicroball.fnumring[fevt->fMicroball.fmulti]=NumRing+1; //WARNING: rings are counted from 1
         fevt->fMicroball.fnumdet[fevt->fMicroball.fmulti]=NumDet+1; //WARNING: detectors are counted from 1 in each ring

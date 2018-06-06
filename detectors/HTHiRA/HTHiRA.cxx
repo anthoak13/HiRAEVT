@@ -70,7 +70,7 @@ void HTHiRA::FillMappedData()
     fevt->fHiRA[NumTel].fCsI.fmulti=0;
     for(int NumCsI=0; NumCsI< fHiRACsI->GetNumCsI(); NumCsI++) {
       HTHiRACsI * currCsI = fHiRACsI[NumTel].GetCsI(NumCsI);
-      if(currCsI->GetEnergy()>0 && currCsI->GetTime()!=-9999) {
+      if(currCsI->GetEnergy()>0) {
         fevt->fHiRA[NumTel].fCsI.fnumcsi[fevt->fHiRA[NumTel].fCsI.fmulti]=NumCsI;
         fevt->fHiRA[NumTel].fCsI.fEnergy[fevt->fHiRA[NumTel].fCsI.fmulti]=currCsI->GetEnergy();
         fevt->fHiRA[NumTel].fCsI.fTime[fevt->fHiRA[NumTel].fCsI.fmulti]=currCsI->GetTime();
