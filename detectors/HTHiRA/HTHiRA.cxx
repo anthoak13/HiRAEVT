@@ -89,6 +89,8 @@ void HTHiRA::FillMappedData()
       fevt->fHiRA[NumTel].fEF.fEnergyLo[fevt->fHiRA[NumTel].fEF.fmulti]=(*(*HINPDataEF)).fEnergyLo[HINPhit];
       fevt->fHiRA[NumTel].fEF.fTime[fevt->fHiRA[NumTel].fEF.fmulti]=(*(*HINPDataEF)).fTime[HINPhit];
       fevt->fHiRA[NumTel].fEF.fmulti++;
+      if(fevt->fHiRA[NumTel].fEF.fmulti==N_STRIPS_PER_TELESCOPE) break;
+      //NOTE: this condition prevents from having multiplicities larger than the number of actual strips, in the presence of corrupted buffers.
     }
     TTreeReaderValue<RBHINPHit> * HINPDataEB = dModuleEB(NumTel)>=0 ? ((HTRootHINP *)fModules[dModuleEB(NumTel)])->GetDataPointer() : 0;
     fevt->fHiRA[NumTel].fEB.fmulti=0;
@@ -100,6 +102,8 @@ void HTHiRA::FillMappedData()
       fevt->fHiRA[NumTel].fEB.fEnergyLo[fevt->fHiRA[NumTel].fEB.fmulti]=(*(*HINPDataEB)).fEnergyLo[HINPhit];
       fevt->fHiRA[NumTel].fEB.fTime[fevt->fHiRA[NumTel].fEB.fmulti]=(*(*HINPDataEB)).fTime[HINPhit];
       fevt->fHiRA[NumTel].fEB.fmulti++;
+      if(fevt->fHiRA[NumTel].fEB.fmulti==N_STRIPS_PER_TELESCOPE) break;
+      //NOTE: this condition prevents from having multiplicities larger than the number of actual strips, in the presence of corrupted buffers.
     }
 
   }
