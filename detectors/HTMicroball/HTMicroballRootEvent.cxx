@@ -1,7 +1,8 @@
 #include <HTMicroballRootEvent.h>
 
 //________________________________________________
-HTMicroballData::HTMicroballData(int num_detectors)
+HTMicroballData::HTMicroballData(int num_detectors) :
+fmulti(0)
 {
   fnumring =new Int_t   [num_detectors];
   fnumdet  =new Int_t   [num_detectors];
