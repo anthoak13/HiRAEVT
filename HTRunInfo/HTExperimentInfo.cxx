@@ -52,13 +52,20 @@ int HTExperimentInfo::InitClass(const char *file_name)
   fRunEvtFilePath=(std::string*)new std::string[fLastRun-fFirstRun+1];
   fRunTitle=(std::string*)new std::string[fLastRun-fFirstRun+1];
 
+  // Retrieving all previously stored run titles from database file
+  RetrieveRunTitlesFromDatabaseFile();
+
   //Set run-by-run setup configuration
   for(int run_num=fFirstRun; run_num<=fLastRun; run_num++)
   {
     NLinesRead += LoadRunConfiguration(file_name,run_num);
-    const char * TempRunTitle=RetrieveRunTitleFromEvtFile(Form("%srun%d/run-%04d-00.evt",fRunEvtFilePath[run_num-fFirstRun].c_str(),run_num,run_num));
-    if(TempRunTitle!=0) {
-      fRunTitle[run_num-fFirstRun].assign(TempRunTitle);
+    // Only if the run title was not previously found retrieve it from evt file and store into the database file
+    if(fRunTitle[run_num-fFirstRun].empty()) {
+      const char * TempRunTitle=RetrieveRunTitleFromEvtFile(Form("%srun%d/run-%04d-00.evt",fRunEvtFilePath[run_num-fFirstRun].c_str(),run_num,run_num));
+      if(TempRunTitle!=0) {
+        fRunTitle[run_num-fFirstRun].assign(TempRunTitle);
+        StoreRunTitleInDatabaseFile(TempRunTitle, run_num);
+      }
     }
   }
 
@@ -275,6 +282,49 @@ const char * HTExperimentInfo::GetRootFilePath() const
 const char * HTExperimentInfo::GetMappedRootFilePath() const
 {
   return fMappedRootFilePath.c_str();
+}
+
+//________________________________________________
+int HTExperimentInfo::RetrieveRunTitlesFromDatabaseFile()
+{
+  std::ifstream FileIn(Form("config/%s.run",fExperimentName.c_str()));
+  if(!FileIn.is_open()) {
+    return -1;
+  }
+  int NRead=0;
+
+  while (!FileIn.eof())
+  {
+    std::string LineRead;
+    std::getline(FileIn, LineRead);
+
+    if(LineRead.empty()) continue;
+    if(LineRead.find('*')==0) continue;
+    if(LineRead.find_first_not_of(' ') == std::string::npos) continue;
+
+    std::istringstream LineStream(LineRead);
+
+    int run_num;
+
+    LineStream>>run_num;
+    if(run_num>=fFirstRun && run_num<=fLastRun) {
+      NRead++;
+      fRunTitle[run_num-fFirstRun].assign(LineRead.substr(LineRead.find_first_not_of(' ',LineRead.find_first_of(' '))));
+    }
+  }
+
+  FileIn.close();
+  return NRead;
+}
+
+//________________________________________________
+void HTExperimentInfo::StoreRunTitleInDatabaseFile(const char * run_title, int run_num)
+{
+  std::ofstream FileOut(Form("config/%s.run",fExperimentName.c_str()),std::ios::app);
+
+  FileOut << run_num << " " << run_title << std::endl;
+
+  FileOut.close();
 }
 
 //________________________________________________
