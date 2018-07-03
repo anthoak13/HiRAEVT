@@ -211,26 +211,42 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
   std::string ValueToSet;
   LineStream>>ValueToSet;
   std::string NewValue;
+  std::string Option;
+  bool RunFound=false;
 
   //NOTE: for a future improvement take into account more possible options not only --run and --exclude
-  if(LineToParse.find("--run")!=std::string::npos) { //found --run option
-    LineToParse.assign(LineToParse.substr(LineToParse.find("--run")+5));
-    int StartRunNum=atoi(LineToParse.substr(LineToParse.find("=")+1,LineToParse.find("-")).c_str());
-    int StopRunNum=atoi(LineToParse.substr(LineToParse.find("-")+1,LineToParse.find("\"")-LineToParse.find("-")).c_str());
-
-    if(LineToParse.find("--exclude")!=std::string::npos) { //found --exclude option
-      LineToParse.assign(LineToParse.substr(LineToParse.find("--exclude")+10));
-      std::istringstream LineExcludeStream(LineToParse.substr(0,LineToParse.find("--")!=std::string::npos ? LineToParse.find("--") : LineToParse.find("\"")));
-      std::string RunToExclude;
-
-      while(std::getline(LineExcludeStream, RunToExclude, ',')) {
-        if(run_num==std::stoi(RunToExclude)) return; //this run is excluded
+  //A --run option can contain or "," or "-" as a separator, not combination of both
+  // Loop on the option strings, every time one finds -- this is an option string, e.g. --run, --exclude
+  while(LineStream>>Option && Option.find("--")!=std::string::npos) {
+    if(Option.find("--run=")!=std::string::npos) {
+      Option.assign(Option.substr(Option.find("--run=")+6));
+      std::istringstream LineRunStream(Option);
+      if(Option.find(",")!=std::string::npos) {
+        std::string RunToInclude;
+        while(std::getline(LineRunStream, RunToInclude, ',')) {
+          if(run_num==std::stoi(RunToInclude)) RunFound=true;
+        }
+      }
+      if(Option.find("-")!=std::string::npos) {
+        std::string StartRun;
+        std::string StopRun;
+        std::getline(LineRunStream, StartRun, '-');
+        std::getline(LineRunStream, StopRun, '-');
+        int StartRunNum=std::stoi(StartRun);
+        int StopRunNum=std::stoi(StopRun);
+        if(run_num>=StartRunNum && run_num<=StopRunNum) RunFound=true;;
+      }
+    } else if (Option.find("--exclude=")!=std::string::npos) {
+        std::istringstream LineExcludeStream(Option.substr(Option.find("--exclude=")+10));
+        std::string RunToExclude;
+        while(std::getline(LineExcludeStream, RunToExclude, ',')) {
+          if(run_num==std::stoi(RunToExclude)) return; //this run is excluded
+        }
       }
     }
 
-    if(run_num>=StartRunNum && run_num<=StopRunNum) {
-      NewValue.assign(LineToParse.substr(LineToParse.find("\"")+1,LineToParse.find_last_of("\"")-(LineToParse.find("\"")+1)));
-    } else return;
+  if(RunFound) {
+    NewValue.assign(LineToParse.substr(LineToParse.find("\"")+1,LineToParse.find_last_of("\"")-(LineToParse.find("\"")+1)));
   } else return;
 
   // if I'm here so run_num has been found in the configuration line
@@ -245,7 +261,6 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
   }
 
   return;
-
 }
 
 //________________________________________________
