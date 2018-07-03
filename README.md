@@ -85,7 +85,7 @@ The program can run over different experimental configurations (DAQ, detectors, 
 * set EXPERIMENT_NAME : the name of the experiment (i.e. 15190)
 * set EXPERIMENT_TITLE : a generic title to describe the experiment
 * set MERGED_DATA : this command can be "true" if data is merged or "false" if data is not merged
-* set EVENT_FILE_PATH : this command sets the path of the evt files. This path can be also set for individual group of runs by using the flag --run=FIRST_RUN-LAST-RUN. The flag --exclude=RUN1,RUN2,...,RUNN can be used to exclude a group of runs, namely 1,..., N, from this setting.
+* set EVENT_FILE_PATH : this command sets the path of the evt files. This path can be also set for individual group of runs by using the flag --run=FIRST_RUN-LAST_RUN or a list of individual runs --run=RUN1,RUN2,RUN3,... etc. The flag --exclude=RUN1,RUN2,...,RUNN can be used to exclude a group of runs, namely 1,..., N, from this setting. Note that more than one --run and --exclude option can be set per configuration line, but each --run option must have OR a range of runs OR a list of run, no combinations are allowed. Spaces are not allowed within each option.
 * FIRST_RUN : this is the first run of the whole experiment
 * LAST_RUN : this is the last run of the whole experiment (the unpacker won't unpack runs after LAST_RUN)
 * set DAQ_CONFIG : set the DAQ config (see the input-file folder, which contains an example of daqconfig file well commented). This command supports the --run and --exclude flags.
