@@ -234,7 +234,7 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
         std::getline(LineRunStream, StopRun, '-');
         int StartRunNum=std::stoi(StartRun);
         int StopRunNum=std::stoi(StopRun);
-        if(run_num>=StartRunNum && run_num<=StopRunNum) RunFound=true;;
+        if(run_num>=StartRunNum && run_num<=StopRunNum) RunFound=true;
       }
     } else if (Option.find("--exclude=")!=std::string::npos) {
         std::istringstream LineExcludeStream(Option.substr(Option.find("--exclude=")+10));
