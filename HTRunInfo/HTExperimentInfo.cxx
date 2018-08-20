@@ -277,7 +277,7 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
     fMappingFileName[run_num-fFirstRun].assign(NewValue);
   } else if (ValueToSet.compare("EVENT_FILE_PATH")==0) {
     fRunEvtFilePath[run_num-fFirstRun].assign(NewValue);
-  }    
+  }
 
   return;
 }
