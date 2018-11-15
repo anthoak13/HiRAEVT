@@ -154,7 +154,6 @@ Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   int vsn = DecodeVSN(header);
 
   if(vsn != GetVSN()) {
-    printf("Sugnu %s e finiu a fetu\n", fChName.Data());
     fVSNMismatchCount++;
     return offset;
   }

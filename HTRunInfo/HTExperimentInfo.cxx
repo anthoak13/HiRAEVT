@@ -58,6 +58,7 @@ int HTExperimentInfo::InitClass(const char *file_name)
   //Set run-by-run setup configuration
   for(int run_num=fFirstRun; run_num<=fLastRun; run_num++)
   {
+    fRunEvtFilePath[run_num-fFirstRun].assign(fEvtFilePath); //In case the evt file path is unique and the option --run is never specified
     NLinesRead += LoadRunConfiguration(file_name,run_num);
     // Only if the run title was not previously found retrieve it from evt file and store into the database file
     if(fRunTitle[run_num-fFirstRun].empty()) {
