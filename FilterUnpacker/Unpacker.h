@@ -69,6 +69,8 @@ class Unpacker
     void EndUnpacking();                 //! Called at the end of the Unpacking process
 
   private:
+    void PrintPercentage() const;        //! Display progress with residual time
+    void PrintPercentageSimple() const;  //! Simple display progress
 };
 
 #endif

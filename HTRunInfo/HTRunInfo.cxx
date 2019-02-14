@@ -141,6 +141,12 @@ void HTRunInfo::ParseAddDAQLine(const char * line_to_parse)
       newModuleInfo->SetNumCh(Nchannels);
       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
       return;
+    } else if (ModuleType.compare("RBMADC32Unpacker")==0) {
+      RBMADC32Unpacker * newModule = new RBMADC32Unpacker(ModuleName.c_str());
+      newModuleInfo->SetModule(newModule);
+      newModuleInfo->SetNumCh(32);
+      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+      return;
     }
 
     //In case none of the previous options was typed just delete the module

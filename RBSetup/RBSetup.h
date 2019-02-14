@@ -3,6 +3,21 @@
 
 #include <stdio.h>
 
+#include <RBUSBStack.h>
+#include <RBElectronics.h>
+#include <RBTimestamp.h>
+#include <RBUSBStackMarker.h>
+#include <RBHINPUnpacker.h>
+#include <RBPh7xxUnpacker.h>
+#include <RBCAEN7xxUnpacker.h>
+#include <RBCAEN1x90Unpacker.h>
+#include <RBMADC32Unpacker.h>
+#include <RBSisTimestampUnpacker.h>
+#include <HTRunInfo.h>
+#include <HTExperimentInfo.h>
+#include <HTDAQStackInfo.h>
+#include <HTModuleInfo.h>
+
 #include <TNamed.h>
 #include <HTShared.h>
 #include <RBExperiment.h>

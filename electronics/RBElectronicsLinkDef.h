@@ -17,6 +17,7 @@
 #pragma link C++ class RBHINPHit+;
 #pragma link C++ class RBCAEN7xxUnpacker+;
 #pragma link C++ class RBCAEN1x90Unpacker+;
+#pragma link C++ class RBMADC32Unpacker+;
 #pragma link C++ class RBPh7xxUnpacker+;
 #pragma link C++ class RBUSBStack+;
 #pragma link C++ class RBUSBStackMarker+;

@@ -8,6 +8,7 @@
 ** add module stackID RBHINPUnpacker "name" vsn #motherboards usingFADC(true, false)
 ** add module stackID RBCAEN7xxUnpacker "name" vsn
 ** add module stackID RBCAEN1x90Unpacker "name" vsn depth refch #Nchannels ns_per_ch
+** add module stackID RBMADC32Unpacker "name" id
 ********************************************************************************
 
 ** HiRA STACK

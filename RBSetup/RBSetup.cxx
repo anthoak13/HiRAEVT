@@ -1,20 +1,7 @@
 //Preliminary RBSetup file for unpacking merged HiRA and NW file
 //Juan Manfredi, Daniele Dell Aquila
 
-#include "RBSetup.h"
-#include "RBUSBStack.h"
-#include "RBElectronics.h"
-#include "RBTimestamp.h"
-#include "RBUSBStackMarker.h"
-#include "RBHINPUnpacker.h"
-#include "RBPh7xxUnpacker.h"
-#include "RBCAEN7xxUnpacker.h"
-#include "RBCAEN1x90Unpacker.h"
-#include "RBSisTimestampUnpacker.h"
-#include <HTRunInfo.h>
-#include <HTExperimentInfo.h>
-#include <HTDAQStackInfo.h>
-#include <HTModuleInfo.h>
+#include <RBSetup.h>
 
 //______________________________________________________________________________
 RBSetup::RBSetup(){
@@ -43,6 +30,9 @@ RBSetup::RBSetup(){
     RBUSBStack * newStack = new RBUSBStack();
     newStack->AddStack();
     HTDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
+
+    printf("RBSetup> Defined new DAQ Stack \"%s\"\n", newStackInfo->GetStackName());
+
     for(int NumModule=0; NumModule<newStackInfo->GetNModules(); NumModule++)
     {
       // Register electronics which should/can be unpacked as raw channels.
@@ -52,6 +42,8 @@ RBSetup::RBSetup(){
       HTModuleInfo * newModuleInfo = newStackInfo->GetModuleInfo(NumModule);
       newStack->AddToStack(0,newModuleInfo->GetVSN(),newModuleInfo->GetModule());
       newModuleInfo->GetModule()->SetFillData(kTRUE);
+
+      printf("RBSetup> Added module \"%s\" of type %s to the stack \"%s\"\n", newModuleInfo->GetModuleName(), newModuleInfo->GetModuleType(), newStackInfo->GetStackName());
     }
     newStack->SetMergedID(newStackInfo->GetStackID());
     newStack->SetBranchName(newStackInfo->GetStackName());

@@ -94,7 +94,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   fMergedData = gExperiment->IsDataMerged();
   gExperiment->InitializeROOTConverter(fSourceFileName);
   gExperiment->Clear("A");
-  time(&fStart);
+  fStart=clock();
 
   printf("** Unpacking run %d-%02d : %s **\n", gRun->GetRunNumber(), EvtFileNumber, gRun->GetTitle());
 }
@@ -130,14 +130,8 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
   //cout << "**Unpacking timestamp " << eventTimestamp<< endl;
 
   // Display progress
-  if(nevent%1000==0){
-    time(&fNow);
-    fTimeElapsed=difftime(fNow, fStart);
-    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
-    cout << "Processing Event: " << setw(10) << nevent << setw(10)
-         << "  " << Form("%02.2f",fPercentDone) << "%"
-         << "   " << fTimeElapsed << " s" << "\r";
-    cout.flush();
+  if(nevent%10000==0){
+    PrintPercentage();
   }
 
   gExperiment->Clear();
@@ -280,14 +274,8 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   ++nevent;
 
   // Display progress
-  if(nevent%1000==0){
-    time(&fNow);
-    fTimeElapsed=difftime(fNow, fStart);
-    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
-    cout << "Processing Event: " << setw(10) << nevent << setw(10)
-         << "  " << Form("%02.2f",fPercentDone) << "%"
-         << "   " << fTimeElapsed << " s" << "\r";
-    cout.flush();
+  if(nevent%10000==0){
+    PrintPercentage();
   }
 
   gExperiment->Clear();
@@ -395,14 +383,8 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   //  cout << "**Unpacking timestamp " << eventTimestamp<< endl;
 
   // Display progress
-  if(nevent%1000==0){
-    time(&fNow);
-    fTimeElapsed=difftime(fNow, fStart);
-    fPercentDone = 100 * ((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize());
-    cout << "Processing Event: " << setw(10) << nevent << setw(10)
-         << "  " << Form("%02.2f",fPercentDone) << "%"
-         << "   " << fTimeElapsed << " s" << "\r";
-    cout.flush();
+  if(nevent%10000==0){
+    PrintPercentage();
   }
 
   gExperiment->Clear();
@@ -499,11 +481,43 @@ void Unpacker::EndUnpacking()
 {
   // -- This method is called at the end of the Unpacking process
   //    It calls PrintSummary() and finally ends the ROOT conversion
-  time(&fNow);
-  fTimeElapsed= difftime(fNow, fStart);
+  fTimeElapsed= (double)(clock() - fStart)/CLOCKS_PER_SEC;
 
   AddTTreeUserInfo(gExperiment->GetTree());
   gExperiment->AddTTreeUserInfo();
   gExperiment->EndROOTConverter();
   PrintSummary();
+}
+
+//____________________________________________________
+void Unpacker::PrintPercentage() const
+{
+  double time_elapsed = (double)(clock() - fStart)/CLOCKS_PER_SEC;
+  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize()) << " %";
+  std::cout << "   [";
+  int printindex=0;
+  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
+  for(; printindex<100; printindex+=5) std::cout << " ";
+  std::cout << "]   " << "elapsed time " << std::setprecision(1) <<
+  (time_elapsed<60 ? time_elapsed : (time_elapsed<3600 ? time_elapsed/60 : time_elapsed/3600)) <<
+  (time_elapsed<60 ? " s; " : (time_elapsed<3600 ? " m; " : " h; "));
+  if(fReadWords>2) {
+    double time_remaining = (time_elapsed/(2.*fReadWords))*(gExperiment->GetEvtFileSize()-2*fReadWords);
+    std::cout << " estimated remaining time " << std::setprecision(1) <<
+    (time_remaining<60 ? time_remaining : (time_remaining<3600 ? time_remaining/60 : time_remaining/3600)) <<
+    (time_remaining<60 ? " s      " : (time_remaining<3600 ? " m      " : " h      "));
+  }
+  std::cout << "\r";
+  std::cout.flush();
+}
+
+//____________________________________________________
+void Unpacker::PrintPercentageSimple() const
+{
+  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize()) << " %";
+  std::cout << "   [";
+  int printindex=0;
+  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
+  for(; printindex<100; printindex+=5) std::cout << " ";
+  std::cout << "]   \r"; std::cout.flush();
 }

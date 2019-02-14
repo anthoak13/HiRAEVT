@@ -9,6 +9,7 @@
 #include <RBPh7xxUnpacker.h>
 #include <RBCAEN7xxUnpacker.h>
 #include <RBCAEN1x90Unpacker.h>
+#include <RBMADC32Unpacker.h>
 #include <RBSisTimestampUnpacker.h>
 #include <RBTimestamp.h>
 
