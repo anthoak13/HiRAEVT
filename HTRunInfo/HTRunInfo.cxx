@@ -24,6 +24,7 @@ HTRunInfo::~HTRunInfo()
 //________________________________________________
 int HTRunInfo::LoadDAQSettings(const char * file_name)
 {
+  std::cout << "Loading DAQ file " << file_name << std::endl;
   std::ifstream FileIn(file_name);
   if(!FileIn.is_open()) {
     return -1;

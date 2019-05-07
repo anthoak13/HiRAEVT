@@ -2,10 +2,8 @@
 //  RBCAEN1x90Unpacker.cpp
 //
 
-//#include <config.h>
+
 #include "RBCAEN1x90Unpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
 #include <iostream>
 
 using namespace std;
@@ -193,12 +191,17 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   // If this chunk of the event is for us, there should be a TDC global header,
   // and it should have a geo field that matches the vsn in our pMap element.
   UInt_t header = getLong(event, offset);
-  if (header == 0xffffffff) {
-    return offset+2;
+  while (header == 0xffffffff) {
+    offset += 2;
+    header = getLong(event, offset);
   }
 
-  if ((header & ITEM_TYPE) != TYPE_GBLHEAD) return offset; // not TDC data.
+  if ((header & ITEM_TYPE) != TYPE_GBLHEAD)
+  {
+    return offset; // not TDC data.
+  }
   if ((header & GBLHEAD_VSN ) != GetVSN()) {
+    cerr << "Failed to find TDC" << endl;
     fVSNMismatchCount++;
     return offset;
   }
@@ -215,9 +218,13 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   bool done = false;
   int  totalHits     = 0;
   while((offset < maxoffset) && !done) {
+
     UInt_t datum = getLong(event, offset);
-    if (datum == 0xffffffff) break; // premature end of event.
+    if (datum == 0xffffffff)
+      break; // premature end of event.
+
     offset += 2;
+
     switch (datum & ITEM_TYPE) {
         // Ignored types:
       case TYPE_TDCHEAD:
@@ -228,12 +235,13 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
       case TYPE_GBLTRAIL:
         // Skip any extra events. I think this is from the event buffer.
-        while(event[offset]!=0xffff && offset<maxoffset) offset++;
-        done  = true;
+        while(event[offset]!=0xffff && offset<maxoffset)
+	  offset++;
+
+	done  = true;
         break;
 
         // The error type prints out an error message:
-
       case TYPE_ERROR:
         fErrorCount++;
         reportError(datum, GetVSN());

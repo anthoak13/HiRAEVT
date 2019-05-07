@@ -1,6 +1,6 @@
 #!/bin/bash
 
-clear
+
 
 first_run=$1
 
