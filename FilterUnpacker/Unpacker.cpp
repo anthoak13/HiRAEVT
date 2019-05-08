@@ -460,6 +460,11 @@ void Unpacker::PrintSummary()
   printf("%llu words read\n", fReadWords);
   printf("%llu timestamp mismatches found\n", fTimestampMismatch);
   printf("--End of Unpacking--\n\n");
+
+  TIter nextModule(gExperiment->GetElectronicsList());
+  while(RBElectronics *elc = (RBElectronics*)nextModule())
+    elc->PrintSummary();
+  
 }
 
 //______________________________________________________________________________
