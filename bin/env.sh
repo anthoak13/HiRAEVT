@@ -1,8 +1,10 @@
 #For questions, talk to Juan Manfredi or Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 
 ROOTVERSION=6.04.02
+export HiRAEVTCONFIG=config/HiRAEVT.conf
 
 #Set ROOT version to $ROOTVERSION ################################
+
 # WARNING: the program works with ROOTVERSION>=6
 module unload root
 module load root/gnu/${ROOTVERSION}

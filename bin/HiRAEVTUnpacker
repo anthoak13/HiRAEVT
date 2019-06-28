@@ -1,10 +1,5 @@
 #!/bin/bash
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 8c19ea7296d7a52e7c6a585c91e3c69ed9e7c211
-
 first_run=$1
 
 if [ -z "$2" ]; then
