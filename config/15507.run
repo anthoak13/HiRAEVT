@@ -1,0 +1,183 @@
+26 Sb125 source into the HPGe
+27 Co60 source into the HPGe
+28 ICPulser
+29 ICPulser
+30 ICPulser
+31 ICPulser
+32 ICPulser
+33 ICPulser
+34 Ge test with 60Co
+35 Ge test with 125Sb
+36 IC Pulser test
+37 Si Pulser Ramp, 0.5~10.5, step size 0.5
+38 dE pulser ramp, 0.5~9.5, step size 0.5
+39 dE pulser ramp, 0.5~9.5, step size 0.5
+40 E pulser ramp, 0.5~9.5, step size 0.5
+41 E pulser ramp, 0.5~9.5, step size 0.5
+42 dE pulser ramp, 0.5~9.5, step size 0.5
+43 dE pulser ramp, 0.5~9.5, step size 0.5
+45 test for Tommy
+46 test for Tommy
+47 test for Tommy
+48 test for Tommy
+49 test
+50 Pb 208 85 MeV/A Trig:DSAnode
+51 Pb 208 85 MeV/A Trig:DSAnode
+52 Pb 208 85 MeV/A Trig:DSAnode
+53 Pb 208 85 MeV/A Trig:DSAnode
+54 Pb 208 85 MeV/A Trig:DSAnode
+55 Pb 208 85 MeV/A Trig:DSAnode
+56 Pb 208 85 MeV/A Trig:DSAnode
+57 Pb 208 85 MeV/A Trig:DSAnode
+58 Pb 208 85 MeV/A Trig:DSAnode
+59 Pb 208 85 MeV/A Trig:DSAnode
+60 Pb 208 85 MeV/A Trig:DSAnode
+61 Pb 208 85 MeV/A Trig:DSAnode
+62 Pb 208 85 MeV/A Trig:DSAnode
+63 Pb 208 85 MeV/A Trig:DSAnode
+64 Pb 208 85 MeV/A Trig:DSAnode
+65 Pb 208 85 MeV/A Trig:DSAnode
+66 Pb 208 85 MeV/A Trig:DSAnode
+67 Pb 208 85 MeV/A Trig:DSAnode
+68 Pb 208 85 MeV/A Trig:DSAnode
+69 Pb 208 85 MeV/A Trig:DSAnode
+70 Pb 208 85 MeV/A Trig:DSAnode
+71 Pb 208 85 MeV/A Trig:DSAnode
+72 Pb 208 85 MeV/A Trig:DSAnode
+73 Pb 208 85 MeV/A Trig:DSAnode
+74 Pb 208 85 MeV/A Trig:DSAnode
+75 Pb 208 85 MeV/A Trig:DSAnode
+76 Pb 208 85 MeV/A Trig:DSAnode
+77 Pb 208 85 MeV/A Trig:DSAnode
+78 Pb 208 85 MeV/A Trig:DSAnode
+79 Pb 208 85 MeV/A Trig:DSAnode
+80 Pb 208 85 MeV/A Trig:DSAnode
+81 Pb 208 85 MeV/A Trig:DSAnode
+82 Pb 208 85 MeV/A Trig:DSAnode
+83 Pb 208 85 MeV/A Trig:DSAnode
+84 Pb 208 85 MeV/A Trig:DSAnode
+85 Pb 208 85 MeV/A Trig:DSAnode
+86 Pb 208 85 MeV/A Trig:DSAnode
+87 Pb 208 85 MeV/A Trig:DSAnode
+88 Pb 208 85 MeV/A Trig:DSAnode
+89 Pb 208 85 MeV/A Trig:DSAnode
+90 Pb 208 85 MeV/A Trig:DSAnode
+91 Pb 208 85 MeV/A Trig:DSAnode
+92 Pb 208 85 MeV/A Trig:DSAnode
+93 Pb 208 85 MeV/A Trig:DSAnode
+94 Pb 208 85 MeV/A Trig:DSAnode both ICs 80MeV
+95 Pb 208 85 MeV/A Trig:DSAnode both ICs 80MeV
+96 Pb 208 85 MeV/A Trig:DSAnode both ICs 80MeV
+97 Pb 208 85 MeV/A Trig:DSAnode both ICs 70MeV
+98 Pb 208 85 MeV/A Trig:DSAnode both ICs 60MeV
+99 Pb 208 85 MeV/A Trig:DSAnode both ICs 50MeV
+100 Pb 208 85 MeV/A Trig:DSAnode both ICs 40MeV
+101 Pb 208 85 MeV/A Trig:DSAnode both ICs 30MeV
+102 Pb 208 85 MeV/A Trig:DSAnode both ICs 20MeV
+103 Pb 208 85 MeV/A Trig:DSAnode both ICs 10MeV
+104 Pb 208 85 MeV/A Trig:DSAnode both ICs 5MeV
+105 Pb 208 85 MeV/A Trig:DSAnode both ICs 90MeV
+106 Pb 208 85 MeV/A Trig:DSAnode both ICs 110MeV
+107 Pb 208 85 MeV/A Trig:DSAnode both ICs 130MeV
+108 Pb 208 85 MeV/A Trig:DSAnode both ICs 150MeV
+109 Pb 208 85 MeV/A Trig:DSAnode both ICs 170MeV
+110 Pb 208 85 MeV/A Trig:DSAnode both ICs 250MeV
+111 Pb 208 85 MeV/A Trig:DSAnode both ICs 350MeV
+112 Pb 208 85 MeV/A Trig:DSAnode both ICs at nominal voltages
+113 Pb 208 85 MeV/A Trig:DSAnode both ICs at nominal voltages
+114 Pb 208 85 MeV/A Trig:DSAnode  300Torr 5us shaping
+115 Pb 208 85 MeV/A Trig:DSAnode  300Torr 5us shaping
+116 Pb 208 85 MeV/A Trig:DSAnode  300Torr 5us shaping ICs at 30V
+117 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+118 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+119 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+120 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr pulser ramp 0-0.14V
+121 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr pulser ramp 0-0.04V
+122 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+123 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+124 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300 torr
+125 Pulser ramp
+126 06/17/2019 08:04:59 Pb 208 85 MeV/A Trig:DSAnode  Isobutane 300Torr
+127 06/17/2019 13:24 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+128 06/17/2019 13:24 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+129 06/17/2019 13:24 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+131 06/17/2019 13:24 IC Calibration 131
+132 06/17/2019 13:24 IC Calibration 132
+133 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+134 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+135 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+136 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+137 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+138 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+139 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+140 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+141 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+142 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+143 06/17/2019 15:55 Beam:196Pb 80+  3.1228Tm Trig:DSAnode
+144 06/17/2019 22:38 HPGe Background Trig:HPGe
+145 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:HPGe
+146 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:HPGe
+147 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:HPGe
+148 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:HPGe
+149 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:HPGe
+150 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+151 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+152 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+153 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+154 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+155 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+159 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+160 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+163 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+164 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+165 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+167 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+168 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+169 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+170 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+171 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+172 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+173 06/17/2019 22:58 Beam:196Pb 80+  3.1228Tm Trig:DAnode
+174 06/17/2019  HPGe Background Trig:HPGe
+175 06/17/2019  HPGe source Trig:HPGe
+176 06/17/2019  HPGe source Trig:HPGe
+177 06/17/2019  HPGe background Trig:HPGe
+178 06/17/2019  HPGe background Trig:HPGe
+179 06/17/2019  HPGe background Trig:HPGe
+180 06/17/2019  HPGe background Trig:HPGe
+181 06/17/2019  HPGe background Trig:HPGe
+182 06/17/2019  HPGe background Trig:HPGe
+183 06/17/2019  pulser ramp 
+184 06/17/2019  HPGe background Trig:HPGe
+185 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+186 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+187 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+188 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+189 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+190 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+191 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+192 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+193 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+194 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+195 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+196 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+197 06/17/2019  196Pb 80+ CF4 Trig:DSAnode
+198 06/17/2019  196Pb 80+ CF4 Trig:DSAnode 150 torr 300 V
+199 06/17/2019  196Pb 80+ CF4 Trig:DSAnode 150 torr 300 V
+200 06/17/2019  196Pb 80+ CF4 Trig:DSAnode 150 torr 300 V
+201 06/17/2019  196Pb 80+ CF4 Trig:DSAnode no gas in ion chamber
+202 06/17/2019  196Pb 80+ CF4 Trig:DSAnode no gas in ion chamber
+203 06/17/2019  196Pb 80+ Isobutane Trig:DSAnode
+204 06/17/2019  196Pb 80+ Isobutane Trig:DSAnode
+205 06/17/2019  196Pb 80+ Isobutane Trig:DSAnode
+206 06/17/2019  196Pb 80+ Isobutane Trig:DSAnode
+207 06/17/2019  IC 0V..0.45V 19 steps Trig:Pulser
+208 06/17/2019  Si dE 0V..010V 21 steps Trig:Pulser
+209 06/17/2019  Si dE 0V..010V 21 steps Trig:Pulser
+210 06/17/2019  Si E 0V..010V 21 steps Trig:Pulser
+211 06/17/2019  Ge with 125Sb source Trig:Ge
+212 06/17/2019  Ge Background source Trig:Ge
+213 06/17/2019  Ge Background source Trig:Ge
+214 06/17/2019  Ge Background source Trig:Ge
+215 06/17/2019  Ge Background source Trig:Ge
+216 06/17/2019  Ge Background source Trig:Ge
