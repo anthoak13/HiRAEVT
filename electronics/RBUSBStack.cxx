@@ -251,8 +251,8 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
   // -- Unpack a USB fragment and any defined electronics modules.
   //
   // pEvent should point to the USBStack header.
-
-  //  cout << "Unpacking RBUSBStack: " << endl;
+  // Assumes that there could be extra pairs of ffffs
+  // and skips over them
 
   fEventCount++;          // event counter
   vector<UShort_t> event; // A vector of assembeled event data.
@@ -261,14 +261,9 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
   Int_t sOffset = 0;
 
   // Assemble the data into a vector of UShort_t's that we can use.
-  //  cout << "Address of pEvent before assembling into vector: " << *pEvent << endl;
   info = assembleEvent(pEvent, event);
-  //  cout << "Asembled event " << event[0] << endl;
-  //  cout << "First value of event: " << event[0] << endl;
-  fWordsCount+=info.s_stackSize+14; // Number of words unpacked for the stack
 
-  // Unpack the fragment timestamp
-  //  if(fUSBTimestamp) sOffset = fUSBTimestamp->Unpack(pEvent);
+  fWordsCount+=info.s_stackSize+14; // Number of words unpacked for the stack
 
   // Loop over all the defined USB stacks.
   TIter nextStack(fStacks);
@@ -282,104 +277,144 @@ Int_t RBUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
     TIter nextModule(stack);
 
 
-    while(RBElectronics* module = (RBElectronics*)nextModule()){
-      //      cout << "Within stack, module is " << module->GetBranchName() << endl;
-
-      //      cout << "Print out some of the buffer" << endl;
-      /*
-      for (int i=0; i<24; i++){
-	cout << hex << event[sOffset+i] << endl;
-      }
-      */
-
+    while(RBElectronics* module = (RBElectronics*)nextModule())
+    {
       // Search the RingItem body for this module's data.
       // Get the 'header' .. ensure that it matches our VSN if module has a VSN.
       unsigned long header;
       int           vsn = -99;
 
-      //DEBUG
-      //      cout << "Module " << module << endl;
-      //      cout << " is called " << module->ClassName() << endl;
-
       // If this is a Marker, just read it.
-      if(strcmp(module->ClassName(),"RBUSBStackMarker")==0){
-	      cout << "Found marker: " << module->ClassName() << endl;
+      if(strcmp(module->ClassName(),"RBUSBStackMarker")==0)
+      {
+
+	cout << "Found marker: " << module->ClassName() << endl;
         RBUSBStackMarker *marker = (RBUSBStackMarker*)module;
         sOffset = marker->Unpack(event,sOffset);
-      } else {
+
+      } else
+      {
+	
         // Try to unpack the module given the order it was defined in the stack.
         // If the VSN does not match, then search for the VSN in rest of the body.
-        header  = getLong(event, sOffset);
-        vsn     = module->DecodeVSN(header);
+	while (event[sOffset] == 0xffff)
+	  sOffset++;
 
-	     //DEBUG
-	     //	cout << "VSN: " << vsn << " " << module->GetName() << " " << module->GetVSN() << " " << sOffset << " " << event[sOffset] << endl;
-       //WARNING : during experiment 15190 a mistake in the daqconfig file makes one of the modules having VSN 0.
-       // I will temporarly use the solution 3.) in the following block of code.
-       // Sometimes VSN can be 0. In such a case we can have at least 3 possibiliets:
-       // 1.) The rest of the buffer is corrupted. So we skip the rest (Juan Manfredi's solution)
-       // 2.) A bunch of words are corrupted bun then we will find good data. Just skip the words with VSN = 0 (Daniele Dell'Aquila's solution)
-       // 3.) If VSN=0 but also the VSN of the module is 0 so keep Unpacking the module. Otherwise just keep skipping VSN until the VSN of the module is found.
-       //
-       // 1.) Juan Manfredi's code
-       //If the VSN is 0, then this is definitely a junk event and I
-	     //want to escape
+	//Make sure wer're in a good region
+	if(sOffset > event.size()-2)
+	  break;
+
+	header = getLong(event, sOffset);
+	// Get the VSN
+        vsn = module->DecodeVSN(header);
+
+	//cout << "VSN: " << vsn << " " << module->GetName() << " " << module->GetVSN() << " " << sOffset << " " << hex << event[sOffset] << endl;
+	//WARNING : during experiment 15190 a mistake in the daqconfig file makes one of the modules having VSN 0.
+	// I will temporarly use the solution 3.) in the following block of code.
+	// Sometimes VSN can be 0. In such a case we can have at least 3 possibiliets:
+	// 1.) The rest of the buffer is corrupted. So we skip the rest (Juan Manfredi's solution)
+	// 2.) A bunch of words are corrupted bun then we will find good data. Just skip the words with VSN = 0 (Daniele Dell'Aquila's solution)
+	// 3.) If VSN=0 but also the VSN of the module is 0 so keep Unpacking the module. Otherwise just keep skipping VSN until the VSN of the module is found.
+	//
+	// 1.) Juan Manfredi's code
+	//If the VSN is 0, then this is definitely a junk event and I
+	//want to escape
         /*
      	  if (vsn == 0) {
-	        fVsnErrorCount++;
-	        return event.size();
+	  fVsnErrorCount++;
+	  return event.size();
     	  }
         */
         // 2.) Daniele Dell'Aquila's code
         //If vsn = 0 the word is clearly corrupted, but no need to skip the whole event
-        /*
-	      while (vsn == 0)
+	/*
+	while (vsn == 0)
         {
           sOffset+=2;
           header  = getLong(event, sOffset);
           vsn     = module->DecodeVSN(header);
         }
-	      */
+	*/
         // 3.) Daniele Dell'Aquila's code to handle the daqconfig mistake
         // WARNING: possible bug, here sOffset can be 0 and the following condition can have strange behaviours (temporarly changed by Daniele Dec2017)!!!
-        if(getLong(event,sOffset)==0xffffffff && (getLong(event,sOffset+1)==0xffffffff || (sOffset>0 && getLong(event,sOffset-1)==0xffffffff))) {
-          // This event was not properly constructed. Possible missing module data. However, it could be that the modules are simply empty.
-          // burn up a set of 0xffff's
-          sOffset += 2;
-          module->SetUnpackError(10); // Error code.
-          fUnpackErrorCount++;
-	  //	  cout << "Unpack "Error" Count up to " << fUnpackErrorCount << endl;
-        } else if(vsn == module->GetVSN() || module->GetVSN() == -1) {
-          sOffset = module->Unpack(event, sOffset);
-        } else {
+	
+//	if(getLong(event,sOffset)==0xffffffff &&
+//	   ( getLong(event,sOffset+1)==0xffffffff ||
+//	     ( sOffset>0 && getLong(event,sOffset-1)==0xffffffff )
+//	   )
+//	  )
+//	{
+	//        // This event was not properly constructed. Possible missing module data. However, it could be that the modules are simply empty.
+          //// burn up a set of 0xffff's
+          //sOffset += 2;
+          //module->SetUnpackError(10); // Error code.
+          //fUnpackErrorCount++;
+	
+//        } else if(vsn == module->GetVSN() || module->GetVSN() == -1)
+	if(vsn == module->GetVSN() || module->GetVSN() == -1)
+	  sOffset = module->Unpack(event, sOffset);
+	else
+	{
+/*	  
+	  cout << "Failed to find VSN" <<  module->GetVSN() << " for " << module->GetName()
+	       << " at " << sOffset << " with " << hex << event[sOffset] << endl;
+	  cout << "Found " << vsn << " instead" << endl;
+	  //Print out the buffer
+	  for(int i =0; i < event.size(); i++)
+	  {
+	    if(i%4==0) cout << endl;
+	    cout << " " << hex << event[i];
+	  }
+	  std::cout << endl;
+*/	  
+	  bool found = false;
+	  auto oldOffset = sOffset;
+
           // Scan the RingItem body for the VSN of this module.
-          while(sOffset<event.size() && vsn != module->GetVSN()) {
+	  // If it isn't found return the offset to previous value
+          while(sOffset<event.size() && !found)
+	  {
             header  = getLong(event, sOffset);
             vsn     = module->DecodeVSN(header);
-            fVsnErrorCount++;
+	    found = vsn == module->GetVSN();
             sOffset += 2;
           }
-        }
-      }
+	  if(!found)
+	  {
+	    sOffset = oldOffset;
+	    fVsnErrorCount++;
+	  }
+	  
+	}// end loop over failed vsn search
+      } //end if over module type
 
       //If the offset is nonsense, get out
       if (sOffset == -1) {break;}
-//      // If we did not find a VSN, then the module may not have written a VSN.
-//      // Try to unpack the module given the order it was defined in the stack.
-//      if(sOffset >= event.size()) {
-//        cerr << "Did not find our data for VSN " << module->GetVSN() << " " << vsn << ". . ." << endl;
-//        sOffset = offset;		// If immed BERR skip the BERR word and give up
-//      }
-	}
-  }
 
-//  offset = event.size();
+    }//end while loop over modules
 
+  }//end loop over stacks
+  
+  
+  //Clear out any remaining ffffs
+  while(event[sOffset] == 0xffff)
+    sOffset++;
+  
   // Something went wrong if we didn't burn up the entire event:
-  if(sOffset != event.size()) {
+  if(sOffset < event.size())
+  {
     fBufferMismatchCount++;
     cerr << "**WARNING** Event not entirely decoded by unpackers -- READ: "
          << sOffset << " SIZE: " << event.size() << " EVENT: " << fEventCount << endl;
+
+    for(int i =0; i < event.size(); i++)
+    {
+      if(i%4==0) cout << endl;
+      cout << " " << hex << event[i];
+    }
+    cout << std::endl;
+    
+    
     return event.size();
   }
 
@@ -406,9 +441,10 @@ RBUSBStack::assembleEvent(UShort_t *p, vector<UShort_t>& event)
   int  stackId = -1;
   size_t totalSize = 0;
   while(!done) {
+
     // Decode the header:
-    UShort_t header = *p; ++p;
-    done            = (header & VMUSB_CONTINUE) == 0;
+    UShort_t header = *p++;
+    done             = (header & VMUSB_CONTINUE) == 0;
     int fragmentSize = header & VMUSB_LENGTH;
     totalSize++;		// headers are a word of size...
 
@@ -419,7 +455,7 @@ RBUSBStack::assembleEvent(UShort_t *p, vector<UShort_t>& event)
 
     // Append the fragment to the event vector
     for (int i=0; i < fragmentSize; i++) {
-      UShort_t datum = *p; ++p;
+      UShort_t datum = *p++;
       event.push_back(datum);
     }
     totalSize += fragmentSize;	// Words in the fragment...

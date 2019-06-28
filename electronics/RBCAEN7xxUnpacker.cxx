@@ -154,6 +154,7 @@ Int_t RBCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   int vsn = DecodeVSN(header);
 
   if(vsn != GetVSN()) {
+    cerr << "VSN wrong: " << vsn << " " << GetVSN() << std::endl;
     fVSNMismatchCount++;
     return offset;
   }

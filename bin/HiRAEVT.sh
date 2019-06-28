@@ -1,6 +1,10 @@
 #For questions, talk to Juan Manfredi or Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
 
+#Set the root version
 ROOTVERSION=6.04.02
+
+#Set the path of HiRAEVT config file
+export HiRAEVTCONFIG=config/HiRAEVT.conf
 
 #Set ROOT version to $ROOTVERSION ################################
 # WARNING: the program works with ROOTVERSION>=6
@@ -16,7 +20,7 @@ while IFS= read -r line;do
     if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
       HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
     fi
-done < config/HiRAEVT.conf
+done < $HiRAEVTCONFIG
 
 export LD_LIBRARY_PATH=$ROOTSYS/lib/root:$LD_LIBRARY_PATH:./
 

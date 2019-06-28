@@ -2,10 +2,8 @@
 //  RBCAEN1x90Unpacker.cpp
 //
 
-//#include <config.h>
+
 #include "RBCAEN1x90Unpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
 #include <iostream>
 
 using namespace std;
@@ -193,12 +191,22 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   // If this chunk of the event is for us, there should be a TDC global header,
   // and it should have a geo field that matches the vsn in our pMap element.
   UInt_t header = getLong(event, offset);
-  if (header == 0xffffffff) {
-    return offset+2;
+
+  if ((header & ITEM_TYPE) != TYPE_GBLHEAD)
+  {
+    cerr << "Not TDC Data" << endl;
+    for(int i = offset; i < event.size(); ++i)
+    {
+      if(i%4 == 0)
+	cout << endl;
+      cout << hex << event[i] << " ";
+    }
+    cout << endl;
+    return offset; // not TDC data.
   }
 
-  if ((header & ITEM_TYPE) != TYPE_GBLHEAD) return offset; // not TDC data.
   if ((header & GBLHEAD_VSN ) != GetVSN()) {
+    cerr << "Failed to find TDC: " << (header & GBLHEAD_VSN ) << endl;
     fVSNMismatchCount++;
     return offset;
   }
@@ -215,9 +223,13 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
   bool done = false;
   int  totalHits     = 0;
   while((offset < maxoffset) && !done) {
+
     UInt_t datum = getLong(event, offset);
-    if (datum == 0xffffffff) break; // premature end of event.
+    if (datum == 0xffffffff)
+      break; // premature end of event.
+
     offset += 2;
+
     switch (datum & ITEM_TYPE) {
         // Ignored types:
       case TYPE_TDCHEAD:
@@ -228,12 +240,13 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
       case TYPE_GBLTRAIL:
         // Skip any extra events. I think this is from the event buffer.
-        while(event[offset]!=0xffff && offset<maxoffset) offset++;
-        done  = true;
+        while(event[offset]!=0xffff && offset<maxoffset)
+	  offset++;
+
+	done  = true;
         break;
 
         // The error type prints out an error message:
-
       case TYPE_ERROR:
         fErrorCount++;
         reportError(datum, GetVSN());
@@ -251,77 +264,52 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
     }
   }
-  // If the next longword is a 0xffffffff that's due to the BERR
-  // at the end of our readout:
-
-  if(getLong(event, offset) == 0xffffffff) offset += 2;
-
-  //As a test, print out the channels that have been hit
-  //for (int i=0; i < chanVec.size(); i++){
-  //    cout << "The " << i << "th channel is " << chanVec[i] << endl;
-  //  }
-
 
   // If we got no hits (just tdc headers/trailers don't do anything.
-
-  if (totalHits > 0) {
-
-    fTotalUnpackedData+=totalHits;
-
-    //
-    // Two cases to consider.  If the reference channel number is -1
-    // there's no reference channel..otherwised there is:
-    //
-    Int_t reftime = 0;                // Default to no reference chhanel:
-    if(fRefChannel >= 0) {            //  Reference channel used:
-
-      if (rawTimes[fRefChannel].size() > 0) {
-        reftime = rawTimes[fRefChannel][0];
-      }
-      else {
-        fNoReferenceCount++;
-        std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
-        std::cerr << GetVSN() << std::endl;
-        return offset;
-      }
+  if (totalHits <= 0)
+    return offset;
+  
+  fTotalUnpackedData+=totalHits;
+  
+  //
+  // Two cases to consider.  If the reference channel number is -1
+  // there's no reference channel..otherwised there is:
+  //
+  Int_t reftime = 0;                // Default to no reference chhanel:
+  if(fRefChannel >= 0) {            //  Reference channel used:
+    
+    if (rawTimes[fRefChannel].size() > 0)
+      reftime = rawTimes[fRefChannel][0];
+    else
+    {
+      fNoReferenceCount++;
+      std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
+      std::cerr << GetVSN() << std::endl;
+      return offset;
     }
+  }
+  
+  // The reftime defaults to zero which essentially does not adjust the times
+  // if no reference channel is specified.
+  
+  for (int i = 0; i < fnChannels; i++)
+  {
+    int hits = rawTimes[i].size();
+    if (hits > fDepth)
+	hits = fDepth;
+    
+    for (int hit =0; hit < hits; hit++)
+    {
+      double triggerRelative = static_cast<double>(rawTimes[i][hit] - reftime);
+      
+      //Get rid of random gen noise
+      //if(triggerRelative!=0)
+      //triggerRelative += fRandomGen->Rndm()-0.5;
+      fTimes[i] = triggerRelative*fChsToNs;
 
-    // The reftime defaults to zero which essentially does not adjust the times
-    // if no reference channel is specified.
-
-    for (int i = 0; i < fnChannels; i++) {
-      int hits = rawTimes[i].size();
-      if (hits > fDepth) hits = fDepth;
-      for (int hit =0; hit < hits; hit++) {
-        double triggerRelative = static_cast<double>(rawTimes[i][hit] - reftime);
-
-        if(triggerRelative!=0) {
-	  triggerRelative       += fRandomGen->Rndm()-0.5;
-        }
-        triggerRelative        = triggerRelative*fChsToNs;
-
-	//        fTimes[hit] = triggerRelative; // common stop assumption.
-	//Line above was originally put in by Andy, but as far as I can tell is totally wrong
-	//fTimes should be indexed by the channel number, not the hit number
-
-        fTimes[i] = triggerRelative; // common stop assumption.
-
-//         printf("writing channel i=%d with fTimes[%d]=%d\n", i, i,fTimes[i]);
-
-	/*
-	if (i==64 || i==65){
-	  cout << "Unpacking data from the TDC, hit " << hit << " and channel " << i << endl;
-	  cout << "Raw time is " << rawTimes[i][hit] << ", reftime is " << reftime << endl;
-	  cout << "triggerRelative adjusted to ns is " << triggerRelative << endl;
-	}
-	*/
-
-
-      }
-    }
-  } // Have some hits.
-  //  cout << "Yes: " << yes << " total events: " << events << " fraction " << (Double_t)yes/events << endl;
-
+    }//End loop over hits
+  } //end loop over channels
+  
   return offset;
 
 }
