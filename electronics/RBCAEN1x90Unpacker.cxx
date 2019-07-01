@@ -283,8 +283,8 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
     else
     {
       fNoReferenceCount++;
-      std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
-      std::cerr << GetVSN() << std::endl;
+      //std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
+      //std::cerr << GetVSN() << std::endl;
       return offset;
     }
   }
