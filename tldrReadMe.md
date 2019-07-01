@@ -41,3 +41,12 @@ $ HiRAEVTUnpacker FIRST_RUN LAST_RUN
 where FIRST_RUN and LAST_RUN define the range of runs to unpack.
 
 ### Getting the data
+
+## Adding a new detector
+
+To add a new detector there a number of classes that need to be defined. First a detector class must be created that extends HTDetector. This subclass is responsible for writing the functions `InitTreeBranch(TTree *)`, `BuildEvent()`, and `FillMappedData()`. This esentially defines the behavior of the class.
+
+In general, each detector has an associated data type. For example, the ion chamber has detector class `HTIonChamber` with associated data type `HTIonChamberData`. The tree branch associated with this detector is then an instance of this data type.
+
+In order to get this to work, there is also an associate RootEvent class (HTIonChamberRootEvent) that is defined in the same header file. This is just a class to hold an instance of the Data class to write to the tree
+
