@@ -1,0 +1,72 @@
+** Pedestal values for e15507 **
+** Written by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
+** Adjusted by Joseph Wieske (wieskejo@msu.edu)
+** Short guide *****************************************************************
+** To define the pedestal value of a module RBCAEN7xxUnpacker use the "set" command as follows:
+** set pedestal module_name ch value
+** for example, if I want to set to 351.4 the pedestal of channel 4 of module "qdc2":
+** set pedestal qdc2 4 351.4
+********************************************************************************
+
+* pedestals for adc1 ****************
+set pedestal adc1 0	  43
+set pedestal adc1 1	  60
+set pedestal adc1 2	  50
+set pedestal adc1 3	  50
+set pedestal adc1 4	  50
+set pedestal adc1 5	  50
+set pedestal adc1 6	  55
+set pedestal adc1 7	  55
+*************************************
+
+* pedestals for adc2 ****************
+set pedestal adc2 0	  45
+set pedestal adc2 1	  32
+*************************************
+
+* pedestals for qdc1 ****************
+set pedestal qdc1 0       62
+*************************************
+
+* pedestals for qdc2 ****************
+set pedestal qdc2 0	  65
+*************************************
+
+* pedestals for qdc3 ****************
+*************************************
+
+* pedestals for qdc4 ****************
+*************************************
+
+* pedestals for qdc5 ****************
+*************************************
+
+* pedestals for qdc6 ****************
+*************************************
+
+* pedestals for qdc7 ****************
+*************************************
+
+* pedestals for qdc8 ****************
+*************************************
+
+* pedestals for qdcfart *************
+*************************************
+
+* pedestals for MBqdc1 **************
+*************************************
+
+* pedestals for MBqdc2 **************
+*************************************
+
+* pedestals for MBqdc3 **************
+*************************************
+
+* pedestals for MBqdc4 **************
+*************************************
+
+* pedestals for MBqdc5 **************
+*************************************
+
+* pedestals for MBqdc6 **************
+*************************************

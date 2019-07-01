@@ -1,4 +1,7 @@
-CFLAGS    :=`root-config --cflags --libs`
+# Set the detector name
+DETECTOR_NAME := $(shell basename `pwd`)
+
+CFLAGS    := $(shell root-config --cflags --libs)
 SYSLIB    := -lz -l TreePlayer -lMathMore
 
 DllSuf    := so
@@ -7,57 +10,59 @@ ObjSuf    := o
 PcmSuf    := _rdict.pcm
 
 INCLUDES  := -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/shared
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTNeutronWall
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/$(DETECTOR_NAME)
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTDetector
+RLIBS     := -L$(HiRAEVTLIB) -lHTDetector -lHTShared
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
-HTNEUTRONWALL_DICT  := HTNeutronWallDict.$(SrcSuf)
-HTNEUTRONWALL_DICTH := $(HTNEUTRONWALL_DICT:.$(SrcSuf)=.h)
-HTNEUTRONWALL_DICTO := $(HTNEUTRONWALL_DICT:.$(SrcSuf)=.$(ObjSuf))
-HTNEUTRONWALL_PCM   := HTNeutronWallDict$(PcmSuf)
+DETECTOR_DICT  := ${DETECTOR_NAME}Dict.$(SrcSuf)
+DETECTOR_DICTH := $(DETECTOR_DICT:.$(SrcSuf)=.h)
+DETECTOR_DICTO := $(DETECTOR_DICT:.$(SrcSuf)=.$(ObjSuf))
+DETECTOR_PCM   := ${DETECTOR_NAME}Dict$(PcmSuf)
 
-HTNEUTRONWALL_HDRS  := $(wildcard HT*.$(SrcSuf))
+DETECTOR_HDRS  := $(wildcard HT*.$(SrcSuf))
 
-HTNEUTRONWALL_HDRS  := $(HTNEUTRONWALL_HDRS:.$(SrcSuf)=.h) HTNeutronWallLinkDef.h
-HTNEUTRONWALL_HDRS  := $(filter-out $(HTNEUTRONWALL_DICTH),$(HTNEUTRONWALL_HDRS))
+DETECTOR_HDRS  := $(DETECTOR_HDRS:.$(SrcSuf)=.h) ${DETECTOR_NAME}LinkDef.h
+DETECTOR_HDRS  := $(filter-out $(DETECTOR_DICTH),$(DETECTOR_HDRS))
 
-HTNEUTRONWALL_LIB := libHTNeutronWall.$(DllSuf)
+DETECTOR_LIB := lib${DETECTOR_NAME}.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
-	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+	$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
 	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-all: $(HTNEUTRONWALL_LIB)
+all: $(DETECTOR_LIB)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf) .$(PcmSuf)
 
-$(HTNEUTRONWALL_DICT): $(HTNEUTRONWALL_HDRS)
+$(DETECTOR_DICT): $(DETECTOR_HDRS)
 	@echo "Generating dictionary $@..."
 	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
-$(HTNEUTRONWALL_LIB): $(OBJS) $(HTNEUTRONWALL_DICTO)
+$(DETECTOR_LIB): $(OBJS) $(DETECTOR_DICTO)
 	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
 	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
 
 install:
-	@cp $(HTNEUTRONWALL_LIB) $(HTNEUTRONWALL_PCM) $(HiRAEVTLIB)/.
+	@cp $(DETECTOR_LIB) $(DETECTOR_PCM) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
-	@rm -f $(HTNEUTRONWALL_LIB) $(HTNEUTRONWALL_DICT) $(HTNEUTRONWALL_DICTH) $(HTNEUTRONWALL_PCM)
-	@rm -f $(HiRAEVTLIB)/$(HTNEUTRONWALL_LIB)
-	@rm -f $(HiRAEVTLIB)/$(HTNEUTRONWALL_PCM)
+	@rm -f $(DETECTOR_LIB) $(DETECTOR_DICT) $(DETECTOR_DICTH) $(DETECTOR_PCM)
+	@rm -f $(HiRAEVTLIB)/$(DETECTOR_LIB)
+	@rm -f $(HiRAEVTLIB)/$(DETECTOR_PCM)
 
 .PHONY: clean
 clean:
-	@$(RM) -f $(LIB) $(OBJS) $(HTNEUTRONWALL_DICTO) $(HTNEUTRONWALL_DICT) $(HTNEUTRONWALL_DICTH) $(HTNEUTRONWALL_PCM)
+	@$(RM) -f $(LIB) $(OBJS) $(DETECTOR_DICTO) $(DETECTOR_DICT) $(DETECTOR_DICTH) $(DETECTOR_PCM)
 	@$(RM) -f *.expand
 
 .PHONY: lint
