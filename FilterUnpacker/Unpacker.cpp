@@ -66,6 +66,14 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   strcpy(fSourceFileName, sourceName);
   std::string evtFileStr(fSourceFileName);
   std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
+  auto confVal = std::getenv("HiRAEVTCONFIG");
+  if (confVal == nullptr)
+  {
+    cout << "Envirment not configured for config file" << endl;
+    exit(-1);
+  }
+  std::string configFile(confVal);
+  
   // Determine run number from file name.
   std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-")+4,4));
   int RunNumber = atoi(runNumStr.c_str());
@@ -73,8 +81,10 @@ void Unpacker::InitializeUnpacker(char *sourceName)
 
   //Initialization of RBRunInfo class
   cout << "** Initializing Run Info **\n";
+  cout << "Loading config file: " << configFile << endl;
+  
   gExperimentInfo = new HTExperimentInfo();
-  if(gExperimentInfo->InitClass("config/HiRAEVT.conf")<=0) {
+  if(gExperimentInfo->InitClass(configFile.c_str())<=0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }

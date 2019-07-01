@@ -22,8 +22,19 @@ int main (int argc, char ** argv)
   }
 
   //Initialize HTMapper object
+  auto confVal = std::getenv("HiRAEVTCONFIG");
+  if (confVal == nullptr)
+  {
+    cout << "Envirment not configured for config file" << endl;
+    exit(-1);
+  }
+  std::string configFile(confVal);
+
   printf("** Initializing Mapper **\n");
-  if(TheMapper->InitializeMapper("config/HiRAEVT.conf")!=0) {
+  std::cout << "Loading config file: " << configFile << std::endl;
+
+  
+  if(TheMapper->InitializeMapper(configFile.c_str())!=0) {
     printf("Error while configuring program\n");
     return -2;
   }

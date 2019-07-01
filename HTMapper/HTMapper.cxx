@@ -47,16 +47,21 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
 {
   //Initialization of RBRunInfo class
   std::cout << "** Initializing Run Info **\n";
+  std::cout << "Loading config file: " << file_name << std::endl;
+
   gExperimentInfo = new HTExperimentInfo();
-  if(gExperimentInfo->InitClass("config/HiRAEVT.conf")<=0) {
+
+  if(gExperimentInfo->InitClass(file_name)<=0) {
     std::cout << "Error while reading configuration file.\n";
     exit (-1);
   }
+  
   gRun=gExperimentInfo->GetRunInfo(fRunNumber);
   if(gRun==0) {
    std::cout << "Failed to get run info." << std::endl;
    exit(-1);
   }
+
   std::cout << "** Run Info correctly initialized **\n";
 
   return 0;

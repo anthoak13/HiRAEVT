@@ -1,4 +1,4 @@
-CFLAGS    :=`root-config --cflags --libs`
+CFLAGS    := $(shell root-config --cflags --libs)
 
 DllSuf    := so
 SrcSuf    := cxx
