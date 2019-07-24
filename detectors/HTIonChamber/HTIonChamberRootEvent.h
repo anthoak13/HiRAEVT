@@ -7,10 +7,10 @@
 class HTIonChamberData
 {
 public:
-  Int_t    fmulti;
-  Int_t    *fnumdet;      //[fmulti]
-  Short_t  *fE;           //[fmulti]
-  Double_t *fTime;        //[fmulti]
+  Int_t     fMulti;
+  Int_t    *fDetNum; //[fMulti]
+  Short_t  *fE;      //[fMulti]
+  Double_t *fTime;   //[fMulti]
 
   HTIonChamberData(int);
   virtual ~HTIonChamberData();

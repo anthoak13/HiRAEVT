@@ -14,8 +14,8 @@
 class HTRawDataReader
 {
 public :
-  HTRawDataReader();                  //!Constructor
-  ~HTRawDataReader();                 //!Destructor
+  HTRawDataReader(HTMapper *theMapper);    //!Constructor
+  ~HTRawDataReader();                      //!Destructor
 
   int InitReader();                   //!Called after mapper and input tree are set to initialize input tree branches. Returns -1 if failed to create TTreeReader. -2 failed to retrieve Root input file(s)
   int InitRootInput();                //!Initialize ROOT TTree and TFile for input, returns the number of files retrieved

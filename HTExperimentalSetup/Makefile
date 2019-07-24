@@ -19,6 +19,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTVetoWall
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTForwardArray
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
 RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTDetectorMap -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare
 

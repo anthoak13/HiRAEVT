@@ -50,3 +50,9 @@ In general, each detector has an associated data type. For example, the ion cham
 
 In order to get this to work, there is also an associate RootEvent class (HTIonChamberRootEvent) that is defined in the same header file. This is just a class to hold an instance of the Data class to write to the tree
 
+The module has to be added to the long if statment list in HTExperimentalSetup. The header file has to be included here as well. Becuase of how the make file is written you also have to manually add the directory with the detector header file HTIonChmber.h to the make files in directories HTExperimentalSetup, HTMapper, HTRawDataReader. To the HTMapper make file, you also have to add the library flag -lHTIonChamber. To the main Makefile, you have to add the lines to build and install the detector.
+
+Because the root electronics module was never created for the MADC, I had to write it. Basically I just coppied the CAEN7xx and changed the name. This class also had to be added to the long if statment list in HTExpirementalSetup::BuildElectronicModules.
+
+The HTIonChamberMap class also has to be created and added to the long if statment list in HTExperimentalSetup::BuildDetectorMaps(). *What is the difference between adding the map to fDetectorMaps and the second part of TheDetector?*
+

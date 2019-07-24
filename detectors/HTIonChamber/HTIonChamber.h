@@ -1,19 +1,14 @@
-#ifndef HTFORWARDARRAY_H
-#define HTFORWARDARRAY_H
+#ifndef HTIONCHAMBER_H
+#define HTIONCHAMBER_H
 
 /* *******************************************************************************************************
- * HTForwardArray Class
- * v1.0 04/29/2018
- * class to store Forward Array data derived from RBForwardArray class
- * implemented by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
- * 02/13/2018 v1.0 The class is composed by:
- * 1 HTForwardArrayCluster.
+ * HTIonChamber Class
+ * v1.0 0 7/1/2019
+ * class to store ion chamber data 
+ * implemented by Adam Anthony (anthonya@nscl.msu.edu)
  *
- *
- * class HTForwardArrayCluster : it contains an array of RBForwardArrayDetector objects
- *
- * - RBForwardArrayDetector array
- * | - fnumdet
+ * - HTIonChamber array
+ * | - fDetNum
  * | - fE
  * | - fTime
  */
@@ -22,7 +17,7 @@
 #include <TTree.h>
 #include <HTIonChamberRootEvent.h>
 #include <HTIonChamberMap.h>
-#include <HTRootCAEN7xx.h>
+#include <HTRootMADC32.h>
 #include <HTRootCAEN1x90.h>
 #include <HTDetector.h>
 

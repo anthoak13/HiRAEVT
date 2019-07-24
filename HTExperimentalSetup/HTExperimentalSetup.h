@@ -14,6 +14,7 @@
 #include <HTRootHINP.h>
 #include <HTRootSisTimestamp.h>
 #include <HTRootTimestamp.h>
+
 #include <HTDetector.h>
 #include <HTSisTimestampe15190.h>
 #include <HTHiRA.h>
@@ -23,6 +24,8 @@
 #include <HTForwardArray.h>
 #include <HTMicroball.h>
 #include <HTTDCSpare.h>
+#include <HTIonChamber.h>
+
 #include <HTDetectorMap.h>
 #include <HTSisTimestampe15190Map.h>
 #include <HTTDCSpareMap.h>

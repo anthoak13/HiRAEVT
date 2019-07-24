@@ -1,7 +1,7 @@
 # Executable
 unpack
 *~
-#*
+*#*
 *Dict.cxx
 *.pcm
 

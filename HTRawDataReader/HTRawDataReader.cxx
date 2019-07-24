@@ -1,8 +1,8 @@
 #include <HTRawDataReader.h>
 
 //________________________________________________
-HTRawDataReader::HTRawDataReader() :
-fDataMapper(0),
+HTRawDataReader::HTRawDataReader(HTMapper *theMapper) :
+fDataMapper(theMapper),
 fDataTree(0),
 fNEvtFiles(0),
 fDataReader(0),
@@ -11,7 +11,8 @@ fCurrEvent(0),
 fStart(0),
 fNow(0),
 fTimeElapsed(0)
-{}
+{
+}
 
 //________________________________________________
 HTRawDataReader::~HTRawDataReader()

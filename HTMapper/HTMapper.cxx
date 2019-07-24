@@ -31,13 +31,17 @@ int HTMapper::PassArguments(int argc, char** argv)
 int HTMapper::InitializeMapper(const char * file_config_name)
 {
   //Loading configuration file and building RunInfo
-  if(LoadExperimentInfo(file_config_name)!=0) return -3;
+  if(LoadExperimentInfo(file_config_name)!=0)
+    return -3;
+
 
   //Building Experimental Setup
-  if(BuildExperimentalSetup()!=0) return -1;
+  if(BuildExperimentalSetup()!=0)
+    return -1;
 
   //Initializing output TFile and TTree
-  if(InitRootOutput()!=0) return -2;
+  if(InitRootOutput()!=0)
+    return -2;
 
   return 0;
 }
@@ -72,14 +76,21 @@ int HTMapper::BuildExperimentalSetup()
 {
   gExpSetup=new HTExperimentalSetup();
 
-  if(gExpSetup==0) return -1;
+  if(gExpSetup==0)
+    return -1;
 
-  if(gExpSetup->BuildElectronicModules()<=0) return -2;
-
-  if(gExpSetup->BuildDetectors()<=0) return -3;
-
-  if(gExpSetup->BuildDetectorMaps()<=0) return -4;
-
+  if(gExpSetup->BuildElectronicModules()<=0)
+    return -2;
+  std::cout << "Electronic modules initialized" << std::endl;
+  
+  if(gExpSetup->BuildDetectors()<=0)
+    return -3;
+  std::cout << "Detectors initialized" << std::endl;
+  
+  if(gExpSetup->BuildDetectorMaps()<=0)
+    return -4;
+  std::cout << "Detectors mapped" << std::endl;
+  
   return 0;
 }
 

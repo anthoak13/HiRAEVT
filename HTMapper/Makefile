@@ -22,8 +22,9 @@ INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTVetoWall
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTForwardArray
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTLogo -lHTShared -lHTRunInfo -lHTExperimentalSetup -lHTRootElectronics -lHTDetector -lHTDetectorMap  -lHTRawDataReader -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare
+RLIBS     := -L$(HiRAEVTLIB) -lHTLogo -lHTShared -lHTRunInfo -lHTExperimentalSetup -lHTRootElectronics -lHTDetector -lHTDetectorMap  -lHTRawDataReader -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))

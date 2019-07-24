@@ -181,3 +181,44 @@
 214 06/17/2019  Ge Background source Trig:Ge
 215 06/17/2019  Ge Background source Trig:Ge
 216 06/17/2019  Ge Background source Trig:Ge
+217 07/11/2019  Si E pulser no Bias Trig:Pulser
+218 07/11/2019  Si E pulser no Bias Trig:Pulser
+219 07/11/2019  Si E pulser no Bias Trig:Pulser
+220 07/11/2019  Si dE pulser no Bias Trig:Pulser
+221 07/11/2019  Si dE pulser no Bias Trig:Pulser
+222 07/11/2019  Si dE pulser w/ Bias Trig:Pulser
+223 07/11/2019  IC Stability pulser Trig:Pulser
+224 07/11/2019  IC Stability pulser Trig:Pulser
+226 07/11/2019  IC Pulser 1V Trig:Pulser
+227 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+228 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+229 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+230 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+231 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+232 07/11/2019  IC Pulser 1V Stability 10Hz Trig:Pulser
+233 07/11/2019  IC Pulser 0.5V Stability 10Hz Trig:Pulser
+234 07/11/2019  IC Pulser 0.5V Stability 10Hz Trig:Pulser
+235 07/11/2019  IC Pulser 0.5V Stability 10Hz Trig:Pulser
+236 07/11/2019  IC Pulser 0.5V Stability 10Hz Trig:Pulser
+237 07/14/2019  Pulser of U1 shaper 0.5V Stability 10Hz Trig:Pulser
+238 07/14/2019  Pulser of U1 shaper 0.5V Stability 10Hz Trig:Pulser
+239 07/14/2019  Pulser of U1 shaper 0.5V Stability 10Hz Trig:Pulser
+240 07/16/2019  Am241 into Si 25-039A Trig:Alpha
+241 07/16/2019  Am241 into Si 25-039A Trig:Alpha
+242 07/16/2019  Pulser of Si electronics Trig:Pulser
+243 07/16/2019  Alpha into 25-039A 20V bias Trig:Alpha
+244 07/16/2019  Pulser ramp with bias 20V bias  0 - 1.25V 11 steps Trig:pulser
+245 07/17/2019  Pulser ramp of D2 0- 10V 11 steps with 100MeV cap Trig:pulser
+246 07/17/2019  Pulser ramp of D2 input 0- 10V 11 steps  Trig:pulser
+247 07/17/2019  Pulser ramp of D2 input 0- 1.25V 11 steps  Trig:pulser
+248 07/17/2019  Pulser All IC internal capacator 0- 0.2 21 steps  Trig:pulser
+249 07/17/2019  Pulser All IC internal capacator 0- 0.2 21 steps  Trig:pulser
+250 07/17/2019  Pulser D1 external capacator 1-2V 21 steps  Trig:pulser
+251 07/17/2019  Pulser D1 external capacator 1-5 V 21 steps  Trig:pulser
+252 07/17/2019  Pulser D1 external capacator 1-5 V 21 steps  Trig:pulser
+253 07/17/2019  Pulser D3 external capacator 1-5 V 21 steps  Trig:pulser
+254 07/17/2019  Pulser D4 external capacator 1-5 V 21 steps  Trig:pulser
+255 07/17/2019  Pulser U1 external capacator 1-5 V 21 steps  Trig:pulser
+256 07/17/2019  Pulser U2 external capacator 1-5 V 21 steps  Trig:pulser
+257 07/17/2019  Pulser U3 external capacator 1-5 V 21 steps  Trig:pulser
+258 07/17/2019  Pulser U4 external capacator 1-5 V 21 steps  Trig:pulser

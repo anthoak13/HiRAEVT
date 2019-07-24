@@ -1,16 +1,9 @@
 #include <HTIonChamber.h>
 
-#define dModuleEnergy(det) ((HTIonChamberMap *)fDetectorMapping)->GetEnergyModule(det)
-#define dChannelEnergy(det) ((HTIonChamberMap *)fDetectorMapping)->GetEnergyChannel(det)
-#define dModuleTime(det) ((HTIonChamberMap *)fDetectorMapping)->GetTimeModule(det)
-#define dChannelTime(det) ((HTIonChamberMap *)fDetectorMapping)->GetTimeChannel(det)
-
 //________________________________________________
 HTIonChamber::HTIonChamber(const char * name, int num_detectors) : HTDetector(name, num_detectors),
-fIonChamber(0),
 fevt(0)
 {
-  fIonChamber=new HTIonChamberCluster(fNumDetectors);
   fevt=new HTIonChamberRootEvent(fNumDetectors);
   fType.assign("HTIonChamber");
 }
@@ -18,8 +11,8 @@ fevt(0)
 //________________________________________________
 HTIonChamber::~HTIonChamber()
 {
-  if(fIonChamber) delete fIonChamber;
-  if(fevt) delete fevt;
+  if( fevt != nullptr )
+    delete fevt;
 }
 
 //________________________________________________
@@ -37,9 +30,23 @@ void HTIonChamber::InitTTreeBranch(TTree * theTree)
 void HTIonChamber::BuildEvent()
 {
   //Retrieving information from HTRootModule types
-  for(int NumDet=0; NumDet<fNumDetectors; NumDet++) {
-    fIonChamber->GetDetector(NumDet)->SetE(dModuleEnergy(NumDet)>=0 ? ((HTRootCAEN7xx *)fModules[dModuleEnergy(NumDet)])->GetData(dChannelEnergy(NumDet)) : -9999);
-    fIonChamber->GetDetector(NumDet)->SetTime(dModuleTime(NumDet)>=0 ? ((HTRootCAEN1x90 *)fModules[dModuleTime(NumDet)])->GetData(dChannelTime(NumDet)) : -9999);
+  for(int detNum=0; detNum < fNumDetectors; detNum++)
+  {
+    HTIonChamberMap* map = (HTIonChamberMap*) fDetectorMapping;
+
+    //If the energy module exists, grab the energy
+    if(map->GetEnergyModule(detNum) >= 0)
+      fevt->fIonChamber.fE[detNum] = ((HTRootMADC32 *)fModules[map->GetEnergyModule(detNum)])->
+	GetData(map->GetEnergyChannel(detNum));
+    else
+      fevt->fIonChamber.fE[detNum] = -9999;
+
+    //If the time module exists get the time
+    if(map->GetTimeModule(detNum) >= 0)
+      fevt->fIonChamber.fTime[detNum] = ((HTRootCAEN1x90 *)fModules[map->GetTimeModule(detNum)])->
+	GetData(map->GetTimeChannel(detNum));
+    else
+      fevt->fIonChamber.fTime[detNum] = -9999;
   }
 
   //Fill Root Event structure to be written on the tree
@@ -52,17 +59,17 @@ void HTIonChamber::BuildEvent()
 void HTIonChamber::FillMappedData()
 {
   //Retrieving information from HTIonChamberCluster to fill HTIonChamberData object
-  fevt->fIonChamber.fmulti=0;
-  for(int NumDet=0; NumDet<fNumDetectors; NumDet++) {
-    HTIonChamberDetector * DetToFill = fIonChamber->GetDetector(NumDet);
-    if(DetToFill->GetE()>0 && DetToFill->GetTime()!=-9999)
+  fevt->fIonChamber.fMulti = fNumDetectors;
+  
+/*  for(int detNum=0; detNum<fNumDetectors; detNum++)
+  {
+    if(fevt->E[detNum] > 0 && fevt->fTime[detNum] != -9999)
     {
-      fevt->fIonChamber.fnumdet[fevt->fIonChamber.fmulti]=NumDet+1; //WARNING: detectors are counted from 1 in the FA experimental configuration
-      fevt->fIonChamber.fE[fevt->fIonChamber.fmulti]=DetToFill->GetE();
+      fevt->fIonChamber.fE[fevt->]=DetToFill->GetE();
       fevt->fIonChamber.fTime[fevt->fIonChamber.fmulti]=DetToFill->GetTime();
       fevt->fIonChamber.fmulti++;
     }
   }
-
+*/
   return;
 }

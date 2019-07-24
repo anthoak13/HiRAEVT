@@ -42,35 +42,57 @@ int HTExperimentalSetup::BuildElectronicModules()
   {
     //Loop over all the defined stacks to retrieve individual module information
     HTDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
-    for(int NumModule=0; NumModule<newStackInfo->GetNModules(); NumModule++)
+
+    for(int NumModule = 0; NumModule < newStackInfo->GetNModules(); NumModule++)
     {
       //Loop over all the modules of a stack
       HTModuleInfo * newModuleInfo = newStackInfo->GetModuleInfo(NumModule);
       std::string newModuleType(newModuleInfo->GetModuleType());
       std::string newModuleName(newModuleInfo->GetModuleName());
 
-      if(newModuleType.compare("RBSisTimestampUnpacker")==0) {
+      if(newModuleType.compare("RBSisTimestampUnpacker")==0)
+      {
         HTRootSisTimestamp * newModule = new HTRootSisTimestamp(newModuleName.c_str());
         (*fModules)[newModuleName]=newModule;
-      } else if (newModuleType.compare("RBTimestamp")==0) {
+	
+      } else if (newModuleType.compare("RBTimestamp")==0)
+      {
         HTRootTimestamp * newModule = new HTRootTimestamp(newModuleName.c_str());
         (*fModules)[newModuleName]=newModule;
-      } else if (newModuleType.compare("RBHINPUnpacker")==0) {
+	
+      } else if (newModuleType.compare("RBHINPUnpacker")==0)
+      {
         HTRootHINP * newModule = new HTRootHINP(newModuleName.c_str());
         (*fModules)[newModuleName]=newModule;
-      } else if (newModuleType.compare("RBCAEN7xxUnpacker")==0) {
+	
+      } else if (newModuleType.compare("RBCAEN7xxUnpacker")==0)
+      {
         HTRootCAEN7xx * newModule = new HTRootCAEN7xx(newModuleName.c_str());
-        int LineLoaded=newModule->LoadPedestals(gRun->GetPedestalFile());
-        if(LineLoaded<0) {
+        int LineLoaded = newModule->LoadPedestals(gRun->GetPedestalFile());
+        if(LineLoaded < 0)
+	{
           printf("HTRootCAEN7xx: Error while loading pedestal file %s\n", gRun->GetPedestalFile());
-        } else {
-          printf("HTRootCAEN7xx: Module %s has loaded %d lines from pedestal file %s\n", newModuleName.c_str(), LineLoaded, gRun->GetPedestalFile());
+        } else
+	{
+          printf("HTRootCAEN7xx: Module %s has loaded %d lines from pedestal file %s\n",
+		 newModuleName.c_str(), LineLoaded, gRun->GetPedestalFile());
         }
         (*fModules)[newModuleName]=newModule;
-      } else if (newModuleType.compare("RBCAEN1x90Unpacker")==0) {
+	
+      } else if (newModuleType.compare("RBCAEN1x90Unpacker")==0)
+      {
         HTRootCAEN1x90 * newModule = new HTRootCAEN1x90(newModuleName.c_str(), newModuleInfo->GetNumCh());
         (*fModules)[newModuleName]=newModule;
+      } else if (newModuleType.compare("RBMADC32Unpacker")==0)
+      {
+        HTRootMADC32 * newModule = new HTRootMADC32(newModuleName.c_str());
+        (*fModules)[newModuleName]=newModule;
       }
+      else
+      {
+	std::cerr << newModuleType << " is not a known module (no corresponding HTRoot class)" << std::endl;
+      }
+      
     }
   }
   return fModules->size();
@@ -81,7 +103,8 @@ int HTExperimentalSetup::BuildDetectors()
 {
   std::ifstream FileIn(gRun->GetMappingFile());
   if(!FileIn.is_open()) {
-    printf("HTExperimentalSetup: Failed to build detectors, error while opening %s file\n", gRun->GetMappingFile());
+    printf("HTExperimentalSetup: Failed to build detectors, error while opening %s file\n",
+	   gRun->GetMappingFile());
     return -1;
   }
 
@@ -91,16 +114,18 @@ int HTExperimentalSetup::BuildDetectors()
     std::getline(FileIn, LineRead);
     std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
 
-    if(LineReadCommentLess.empty()) continue;
+    if(LineReadCommentLess.empty())
+      continue;
 
-    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos)
+      continue;
 
-    if(LineReadCommentLess.find("define ")!=std::string::npos) {
+    if(LineReadCommentLess.find("define ")!=std::string::npos)
       ParseDefineMappingLine(LineReadCommentLess.c_str());
-    }
-    if(LineReadCommentLess.find("assign ")!=std::string::npos) {
+
+    if(LineReadCommentLess.find("assign ")!=std::string::npos) 
       ParseAssignMappingLine(LineReadCommentLess.c_str());
-    }
+    
   }
   FileIn.close();
 
@@ -113,47 +138,65 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
 {
   std::string LineReadCommentLess(line_to_parse);
 
-  int NDets=fDetectors->size();
+  int NDets = fDetectors->size();
 
-  if(LineReadCommentLess.find("detector ")!=std::string::npos) {
+  if(LineReadCommentLess.find("detector ")!=std::string::npos)
+  {
     LineReadCommentLess.assign(LineReadCommentLess.substr(LineReadCommentLess.find("detector ")+9));
+
     std::istringstream LineStream(LineReadCommentLess);
     std::string DetectorType;
     std::string DetectorName;
+
     LineStream>>DetectorType>>DetectorName;
 
-    DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
+    DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,
+					    DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
 
-    if(DetectorType.compare("TDCSpare")==0) {
+    if(DetectorType.compare("TDCSpare")==0)
+    {
       HTTDCSpare * newDetector = new HTTDCSpare(DetectorName.c_str());
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("HiRA")==0) {
+    } else if(DetectorType.compare("HiRA")==0)
+    {
       int NumTelescopes;
-      LineStream>>NumTelescopes;
+      LineStream >> NumTelescopes;
       HTHiRA * newDetector = new HTHiRA(DetectorName.c_str(), NumTelescopes);
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("NeutronWall")==0) {
+    } else if(DetectorType.compare("NeutronWall")==0)
+    {
       int NumBars;
-      LineStream>>NumBars;
+      LineStream >> NumBars;
       HTNeutronWall * newDetector = new HTNeutronWall(DetectorName.c_str(), NumBars);
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("VetoWall")==0) {
+    } else if(DetectorType.compare("VetoWall")==0)
+    {
       int NumBars;
-      LineStream>>NumBars;
+      LineStream >> NumBars;
       HTVetoWall * newDetector = new HTVetoWall(DetectorName.c_str(), NumBars);
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("ForwardArray")==0) {
+    } else if(DetectorType.compare("ForwardArray")==0)
+    {
       int NumDetectors;
-      LineStream>>NumDetectors;
+      LineStream >> NumDetectors;
       HTForwardArray * newDetector = new HTForwardArray(DetectorName.c_str(), NumDetectors);
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("Microball")==0) {
+    } else if(DetectorType.compare("Microball")==0)
+    {
       HTMicroball * newDetector = new HTMicroball(DetectorName.c_str());
       (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("SisTimestampe15190")==0) {
+    } else if(DetectorType.compare("SisTimestampe15190")==0)
+    {
       HTSisTimestampe15190 * newDetector = new HTSisTimestampe15190(DetectorName.c_str());
       (*fDetectors)[DetectorName]=newDetector;
+    } else if(DetectorType.compare("IonChamber") == 0)
+    {
+      int numDet;
+      LineStream >> numDet;
+      HTIonChamber * newDetector = new HTIonChamber(DetectorName.c_str(), numDet);
+      (*fDetectors)[DetectorName]=newDetector;
     }
+
   }
 
   return fDetectors->size()-NDets;
@@ -188,46 +231,66 @@ int HTExperimentalSetup::BuildDetectorMaps()
   // Loop over the defined detectors to build the corresponding detector mappers
   // Each of them is mapped with the same name of the detector itself.
   if(fDetectors) {
-    for(std::map<std::string, HTDetector *>::iterator TheDetector=fDetectors->begin(); TheDetector!=fDetectors->end(); TheDetector++) {
+    for(auto TheDetector=fDetectors->begin(); TheDetector!=fDetectors->end(); TheDetector++)
+    {
       std::string DetectorName((*TheDetector).second->GetName());
       std::string DetectorType((*TheDetector).second->GetType());
+      
       int NumIndividualDetectionObjects((*TheDetector).second->GetNumDetectors());
-      if(DetectorType.compare("HTTDCSpare")==0) {
+      
+      if(DetectorType.compare("HTTDCSpare")==0)
+      {
         HTTDCSpareMap * newMapping = new HTTDCSpareMap(DetectorName.c_str());
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTHiRA")==0) {
+      } else if(DetectorType.compare("HTHiRA")==0)
+      {
         HTHiRAMap * newMapping = new HTHiRAMap(DetectorName.c_str(), NumIndividualDetectionObjects);
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTNeutronWall")==0) {
+      } else if(DetectorType.compare("HTNeutronWall")==0)
+      {
         HTNeutronWallMap * newMapping = new HTNeutronWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTVetoWall")==0) {
+      } else if(DetectorType.compare("HTVetoWall")==0)
+      {
         HTVetoWallMap * newMapping = new HTVetoWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTForwardArray")==0) {
+      } else if(DetectorType.compare("HTForwardArray")==0)
+      {
         HTForwardArrayMap * newMapping = new HTForwardArrayMap(DetectorName.c_str(), NumIndividualDetectionObjects);
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTMicroball")==0) {
+      } else if(DetectorType.compare("HTMicroball")==0)
+      {
         HTMicroballMap * newMapping = new HTMicroballMap(DetectorName.c_str());
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTSisTimestampe15190")==0) {
+      } else if(DetectorType.compare("HTSisTimestampe15190")==0)
+      {
         HTSisTimestampe15190Map * newMapping = new HTSisTimestampe15190Map(DetectorName.c_str());
         newMapping->LoadMapping(gRun->GetMappingFile());
         (*fDetectorMaps)[DetectorName]=newMapping;
         (*TheDetector).second->SetMapping(newMapping);
+      } else if(DetectorType.compare("HTIonChamber")==0)
+      {
+        HTIonChamberMap * newMapping = new HTIonChamberMap(DetectorName.c_str(), NumIndividualDetectionObjects);
+        newMapping->LoadMapping(gRun->GetMappingFile());
+        (*fDetectorMaps)[DetectorName]=newMapping;
+        (*TheDetector).second->SetMapping(newMapping);
+      } else
+      {
+	std::cerr << DetectorType << " does not have a valid Map class!" << std::endl;
       }
+
     }
   }
   return fDetectorMaps->size();

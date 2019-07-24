@@ -22,6 +22,7 @@ root:
 	$(MAKE) -C detectors/HTForwardArray ;			$(MAKE) -C detectors/HTForwardArray install
 	$(MAKE) -C detectors/HTMicroball ;			$(MAKE) -C detectors/HTMicroball install
 	$(MAKE) -C detectors/HTTDCSpare ;			$(MAKE) -C detectors/HTTDCSpare install
+	$(MAKE) -C detectors/HTIonChamber ;			$(MAKE) -C detectors/HTIonChamber install
 	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader ; 	$(MAKE) -C HTRawDataReader install
 
@@ -42,6 +43,7 @@ install:
 	$(MAKE) -C detectors/HTForwardArray install
 	$(MAKE) -C detectors/HTMicroball install
 	$(MAKE) -C detectors/HTTDCSpare install
+	$(MAKE) -C detectors/HTIonChamber install
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader install
 
@@ -85,6 +87,7 @@ clean:
 	$(MAKE) -C detectors/HTForwardArray clean
 	$(MAKE) -C detectors/HTMicroball clean
 	$(MAKE) -C detectors/HTTDCSpare clean
+	$(MAKE) -C detectors/HTIonChamber clean
 	$(MAKE) -C HTExperimentalSetup clean
 	$(MAKE) -C HTRawDataReader clean
 

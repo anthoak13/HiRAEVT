@@ -35,7 +35,10 @@ void HTVetoWall::Clear()
 //________________________________________________
 void HTVetoWall::InitTTreeBranch(TTree * theTree)
 {
-  theTree->Branch(Form("%s.",fName.c_str()),"HTVetoWallData",&(fevt->fVetoWall),32768,2);
+  theTree->Branch(Form("%s.",fName.c_str()),
+		  "HTVetoWallData",
+		  &(fevt->fVetoWall),
+		  32768,2);
   return;
 }
 

@@ -34,18 +34,18 @@ int main (int argc, char ** argv)
   std::cout << "Loading config file: " << configFile << std::endl;
 
   
-  if(TheMapper->InitializeMapper(configFile.c_str())!=0) {
-    printf("Error while configuring program\n");
+  if( TheMapper->InitializeMapper(configFile.c_str())!= 0 )
+  {
+      printf("Error while configuring program\n");
     return -2;
   }
+  
   printf("** Mapper correctly initialized **\n");
 
   //Create HTRawDataReader object
-  HTRawDataReader * TheReader = new HTRawDataReader();
+  HTRawDataReader * TheReader = new HTRawDataReader(TheMapper);
 
   printf("** Initializing Reader **\n");
-  //Set Mapper to HTRawDataReader object
-  TheReader->SetMapper(TheMapper);
 
   //Initialize HTRawDataReader object
   if(TheReader->InitReader()!=0) {
