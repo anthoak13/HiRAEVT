@@ -1,7 +1,7 @@
 #include <HTDetectorMap.h>
 
 //________________________________________________
-HTDetectorMap::HTDetectorMap(const char * name) :
+HTDetectorMap::HTDetectorMap(const std::string& name) :
 fName(name),
 fModuleAssignmentOrder(0)
 {

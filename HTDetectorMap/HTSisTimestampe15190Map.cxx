@@ -1,9 +1,10 @@
 #include <HTSisTimestampe15190Map.h>
 
 //________________________________________________
-HTSisTimestampe15190Map::HTSisTimestampe15190Map(const char * name) : HTDetectorMap(name),
-fTimestampModule(-1),
-fTimestampKoreansModule(-1)
+HTSisTimestampe15190Map::HTSisTimestampe15190Map(const std::string& name) :
+  HTDetectorMap(name),
+  fTimestampModule(-1),
+  fTimestampKoreansModule(-1)
 {}
 
 //________________________________________________

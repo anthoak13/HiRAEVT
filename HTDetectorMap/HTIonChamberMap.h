@@ -6,7 +6,7 @@
 class HTIonChamberMap : public HTDetectorMap
 {
 public :
-  HTIonChamberMap(const char *, int);
+  HTIonChamberMap(const std::string&, int);
   ~HTIonChamberMap();
 
   int ParseMapLine(const char *) override;

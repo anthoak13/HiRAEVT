@@ -55,3 +55,8 @@ void HTTDCSpare::FillMappedData()
 {
   // The entire data is used to fill the tree, no selection is made and no auxiliary data structures are needed
 }
+
+void HTTDCSpare::InitMapping()
+{
+  fDetectorMapping = new HTTDCSpareMap(fName);
+}

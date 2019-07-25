@@ -43,6 +43,8 @@ public :
 private :
   HTForwardArrayCluster *fForwardArray;            //!HTForwardArrayCluster containing event-by-event mapped data
   HTForwardArrayRootEvent * fevt;                  //!RootEvent type of the detector
+
+  void InitMapping() override;
 };
 
 #endif

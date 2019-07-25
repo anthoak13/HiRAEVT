@@ -1,12 +1,13 @@
 #include <HTForwardArrayMap.h>
 
 //________________________________________________
-HTForwardArrayMap::HTForwardArrayMap(const char * name, int num_detectors) : HTDetectorMap(name),
-fNumDetectors(num_detectors),
-fEnergyModule(0),
-fEnergyChannel(0),
-fTimeModule(0),
-fTimeChannel(0)
+HTForwardArrayMap::HTForwardArrayMap(const std::string& name, int num_detectors) :
+  HTDetectorMap(name),
+  fNumDetectors(num_detectors),
+  fEnergyModule(0),
+  fEnergyChannel(0),
+  fTimeModule(0),
+  fTimeChannel(0)
 {
   fEnergyModule=new int[fNumDetectors];
   fEnergyChannel=new int[fNumDetectors];

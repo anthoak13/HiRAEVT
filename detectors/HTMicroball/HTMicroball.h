@@ -28,6 +28,7 @@ private :
   HTMicroballRootEvent * fevt;                     //!RootEvent type of the detector
   int fNumDetectors;                               //!Number of detectors
 
+  void InitMapping() override;
 };
 
 #endif

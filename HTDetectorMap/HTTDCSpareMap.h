@@ -7,7 +7,7 @@
 class HTTDCSpareMap : public HTDetectorMap
 {
 public :
-  HTTDCSpareMap(const char *);
+  HTTDCSpareMap(const std::string&);
   ~HTTDCSpareMap();
 
   int ParseMapLine(const char *) override;

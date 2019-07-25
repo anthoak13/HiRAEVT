@@ -83,3 +83,8 @@ void HTMicroball::FillMappedData()
 
   return;
 }
+
+void HTMicroball::InitMapping()
+{
+  fDetectorMapping = new HTMicroballMap(fName);
+}

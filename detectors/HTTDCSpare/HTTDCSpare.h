@@ -35,6 +35,8 @@ public :
 
 private :
   std::vector<HTTDCSpareChannel *> fSpareChannels;  //!HTTDCSpareChannel array containing event-by-event mapped data
+
+  void InitMapping() override;
 };
 
 #endif

@@ -13,7 +13,7 @@
 class HTDetectorMap
 {
 public :
-  HTDetectorMap(const char *);                       //!Constructor
+  HTDetectorMap(const std::string&);                 //!Constructor
   virtual ~HTDetectorMap();                          //!Destructor
 
   virtual void Clear();                              //!Clear mapping

@@ -66,3 +66,8 @@ void HTForwardArray::FillMappedData()
 
   return;
 }
+
+void HTForwardArray::InitMapping()
+{
+  fDetectorMapping = new HTForwardArrayMap(fName, fNumDetectors);
+}

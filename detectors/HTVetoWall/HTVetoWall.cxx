@@ -79,3 +79,8 @@ void HTVetoWall::FillMappedData()
   }
   return;
 }
+
+void HTVetoWall::InitMapping()
+{
+  fDetectorMapping = new HTVetoWallMap(fName, fNumDetectors);
+}

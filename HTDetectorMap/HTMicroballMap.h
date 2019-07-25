@@ -6,7 +6,7 @@
 class HTMicroballMap : public HTDetectorMap
 {
 public :
-  HTMicroballMap(const char *);
+  HTMicroballMap(const std::string&);
   ~HTMicroballMap();
 
   int ParseMapLine(const char *) override;

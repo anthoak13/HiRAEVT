@@ -51,3 +51,8 @@ void HTSisTimestampe15190::FillMappedData()
   (fevt->fSisTimestamp).fTimestampKoreans=fTimestampKoreans;
   return;
 }
+
+void HTSisTimestampe15190::InitMapping()
+{
+  fDetectorMapping = new HTSisTimestampe15190Map(fName);
+}

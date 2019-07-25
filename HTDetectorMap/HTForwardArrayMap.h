@@ -6,7 +6,7 @@
 class HTForwardArrayMap : public HTDetectorMap
 {
 public :
-  HTForwardArrayMap(const char *, int);
+  HTForwardArrayMap(const std::string&, int);
   ~HTForwardArrayMap();
 
   int ParseMapLine(const char *) override;

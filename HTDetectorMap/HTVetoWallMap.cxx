@@ -1,16 +1,17 @@
 #include <HTVetoWallMap.h>
 
 //________________________________________________
-HTVetoWallMap::HTVetoWallMap(const char * name, int num_bars) : HTDetectorMap(name),
-fNumBars(num_bars),
-fBottomModule(0),
-fBottomChannel(0),
-fTopModule(0),
-fTopChannel(0),
-fBottomTimeModule(0),
-fBottomTimeChannel(0),
-fTopTimeModule(0),
-fTopTimeChannel(0)
+HTVetoWallMap::HTVetoWallMap(const std::string& name, int num_bars) :
+  HTDetectorMap(name),
+  fNumBars(num_bars),
+  fBottomModule(0),
+  fBottomChannel(0),
+  fTopModule(0),
+  fTopChannel(0),
+  fBottomTimeModule(0),
+  fBottomTimeChannel(0),
+  fTopTimeModule(0),
+  fTopTimeChannel(0)
 {
   fBottomModule= new int[fNumBars];
   fBottomChannel= new int[fNumBars];

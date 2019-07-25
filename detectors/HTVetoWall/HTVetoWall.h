@@ -53,6 +53,7 @@ private :
   HTVetoWallArray * fVetoWall;                     //!HTVetoWallArray object containing event-by-event mapped data
   HTVetoWallRootEvent * fevt;                      //!RootEvent type of the detector
 
+  void InitMapping() override;
 };
 
 #endif

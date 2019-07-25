@@ -87,8 +87,6 @@ int HTMapper::BuildExperimentalSetup()
     return -3;
   std::cout << "Detectors initialized" << std::endl;
   
-  if(gExpSetup->BuildDetectorMaps()<=0)
-    return -4;
   std::cout << "Detectors mapped" << std::endl;
   
   return 0;

@@ -1,8 +1,9 @@
 #include <HTTDCSpareMap.h>
 
 //________________________________________________
-HTTDCSpareMap::HTTDCSpareMap(const char * name) : HTDetectorMap(name),
-fNumChannels(0)
+HTTDCSpareMap::HTTDCSpareMap(const std::string& name) :
+  HTDetectorMap(name),
+  fNumChannels(0)
 {
   Clear();
 }

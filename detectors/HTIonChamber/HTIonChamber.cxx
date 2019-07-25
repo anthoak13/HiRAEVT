@@ -2,7 +2,7 @@
 
 //________________________________________________
 HTIonChamber::HTIonChamber(const char * name, int num_detectors) : HTDetector(name, num_detectors),
-fevt(0)
+								   fevt(0)
 {
   fevt=new HTIonChamberRootEvent(fNumDetectors);
   fType.assign("HTIonChamber");
@@ -72,4 +72,8 @@ void HTIonChamber::FillMappedData()
   }
 */
   return;
+}
+void HTIonChamber::InitMapping()
+{
+  fDetectorMapping = new HTIonChamberMap(fName, fNumDetectors);
 }

@@ -1,7 +1,7 @@
 #include <HTIonChamberMap.h>
 
 //________________________________________________
-HTIonChamberMap::HTIonChamberMap(const char * name, int num_detectors) : HTDetectorMap(name),
+HTIonChamberMap::HTIonChamberMap(const std::string& name, int num_detectors) : HTDetectorMap(name),
 fNumDetectors(num_detectors)
 {
   fEnergyModule=new int[fNumDetectors];

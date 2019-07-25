@@ -26,6 +26,7 @@ private :
   Long64_t fTimestamp;
   Long64_t fTimestampKoreans;
 
+  void InitMapping() override;
 };
 
 #endif

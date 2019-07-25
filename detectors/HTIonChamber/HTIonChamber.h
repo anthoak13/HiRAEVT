@@ -36,6 +36,8 @@ public :
 
 private :
   HTIonChamberRootEvent * fevt;                  //!RootEvent type of the detector
+
+  void InitMapping() override;
 };
 
 #endif

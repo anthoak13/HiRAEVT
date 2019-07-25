@@ -7,7 +7,7 @@ const int N_DETS[] = {6, 10, 12, 12, 14, 14, 12, 10, 6};
 /******************************************************************/
 
 //________________________________________________
-HTMicroballMap::HTMicroballMap(const char * name) : HTDetectorMap(name),
+HTMicroballMap::HTMicroballMap(const std::string& name) : HTDetectorMap(name),
 fFastModule(0),
 fFastChannel(0),
 fTailModule(0),

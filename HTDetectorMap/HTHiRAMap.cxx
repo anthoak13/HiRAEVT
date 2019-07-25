@@ -1,18 +1,19 @@
 #include <HTHiRAMap.h>
 
 //________________________________________________
-HTHiRAMap::HTHiRAMap(const char * name, int num_telescopes) : HTDetectorMap(name),
-fNumTelescopes(num_telescopes),
-fNumStripsperTelescope(N_STRIPS_PER_TELESCOPE),
-fNumCsIperTelescope(N_CSIS_PER_TELESCOPE),
-fCsIEnergyModule(0),
-fCsIEnergyChannel(0),
-fCsITimeModule(0),
-fCsITimeChannel(0),
-fModuleEF(0),
-fModuleEB(0),
-fStripEF(0),
-fStripEB(0)
+HTHiRAMap::HTHiRAMap(const std::string& name, int num_telescopes) :
+  HTDetectorMap(name),
+  fNumTelescopes(num_telescopes),
+  fNumStripsperTelescope(N_STRIPS_PER_TELESCOPE),
+  fNumCsIperTelescope(N_CSIS_PER_TELESCOPE),
+  fCsIEnergyModule(0),
+  fCsIEnergyChannel(0),
+  fCsITimeModule(0),
+  fCsITimeChannel(0),
+  fModuleEF(0),
+  fModuleEB(0),
+  fStripEF(0),
+  fStripEB(0)
 {
   fCsIEnergyModule = new int *[fNumTelescopes];
   fCsIEnergyChannel = new int *[fNumTelescopes];

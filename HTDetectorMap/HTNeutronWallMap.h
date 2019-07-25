@@ -6,7 +6,7 @@
 class HTNeutronWallMap : public HTDetectorMap
 {
 public :
-  HTNeutronWallMap(const char *, int);
+  HTNeutronWallMap(const std::string&, int);
   ~HTNeutronWallMap();
 
   int ParseMapLine(const char *) override;

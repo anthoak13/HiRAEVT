@@ -3,12 +3,10 @@
 //________________________________________________
 HTExperimentalSetup::HTExperimentalSetup() :
 fModules(0),
-fDetectors(0),
-fDetectorMaps(0)
+fDetectors(0)
 {
   fModules = new std::map<std::string, HTRootElectronics*>;
   fDetectors = new std::map<std::string, HTDetector *>;
-  fDetectorMaps = new std::map<std::string, HTDetectorMap *>;
 }
 
 //________________________________________________
@@ -26,12 +24,7 @@ HTExperimentalSetup::~HTExperimentalSetup()
     }
     delete fDetectors;
   }
-  if(fDetectorMaps) {
-    for(std::map<std::string, HTDetectorMap *>::iterator TheModule=fDetectorMaps->begin(); TheModule!=fDetectorMaps->end(); TheModule++) {
-      delete (*TheModule).second;
-    }
-    delete fDetectorMaps;
-  }
+
 }
 
 //________________________________________________
@@ -197,7 +190,9 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
       (*fDetectors)[DetectorName]=newDetector;
     }
 
-  }
+    (*fDetectors)[DetectorName]->InitMapping();
+
+  } //End if statment
 
   return fDetectors->size()-NDets;
 }
@@ -226,74 +221,14 @@ int HTExperimentalSetup::ParseAssignMappingLine(const char * line_to_parse)
 }
 
 //________________________________________________
-int HTExperimentalSetup::BuildDetectorMaps()
+void HTExperimentalSetup::BuildDetectorMaps()
 {
   // Loop over the defined detectors to build the corresponding detector mappers
   // Each of them is mapped with the same name of the detector itself.
-  if(fDetectors) {
-    for(auto TheDetector=fDetectors->begin(); TheDetector!=fDetectors->end(); TheDetector++)
-    {
-      std::string DetectorName((*TheDetector).second->GetName());
-      std::string DetectorType((*TheDetector).second->GetType());
-      
-      int NumIndividualDetectionObjects((*TheDetector).second->GetNumDetectors());
-      
-      if(DetectorType.compare("HTTDCSpare")==0)
-      {
-        HTTDCSpareMap * newMapping = new HTTDCSpareMap(DetectorName.c_str());
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTHiRA")==0)
-      {
-        HTHiRAMap * newMapping = new HTHiRAMap(DetectorName.c_str(), NumIndividualDetectionObjects);
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTNeutronWall")==0)
-      {
-        HTNeutronWallMap * newMapping = new HTNeutronWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTVetoWall")==0)
-      {
-        HTVetoWallMap * newMapping = new HTVetoWallMap(DetectorName.c_str(), NumIndividualDetectionObjects);
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTForwardArray")==0)
-      {
-        HTForwardArrayMap * newMapping = new HTForwardArrayMap(DetectorName.c_str(), NumIndividualDetectionObjects);
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTMicroball")==0)
-      {
-        HTMicroballMap * newMapping = new HTMicroballMap(DetectorName.c_str());
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTSisTimestampe15190")==0)
-      {
-        HTSisTimestampe15190Map * newMapping = new HTSisTimestampe15190Map(DetectorName.c_str());
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else if(DetectorType.compare("HTIonChamber")==0)
-      {
-        HTIonChamberMap * newMapping = new HTIonChamberMap(DetectorName.c_str(), NumIndividualDetectionObjects);
-        newMapping->LoadMapping(gRun->GetMappingFile());
-        (*fDetectorMaps)[DetectorName]=newMapping;
-        (*TheDetector).second->SetMapping(newMapping);
-      } else
-      {
-	std::cerr << DetectorType << " does not have a valid Map class!" << std::endl;
-      }
-
-    }
-  }
-  return fDetectorMaps->size();
+  for(auto det=fDetectors->begin(); det!=fDetectors->end(); det++)
+  {
+    det->second->LoadMapping(gRun->GetMappingFile());
+  } //End for loop
 }
 
 //________________________________________________

@@ -6,7 +6,7 @@
 class HTVetoWallMap : public HTDetectorMap
 {
 public :
-  HTVetoWallMap(const char *, int);
+  HTVetoWallMap(const std::string&, int);
   ~HTVetoWallMap();
 
   int ParseMapLine(const char *) override;

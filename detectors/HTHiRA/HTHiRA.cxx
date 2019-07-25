@@ -110,3 +110,8 @@ void HTHiRA::FillMappedData()
 
   return;
 }
+
+void HTHiRA::InitMapping()
+{
+  fDetectorMapping = new HTHiRAMap(fName, fNumDetectors);
+}

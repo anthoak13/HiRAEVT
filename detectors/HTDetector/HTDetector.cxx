@@ -5,7 +5,9 @@ HTDetector::HTDetector(const char * name, int num_detectors) :
 fName(name),
 fNumDetectors(num_detectors),
 fDetectorMapping(0)
-{}
+{
+
+}
 
 //________________________________________________
 HTDetector::~HTDetector()
@@ -23,12 +25,6 @@ void HTDetector::Clear()
 void HTDetector::AssignModule(HTRootElectronics * newModule)
 {
   fModules.push_back(newModule);
-}
-
-//________________________________________________
-void HTDetector::SetMapping(HTDetectorMap * detMapping)
-{
-  fDetectorMapping=detMapping;
 }
 
 //________________________________________________
@@ -65,4 +61,9 @@ void HTDetector::BuildEvent()
 void HTDetector::FillMappedData()
 {
   return;
+}
+
+void HTDetector::LoadMapping(const char* name)
+{
+  fDetectorMapping->LoadMapping(name);
 }

@@ -7,7 +7,7 @@
 class HTHiRAMap : public HTDetectorMap
 {
 public :
-  HTHiRAMap(const char *, int);
+  HTHiRAMap(const std::string&, int);
   ~HTHiRAMap();
 
   int GetCsIEnergyModule(int tel, int csi) const {return fCsIEnergyModule[tel][csi];}

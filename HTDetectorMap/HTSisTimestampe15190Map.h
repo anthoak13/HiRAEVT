@@ -6,7 +6,7 @@
 class HTSisTimestampe15190Map : public HTDetectorMap
 {
 public :
-  HTSisTimestampe15190Map(const char *);
+  HTSisTimestampe15190Map(const std::string&);
   ~HTSisTimestampe15190Map();
 
   int ParseMapLine(const char *) override;

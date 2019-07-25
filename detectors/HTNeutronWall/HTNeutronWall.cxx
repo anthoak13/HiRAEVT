@@ -86,3 +86,8 @@ void HTNeutronWall::FillMappedData()
 
   return;
 }
+
+void HTNeutronWall::InitMapping()
+{
+  fDetectorMapping = new HTNeutronWallMap(fName, fNumDetectors);
+}

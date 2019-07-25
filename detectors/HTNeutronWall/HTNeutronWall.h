@@ -53,6 +53,7 @@ private :
   HTNeutronWallArray *fNeutronWall;                //!HTNeutronWallArray containing mapped event-by-event data
   HTNeutronWallRootEvent * fevt;                   //!RootEvent type of the detector
 
+  void InitMapping() override;
 };
 
 #endif

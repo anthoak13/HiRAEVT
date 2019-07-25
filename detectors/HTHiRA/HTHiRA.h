@@ -50,6 +50,7 @@ private :
   HTHiRACsIArray *fHiRACsI;                        //!HTHiRACsIArray containing CsI data mapped
   HTHiRARootEvent * fevt;                          //!RootEvent type of the detector
 
+  void InitMapping() override;
 };
 
 #endif

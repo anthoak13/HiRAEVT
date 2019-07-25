@@ -46,9 +46,9 @@ public :
   HTExperimentalSetup();                             //!Constructor
   ~HTExperimentalSetup();                            //!Destructor
 
-  int BuildElectronicModules();                      //!Called by HTMapper::BuildExperimentalSetup()
-  int BuildDetectors();                              //!Called by HTMapper::BuildExperimentalSetup()
-  int BuildDetectorMaps();                           //!Called by HTMapper::BuildExperimentalSetup()
+  int  BuildElectronicModules();                      //!Called by HTMapper::BuildExperimentalSetup()
+  int  BuildDetectors();                              //!Called by HTMapper::BuildExperimentalSetup()
+  void BuildDetectorMaps();                           //!Called by HTMapper::BuildExperimentalSetup()
   void InitDetectorBranches(TTree *);                //!Called by HTMapper::InitRootOutput()
 
   int ParseDefineMappingLine(const char *);          //!Parse a define line in .map file. Returns 1 if a detector is add, otherwise 0.

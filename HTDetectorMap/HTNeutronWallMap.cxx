@@ -1,20 +1,21 @@
 #include <HTNeutronWallMap.h>
 
 //________________________________________________
-HTNeutronWallMap::HTNeutronWallMap(const char * name, int num_bars) : HTDetectorMap(name),
-fNumBars(num_bars),
-fLeftModule(0),
-fLeftChannel(0),
-fLeftFastModule(0),
-fLeftFastChannel(0),
-fRightModule(0),
-fRightChannel(0),
-fRightFastModule(0),
-fRightFastChannel(0),
-fLeftTimeModule(0),
-fLeftTimeChannel(0),
-fRightTimeModule(0),
-fRightTimeChannel(0)
+HTNeutronWallMap::HTNeutronWallMap(const std::string& name, int num_bars) :
+  HTDetectorMap(name),
+  fNumBars(num_bars),
+  fLeftModule(0),
+  fLeftChannel(0),
+  fLeftFastModule(0),
+  fLeftFastChannel(0),
+  fRightModule(0),
+  fRightChannel(0),
+  fRightFastModule(0),
+  fRightFastChannel(0),
+  fLeftTimeModule(0),
+  fLeftTimeChannel(0),
+  fRightTimeModule(0),
+  fRightTimeChannel(0)
 {
   fLeftModule=new int[fNumBars];
   fLeftChannel=new int[fNumBars];
