@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+
 #include <TTree.h>
-#include <HTRootElectronics.h>
-#include <HTDetectorMap.h>
+
+#include "HTRootElectronics.h"
+#include "HTDetectorMap.h"
 
 class HTDetector
 {

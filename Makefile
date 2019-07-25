@@ -52,7 +52,6 @@ distclean:
 	$(MAKE) -C logo distclean
 	$(MAKE) -C shared distclean
 	$(MAKE) -C HTRunInfo distclean
-	$(MAKE) -C HTDetectorMap distclean
 	$(MAKE) -C HTRootElectronics distclean
 	$(MAKE) -C detectors/HTDetector distclean
 	$(MAKE) -C detectors/HTSisTimestampe15190 distclean

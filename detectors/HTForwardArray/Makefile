@@ -9,13 +9,15 @@ SrcSuf    := cxx
 ObjSuf    := o
 PcmSuf    := _rdict.pcm
 
-INCLUDES  := -I$(HiRAEVTSRC)/
+#Get all of the subdirectors in the parent folder and add them to the includes
+SUBDIR := $(sort $(dir $(wildcard ${CURDIR}/../*/)))
+INCLUDES := $(patsubst %, -I%, ${SUBDIR})
+
+INCLUDES  += -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/$(DETECTOR_NAME)
 
 RLIBS     := -L$(HiRAEVTLIB) -lHTDetector -lHTShared
 

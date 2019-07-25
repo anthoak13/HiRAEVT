@@ -4,12 +4,16 @@ DllSuf    := so
 SrcSuf    := cxx
 ObjSuf    := o
 
-INCLUDES  := -I$(HiRAEVTSRC)/
-INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
-INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
+#Get all of the subdirectors in the parent folder and add them to the includes
+SUBDIR := $(sort $(dir $(wildcard ${CURDIR}/../*/)))
+INCLUDES := $(patsubst %, -I%, ${SUBDIR})
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTDetectorMap
+INCLUDES  += -I$(HiRAEVTSRC)/
+INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
+INCLUDES  += -I$(HiRAEVTSRC)/electronics
+INCLUDES  += -I$(HiRAEVTSRC)/shared
+
+RLIBS     := -L$(HiRAEVTLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
@@ -26,6 +30,7 @@ all: $(HTDETECTOR_LIB)
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
 $(HTDETECTOR_LIB): $(OBJS)
+	@echo ${OBJS}
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 

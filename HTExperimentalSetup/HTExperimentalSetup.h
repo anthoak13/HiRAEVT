@@ -39,6 +39,7 @@
 #include <HTDAQStackInfo.h>
 #include <HTModuleInfo.h>
 #include <HTShared.h>
+#include <HTDetectorFactory.h>
 
 class HTExperimentalSetup
 {

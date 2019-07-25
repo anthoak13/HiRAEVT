@@ -23,7 +23,9 @@
 
 #include <TROOT.h>
 #include <TTree.h>
-#include <RBHINPHit.h>
+
+#include "../../electronics/RBHINPHit.h"
+
 #include <HTHiRARootEvent.h>
 #include <HTHiRAMap.h>
 #include <HTRootCAEN7xx.h>

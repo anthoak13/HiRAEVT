@@ -140,12 +140,17 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
     std::istringstream LineStream(LineReadCommentLess);
     std::string DetectorType;
     std::string DetectorName;
-
-    LineStream>>DetectorType>>DetectorName;
+    int numDets;
+    
+    LineStream >> DetectorType >> DetectorName >> numDets;
 
     DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,
 					    DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
-
+    
+    (*fDetectors)[DetectorName] = HTDetectorFactory::Instance()->CreateDetector( DetectorType,
+										 DetectorName,
+										 numDets);
+    /*
     if(DetectorType.compare("TDCSpare")==0)
     {
       HTTDCSpare * newDetector = new HTTDCSpare(DetectorName.c_str());
@@ -191,8 +196,8 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
     }
 
     (*fDetectors)[DetectorName]->InitMapping();
-
-  } //End if statment
+    */  
+  } //End if statment that detector line exists
 
   return fDetectors->size()-NDets;
 }
