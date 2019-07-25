@@ -6,25 +6,24 @@ all:
 	$(MAKE) -C HTMapper ;			$(MAKE) -C HTMapper install
 
 root:
-	$(MAKE) -C electronics ; 		$(MAKE) -C electronics install
-	$(MAKE) -C RBExperiment ; 		$(MAKE) -C RBExperiment install
-	$(MAKE) -C RBSetup ;			$(MAKE) -C RBSetup install
-	$(MAKE) -C logo ;			$(MAKE) -C logo install
-	$(MAKE) -C shared ;			$(MAKE) -C shared install
-	$(MAKE) -C HTRunInfo ;			$(MAKE) -C HTRunInfo install
+	$(MAKE) -C electronics ; 			$(MAKE) -C electronics install
+	$(MAKE) -C RBExperiment ; 			$(MAKE) -C RBExperiment install
+	$(MAKE) -C RBSetup ;				$(MAKE) -C RBSetup install
+	$(MAKE) -C logo ;				$(MAKE) -C logo install
+	$(MAKE) -C shared ;				$(MAKE) -C shared install
+	$(MAKE) -C HTRunInfo ;				$(MAKE) -C HTRunInfo install
 	$(MAKE) -C HTRootElectronics ;			$(MAKE) -C HTRootElectronics install
-	$(MAKE) -C HTDetectorMap ;			$(MAKE) -C HTDetectorMap install
-	$(MAKE) -C detectors/HTDetector ;			$(MAKE) -C detectors/HTDetector install
-	$(MAKE) -C detectors/HTSisTimestampe15190 ;			$(MAKE) -C detectors/HTSisTimestampe15190 install
+	$(MAKE) -C detectors/HTDetector ;		$(MAKE) -C detectors/HTDetector install
+	$(MAKE) -C detectors/HTSisTimestampe15190 ;	$(MAKE) -C detectors/HTSisTimestampe15190 install
 	$(MAKE) -C detectors/HTHiRA ;			$(MAKE) -C detectors/HTHiRA install
-	$(MAKE) -C detectors/HTNeutronWall ;			$(MAKE) -C detectors/HTNeutronWall install
-	$(MAKE) -C detectors/HTVetoWall ;			$(MAKE) -C detectors/HTVetoWall install
-	$(MAKE) -C detectors/HTForwardArray ;			$(MAKE) -C detectors/HTForwardArray install
-	$(MAKE) -C detectors/HTMicroball ;			$(MAKE) -C detectors/HTMicroball install
-	$(MAKE) -C detectors/HTTDCSpare ;			$(MAKE) -C detectors/HTTDCSpare install
-	$(MAKE) -C detectors/HTIonChamber ;			$(MAKE) -C detectors/HTIonChamber install
-	$(MAKE) -C HTExperimentalSetup ;			$(MAKE) -C HTExperimentalSetup install
-	$(MAKE) -C HTRawDataReader ; 	$(MAKE) -C HTRawDataReader install
+	$(MAKE) -C detectors/HTNeutronWall ;		$(MAKE) -C detectors/HTNeutronWall install
+	$(MAKE) -C detectors/HTVetoWall ;		$(MAKE) -C detectors/HTVetoWall install
+	$(MAKE) -C detectors/HTForwardArray ;		$(MAKE) -C detectors/HTForwardArray install
+	$(MAKE) -C detectors/HTMicroball ;		$(MAKE) -C detectors/HTMicroball install
+	$(MAKE) -C detectors/HTTDCSpare ;		$(MAKE) -C detectors/HTTDCSpare install
+	$(MAKE) -C detectors/HTIonChamber ;		$(MAKE) -C detectors/HTIonChamber install
+	$(MAKE) -C HTExperimentalSetup ;		$(MAKE) -C HTExperimentalSetup install
+	$(MAKE) -C HTRawDataReader ; 			$(MAKE) -C HTRawDataReader install
 
 install:
 	$(MAKE) -C electronics install
@@ -33,7 +32,6 @@ install:
 	$(MAKE) -C logo install
 	$(MAKE) -C shared install
 	$(MAKE) -C HTRunInfo install
-	$(MAKE) -C HTDetectorMap install
 	$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector install
 	$(MAKE) -C detectors/HTSisTimestampe15190 install
@@ -77,7 +75,6 @@ clean:
 	$(MAKE) -C logo clean
 	$(MAKE) -C shared clean
 	$(MAKE) -C HTRunInfo clean
-	$(MAKE) -C HTDetectorMap clean
 	$(MAKE) -C HTRootElectronics clean
 	$(MAKE) -C detectors/HTDetector clean
 	$(MAKE) -C detectors/HTSisTimestampe15190 clean
@@ -103,7 +100,6 @@ debug:
 	$(MAKE) -C logo
 	$(MAKE) -C shared
 	$(MAKE) -C HTRunInfo
-	$(MAKE) -C HTDetectorMap
 	$(MAKE) -C HTRootElectronics
 	$(MAKE) -C detectors/HTDetector
 	$(MAKE) -C detectors/HTSisTimestampe15190
