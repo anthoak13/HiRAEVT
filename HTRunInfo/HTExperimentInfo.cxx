@@ -1,5 +1,14 @@
 #include <HTExperimentInfo.h>
 
+HTExperimentInfo* HTExperimentInfo::_instance = nullptr;
+
+HTExperimentInfo* HTExperimentInfo::Instance()
+{
+  if(_instance == nullptr)
+    _instance = new HTExperimentInfo();
+  return _instance;
+}
+
 //________________________________________________
 HTExperimentInfo::HTExperimentInfo() :
 fDataMerged(false),

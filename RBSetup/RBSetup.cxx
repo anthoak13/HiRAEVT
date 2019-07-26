@@ -13,16 +13,16 @@ RBSetup::RBSetup(){
 ///////////////////////////////////////////////////////////////////////////////////////////
 
   // Set the setup name and title.
-  SetName (gExperimentInfo->GetName());
-  SetTitle(gExperimentInfo->GetTitle());
+  SetName (HTExperimentInfo::Instance()->GetName());
+  SetTitle(HTExperimentInfo::Instance()->GetTitle());
 
   // Instantiate a new RBExperiment object.
-  gExperiment = new RBExperiment(gExperimentInfo->GetName());
+  gExperiment = new RBExperiment(HTExperimentInfo::Instance()->GetName());
   // Initialize data members.
-  gExperiment->SetMergedData      (gExperimentInfo->IsDataMerged());  // EVT files have been merged.
+  gExperiment->SetMergedData      (HTExperimentInfo::Instance()->IsDataMerged());  // EVT files have been merged.
   gExperiment->SetEventFilePath   (gRun->GetEvtFilePath());
-  gExperiment->SetRootFilePath    (gExperimentInfo->GetRootFilePath());
-  gExperiment->SetExperimentNumber(gExperimentInfo->GetName());
+  gExperiment->SetRootFilePath    (HTExperimentInfo::Instance()->GetRootFilePath());
+  gExperiment->SetExperimentNumber(HTExperimentInfo::Instance()->GetName());
 
   // Definition of electronic modules and stacks
   for(int NumStack=0; NumStack<gRun->GetNStacks(); NumStack++)

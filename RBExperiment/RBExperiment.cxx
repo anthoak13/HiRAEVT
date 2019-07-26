@@ -73,8 +73,8 @@ RBExperiment::RBExperiment(const char *name)
   RBNSCLBufferHeader::Class()->IgnoreTObjectStreamer();
 
   // Allocate memory for objects that will be written to UserInfo list.
-  expTitle            = new TNamed("Experiment Title",gExperimentInfo->GetTitle());
-  expNumber           = new TNamed("Experiment Number",gExperimentInfo->GetName());
+  expTitle            = new TNamed("Experiment Title",HTExperimentInfo::Instance()->GetTitle());
+  expNumber           = new TNamed("Experiment Number",HTExperimentInfo::Instance()->GetName());
   runTitle            = new TNamed("Run Title",gRun->GetTitle());
   runNumber           = new TNamed("Run Number",Form("%d",gRun->GetRunNumber()));
   evtFileNumber       = new TNamed("Evt File Number","");
@@ -228,7 +228,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   TString rootFileStr(rootFile);
   if(rootFileStr=="out.root"){
     rootFileStr.Clear();
-    rootFileStr.Append(gExperimentInfo->GetRootFilePath());
+    rootFileStr.Append(HTExperimentInfo::Instance()->GetRootFilePath());
     rootFileStr.Append(evtFileName);
     rootFileStr.ReplaceAll(".evt",".root");
   }
@@ -252,7 +252,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   }
 
   // We must be careful here.  The file must be open before we create the tree.
-  fRootTree = new TTree(Form("E%s",gExperimentInfo->GetName()), gRun->GetTitle(),2);
+  fRootTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), gRun->GetTitle(),2);
 
   // Initialize the branches for EVB RingItem data.
   fRootTree->Branch("fBRI.Size",     &fBRI_Size,     "fBRI.Size/I");

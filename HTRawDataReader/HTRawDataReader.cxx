@@ -25,7 +25,7 @@ int HTRawDataReader::InitReader()
 {
   //Opening input TFile and TTree to read data
   if(InitRootInput()<=0) return -2;
-  printf("** Correctly retrieved %d evt file(s) for mapping from folder %s **\n", fNEvtFiles, gExperimentInfo->GetRootFilePath());
+  printf("** Correctly retrieved %d evt file(s) for mapping from folder %s **\n", fNEvtFiles, HTExperimentInfo::Instance()->GetRootFilePath());
 
   //Seting TTreeReader to the opened TChain
   fDataReader=new TTreeReader(fDataTree);
@@ -45,8 +45,8 @@ int HTRawDataReader::InitReader()
 int HTRawDataReader::InitRootInput()
 {
   // Opening a new TFile for input
-  fDataTree = new TChain(Form("E%s",gExperimentInfo->GetName()));
-  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root", gExperimentInfo->GetRootFilePath(), gRun->GetRunNumber()));
+  fDataTree = new TChain(Form("E%s",HTExperimentInfo::Instance()->GetName()));
+  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root", HTExperimentInfo::Instance()->GetRootFilePath(), gRun->GetRunNumber()));
   fTotalEvents=fDataTree->GetEntries();
   return fNEvtFiles;
 }

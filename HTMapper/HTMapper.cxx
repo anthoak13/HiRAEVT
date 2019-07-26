@@ -53,14 +53,13 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
   std::cout << "** Initializing Run Info **\n";
   std::cout << "Loading config file: " << file_name << std::endl;
 
-  gExperimentInfo = new HTExperimentInfo();
 
-  if(gExperimentInfo->InitClass(file_name)<=0) {
+  if(HTExperimentInfo::Instance()->InitClass(file_name)<=0) {
     std::cout << "Error while reading configuration file.\n";
     exit (-1);
   }
   
-  gRun=gExperimentInfo->GetRunInfo(fRunNumber);
+  gRun=HTExperimentInfo::Instance()->GetRunInfo(fRunNumber);
   if(gRun==0) {
    std::cout << "Failed to get run info." << std::endl;
    exit(-1);
@@ -96,17 +95,17 @@ int HTMapper::BuildExperimentalSetup()
 int HTMapper::InitRootOutput()
 {
   // Opening a new TFile for output
-  fFileOut = new TFile(Form("%srun-%04d.root", gExperimentInfo->GetMappedRootFilePath(), fRunNumber), "RECREATE");
+  fFileOut = new TFile(Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber), "RECREATE");
   if(fFileOut->IsZombie()) return -1; //failed to open TFile
 
   // Creating output TTree
-  fMappedTree = new TTree(Form("E%s",gExperimentInfo->GetName()), gRun->GetTitle(),2);
+  fMappedTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), gRun->GetTitle(),2);
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch
   HTExperimentalSetup::Instance()->InitDetectorBranches(fMappedTree);
 
-  printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", gExperimentInfo->GetMappedRootFilePath(), fRunNumber));
+  printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber));
 
   return 0;
 }

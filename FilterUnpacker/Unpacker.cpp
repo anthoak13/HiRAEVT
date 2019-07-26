@@ -83,12 +83,12 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   cout << "** Initializing Run Info **\n";
   cout << "Loading config file: " << configFile << endl;
   
-  gExperimentInfo = new HTExperimentInfo();
-  if(gExperimentInfo->InitClass(configFile.c_str())<=0) {
+
+  if(HTExperimentInfo::Instance()->InitClass(configFile.c_str())<=0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }
-  gRun=gExperimentInfo->GetRunInfo(RunNumber);
+  gRun=HTExperimentInfo::Instance()->GetRunInfo(RunNumber);
   if(gRun==0) {
    cout << "Failed to get run info." << endl;
    exit(-1);

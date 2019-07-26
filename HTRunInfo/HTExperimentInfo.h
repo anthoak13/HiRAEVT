@@ -27,8 +27,8 @@
 class HTExperimentInfo
 {
 public:
-  HTExperimentInfo();                             //! Constructor
-  ~HTExperimentInfo();                            //! Destructor
+  static HTExperimentInfo* Instance();
+
 
   int InitClass(const char *);                    //! Class Initializer
 
@@ -45,7 +45,13 @@ public:
 
   void Clear();                                   //!
 
+protected:
+  HTExperimentInfo();                             //! Constructor
+  ~HTExperimentInfo();                            //! Destructor
+
 private:
+  static HTExperimentInfo* _instance;
+  
   std::string * fDAQConfigurationFileName;
   std::string * fPedestalFileName;
   std::string * fMappingFileName;
@@ -63,9 +69,13 @@ private:
   int fLastRun;
 
   void ParseSetConfigLine(const char *);              //! Parse a configuration line containing the command "set" and extract Experiment info
+
   void ParseSetConfigLineRunInfo(const char *, int);  //! Parse a configuration line containing the command "set" and extract Run info
+
   const char * RetrieveRunTitleFromEvtFile(const char *) const;     //! Returns run title taken from the evt file given as input
+
   void StoreRunTitleInDatabaseFile(const char *, int);  //! Save run title into database file. The file takes the name of the experiment.
+
   int RetrieveRunTitlesFromDatabaseFile();  //! Retrieves all the run title from the database file storing into fRunTitle. The missing run titles are then retrieved from evt files.
 };
 
