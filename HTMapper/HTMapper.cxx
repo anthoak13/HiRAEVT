@@ -74,16 +74,16 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
 //________________________________________________
 int HTMapper::BuildExperimentalSetup()
 {
-  gExpSetup=new HTExperimentalSetup();
 
-  if(gExpSetup==0)
+
+  if(HTExperimentalSetup::Instance()==0)
     return -1;
 
-  if(gExpSetup->BuildElectronicModules()<=0)
+  if(HTExperimentalSetup::Instance()->BuildElectronicModules()<=0)
     return -2;
   std::cout << "Electronic modules initialized" << std::endl;
   
-  if(gExpSetup->BuildDetectors()<=0)
+  if(HTExperimentalSetup::Instance()->BuildDetectors()<=0)
     return -3;
   std::cout << "Detectors initialized" << std::endl;
   
@@ -104,7 +104,7 @@ int HTMapper::InitRootOutput()
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch
-  gExpSetup->InitDetectorBranches(fMappedTree);
+  HTExperimentalSetup::Instance()->InitDetectorBranches(fMappedTree);
 
   printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", gExperimentInfo->GetMappedRootFilePath(), fRunNumber));
 
@@ -131,7 +131,7 @@ void HTMapper::EndMapping()
 void HTMapper::MapDetectors()
 {
   //Loop over the defined detectors to call their individual HTDetector::BuildEvent()
-  std::map<std::string, HTDetector *> * DefinedDetectors = gExpSetup->GetDetectors();
+  std::map<std::string, HTDetector *> * DefinedDetectors = HTExperimentalSetup::Instance()->GetDetectors();
   for(std::map<std::string, HTDetector *>::iterator TheDetector=DefinedDetectors->begin(); TheDetector!=DefinedDetectors->end(); TheDetector++)
   {
     (TheDetector)->second->BuildEvent();

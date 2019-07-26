@@ -1,5 +1,17 @@
 #include <HTExperimentalSetup.h>
 
+HTExperimentalSetup* HTExperimentalSetup::_instance = nullptr;
+
+HTExperimentalSetup* HTExperimentalSetup::Instance()
+{
+  if (_instance == nullptr)
+  {
+    _instance = new HTExperimentalSetup();
+  }
+
+  return _instance;
+}
+
 //________________________________________________
 HTExperimentalSetup::HTExperimentalSetup() :
 fModules(0),
@@ -142,6 +154,7 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
     std::string DetectorName;
     int numDets;
     
+    //Load in the detector information
     LineStream >> DetectorType >> DetectorName >> numDets;
 
     DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,
@@ -150,53 +163,7 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
     (*fDetectors)[DetectorName] = HTDetectorFactory::Instance()->CreateDetector( DetectorType,
 										 DetectorName,
 										 numDets);
-    /*
-    if(DetectorType.compare("TDCSpare")==0)
-    {
-      HTTDCSpare * newDetector = new HTTDCSpare(DetectorName.c_str());
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("HiRA")==0)
-    {
-      int NumTelescopes;
-      LineStream >> NumTelescopes;
-      HTHiRA * newDetector = new HTHiRA(DetectorName.c_str(), NumTelescopes);
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("NeutronWall")==0)
-    {
-      int NumBars;
-      LineStream >> NumBars;
-      HTNeutronWall * newDetector = new HTNeutronWall(DetectorName.c_str(), NumBars);
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("VetoWall")==0)
-    {
-      int NumBars;
-      LineStream >> NumBars;
-      HTVetoWall * newDetector = new HTVetoWall(DetectorName.c_str(), NumBars);
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("ForwardArray")==0)
-    {
-      int NumDetectors;
-      LineStream >> NumDetectors;
-      HTForwardArray * newDetector = new HTForwardArray(DetectorName.c_str(), NumDetectors);
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("Microball")==0)
-    {
-      HTMicroball * newDetector = new HTMicroball(DetectorName.c_str());
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("SisTimestampe15190")==0)
-    {
-      HTSisTimestampe15190 * newDetector = new HTSisTimestampe15190(DetectorName.c_str());
-      (*fDetectors)[DetectorName]=newDetector;
-    } else if(DetectorType.compare("IonChamber") == 0)
-    {
-      int numDet;
-      LineStream >> numDet;
-      HTIonChamber * newDetector = new HTIonChamber(DetectorName.c_str(), numDet);
-      (*fDetectors)[DetectorName]=newDetector;
-    }
 
-    (*fDetectors)[DetectorName]->InitMapping();
-    */  
   } //End if statment that detector line exists
 
   return fDetectors->size()-NDets;

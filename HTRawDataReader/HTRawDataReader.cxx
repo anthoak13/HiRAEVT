@@ -31,8 +31,8 @@ int HTRawDataReader::InitReader()
   fDataReader=new TTreeReader(fDataTree);
   if(!fDataTree) return -1;
 
-  //Loop on the modules retrieved from gExpSetup to init their individual TTreeReader Branches
-  std::map<std::string, HTRootElectronics *> * DefinedModules = gExpSetup->GetModules();
+  //Loop on the modules retrieved from HTExperimentalSetup::Instance() to init their individual TTreeReader Branches
+  std::map<std::string, HTRootElectronics *> * DefinedModules = HTExperimentalSetup::Instance()->GetModules();
   for(std::map<std::string, HTRootElectronics *>::iterator TheModule=DefinedModules->begin(); TheModule!=DefinedModules->end(); TheModule++)
   {
     (TheModule)->second->InitTreeInputBranch(*fDataReader);

@@ -44,29 +44,43 @@
 class HTExperimentalSetup
 {
 public :
-  HTExperimentalSetup();                             //!Constructor
-  ~HTExperimentalSetup();                            //!Destructor
+  static HTExperimentalSetup* Instance();           //Getter for Singleton
 
-  int  BuildElectronicModules();                      //!Called by HTMapper::BuildExperimentalSetup()
-  int  BuildDetectors();                              //!Called by HTMapper::BuildExperimentalSetup()
-  void BuildDetectorMaps();                           //!Called by HTMapper::BuildExperimentalSetup()
+  int  BuildElectronicModules();                     //!Called by HTMapper::BuildExperimentalSetup()
+  int  BuildDetectors();                             //!Called by HTMapper::BuildExperimentalSetup()
+  void BuildDetectorMaps();                          //!Called by HTMapper::BuildExperimentalSetup()
   void InitDetectorBranches(TTree *);                //!Called by HTMapper::InitRootOutput()
 
-  int ParseDefineMappingLine(const char *);          //!Parse a define line in .map file. Returns 1 if a detector is add, otherwise 0.
-  int ParseAssignMappingLine(const char *);          //!Parse a assign line in .map file. Returns the number of module assigned.
+  
+  //!Parse a define line in .map file. Returns 1 if a detector is add, otherwise 0.
+  int ParseDefineMappingLine(const char *);
+  //!Parse a assign line in .map file. Returns the number of module assigned.
+  int ParseAssignMappingLine(const char *);          
 
-  std::map<std::string, HTRootElectronics *> * GetModules() const; //!Get a std::map<std::string, HTRootElectronics *> pointer to the defined modules
+
+  //!Get a std::map<std::string, HTRootElectronics *> pointer to the defined modules
+  std::map<std::string, HTRootElectronics *> * GetModules() const;
   HTRootElectronics * GetModule(std::string) const;                //!Get a module by name.
   HTRootElectronics * GetModule(const char *) const;               //!Get a module by name.
-  std::map<std::string, HTDetector *> * GetDetectors() const;      //!Get a std::map<std::string, HTDetector *> pointer to the defined modules
+
+  //!Get a std::map<std::string, HTDetector *> pointer to the defined modules
+  std::map<std::string, HTDetector *> * GetDetectors() const;      
   HTDetector * GetDetector(std::string) const;                     //!Get a detector by name
   HTDetector * GetDetector(const char *) const;                    //!Get a detector by name
-  int GetNDetectors() const;                                       //!Get the number of defined detectors
+  
+  //!Get the number of defined detectors
+  int GetNDetectors() const;                                       
 
+protected:
+  HTExperimentalSetup();                             //!Constructor
+  ~HTExperimentalSetup();                            //!Destructor
+  
 private :
+  static HTExperimentalSetup* _instance;
+
+  //Maps of module and detector names to classes
   std::map<std::string, HTRootElectronics *> *fModules;
   std::map<std::string, HTDetector *> *fDetectors;
-  std::map<std::string, HTDetectorMap *> *fDetectorMaps;
 
 };
 

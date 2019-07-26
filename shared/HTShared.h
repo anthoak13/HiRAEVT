@@ -5,14 +5,12 @@ class Unpacker;
 class RBExperiment;
 class HTRunInfo;
 class HTExperimentInfo;
-class HTExperimentalSetup;
 
 //Global variables
 extern Unpacker * gUnpacker;
 extern RBExperiment * gExperiment;
 extern HTRunInfo * gRun;
 extern HTExperimentInfo * gExperimentInfo;
-extern HTExperimentalSetup * gExpSetup;
 
 //Constants ********************************************************
 // HiRA Constants
