@@ -40,17 +40,17 @@ void CUnpackerFilter::PassArguments(int argc, char* argv[])
 
 //    const char *debugPrefix = "debug=";
 //    result = strstr(argv[i], debugPrefix);
-//    if(strcmp(result,"true")==0) gUnpacker->SetDebug(true);
+//    if(strcmp(result,"true")==0) unpacker->SetDebug(true);
   }
   //if(result==0){ std::cerr << "-->CUnpackerFilter::ctor source argument is invalid." << std::endl;}
 
   strcpy(sourceFileName,temp);
   std::cout << "**Setting source file name to " << sourceFileName << " **" << std::endl;
 
-  gUnpacker = new Unpacker();
-  gUnpacker->InitializeUnpacker(sourceFileName);
+  unpacker = new Unpacker();
+  unpacker->InitializeUnpacker(sourceFileName);
 
-  gUnpacker->Clear();
+  unpacker->Clear();
 }
 
 // handle the state change events
@@ -65,13 +65,13 @@ CRingItem* CUnpackerFilter::handleStateChangeItem(CRingStateChangeItem* pItem)
 //  std::cout << pItem->getTimestamp()   << std::endl;
 //  std::cout << pItem->getTitle()       << std::endl;
 
-//  if(gUnpacker->IsDataMerged()){
-//    gUnpacker(pItem->getEventTimestamp(),  pItem->getSourceId(),
+//  if(unpacker->IsDataMerged()){
+//    unpacker(pItem->getEventTimestamp(),  pItem->getSourceId(),
 //              pItem->getBarrierType(),     pItem->typeName(),
 //              pItem->getRunNumber(),       pItem->getElapsedTime(),
 //              pItem->getTimestamp(),       pItem->getTitle());
 //  }else{
-    (*gUnpacker)(0,                      99,
+    (*unpacker)(0,                      99,
                  0,                      pItem->typeName(),
                  pItem->getRunNumber(),  pItem->getElapsedTime(),
                  pItem->getTimestamp(),  pItem->getTitle());
@@ -85,21 +85,21 @@ CRingItem* CUnpackerFilter::handlePhysicsEventItem(CPhysicsEventItem* pItem)
 {
   uint16_t* pBody = reinterpret_cast<uint16_t*>(pItem->getBodyPointer());
 
-  if(gUnpacker->IsDataMerged()){
+  if(unpacker->IsDataMerged()){
     // Deal with the built data structure
     // if the physics event item is not the output of the
     // event builder, you don't need this.
     FragmentIndex frags(pBody);
 
     // Call my root analyzer... the name was externed in the header
-    (*gUnpacker)(frags, pItem->getBodySize(),pItem->getEventTimestamp());
-//  }else if(gUnpacker->GetDataFormatVersion() >= 11.0){
+    (*unpacker)(frags, pItem->getBodySize(),pItem->getEventTimestamp());
+//  }else if(unpacker->GetDataFormatVersion() >= 11.0){
 //  }else if(11.1 >= 11.0){
 //
-//    gUnpacker(pBody, pItem->getBodySize(),pItem->getEventTimestamp());
+//    unpacker(pBody, pItem->getBodySize(),pItem->getEventTimestamp());
   }else{
     // Unmerged data.
-    (*gUnpacker)(pBody, pItem->getBodySize());
+    (*unpacker)(pBody, pItem->getBodySize());
   }
 
   // return the original item

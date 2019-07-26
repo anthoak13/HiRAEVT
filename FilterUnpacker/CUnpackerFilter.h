@@ -3,6 +3,7 @@
 #ifndef CUNPACKERFILTER_CPP
 #define CUNPACKERFILTER_CPP
 
+#include <Unpacker.h>
 #include <HTShared.h>
 #include <CFilter.h>
 #include <stdint.h>
@@ -23,10 +24,13 @@ class CUnpackerFilter : public CFilter
   private:
     char sourceFileName[1000];
 
+    Unpacker *unpacker;
+
   public:
     CUnpackerFilter();
     ~CUnpackerFilter();
 
+    Unpacker *GetUnpacker() { return unpacker; }
     void PassArguments(int argc, char* argv[]);
 
     virtual CUnpackerFilter* clone() const { return new CUnpackerFilter(*this);}

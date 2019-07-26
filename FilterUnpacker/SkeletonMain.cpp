@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     theApp();
     
     // End unpacking process
-    gUnpacker->EndUnpacking();
+    unpacker_filter.GetUnpacker()->EndUnpacking();
 
   return status;
 }
