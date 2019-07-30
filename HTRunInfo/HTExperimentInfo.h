@@ -69,7 +69,7 @@ private:
   int fLastRun;
 
   void ParseSetConfigLine(const char *);              //! Parse a configuration line containing the command "set" and extract Experiment info
-
+  
   void ParseSetConfigLineRunInfo(const char *, int);  //! Parse a configuration line containing the command "set" and extract Run info
 
   const char * RetrieveRunTitleFromEvtFile(const char *) const;     //! Returns run title taken from the evt file given as input

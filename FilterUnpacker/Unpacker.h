@@ -1,4 +1,3 @@
-
 #ifndef UNPACKER_H
 #define UNPACKER_H
 
@@ -8,15 +7,11 @@
 #include <string.h>
 #include <vector>
 
+#include "RBExperiment.h"
+#include "FragmentIndex.h"
 
-class FragmentIndex;
+#include <TTree.h>
 
-// External class that defines the particular experimental setup.
-//extern class RBSetup gSetup;
-
-class RBSetup;
-class RBExperiment;
-class TTree;
 
 class Unpacker
 {
@@ -37,8 +32,8 @@ class Unpacker
     bool fMergedData;
 //    double fDataFormatVersion;
 
-    RBSetup  *fSetup;
-
+    RBExperiment *fExperiment;
+    
   public:
     Unpacker();
     Unpacker(const Unpacker& rhs);

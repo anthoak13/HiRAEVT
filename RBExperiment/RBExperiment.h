@@ -15,9 +15,12 @@
 #include <RBNSCLBufferHeader.h>
 #include <RBRingStateChangeItem.h>
 #include <RBElectronics.h>
-#include <HTShared.h>
-#include <HTRunInfo.h>
-#include <HTExperimentInfo.h>
+#include "RBUSBStack.h"
+
+#include "HTRunInfo.h"
+#include "HTExperimentInfo.h"
+#include "HTShared.h"
+
 
 #include <fstream>
 #include <string>
@@ -110,9 +113,11 @@ private:
 //                              Option_t *nBufs="0");
 
 public:
-  RBExperiment() {RBExperiment("E00000");}
-  RBExperiment(const char *name);
+  RBExperiment(const char *name = "E000000");
   ~RBExperiment();
+
+  //Does everything that the old RBSetup class does
+  void Setup();
 
   void         Clear(Option_t *option="");
   Bool_t       ConvertEvtFile(const Char_t *evtFile,

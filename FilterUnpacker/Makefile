@@ -1,5 +1,6 @@
 #include $(INSTDIR)/filterkit/FilterIncludes
 include $(HiRAEVTDAQROOT)/filterkit/FilterIncludes
+
 #
 #  Add your own compilation/link flags here:
 RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lHTLogo -lHTShared -lHTRunInfo
@@ -14,7 +15,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/FilterUnpacker
 
 CFLAGS    :=`root-config --cflags --libs`
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 $(RLIBS)
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 $(RLIBS) `root-config --cflags --libs`
 
 #
 #  Add the names of objects you need here if you modified the name of the driver file,
@@ -48,7 +49,9 @@ distclean: clean
 
 # Build this separately and then link in later
 Unpacker.o : Unpacker.cpp
+	@echo "Building Unpacker.o"
 	$(CXX) $(CXXFLAGS) $(USERCXXFLAGS) $(LDFLAGS) -c $(shell root-config --cflags) -o $@ $< $(CFLAGS)
 
 HiRAEVTUnpacker.exe : $(OBJECTS) Unpacker.o
+	@echo "Building executable"
 	$(CXX) $(CXXFLAGS) $(OBJECTS) Unpacker.o -o $@ $(USERLDFLAGS) $(LDFLAGS) $(CFLAGS) -Wl,-rpath=$(INSTDIR)

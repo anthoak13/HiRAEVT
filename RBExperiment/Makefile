@@ -8,10 +8,10 @@ PcmSuf    := _rdict.pcm
 
 INCLUDES  := -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
-INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/RBExperiment
 INCLUDES  += -I$(HiRAEVTSRC)/FilterUnpacker
+INCLUDES  += -I$(HiRAEVTSRC)/shared
 
 RLIBS     := -L$(HiRAEVTLIB)
 

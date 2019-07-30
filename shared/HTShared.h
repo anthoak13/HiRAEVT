@@ -5,7 +5,6 @@ class RBExperiment;
 class HTRunInfo;
 
 //Global variables
-extern RBExperiment * gExperiment;
 extern HTRunInfo * gRun;
 
 //Constants ********************************************************

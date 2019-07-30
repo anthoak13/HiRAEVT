@@ -12,7 +12,6 @@
 #include <TNamed.h>
 #include <TList.h>
 
-#include <RBSetup.h>
 #include <RBExperiment.h>
 #include <HTExperimentInfo.h>
 #include <HTExperimentInfo.h>
@@ -60,13 +59,13 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   // --
   // Here the following objects are initialized:
   // gRun : RBRunInfo class object containing all the info for the current run
-  // fSetup : RBSetup class object containing the DAQ configuration. The constructor of RBSetup initializes also gExperiment
-  // gExperiment : RBExperiment class object containing stack configurations and defining the structure of the output file
+  // fExperiment : RBExperiment class object containing stack configurations and defining the structure of the output file
   //
   strcpy(fSourceFileName, sourceName);
   std::string evtFileStr(fSourceFileName);
   std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
   auto confVal = std::getenv("HiRAEVTCONFIG");
+
   if (confVal == nullptr)
   {
     cout << "Envirment not configured for config file" << endl;
@@ -80,7 +79,8 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   int EvtFileNumber = atoi(evtFileStr.substr(evtFileStr.find_last_of("-")+1,evtFileStr.find_last_of(".")-(evtFileStr.find_last_of("-")+1)).c_str());
 
   //Initialization of RBRunInfo class
-  cout << "** Initializing Run Info **\n";
+  cout << "** Initializing Run Info **" << endl;
+  
   cout << "Loading config file: " << configFile << endl;
   
 
@@ -88,22 +88,26 @@ void Unpacker::InitializeUnpacker(char *sourceName)
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }
-  gRun=HTExperimentInfo::Instance()->GetRunInfo(RunNumber);
-  if(gRun==0) {
+  
+  gRun = HTExperimentInfo::Instance()->GetRunInfo(RunNumber);
+
+  if(gRun == 0) {
    cout << "Failed to get run info." << endl;
    exit(-1);
   }
   cout << "** Run Info correctly initialized **\n";
 
-  //Initialization of RBSetup class (RBExperiment is initialized in its constructor)
-  fSetup = new RBSetup();
-  if(gExperiment==0) {
+  fExperiment = new RBExperiment();
+  fExperiment->Setup();
+
+  if(fExperiment == 0) {
     cout << "Failed to initalize experiment electronics." << endl;
     exit(-1);
   }
-  fMergedData = gExperiment->IsDataMerged();
-  gExperiment->InitializeROOTConverter(fSourceFileName);
-  gExperiment->Clear("A");
+  
+  fMergedData = fExperiment->IsDataMerged();
+  fExperiment->InitializeROOTConverter(fSourceFileName);
+  fExperiment->Clear("A");
   fStart=clock();
 
   printf("** Unpacking run %d-%02d : %s **\n", gRun->GetRunNumber(), EvtFileNumber, gRun->GetTitle());
@@ -121,7 +125,7 @@ void Unpacker::operator() (uint64_t eventTimestamp, uint32_t sourceId,
   RBRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName,
                                   runNumber, timeOffset, timestamp, title);
 
-  gExperiment->SetStateInfo(&stateItem);
+  fExperiment->SetStateInfo(&stateItem);
 }
 
 
@@ -144,10 +148,10 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
     PrintPercentage();
   }
 
-  gExperiment->Clear();
+  fExperiment->Clear();
 
-  gExperiment->SetBRISize     (totalSize);
-  gExperiment->SetBRITimestamp(eventTimestamp);
+  fExperiment->SetBRISize     (totalSize);
+  fExperiment->SetBRITimestamp(eventTimestamp);
 
   // Create iterators to loop through all the fragments
   FragmentIndex::iterator it, begin, end;
@@ -180,7 +184,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
     // Loop over all registered electronic modules and call their individual Unpacker methods.
     // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
-    TIter nextModule(gExperiment->GetElectronicsList());
+    TIter nextModule(fExperiment->GetElectronicsList());
     while(RBElectronics *elc = (RBElectronics*)nextModule()){
       //      cout << "Module is " << elc->GetBranchName() << endl;
 
@@ -263,7 +267,7 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  gExperiment->Fill(); // This unpacker handles PHYSICS event items.
+  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize/2;
@@ -288,10 +292,10 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
     PrintPercentage();
   }
 
-  gExperiment->Clear();
+  fExperiment->Clear();
 
-  gExperiment->SetBRISize     (totalSize);
-  gExperiment->SetBRITimestamp(eventTimestamp);
+  fExperiment->SetBRISize     (totalSize);
+  fExperiment->SetBRITimestamp(eventTimestamp);
 
   // Define an offset to keep track of where we the fragment is located
   // and to check that we are unpacking all the data in the buffer.
@@ -316,7 +320,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
   // Loop over all registered electronic modules and call their individual Unpacker methods.
   // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
-  TIter nextModule(gExperiment->GetElectronicsList());
+  TIter nextModule(fExperiment->GetElectronicsList());
   while(RBElectronics *elc = (RBElectronics*)nextModule()){
     // Check if the Merged ID matches that of the current module.
 //    if (it->s_sourceId == elc->GetMergedID()) {
@@ -376,7 +380,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
   // Finished with this event,
   // now fill the TTrees with the data we just unpacked.
-  gExperiment->Fill(); // This unpacker handles PHYSICS event items.
+  fExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
   // Update the counters.
   fReadWords += totalSize/2;
@@ -397,10 +401,10 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
     PrintPercentage();
   }
 
-  gExperiment->Clear();
+  fExperiment->Clear();
 
-  gExperiment->SetBRISize     (totalSize);
-  //  gExperiment->SetBRITimestamp(eventTimestamp);
+  fExperiment->SetBRISize     (totalSize);
+  //  fExperiment->SetBRITimestamp(eventTimestamp);
 
   //  UShort_t bodySize = *pBody++;
   //Note: I commented out the line above because the HINPUnpacker was starting one word too late
@@ -427,7 +431,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
   //  UShort_t hdrSize  = *pBody;
   //  cout << "Header size is " << hdrSize << endl;
   // Loop over all registered electronics modules and call their individual Unpacker methods.
-  TIter nextModule(gExperiment->GetElectronicsList());
+  TIter nextModule(fExperiment->GetElectronicsList());
 
 
   UInt_t readWords = 0;
@@ -440,7 +444,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
     while(readWords>0){*pBody++; readWords--;}
   }
 
-  gExperiment->Fill();
+  fExperiment->Fill();
 
   fReadWords += totalSize/2;
 }
@@ -471,7 +475,7 @@ void Unpacker::PrintSummary()
   printf("%llu timestamp mismatches found\n", fTimestampMismatch);
   printf("--End of Unpacking--\n\n");
 
-  TIter nextModule(gExperiment->GetElectronicsList());
+  TIter nextModule(fExperiment->GetElectronicsList());
   while(RBElectronics *elc = (RBElectronics*)nextModule())
     elc->PrintSummary();
   
@@ -498,9 +502,9 @@ void Unpacker::EndUnpacking()
   //    It calls PrintSummary() and finally ends the ROOT conversion
   fTimeElapsed= (double)(clock() - fStart)/CLOCKS_PER_SEC;
 
-  AddTTreeUserInfo(gExperiment->GetTree());
-  gExperiment->AddTTreeUserInfo();
-  gExperiment->EndROOTConverter();
+  AddTTreeUserInfo(fExperiment->GetTree());
+  fExperiment->AddTTreeUserInfo();
+  fExperiment->EndROOTConverter();
   PrintSummary();
 }
 
@@ -508,16 +512,16 @@ void Unpacker::EndUnpacking()
 void Unpacker::PrintPercentage() const
 {
   double time_elapsed = (double)(clock() - fStart)/CLOCKS_PER_SEC;
-  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize()) << " %";
+  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(fExperiment->GetEvtFileSize()) << " %";
   std::cout << "   [";
   int printindex=0;
-  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
+  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(fExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
   for(; printindex<100; printindex+=5) std::cout << " ";
   std::cout << "]   " << "elapsed time " << std::setprecision(1) <<
   (time_elapsed<60 ? time_elapsed : (time_elapsed<3600 ? time_elapsed/60 : time_elapsed/3600)) <<
   (time_elapsed<60 ? " s; " : (time_elapsed<3600 ? " m; " : " h; "));
   if(fReadWords>2) {
-    double time_remaining = (time_elapsed/(2.*fReadWords))*(gExperiment->GetEvtFileSize()-2*fReadWords);
+    double time_remaining = (time_elapsed/(2.*fReadWords))*(fExperiment->GetEvtFileSize()-2*fReadWords);
     std::cout << " estimated remaining time " << std::setprecision(1) <<
     (time_remaining<60 ? time_remaining : (time_remaining<3600 ? time_remaining/60 : time_remaining/3600)) <<
     (time_remaining<60 ? " s      " : (time_remaining<3600 ? " m      " : " h      "));
@@ -529,10 +533,10 @@ void Unpacker::PrintPercentage() const
 //____________________________________________________
 void Unpacker::PrintPercentageSimple() const
 {
-  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize()) << " %";
+  std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5) << 100*((Long64_t)(2*fReadWords))/(fExperiment->GetEvtFileSize()) << " %";
   std::cout << "   [";
   int printindex=0;
-  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(gExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
+  for(; printindex<int(100*((Long64_t)(2*fReadWords))/(fExperiment->GetEvtFileSize())); printindex+=5) std::cout << "=";
   for(; printindex<100; printindex+=5) std::cout << " ";
   std::cout << "]   \r"; std::cout.flush();
 }

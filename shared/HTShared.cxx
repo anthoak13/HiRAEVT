@@ -1,7 +1,6 @@
 #include <HTShared.h>
 
 //Global variables
-RBExperiment * gExperiment;
 HTRunInfo* gRun;
 
 //Constants ********************************************************
