@@ -6,6 +6,7 @@
 #include "HTDetectorFactory.h"
 
 HTDetectorFactory* HTDetectorFactory::_instance = nullptr;
+
 HTDetectorFactory::HTDetectorFactory()
 {}
 

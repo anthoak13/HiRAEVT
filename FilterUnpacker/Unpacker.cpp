@@ -89,12 +89,8 @@ void Unpacker::InitializeUnpacker(char *sourceName)
     exit (-1);
   }
   
-  gRun = HTExperimentInfo::Instance()->GetRunInfo(RunNumber);
+  auto runInfo = HTExperimentInfo::Instance()->SetRunNumber(RunNumber);
 
-  if(gRun == 0) {
-   cout << "Failed to get run info." << endl;
-   exit(-1);
-  }
   cout << "** Run Info correctly initialized **\n";
 
   fExperiment = new RBExperiment();
@@ -110,7 +106,8 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   fExperiment->Clear("A");
   fStart=clock();
 
-  printf("** Unpacking run %d-%02d : %s **\n", gRun->GetRunNumber(), EvtFileNumber, gRun->GetTitle());
+  printf("** Unpacking run %d-%02d : %s **\n",
+	 runInfo->GetRunNumber(), EvtFileNumber, runInfo->GetTitle());
 }
 
 

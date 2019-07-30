@@ -35,8 +35,12 @@ public:
   int LoadSetupConfiguration(const char *);       //! Read general setup lines from configuration file of the experiment
   int LoadRunConfiguration(const char *, int);    //! Read run configuration for a specific run
 
-  HTRunInfo * GetRunInfo(int) const;              //! Get HTRunInfo class for a specific run number
+  HTRunInfo* GetRunInfo() const;                 //! Get HTRunInfo for the current run number
+  int        GetRunNumber() const;
+  HTRunInfo* SetRunNumber(int runNum);
+
   bool IsDataMerged() const;                      //!
+
   const char * GetName() const;                   //!
   const char * GetTitle() const;                  //!
   const char * GetEvtFilePath() const;            //!
@@ -51,6 +55,7 @@ protected:
 
 private:
   static HTExperimentInfo* _instance;
+
   
   std::string * fDAQConfigurationFileName;
   std::string * fPedestalFileName;
@@ -67,6 +72,8 @@ private:
 
   int fFirstRun;
   int fLastRun;
+  int        _runNum;
+  HTRunInfo *_runInfo;
 
   void ParseSetConfigLine(const char *);              //! Parse a configuration line containing the command "set" and extract Experiment info
   

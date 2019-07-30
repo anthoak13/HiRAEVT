@@ -59,12 +59,7 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
     exit (-1);
   }
   
-  gRun=HTExperimentInfo::Instance()->GetRunInfo(fRunNumber);
-  if(gRun==0) {
-   std::cout << "Failed to get run info." << std::endl;
-   exit(-1);
-  }
-
+  auto runInfo = HTExperimentInfo::Instance()->SetRunNumber(fRunNumber);
   std::cout << "** Run Info correctly initialized **\n";
 
   return 0;
@@ -99,7 +94,7 @@ int HTMapper::InitRootOutput()
   if(fFileOut->IsZombie()) return -1; //failed to open TFile
 
   // Creating output TTree
-  fMappedTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), gRun->GetTitle(),2);
+  fMappedTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(),2);
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch

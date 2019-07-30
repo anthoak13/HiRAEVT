@@ -1,8 +1,5 @@
 #include <HTShared.h>
 
-//Global variables
-HTRunInfo* gRun;
-
 //Constants ********************************************************
 // HiRA Constants
 const int N_STRIPS_PER_TELESCOPE = 32;

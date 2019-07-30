@@ -62,8 +62,8 @@ RBExperiment::RBExperiment(const char *name)
   // Allocate memory for objects that will be written to UserInfo list.
   expTitle            = new TNamed("Experiment Title",HTExperimentInfo::Instance()->GetTitle());
   expNumber           = new TNamed("Experiment Number",HTExperimentInfo::Instance()->GetName());
-  runTitle            = new TNamed("Run Title",gRun->GetTitle());
-  runNumber           = new TNamed("Run Number",Form("%d",gRun->GetRunNumber()));
+  runTitle            = new TNamed("Run Title",HTExperimentInfo::Instance()->GetRunInfo()->GetTitle());
+  runNumber           = new TNamed("Run Number",Form("%d",HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber()));
   evtFileNumber       = new TNamed("Evt File Number","");
   dateTimestamp       = new TNamed("Date timestamp Begin","");
   dateBegin           = new TNamed("Run Begin Date","");
@@ -88,15 +88,15 @@ RBExperiment::~RBExperiment()
 void RBExperiment::Setup()
 {
   SetMergedData(HTExperimentInfo::Instance()->IsDataMerged());
-  SetEventFilePath(gRun->GetEvtFilePath());
+  SetEventFilePath(HTExperimentInfo::Instance()->GetRunInfo()->GetEvtFilePath());
   SetRootFilePath(HTExperimentInfo::Instance()->GetRootFilePath());
     
   //Define all of the modules and stacks
-  for(int NumStack=0; NumStack<gRun->GetNStacks(); NumStack++)
+  for(int NumStack=0; NumStack<HTExperimentInfo::Instance()->GetRunInfo()->GetNStacks(); NumStack++)
   {
     RBUSBStack * newStack = new RBUSBStack();
     newStack->AddStack();
-    HTDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
+    HTDAQStackInfo * newStackInfo = HTExperimentInfo::Instance()->GetRunInfo()->GetStackInfo(NumStack);
     
     printf("RBSetup> Defined new DAQ Stack \"%s\"\n", newStackInfo->GetStackName());
     
@@ -247,7 +247,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
 
   // Setting run number
-  fRunNumber = gRun->GetRunNumber();
+  fRunNumber = HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber();
 
   // Determine the evt file number.
   std::string evtNumStr(evtFileStr.substr(evtFileStr.find_last_of('-')+1,evtFileStr.find(".evt")-evtFileStr.find_last_of('-')-1));
@@ -284,7 +284,7 @@ Bool_t RBExperiment::InitializeROOTConverter(const Char_t *evtFile, const Char_t
   }
 
   // We must be careful here.  The file must be open before we create the tree.
-  fRootTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), gRun->GetTitle(),2);
+  fRootTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(),2);
 
   // Initialize the branches for EVB RingItem data.
   fRootTree->Branch("fBRI.Size",     &fBRI_Size,     "fBRI.Size/I");

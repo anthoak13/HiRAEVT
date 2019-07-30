@@ -13,27 +13,14 @@ HTExperimentInfo* HTExperimentInfo::Instance()
 HTExperimentInfo::HTExperimentInfo() :
 fDataMerged(false),
 fFirstRun(0),
-fLastRun(0)
+fLastRun(0),
+_runNum(-1),
+_runInfo(nullptr)
 {}
 
-//________________________________________________
+//THIS IS NEVER CALLED. MEMORY IS RELEASED AT PROGRAM CLOSE.
 HTExperimentInfo::~HTExperimentInfo()
 {
-  if(fDAQConfigurationFileName) {
-    delete [] fDAQConfigurationFileName;
-  }
-  if(fPedestalFileName) {
-    delete [] fPedestalFileName;
-  }
-  if(fMappingFileName) {
-    delete [] fMappingFileName;
-  }
-  if(fRunEvtFilePath) {
-    delete [] fRunEvtFilePath;
-  }
-  if(fRunTitle) {
-    delete [] fRunTitle;
-  }
 }
 
 //________________________________________________
@@ -55,28 +42,40 @@ int HTExperimentInfo::InitClass(const char *file_name)
   //Set general setup configuration
   NLinesRead += LoadSetupConfiguration(file_name);
 
-  fDAQConfigurationFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
-  fPedestalFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
-  fMappingFileName=(std::string*)new std::string[fLastRun-fFirstRun+1];
-  fRunEvtFilePath=(std::string*)new std::string[fLastRun-fFirstRun+1];
-  fRunTitle=(std::string*)new std::string[fLastRun-fFirstRun+1];
+  fDAQConfigurationFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
+  fPedestalFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
+  fMappingFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
+  fRunEvtFilePath = (std::string*)new std::string[fLastRun-fFirstRun+1];
+  fRunTitle = (std::string*)new std::string[fLastRun-fFirstRun+1];
 
   // Retrieving all previously stored run titles from database file
   RetrieveRunTitlesFromDatabaseFile();
 
   //Set run-by-run setup configuration
-  for(int run_num=fFirstRun; run_num<=fLastRun; run_num++)
+  for(int run_num = fFirstRun; run_num <= fLastRun; run_num++)
   {
-    fRunEvtFilePath[run_num-fFirstRun].assign(fEvtFilePath); //In case the evt file path is unique and the option --run is never specified
+    //In case the evt file path is unique and the option --run is never specified
+    fRunEvtFilePath[run_num-fFirstRun].assign(fEvtFilePath);
+
+    //If the run title was not previously found,
+    //retrieve it from evt file and store into the database file    
     NLinesRead += LoadRunConfiguration(file_name,run_num);
-    // Only if the run title was not previously found retrieve it from evt file and store into the database file
-    if(fRunTitle[run_num-fFirstRun].empty()) {
-      const char * TempRunTitle=RetrieveRunTitleFromEvtFile(Form("%srun%d/run-%04d-00.evt",fRunEvtFilePath[run_num-fFirstRun].c_str(),run_num,run_num));
-      if(TempRunTitle!=0) {
+
+    if(fRunTitle[run_num - fFirstRun].empty())
+    {
+      const char * TempRunTitle =
+	RetrieveRunTitleFromEvtFile(
+	  Form("%srun%d/run-%04d-00.evt",
+	       fRunEvtFilePath[run_num-fFirstRun].c_str(),
+	       run_num,
+	       run_num));
+      
+      if(TempRunTitle!=0)
+      {
         fRunTitle[run_num-fFirstRun].assign(TempRunTitle);
         StoreRunTitleInDatabaseFile(TempRunTitle, run_num);
       }
-    }
+    } //End if fRunTitle is empty
   }
 
   return NLinesRead;
@@ -151,30 +150,47 @@ int HTExperimentInfo::LoadRunConfiguration(const char *file_name, int run_num)
   return NRead;
 }
 
-//________________________________________________
-HTRunInfo * HTExperimentInfo::GetRunInfo(int run_num) const
+int HTExperimentInfo::GetRunNumber() const
 {
+  return _runNum;
+}
+
+HTRunInfo * HTExperimentInfo::GetRunInfo() const
+{
+  return _runInfo;
+}
+
+//________________________________________________
+HTRunInfo * HTExperimentInfo::SetRunNumber(int run_num)
+{
+  bool success = true;
   HTRunInfo * newRunInfo = new HTRunInfo(run_num,fRunTitle[run_num-fFirstRun].c_str());
 
-  if(newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str())<=0) {
-    delete newRunInfo;
-    return 0;
-  }
-  if(newRunInfo->SetPedestalsFile(fPedestalFileName[run_num-fFirstRun].c_str())!=0) {
-    delete newRunInfo;
-    return 0;
-  }
-  if(newRunInfo->SetMappingFile(fMappingFileName[run_num-fFirstRun].c_str())!=0) {
-    delete newRunInfo;
-    return 0;
-  }
-  if(!fRunEvtFilePath[run_num-fFirstRun].empty()) {
-    newRunInfo->SetEvtFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
-  } else {
-    newRunInfo->SetEvtFilePath(fEvtFilePath.c_str());
-  }
+  //Load in all of the DAQ, Pedistal, and Mappings
+  success &=
+    newRunInfo->LoadDAQSettings(fDAQConfigurationFileName[run_num-fFirstRun].c_str()) > 0;
+  
+  success &= 
+    newRunInfo->SetPedestalsFile(fPedestalFileName[run_num-fFirstRun].c_str()) == 0;
 
-  return newRunInfo;
+  success &=
+    newRunInfo->SetMappingFile(fMappingFileName[run_num-fFirstRun].c_str())== 0;
+
+
+  //Set the evt file path
+  if(!fRunEvtFilePath[run_num-fFirstRun].empty())
+    newRunInfo->SetEvtFilePath(fRunEvtFilePath[run_num-fFirstRun].c_str());
+  else
+    newRunInfo->SetEvtFilePath(fEvtFilePath.c_str());
+
+  //if Something failed throw an error
+  if (!success)
+    throw "Failed to load info on run";
+
+  _runNum = run_num;
+  _runInfo = newRunInfo;
+  return _runInfo;
+
 }
 
 //________________________________________________

@@ -1,12 +1,6 @@
 #ifndef HTSHARED_H
 #define HTSHARED_H
 
-class RBExperiment;
-class HTRunInfo;
-
-//Global variables
-extern HTRunInfo * gRun;
-
 //Constants ********************************************************
 // HiRA Constants
 extern const int N_STRIPS_PER_TELESCOPE;

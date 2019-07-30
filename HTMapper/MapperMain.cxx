@@ -57,7 +57,7 @@ int main (int argc, char ** argv)
 
 
   //Main loop HTRawDataReader::ProcessRawTree()
-  printf("** Mapping run %d **\n", gRun->GetRunNumber());
+  printf("** Mapping run %d **\n", HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber());
   TheReader->ProcessRawTree();
 
 

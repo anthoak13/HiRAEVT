@@ -43,10 +43,10 @@ HTExperimentalSetup::~HTExperimentalSetup()
 int HTExperimentalSetup::BuildElectronicModules()
 {
   // Definition of electronic modules to retrieve data from the ROOT Unpacked TTree
-  for(int NumStack=0; NumStack<gRun->GetNStacks(); NumStack++)
+  for(int NumStack=0; NumStack<HTExperimentInfo::Instance()->GetRunInfo()->GetNStacks(); NumStack++)
   {
     //Loop over all the defined stacks to retrieve individual module information
-    HTDAQStackInfo * newStackInfo = gRun->GetStackInfo(NumStack);
+    HTDAQStackInfo * newStackInfo = HTExperimentInfo::Instance()->GetRunInfo()->GetStackInfo(NumStack);
 
     for(int NumModule = 0; NumModule < newStackInfo->GetNModules(); NumModule++)
     {
@@ -73,14 +73,14 @@ int HTExperimentalSetup::BuildElectronicModules()
       } else if (newModuleType.compare("RBCAEN7xxUnpacker")==0)
       {
         HTRootCAEN7xx * newModule = new HTRootCAEN7xx(newModuleName.c_str());
-        int LineLoaded = newModule->LoadPedestals(gRun->GetPedestalFile());
+        int LineLoaded = newModule->LoadPedestals(HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
         if(LineLoaded < 0)
 	{
-          printf("HTRootCAEN7xx: Error while loading pedestal file %s\n", gRun->GetPedestalFile());
+          printf("HTRootCAEN7xx: Error while loading pedestal file %s\n", HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
         } else
 	{
           printf("HTRootCAEN7xx: Module %s has loaded %d lines from pedestal file %s\n",
-		 newModuleName.c_str(), LineLoaded, gRun->GetPedestalFile());
+		 newModuleName.c_str(), LineLoaded, HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
         }
         (*fModules)[newModuleName]=newModule;
 	
@@ -106,10 +106,10 @@ int HTExperimentalSetup::BuildElectronicModules()
 //________________________________________________
 int HTExperimentalSetup::BuildDetectors()
 {
-  std::ifstream FileIn(gRun->GetMappingFile());
+  std::ifstream FileIn(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
   if(!FileIn.is_open()) {
     printf("HTExperimentalSetup: Failed to build detectors, error while opening %s file\n",
-	   gRun->GetMappingFile());
+	   HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
     return -1;
   }
 
@@ -134,7 +134,7 @@ int HTExperimentalSetup::BuildDetectors()
   }
   FileIn.close();
 
-  printf("HTExperimentalSetup: Built %lu detectors from file %s\n", fDetectors->size(), gRun->GetMappingFile());
+  printf("HTExperimentalSetup: Built %lu detectors from file %s\n", fDetectors->size(), HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
   return fDetectors->size();
 }
 
@@ -199,7 +199,7 @@ void HTExperimentalSetup::BuildDetectorMaps()
   // Each of them is mapped with the same name of the detector itself.
   for(auto det=fDetectors->begin(); det!=fDetectors->end(); det++)
   {
-    det->second->LoadMapping(gRun->GetMappingFile());
+    det->second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
   } //End for loop
 }
 

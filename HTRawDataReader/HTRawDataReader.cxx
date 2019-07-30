@@ -46,7 +46,7 @@ int HTRawDataReader::InitRootInput()
 {
   // Opening a new TFile for input
   fDataTree = new TChain(Form("E%s",HTExperimentInfo::Instance()->GetName()));
-  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root", HTExperimentInfo::Instance()->GetRootFilePath(), gRun->GetRunNumber()));
+  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root", HTExperimentInfo::Instance()->GetRootFilePath(), HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber()));
   fTotalEvents=fDataTree->GetEntries();
   return fNEvtFiles;
 }
