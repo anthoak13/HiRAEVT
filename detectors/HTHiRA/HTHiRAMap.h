@@ -2,7 +2,7 @@
 #define HTHIRAMAP_H
 
 #include <HTDetectorMap.h>
-#include <HTShared.h>
+#include <HiRAConstants.h>
 
 class HTHiRAMap : public HTDetectorMap
 {

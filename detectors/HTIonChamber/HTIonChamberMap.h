@@ -2,6 +2,7 @@
 #define HTIONCHAMBERMAP_H
 
 #include <HTDetectorMap.h>
+#include <TString.h>
 
 class HTIonChamberMap : public HTDetectorMap
 {

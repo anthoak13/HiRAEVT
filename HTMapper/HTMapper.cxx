@@ -60,7 +60,7 @@ int HTMapper::LoadExperimentInfo(const char * file_name)
   }
   
   auto runInfo = HTExperimentInfo::Instance()->SetRunNumber(fRunNumber);
-  std::cout << "** Run Info correctly initialized **\n";
+  std::cout << "** Run Info correctly initialized **\n" << std::endl;
 
   return 0;
 }
@@ -77,10 +77,11 @@ int HTMapper::BuildExperimentalSetup()
     return -2;
   std::cout << "Electronic modules initialized" << std::endl;
   
-  if(HTExperimentalSetup::Instance()->BuildDetectors()<=0)
+  if(HTExperimentalSetup::Instance()->BuildDetectors() <=0 )
     return -3;
   std::cout << "Detectors initialized" << std::endl;
-  
+
+  HTExperimentalSetup::Instance()->BuildDetectorMaps();
   std::cout << "Detectors mapped" << std::endl;
   
   return 0;

@@ -128,9 +128,8 @@ int HTExperimentalSetup::BuildDetectors()
     if(LineReadCommentLess.find("define ")!=std::string::npos)
       ParseDefineMappingLine(LineReadCommentLess.c_str());
 
-    if(LineReadCommentLess.find("assign ")!=std::string::npos) 
+    else if(LineReadCommentLess.find("assign ")!=std::string::npos)
       ParseAssignMappingLine(LineReadCommentLess.c_str());
-    
   }
   FileIn.close();
 
@@ -181,8 +180,11 @@ int HTExperimentalSetup::ParseAssignMappingLine(const char * line_to_parse)
     std::string DetectorName;
     LineStream>>DetectorName;
     std::string ModuleName;
-    while(LineStream>>ModuleName) {
-      if(fDetectors->find(DetectorName)!=fDetectors->end()) {
+
+    while(LineStream>>ModuleName)
+    {
+      if(fDetectors->find(DetectorName)!=fDetectors->end())
+      {
         NModulesAdded++;
         (*fDetectors)[DetectorName]->AssignModule((*fModules)[ModuleName]);
       }
@@ -199,6 +201,7 @@ void HTExperimentalSetup::BuildDetectorMaps()
   // Each of them is mapped with the same name of the detector itself.
   for(auto det=fDetectors->begin(); det!=fDetectors->end(); det++)
   {
+    std::cout << "Loading mapping for " << det->second->GetName() << std::endl;
     det->second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
   } //End for loop
 }

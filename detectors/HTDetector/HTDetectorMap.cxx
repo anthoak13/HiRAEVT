@@ -78,6 +78,7 @@ int HTDetectorMap::ParseAssignLine(const char * line_to_parse)
 //________________________________________________
 int HTDetectorMap::ParseMapLine(const char * line_to_parse)
 {
+  std::cout << "This line is being called" << std::endl;
   return 0;
 }
 

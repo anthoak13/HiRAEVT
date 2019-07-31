@@ -5,7 +5,6 @@
 
 #include <CUnpackerFilter.h>
 #include <HiRAEVTLogo.h>
-#include <HTShared.h>
 #include <Unpacker.h>
 
 /// The main function

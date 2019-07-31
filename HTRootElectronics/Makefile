@@ -9,7 +9,7 @@ INCLUDES  := -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 
-RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lHTShared
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

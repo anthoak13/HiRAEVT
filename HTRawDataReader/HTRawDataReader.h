@@ -1,7 +1,6 @@
 #ifndef HTRAWDATAREADER_H
 #define HTRAWDATAREADER_H
 
-#include <HTShared.h>
 #include <HTMapper.h>
 #include <TTreeReader.h>
 #include <TTreeReaderArray.h>

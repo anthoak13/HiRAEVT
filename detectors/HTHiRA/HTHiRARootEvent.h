@@ -2,7 +2,7 @@
 #define HTHIRAROOTEVENT_H
 
 #include <TROOT.h>
-#include <HTShared.h>
+#include <HiRAConstants.h>
 
 class HTHiRAStripData
 {

@@ -4,7 +4,6 @@
 #define CUNPACKERFILTER_CPP
 
 #include <Unpacker.h>
-#include <HTShared.h>
 #include <CFilter.h>
 #include <stdint.h>
 

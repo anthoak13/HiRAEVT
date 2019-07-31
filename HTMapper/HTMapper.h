@@ -8,7 +8,6 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <HTExperimentalSetup.h>
-#include <HTShared.h>
 #include <HTExperimentInfo.h>
 #include <HTRunInfo.h>
 

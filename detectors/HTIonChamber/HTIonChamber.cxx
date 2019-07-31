@@ -33,12 +33,13 @@ void HTIonChamber::BuildEvent()
   for(int detNum=0; detNum < fNumDetectors; detNum++)
   {
     HTIonChamberMap* map = (HTIonChamberMap*) fDetectorMapping;
-
+    
     //If the energy module exists, grab the energy
     if(map->GetEnergyModule(detNum) >= 0)
       fevt->fIonChamber.fE[detNum] = ((HTRootMADC32 *)fModules[map->GetEnergyModule(detNum)])->
 	GetData(map->GetEnergyChannel(detNum));
     else
+      //std::cout << "Failed to find energy module for " << detNum << std::endl;
       fevt->fIonChamber.fE[detNum] = -9999;
 
     //If the time module exists get the time
@@ -47,6 +48,9 @@ void HTIonChamber::BuildEvent()
 	GetData(map->GetTimeChannel(detNum));
     else
       fevt->fIonChamber.fTime[detNum] = -9999;
+
+    //Set the det num
+    fevt->fIonChamber.fDetNum[detNum] = detNum;
   }
 
   //Fill Root Event structure to be written on the tree

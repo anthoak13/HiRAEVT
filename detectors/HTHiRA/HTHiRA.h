@@ -35,6 +35,7 @@
 #include <TTreeReaderValue.h>
 
 #include <HTHiRACsIArray.h>
+#include <HiRAConstants.h>
 
 class HTHiRA : public HTDetector
 {
@@ -47,7 +48,9 @@ public :
   void InitTTreeBranch(TTree *) override;          //!Initialize TTree Branch containing detector ROOT type
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches
   void FillMappedData() override;                  //!Stores mapped data in detector ROOT class to be written on the output tree
-
+  
+  
+  
 private :
   HTHiRACsIArray *fHiRACsI;                        //!HTHiRACsIArray containing CsI data mapped
   HTHiRARootEvent * fevt;                          //!RootEvent type of the detector

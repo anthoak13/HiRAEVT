@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include <HiRAEVTLogo.h>
-#include <HTShared.h>
 #include <HTRunInfo.h>
 #include <HTMapper.h>
 #include <HTRawDataReader.h>

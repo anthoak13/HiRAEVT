@@ -19,7 +19,6 @@
 
 #include "HTRunInfo.h"
 #include "HTExperimentInfo.h"
-#include "HTShared.h"
 
 
 #include <fstream>

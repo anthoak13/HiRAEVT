@@ -50,9 +50,10 @@ int HTIonChamberMap::ParseMapLine(const char * line_to_parse)
   if(DetectorName.compare(fName)!=0) return 0;
 
   //Get the module number from the map
-  moduleNumber=fModuleAssignmentOrder->at(ModuleName);
+  moduleNumber = fModuleAssignmentOrder->at(ModuleName);
 
 
+  
   if(ChType.compare("ENERGY") == 0)
   {
     fEnergyModule[detNumber] = moduleNumber;
@@ -63,5 +64,6 @@ int HTIonChamberMap::ParseMapLine(const char * line_to_parse)
     fTimeModule[detNumber]  = moduleNumber;
     fTimeChannel[detNumber] = moduleCh;
   }
+
   return 1;
 }

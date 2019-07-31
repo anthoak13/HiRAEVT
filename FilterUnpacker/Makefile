@@ -3,7 +3,7 @@ include $(HiRAEVTDAQROOT)/filterkit/FilterIncludes
 
 #
 #  Add your own compilation/link flags here:
-RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lHTLogo -lHTShared -lHTRunInfo
+RLIBS     := -L$(HiRAEVTLIB) -lRBElectronics -lRBExperiment -lRBSetup -lHTLogo -lHTRunInfo
 
 INCLUDES  := -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/electronics

@@ -30,18 +30,26 @@
 ********************************************************************************
 
 ** detectors definition
-define detector IonChamber "IC" 4
+define detector IonChamber "IC" 8
 
 ** assign modules to detectors
 assign module IC adc1 tdc1
 
-** detector mapping for HiRA
-map IC ENERGY 0 adc1 0
-map IC ENERGY 1 adc1 1
-map IC ENERGY 2 adc1 2
-map IC ENERGY 3 adc1 3
+** detector mapping for Ion Chmaber
+map IC ENERGY 0 adc1 3
+map IC ENERGY 1 adc1 2
+map IC ENERGY 2 adc1 1
+map IC ENERGY 3 adc1 0
+map IC ENERGY 4 adc1 7
+map IC ENERGY 5 adc1 6
+map IC ENERGY 6 adc1 5
+map IC ENERGY 7 adc1 4
 
 map IC TIME 0 tdc1 0
 map IC TIME 1 tdc1 1
 map IC TIME 2 tdc1 2
 map IC TIME 3 tdc1 3
+map IC TIME 4 tdc1 4
+map IC TIME 5 tdc1 5
+map IC TIME 6 tdc1 6
+map IC TIME 7 tdc1 7
