@@ -12,6 +12,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/shared
+INCLUDES  += -I$(HiRAEVTSRC)/HTCalibration
 
 RLIBS     := -L$(HiRAEVTLIB)
 

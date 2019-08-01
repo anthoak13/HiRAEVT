@@ -10,6 +10,7 @@
 
 #include "HTRootElectronics.h"
 #include "HTDetectorMap.h"
+#include "HTDetectorCalibration.h"
 
 class HTDetector
 {
@@ -31,7 +32,8 @@ public :
   virtual void BuildEvent();                      //!Individually implemented in specific detector classes
   virtual void FillMappedData();                  //!Individually implemented in specific detector classes
   virtual void InitMapping() = 0;                 //!Create a detector mapping of the right type
-  
+
+  void InitCalibration();                          //!Creates a detector calibration of the right type
 protected :
 
 
@@ -40,7 +42,7 @@ protected :
   int fNumDetectors;                              //!Number of individual detection objects (telescopes, bars, sectors, ...)
   std::vector<HTRootElectronics *> fModules;      //!HTRootElectronics modules
   HTDetectorMap * fDetectorMapping;               //!Detector Mapping
-
+//  HTDetectorCalibration *fDetectorCalibration;      //!Detector Calibration
   
 };
 

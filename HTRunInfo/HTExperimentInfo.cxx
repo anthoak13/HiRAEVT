@@ -45,9 +45,10 @@ int HTExperimentInfo::InitClass(const char *file_name)
   fDAQConfigurationFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
   fPedestalFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
   fMappingFileName = (std::string*)new std::string[fLastRun-fFirstRun+1];
+  fCalibrationFileName = new std::string[fLastRun-fFirstRun+1];
   fRunEvtFilePath = (std::string*)new std::string[fLastRun-fFirstRun+1];
   fRunTitle = (std::string*)new std::string[fLastRun-fFirstRun+1];
-
+  
   // Retrieving all previously stored run titles from database file
   RetrieveRunTitlesFromDatabaseFile();
 
@@ -176,6 +177,9 @@ HTRunInfo * HTExperimentInfo::SetRunNumber(int run_num)
   success &=
     newRunInfo->SetMappingFile(fMappingFileName[run_num-fFirstRun].c_str())== 0;
 
+  success &=
+    newRunInfo->SetCalibrationFile(fCalibrationFileName[run_num-fFirstRun].c_str())== 0;
+
 
   //Set the evt file path
   if(!fRunEvtFilePath[run_num-fFirstRun].empty())
@@ -295,13 +299,20 @@ void HTExperimentInfo::ParseSetConfigLineRunInfo(const char *line_to_parse, int 
   } else return;
 
   // if I'm here so run_num has been found in the configuration line
-  if(ValueToSet.compare("DAQ_CONFIG")==0) {
+  if(ValueToSet.compare("DAQ_CONFIG")==0)
+  {
     fDAQConfigurationFileName[run_num-fFirstRun].assign(NewValue);
-  } else if (ValueToSet.compare("PEDESTAL_VALUES")==0) {
+  } else if (ValueToSet.compare("PEDESTAL_VALUES")==0)
+  {
     fPedestalFileName[run_num-fFirstRun].assign(NewValue);
-  } else if (ValueToSet.compare("CHANNEL_MAPPING")==0) {
+  } else if (ValueToSet.compare("CHANNEL_MAPPING")==0)
+  {
     fMappingFileName[run_num-fFirstRun].assign(NewValue);
-  } else if (ValueToSet.compare("EVENT_FILE_PATH")==0) {
+  } else if (ValueToSet.compare("CALIBRATION")==0)
+  {
+    fCalibrationFileName[run_num-fFirstRun].assign(NewValue);
+  } else if (ValueToSet.compare("EVENT_FILE_PATH")==0)
+  {
     fRunEvtFilePath[run_num-fFirstRun].assign(NewValue);
   }
 

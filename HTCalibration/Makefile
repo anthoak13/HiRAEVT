@@ -12,6 +12,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTCalibration
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
+INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTNeutronWall
@@ -22,11 +23,11 @@ INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber -lHTCalibration
+RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
-HTEXPERIMENTALSETUP_LIB := libHTExperimentalSetup.$(DllSuf)
+THIS_LIB := libHTCalibration.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
@@ -34,21 +35,21 @@ OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
 	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-all: $(HTEXPERIMENTALSETUP_LIB)
+all: $(THIS_LIB)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
-$(HTEXPERIMENTALSETUP_LIB): $(OBJS)
+$(THIS_LIB): $(OBJS)
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(HTEXPERIMENTALSETUP_LIB) $(HiRAEVTLIB)/.
+	@cp $(THIS_LIB) $(HiRAEVTLIB)/.
 
 .PHONY: distclean
 distclean:
-	@rm -f $(HTEXPERIMENTALSETUP_LIB)
-	@rm -f $(HiRAEVTLIB)/$(HTEXPERIMENTALSETUP_LIB)
+	@rm -f $(THIS_LIB)
+	@rm -f $(HiRAEVTLIB)/$(THIS_LIB)
 
 .PHONY: clean
 clean:

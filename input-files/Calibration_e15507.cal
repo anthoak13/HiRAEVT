@@ -1,0 +1,30 @@
+** Calibration for experiment E15507  **
+
+** Curently only HTIonChamber supports calibration **
+
+** To define a calibration need to supply the detector name
+** The code will chack to make sure calibration is supported and the
+** detector has been created in the mapping file
+
+** Examples: *************************************
+** define calibration IC
+**************************************************
+
+** Each detector can support it's own format for calibration and
+** assigning of pedistal values but, in general the format will be
+**
+** calibrate Name detNum Type polyOrder c0 c1 c2 ...
+** ie
+** calibrate IC 0 ENERGY 1 1.5 -2
+**
+** pedistal Name Type DetNum value
+** ie
+** pedistal IC Energy 0 68
+
+
+
+** calibration definition
+define calibration IC
+
+** detector mapping for Ion Chmaber
+calibrate IC 0 ENERGY  1 0.5 0

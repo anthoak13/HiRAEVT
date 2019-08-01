@@ -17,6 +17,7 @@
 #include <TTree.h>
 #include <HTIonChamberRootEvent.h>
 #include <HTIonChamberMap.h>
+#include <HTIonChamberCalibration.h>
 #include <HTRootMADC32.h>
 #include <HTRootCAEN1x90.h>
 #include <HTDetector.h>
@@ -34,10 +35,13 @@ public :
   void BuildEvent() override;                      //!Calls individual electronic modules to feel detector branches
   void FillMappedData() override;                  //!Stores mapped data in detector ROOT class to be written on the output tree
 
+  void InitCalibration();
+  
 private :
   HTIonChamberRootEvent * fevt;                  //!RootEvent type of the detector
 
   void InitMapping() override;
+
 };
 
 #endif
