@@ -18,7 +18,6 @@ INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
-INCLUDES  += -I$(HiRAEVTSRC)/HTCalibration
 
 RLIBS     := -L$(HiRAEVTLIB) -lHTDetector
 

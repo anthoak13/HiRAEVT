@@ -13,7 +13,6 @@ INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTExperimentalSetup
 INCLUDES  += -I$(HiRAEVTSRC)/HTRawDataReader
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
-INCLUDES  += -I$(HiRAEVTSRC)/HTCalibration
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA

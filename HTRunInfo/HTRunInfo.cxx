@@ -173,13 +173,6 @@ int HTRunInfo::SetMappingFile(const char * file_name)
   return 0;
 }
 
-int HTRunInfo::SetCalibrationFile(const char * file_name)
-{
-  fCalibrationFilePath.assign(file_name);
-  fCalibrationFileSet=true;
-  return 0;
-}
-
 //________________________________________________
 void HTRunInfo::SetRunTitle(const char * run_title)
 {
@@ -211,13 +204,6 @@ const char * HTRunInfo::GetMappingFile() const
 {
   if(fMappingFileSet) {
     return fMappingFilePath.c_str();
-  } else return 0;
-}
-
-const char * HTRunInfo::GetCalibrationFile() const
-{
-  if(fCalibrationFileSet) {
-    return fCalibrationFilePath.c_str();
   } else return 0;
 }
 

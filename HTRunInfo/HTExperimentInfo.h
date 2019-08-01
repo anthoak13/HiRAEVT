@@ -60,7 +60,6 @@ private:
   std::string * fDAQConfigurationFileName;
   std::string * fPedestalFileName;
   std::string * fMappingFileName;
-  std::string * fCalibrationFileName;
   std::string * fRunEvtFilePath;
   std::string * fRunTitle;
 

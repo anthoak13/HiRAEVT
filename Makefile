@@ -20,10 +20,8 @@ root:
 	$(MAKE) -C detectors/HTMicroball ;		$(MAKE) -C detectors/HTMicroball install
 	$(MAKE) -C detectors/HTTDCSpare ;		$(MAKE) -C detectors/HTTDCSpare install
 	$(MAKE) -C detectors/HTIonChamber ;		$(MAKE) -C detectors/HTIonChamber install
-	$(MAKE) -C HTCalibration ; 			$(MAKE) -C HTCalibration install	
-	$(MAKE) -C HTExperimentalSetup ;		$(MAKE) -C HTExperimentalSetup install	
+	$(MAKE) -C HTExperimentalSetup ;		$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader ; 			$(MAKE) -C HTRawDataReader install
-
 
 install:
 	$(MAKE) -C electronics install
@@ -42,7 +40,6 @@ install:
 	$(MAKE) -C detectors/HTIonChamber install
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader install
-	$(MAKE) -C HTCalibration install	
 
 distclean:
 	$(MAKE) -C electronics distclean
@@ -63,7 +60,6 @@ distclean:
 
 	$(MAKE) -C FilterUnpacker  distclean
 	$(MAKE) -C HTMapper  distclean
-	$(MAKE) -C HTCalibration distclean
 
 clean:
 	$(MAKE) -C electronics  clean
@@ -85,7 +81,6 @@ clean:
 
 	$(MAKE) -C FilterUnpacker  clean
 	$(MAKE) -C HTMapper  clean
-	$(MAKE) -C HTCalibration clean
 
 debug:	CXXFLAGS += -DDEBUG -g
 
@@ -107,5 +102,4 @@ debug:
 	$(MAKE) -C HTRawDataReader
 
 	$(MAKE) -C FilterUnpacker
-	$(MAKE) -C HTMapper  
-	$(MAKE) -C HTCalibration 	
+	$(MAKE) -C HTMapper  clean

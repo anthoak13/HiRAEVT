@@ -22,25 +22,12 @@ public:
   int LoadDAQSettings(const char *);                     //! Read DAQ settings from file
   int SetPedestalsFile(const char *);                    //! Set Pathname of pedestal file
   int SetMappingFile(const char *);                      //! Set Pathname of mapping file
-  int SetCalibrationFile(const char *);                  //! Set Pathname of calibration file
 
-  
   const char * GetTitle() const;                         //! Returns run title
   int GetRunNumber() const;                              //! Returns run number
-
-  //! Returns path containing evt files for the run
-  const char * GetEvtFilePath() const;                
-  
-  //! Returns the path to pedestal file for the run
-  const char * GetPedestalFile() const;               
-
-  //! Returns the path to the mapping file for the run
-  const char * GetMappingFile() const;                   
-
-  // Return the calibration file for the run
-  const char* GetCalibrationFile() const;
-  
-  
+  const char * GetEvtFilePath() const;                   //! Returns path containing evt files for the run
+  const char * GetPedestalFile() const;                  //! Returns the path to pedestal file for the run
+  const char * GetMappingFile() const;                   //! Returns the path to the mapping file for the run
   int GetNStacks() const;                                //! Returns number of stacks
   HTDAQStackInfo * GetStackInfo(int) const;              //! Returns a HTDAQStackInfo object
 
@@ -55,12 +42,11 @@ private:
   std::string fEvtFilePath;                              //!
   std::string fPedestalsFilePath;                        //!
   std::string fMappingFilePath;                          //!
-  std::string fCalibrationFilePath;
   int fNStacks;                                          //!
   bool fDAQLoaded;                                       //!
   bool fPedestalsFileSet;                                //!
   bool fMappingFileSet;                                  //!
-  bool fCalibrationFileSet;
+
   std::vector <HTDAQStackInfo *> fStackInfo;             //!
 
   void ParseDefineDAQLine(const char *);

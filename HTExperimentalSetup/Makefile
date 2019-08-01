@@ -10,7 +10,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
-INCLUDES  += -I$(HiRAEVTSRC)/HTCalibration
+INCLUDES  += -I$(HiRAEVTSRC)/shared
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA
@@ -21,8 +21,7 @@ INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
 INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
-
-RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber -lHTCalibration
+RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

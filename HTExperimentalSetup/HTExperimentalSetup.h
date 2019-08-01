@@ -15,11 +15,25 @@
 #include <HTRootSisTimestamp.h>
 #include <HTRootTimestamp.h>
 
-#include <HTCalibration.h>
-
 #include <HTDetector.h>
+#include <HTSisTimestampe15190.h>
+#include <HTHiRA.h>
+#include <HTNeutronWall.h>
+#include <HTVetoWall.h>
+#include <HTForwardArray.h>
+#include <HTForwardArray.h>
+#include <HTMicroball.h>
+#include <HTTDCSpare.h>
+#include <HTIonChamber.h>
 
 #include <HTDetectorMap.h>
+#include <HTSisTimestampe15190Map.h>
+#include <HTTDCSpareMap.h>
+#include <HTHiRAMap.h>
+#include <HTNeutronWallMap.h>
+#include <HTVetoWallMap.h>
+#include <HTForwardArrayMap.h>
+#include <HTMicroballMap.h>
 #include <HTRunInfo.h>
 #include <HTExperimentInfo.h>
 #include <HTDAQStackInfo.h>
@@ -34,7 +48,6 @@ public :
   int  BuildElectronicModules();                     //!Called by HTMapper::BuildExperimentalSetup()
   int  BuildDetectors();                             //!Called by HTMapper::BuildExperimentalSetup()
   void BuildDetectorMaps();                          //!Called by HTMapper::BuildExperimentalSetup()
-  void BuildDetectorCalibrations();                  //!Called by HTMapper::Bui;dExperimentalSetup()
   void InitDetectorBranches(TTree *);                //!Called by HTMapper::InitRootOutput()
 
   

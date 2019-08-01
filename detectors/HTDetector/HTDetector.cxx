@@ -67,11 +67,3 @@ void HTDetector::LoadMapping(const char* name)
 {
   fDetectorMapping->LoadMapping(name);
 }
-
-void HTDetector::InitCalibration()
-{
-  std::string errorStr(
-    Form("No calibration for detector type %s", fType.c_str()));
-
-  throw std::invalid_argument(errorStr);
-}

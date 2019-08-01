@@ -34,6 +34,7 @@ int HTMapper::InitializeMapper(const char * file_config_name)
   if(LoadExperimentInfo(file_config_name)!=0)
     return -3;
 
+
   //Building Experimental Setup
   if(BuildExperimentalSetup()!=0)
     return -1;
@@ -82,9 +83,7 @@ int HTMapper::BuildExperimentalSetup()
 
   HTExperimentalSetup::Instance()->BuildDetectorMaps();
   std::cout << "Detectors mapped" << std::endl;
-
-  HTExperimentalSetup::Instance()->BuildDetectorCalibrations();
-
+  
   return 0;
 }
 

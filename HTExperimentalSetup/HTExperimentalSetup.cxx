@@ -21,7 +21,7 @@ fDetectors(0)
   fDetectors = new std::map<std::string, HTDetector *>;
 }
 
-//NOTE: This deconstructor is never called due to the choice of singelton implementation
+//________________________________________________
 HTExperimentalSetup::~HTExperimentalSetup()
 {
   if(fModules) {
@@ -103,6 +103,7 @@ int HTExperimentalSetup::BuildElectronicModules()
   return fModules->size();
 }
 
+//________________________________________________
 int HTExperimentalSetup::BuildDetectors()
 {
   std::ifstream FileIn(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
@@ -118,7 +119,6 @@ int HTExperimentalSetup::BuildDetectors()
     std::getline(FileIn, LineRead);
     std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
 
-    std::cout << "Parsing line: " << LineReadCommentLess << std::endl;
     if(LineReadCommentLess.empty())
       continue;
 
@@ -158,14 +158,14 @@ int HTExperimentalSetup::ParseDefineMappingLine(const char * line_to_parse)
 
     DetectorName.assign(DetectorName.substr(DetectorName.find("\"")+1,
 					    DetectorName.find_last_of("\"")-(DetectorName.find("\"")+1)));
-
+    
     (*fDetectors)[DetectorName] = HTDetectorFactory::Instance()->CreateDetector( DetectorType,
 										 DetectorName,
 										 numDets);
-    std::cout << "Test" << std::endl;
+
   } //End if statment that detector line exists
 
-  return NDets;
+  return fDetectors->size()-NDets;
 }
 
 //________________________________________________
@@ -206,11 +206,6 @@ void HTExperimentalSetup::BuildDetectorMaps()
   } //End for loop
 }
 
-void HTExperimentalSetup::BuildDetectorCalibrations()
-{
-  HTCalibration::Instance()->ParseCalibrationFile();
-}
-
 //________________________________________________
 std::map<std::string, HTRootElectronics *> * HTExperimentalSetup::GetModules() const
 {
@@ -238,13 +233,13 @@ HTRootElectronics * HTExperimentalSetup::GetModule(std::string name) const
 //________________________________________________
 HTDetector * HTExperimentalSetup::GetDetector(const char * name) const
 {
-  return fDetectors->at(name);
+  return (*fDetectors)[name];
 }
 
 //________________________________________________
 HTDetector * HTExperimentalSetup::GetDetector(std::string name) const
 {
-  return fDetectors->at(name);
+  return (*fDetectors)[name];
 }
 
 //________________________________________________
