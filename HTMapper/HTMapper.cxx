@@ -96,11 +96,12 @@ int HTMapper::InitRootOutput()
 
   // Creating output TTree
   fMappedTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(),2);
+
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch
   HTExperimentalSetup::Instance()->InitDetectorBranches(fMappedTree);
-
+  
   printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber));
 
   return 0;
@@ -126,11 +127,10 @@ void HTMapper::EndMapping()
 void HTMapper::MapDetectors()
 {
   //Loop over the defined detectors to call their individual HTDetector::BuildEvent()
-  std::map<std::string, HTDetector *> * DefinedDetectors = HTExperimentalSetup::Instance()->GetDetectors();
-  for(std::map<std::string, HTDetector *>::iterator TheDetector=DefinedDetectors->begin(); TheDetector!=DefinedDetectors->end(); TheDetector++)
-  {
-    (TheDetector)->second->BuildEvent();
-  }
+  auto DefinedDetectors = HTExperimentalSetup::Instance()->GetDetectors();
+
+  for(auto TheDetector : *DefinedDetectors)
+    TheDetector.second->BuildEvent();
 
   return;
 }

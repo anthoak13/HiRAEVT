@@ -51,6 +51,11 @@ public :
   void InitDetectorBranches(TTree *);                //!Called by HTMapper::InitRootOutput()
 
   
+
+  // Parse a define line in calibration file. Throws an error if the detector type
+  // is one that doesn't support calibration.
+  int ParseDefineCalibrationLine(const std::string& );
+
   //!Parse a define line in .map file. Returns 1 if a detector is add, otherwise 0.
   int ParseDefineMappingLine(const char *);
   //!Parse a assign line in .map file. Returns the number of module assigned.
@@ -80,7 +85,7 @@ private :
   //Maps of module and detector names to classes
   std::map<std::string, HTRootElectronics *> *fModules;
   std::map<std::string, HTDetector *> *fDetectors;
-
+  std::vector<std::string> *fCalibratableDetectors;
 };
 
 #endif

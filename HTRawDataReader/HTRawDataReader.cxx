@@ -24,20 +24,25 @@ HTRawDataReader::~HTRawDataReader()
 int HTRawDataReader::InitReader()
 {
   //Opening input TFile and TTree to read data
-  if(InitRootInput()<=0) return -2;
-  printf("** Correctly retrieved %d evt file(s) for mapping from folder %s **\n", fNEvtFiles, HTExperimentInfo::Instance()->GetRootFilePath());
+  if(InitRootInput()<=0)
+    return -2;
+
+  printf("** Correctly retrieved %d evt file(s) for mapping from folder %s **\n",
+	 fNEvtFiles, HTExperimentInfo::Instance()->GetRootFilePath());
 
   //Seting TTreeReader to the opened TChain
-  fDataReader=new TTreeReader(fDataTree);
-  if(!fDataTree) return -1;
+  fDataReader = new TTreeReader(fDataTree);
+  if(!fDataTree)
+    return -1;
 
   //Loop on the modules retrieved from HTExperimentalSetup::Instance() to init their individual TTreeReader Branches
-  std::map<std::string, HTRootElectronics *> * DefinedModules = HTExperimentalSetup::Instance()->GetModules();
-  for(std::map<std::string, HTRootElectronics *>::iterator TheModule=DefinedModules->begin(); TheModule!=DefinedModules->end(); TheModule++)
+  auto DefinedModules = HTExperimentalSetup::Instance()->GetModules();
+  for(auto TheModule : *DefinedModules)
   {
-    (TheModule)->second->InitTreeInputBranch(*fDataReader);
-    printf("TTreeReader: Correctly recognized module %s\n", (TheModule)->second->GetName());
+    TheModule.second->InitTreeInputBranch(*fDataReader);
+    printf("TTreeReader: Correctly recognized module %s\n", TheModule.second->GetName());
   }
+  
   return 0;
 }
 
@@ -46,15 +51,17 @@ int HTRawDataReader::InitRootInput()
 {
   // Opening a new TFile for input
   fDataTree = new TChain(Form("E%s",HTExperimentInfo::Instance()->GetName()));
-  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root", HTExperimentInfo::Instance()->GetRootFilePath(), HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber()));
-  fTotalEvents=fDataTree->GetEntries();
+  fNEvtFiles = fDataTree->Add(Form("%srun-%04d-*.root",
+				   HTExperimentInfo::Instance()->GetRootFilePath(),
+				   HTExperimentInfo::Instance()->GetRunInfo()->GetRunNumber()));
+  fTotalEvents = fDataTree->GetEntries();
   return fNEvtFiles;
 }
 
 //________________________________________________
 void HTRawDataReader::SetMapper(HTMapper * theMapper)
 {
-  fDataMapper=theMapper;
+  fDataMapper = theMapper;
 }
 
 //________________________________________________

@@ -32,10 +32,10 @@ int main (int argc, char ** argv)
   printf("** Initializing Mapper **\n");
   std::cout << "Loading config file: " << configFile << std::endl;
 
-  
+  //This loads the ExperimentInfo
   if( TheMapper->InitializeMapper(configFile.c_str())!= 0 )
   {
-      printf("Error while configuring program\n");
+    printf("Error while configuring program\n");
     return -2;
   }
   

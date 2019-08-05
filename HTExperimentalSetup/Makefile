@@ -10,18 +10,17 @@ INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTDetectorMap
 INCLUDES  += -I$(HiRAEVTSRC)/HTRunInfo
 INCLUDES  += -I$(HiRAEVTSRC)/electronics
-INCLUDES  += -I$(HiRAEVTSRC)/shared
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTNeutronWall
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTVetoWall
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTForwardArray
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo -lHTDetector -lHTSisTimestampe15190 -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber
+
+#Add all of the directories in the detector folder
+DETSUBDIR := $(sort $(dir $(wildcard ${HiRAEVTSRC}/detectors/*/)))
+INCLUDES += $(patsubst %, -I%, ${DETSUBDIR})
+
+DETLIBS := $(filter-out ${HiRAEVTSTC}/%, $(patsubst ${HiRAEVTSRC}/detectors/%/, -l%, ${DETSUBDIR}))
+
+
+RLIBS     := -L$(HiRAEVTLIB) -lHTRunInfo
+RLIBS += ${DETLIBS}
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 

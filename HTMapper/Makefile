@@ -13,17 +13,15 @@ INCLUDES  += -I$(HiRAEVTSRC)/electronics
 INCLUDES  += -I$(HiRAEVTSRC)/HTExperimentalSetup
 INCLUDES  += -I$(HiRAEVTSRC)/HTRawDataReader
 INCLUDES  += -I$(HiRAEVTSRC)/HTRootElectronics
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTDetector
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTSisTimestampe15190
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTHiRA
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTNeutronWall
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTVetoWall
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTForwardArray
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTMicroball
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTTDCSpare
-INCLUDES  += -I$(HiRAEVTSRC)/detectors/HTIonChamber
 
-RLIBS     := -L$(HiRAEVTLIB) -lHTLogo -lHTRunInfo -lHTExperimentalSetup -lHTRootElectronics -lHTDetector -lHTRawDataReader -lHTHiRA -lHTNeutronWall -lHTVetoWall -lHTForwardArray -lHTMicroball -lHTTDCSpare -lHTIonChamber
+#Add all of the directories in the detector folder
+DETSUBDIR := $(sort $(dir $(wildcard ${HiRAEVTSRC}/detectors/*/)))
+INCLUDES += $(patsubst %, -I%, ${DETSUBDIR})
+
+DETLIBS := $(filter-out ${HiRAEVTSTC}/%, $(patsubst ${HiRAEVTSRC}/detectors/%/, -l%, ${DETSUBDIR}))
+
+RLIBS   := -L$(HiRAEVTLIB) -lHTLogo -lHTRunInfo -lHTExperimentalSetup -lHTRootElectronics -lHTRawDataReader
+RLIBS   += ${DETLIBS}
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
@@ -32,7 +30,7 @@ CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
 
 .$(SrcSuf).$(ObjSuf):
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
-	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+#@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
 .PHONEY : all build
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)

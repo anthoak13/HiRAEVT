@@ -20,6 +20,8 @@ root:
 	$(MAKE) -C detectors/HTMicroball ;		$(MAKE) -C detectors/HTMicroball install
 	$(MAKE) -C detectors/HTTDCSpare ;		$(MAKE) -C detectors/HTTDCSpare install
 	$(MAKE) -C detectors/HTIonChamber ;		$(MAKE) -C detectors/HTIonChamber install
+	$(MAKE) -C detectors/HTMCP ;		$(MAKE) -C detectors/HTMCP install
+
 	$(MAKE) -C HTExperimentalSetup ;		$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader ; 			$(MAKE) -C HTRawDataReader install
 
@@ -29,6 +31,7 @@ install:
 	$(MAKE) -C logo install
 	$(MAKE) -C HTRunInfo install
 	$(MAKE) -C HTRootElectronics install
+
 	$(MAKE) -C detectors/HTDetector install
 	$(MAKE) -C detectors/HTSisTimestampe15190 install
 	$(MAKE) -C detectors/HTHiRA install
@@ -38,6 +41,8 @@ install:
 	$(MAKE) -C detectors/HTMicroball install
 	$(MAKE) -C detectors/HTTDCSpare install
 	$(MAKE) -C detectors/HTIonChamber install
+	$(MAKE) -C detectors/HTMCP install
+
 	$(MAKE) -C HTExperimentalSetup install
 	$(MAKE) -C HTRawDataReader install
 
@@ -47,6 +52,7 @@ distclean:
 	$(MAKE) -C logo distclean
 	$(MAKE) -C HTRunInfo distclean
 	$(MAKE) -C HTRootElectronics distclean
+
 	$(MAKE) -C detectors/HTDetector distclean
 	$(MAKE) -C detectors/HTSisTimestampe15190 distclean
 	$(MAKE) -C detectors/HTHiRA distclean
@@ -55,9 +61,11 @@ distclean:
 	$(MAKE) -C detectors/HTForwardArray distclean
 	$(MAKE) -C detectors/HTMicroball distclean
 	$(MAKE) -C detectors/HTTDCSpare distclean
+	$(MAKE) -C detectors/HTIonChamber distclean
+	$(MAKE) -C detectors/HTMCP distclean		
+
 	$(MAKE) -C HTExperimentalSetup distclean
 	$(MAKE) -C HTRawDataReader distclean
-
 	$(MAKE) -C FilterUnpacker  distclean
 	$(MAKE) -C HTMapper  distclean
 
@@ -67,6 +75,7 @@ clean:
 	$(MAKE) -C logo clean
 	$(MAKE) -C HTRunInfo clean
 	$(MAKE) -C HTRootElectronics clean
+
 	$(MAKE) -C detectors/HTDetector clean
 	$(MAKE) -C detectors/HTSisTimestampe15190 clean
 	$(MAKE) -C detectors/HTHiRA clean
@@ -76,6 +85,8 @@ clean:
 	$(MAKE) -C detectors/HTMicroball clean
 	$(MAKE) -C detectors/HTTDCSpare clean
 	$(MAKE) -C detectors/HTIonChamber clean
+	$(MAKE) -C detectors/HTMCP clean	
+
 	$(MAKE) -C HTExperimentalSetup clean
 	$(MAKE) -C HTRawDataReader clean
 

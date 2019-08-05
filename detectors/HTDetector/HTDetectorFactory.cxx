@@ -27,7 +27,7 @@ HTDetector* HTDetectorFactory::CreateDetector(const std::string& detType,
 					      const std::string& detName,
 					      const int numDets)
 {
-  HTDetector *newDet;
+  HTDetector *newDet = nullptr;
   
   if(detType.compare("TDCSpare")==0)
     newDet = new HTTDCSpare(detName.c_str());
@@ -53,6 +53,10 @@ HTDetector* HTDetectorFactory::CreateDetector(const std::string& detType,
   if(detType.compare("IonChamber")==0)
     newDet = new HTIonChamber(detName.c_str(), numDets);
 
+  if(detType.compare("MCP")==0)
+    newDet = new HTMCP(detName.c_str(), numDets);
+  
+  
   if (newDet == nullptr)
     std::cerr << "The detector type " << detType << " was not recognized." << std::endl;
   else

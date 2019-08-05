@@ -18,6 +18,7 @@
 #include "HTMicroball.h"
 #include "HTSisTimestampe15190.h"
 #include "HTIonChamber.h"
+#include "HTMCP.h"
 
 class HTDetectorFactory
 {
