@@ -32,11 +32,15 @@
 ** detectors definition
 define detector IonChamber "IC" 8
 define detector IonChamber "Ge" 1
+define detector IonChamber "SiE" 1
+define detector IonChamber "SiDE" 1
 define detector MCP "MCP" 2
 
 ** assign modules to detectors
 assign module IC adc1 tdc1
 assign module Ge adc2 tdc1
+assign module SiE adc2 tdc1
+assign module SiDE adc2 tdc1
 assign module MCP qdc1 qdc2 tdc1
 
 ** detector mapping for Ion Chmaber
@@ -59,9 +63,17 @@ map IC TIME 6 tdc1 6
 map IC TIME 7 tdc1 7
 
 
-** detector mapping for Ion Chmaber
+** detector mapping for HPGe
 map Ge ENERGY 0 adc2 2
 map Ge TIME 0 tdc1 15
+
+** detector mapping for SiE
+map SiE ENERGY 0 adc2 1
+map SiE TIME 0 tdc1 14
+
+** detector mapping for SidE
+map SiDE ENERGY 0 adc2 0
+map SiDE TIME 0 tdc1 13
 
 ** detector mapping for MCP 0 is US 1 is DS
 map MCP ANODE ENERGY 0 qdc2 0

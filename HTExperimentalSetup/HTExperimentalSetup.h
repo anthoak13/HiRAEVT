@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdexcept>
 #include <iostream>
 #include <vector>
 #include <map>

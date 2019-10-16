@@ -183,11 +183,13 @@ int HTExperimentalSetup::ParseAssignMappingLine(const char * line_to_parse)
 
     while(LineStream>>ModuleName)
     {
-      if(fDetectors->find(DetectorName)!=fDetectors->end())
+      if(fDetectors->find(DetectorName)!= fDetectors->end())
       {
         NModulesAdded++;
         (*fDetectors)[DetectorName]->AssignModule((*fModules)[ModuleName]);
       }
+      else
+	throw std::invalid_argument(DetectorName.append(" not defined!"));
     }
   }
 

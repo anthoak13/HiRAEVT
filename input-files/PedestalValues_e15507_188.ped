@@ -20,8 +20,8 @@ set pedestal adc1 7	  55
 *************************************
 
 * pedestals for adc2 ****************
-set pedestal adc2 0	  45
-set pedestal adc2 1	  32
+set pedestal adc2 0	  0
+set pedestal adc2 1	  0
 *************************************
 
 * pedestals for qdc1 ****************
