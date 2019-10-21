@@ -3,6 +3,11 @@
 
 
 #include <TROOT.h>
+#include <TString.h>
+
+#include <stdexcept>
+
+#define MAXNUMDET 10
 
 class HTIonChamberData
 {
@@ -12,7 +17,7 @@ public:
   Short_t  *fE;      //[fMulti]
   Double_t *fTime;   //[fMulti]
 
-  HTIonChamberData(int);
+  HTIonChamberData(int numDet = MAXNUMDET);
   virtual ~HTIonChamberData();
 
   ClassDef(HTIonChamberData,1);

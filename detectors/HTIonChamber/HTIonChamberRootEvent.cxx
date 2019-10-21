@@ -1,11 +1,16 @@
 #include <HTIonChamberRootEvent.h>
 
 //________________________________________________
-HTIonChamberData::HTIonChamberData(int num_detectors) : fMulti(0)
+HTIonChamberData::HTIonChamberData(int numDetectors) : fMulti(0)
 {
-  fDetNum  = new Int_t   [num_detectors];
-  fE       = new Short_t [num_detectors];
-  fTime    = new Double_t[num_detectors];
+  if(numDetectors > MAXNUMDET)
+    throw std::invalid_argument(TString::Format(
+				  "Tried to create %d detectors which is larger then the absolute cap of %d",
+				  numDetectors, MAXNUMDET).Data());
+
+  fDetNum  = new Int_t   [numDetectors];
+  fE       = new Short_t [numDetectors];
+  fTime    = new Double_t[numDetectors];
 }
 
 //________________________________________________

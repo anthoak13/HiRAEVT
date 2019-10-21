@@ -3,6 +3,11 @@
 
 
 #include <TROOT.h>
+#include <TString.h>
+
+#include <stdexcept>
+
+#define MAXNUMDET 10
 
 class HTMCPData
 {
@@ -15,7 +20,7 @@ public:
   Short_t  *fEBack;     //[fMulti]
   Double_t *fTimeBack;  //[fMulti]
 
-  HTMCPData(int numDetectors);
+  HTMCPData(int numDetectors = MAXNUMDET);
   virtual ~HTMCPData();
 
   ClassDef(HTMCPData,1);
