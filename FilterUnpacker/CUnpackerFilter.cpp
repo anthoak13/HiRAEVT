@@ -45,7 +45,7 @@ void CUnpackerFilter::PassArguments(int argc, char* argv[])
   //if(result==0){ std::cerr << "-->CUnpackerFilter::ctor source argument is invalid." << std::endl;}
 
   strcpy(sourceFileName,temp);
-  std::cout << "**Setting source file name to " << sourceFileName << " **" << std::endl;
+  std::cout << "** Setting source file name to " << sourceFileName << " **" << std::endl;
 
   unpacker = new Unpacker();
   unpacker->InitializeUnpacker(sourceFileName);

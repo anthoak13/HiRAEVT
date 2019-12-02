@@ -84,11 +84,11 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   cout << "Loading config file: " << configFile << endl;
   
 
-  if(HTExperimentInfo::Instance()->InitClass(configFile.c_str())<=0) {
+  if(HTExperimentInfo::Instance()->InitClass(configFile.c_str()) <= 0) {
     cout << "Error while reading configuration file.\n";
     exit (-1);
   }
-  
+
   auto runInfo = HTExperimentInfo::Instance()->SetRunNumber(RunNumber);
 
   cout << "** Run Info correctly initialized **\n";

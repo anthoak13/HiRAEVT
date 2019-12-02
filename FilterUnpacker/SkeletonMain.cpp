@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     CUnpackerFilter unpacker_filter;
     // Pass along the command-line arguments to the unpacker.
     unpacker_filter.PassArguments(argc, argv);
-    std::cout << "**Unpacker filter intialized**" << std::endl;
+    std::cout << "** Unpacker filter intialized**" << std::endl;
 
     // Register the filter(s) here. Note that if more than
     // one filter will be registered, the order of registration
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     // registered, the output of the first filter will become the
     // input of the second filter and so on.
     theApp.registerFilter(&unpacker_filter);
-    std::cout << "**Unpacker filter registered**" << std::endl;
+    std::cout << "** Unpacker filter registered**" << std::endl;
 
     // Run the main loop
     theApp();
