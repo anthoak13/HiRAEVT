@@ -42,12 +42,15 @@ void RBSisTimestampUnpacker::InitBranch(TTree* tree)
 {
 
   if (GetFillData()){
-    Char_t tmp[500];
+/*    Char_t tmp[500];
     sprintf(tmp,"%s/L",GetBranchName());
+
     std::string KoreanElectronics(GetBranchName());
     KoreanElectronics += "Koreans";
+
     tree->Branch(KoreanElectronics.c_str(), &fTimestampKoreans, (KoreanElectronics + "/L").c_str());
-    tree->Branch(GetBranchName(), &fTimestamp, tmp);
+*/
+    tree->Branch(GetBranchName(), fTimestamp, TString::Format("%s[2]/l", GetBranchName()));
 }else{
     cout << "RBSisTimestamp InitBranch problem" << endl;
   }
@@ -57,8 +60,8 @@ void RBSisTimestampUnpacker::InitBranch(TTree* tree)
 void RBSisTimestampUnpacker::Clear()
 {
 
-  fTimestamp = 0;
-  fTimestampKoreans = 0;
+  fTimestamp[0] = 0;
+  fTimestamp[1] = 0;
 }
 
 
@@ -76,10 +79,10 @@ Int_t RBSisTimestampUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
   uint64_t high = high1;
   uint64_t timestamp = low1 | (mid1 << 16) | (high << 32);
+  fTimestamp[0] = timestamp;
   high =high0;
-  uint64_t timestampKoreans = low0 | (mid0 << 16) | (high << 32);
-  fTimestamp = timestamp;
-  fTimestampKoreans = timestampKoreans;
+  timestamp = low0 | (mid0 << 16) | (high << 32);
+  fTimestamp[1] = timestamp;
 
   return offset;
 

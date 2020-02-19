@@ -22,13 +22,13 @@
 //#include <stdint.h>
 
 // Based on SpecTcl code written by Kyle Brown, adapted for RIBbit by Juan Manfredi
+// Made more general by Adam Anthony Feb 2020
 // Jan 2018
 
 class RBSisTimestampUnpacker : public RBModuleUnpacker, public RBElectronics
 {
 private:
-  ULong64_t fTimestamp;
-  ULong64_t fTimestampKoreans;
+  ULong64_t fTimestamp[2];
 
   TTree               *fChain;                 //! Pointer to current TTree or TChain
   Int_t                fCurrent;               //! Current Tree number in a TChain
@@ -38,20 +38,20 @@ public:
   ~RBSisTimestampUnpacker();
 
   Int_t   Unpack(std::vector<UShort_t>& event, UInt_t offset);
-
+  
   //  Int_t   *GetData()        {return fTimes;}
 
   virtual void InitBranch(TTree* tree);
   virtual void Clear();
-
+  
   virtual void InitClass(){}
   //  virtual void InitBranch(TTree* tree);
   //  virtual void InitBranch(TTree* tree){}
-
+  
   virtual void InitTree(TTree* tree){fChain = tree;}
-
-  ULong64_t GetTimestamp(){return fTimestamp;}
-
+  
+  ULong64_t GetTimestamp(unsigned int ch){ return (ch < 2 ?  fTimestamp[ch] : 0); }
+  
   ClassDef(RBSisTimestampUnpacker,1);
 };
 

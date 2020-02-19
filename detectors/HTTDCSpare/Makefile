@@ -27,15 +27,17 @@ SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 %.$(ObjSuf): %.$(SrcSuf)
-	$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
-	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+	@echo "Building $<"
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+
 
 all: $(DETECTOR_LIB)
 
 
 $(DETECTOR_LIB): $(OBJS)
+	@echo "Linking $@ $(SYSLIB)"
 	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
-	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
+
 
 install:
 	@cp $(DETECTOR_LIB) $(HiRAEVTLIB)/.

@@ -39,7 +39,7 @@ OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
 	$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
-	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+	@echo "Building $<"
 
 all: $(DETECTOR_LIB)
 
@@ -50,8 +50,9 @@ $(DETECTOR_DICT): $(DETECTOR_HDRS)
 	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
 $(DETECTOR_LIB): $(OBJS) $(DETECTOR_DICTO)
+	@echo "Linking $@ $(SYSLIB)"
 	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
-	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
+
 
 install:
 	@cp $(DETECTOR_LIB) $(DETECTOR_PCM) $(HiRAEVTLIB)/.

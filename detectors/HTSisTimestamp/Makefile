@@ -38,8 +38,9 @@ SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
-	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+	@echo "Building $<"
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+
 
 all: $(DETECTOR_LIB)
 
@@ -47,11 +48,12 @@ all: $(DETECTOR_LIB)
 
 $(DETECTOR_DICT): $(DETECTOR_HDRS)
 	@echo "Generating dictionary $@..."
-	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
+	@$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
 
 $(DETECTOR_LIB): $(OBJS) $(DETECTOR_DICTO)
+	@echo "Linking $@"
 	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@
-	@echo "$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@"
+
 
 install:
 	@cp $(DETECTOR_LIB) $(DETECTOR_PCM) $(HiRAEVTLIB)/.
