@@ -4,11 +4,11 @@
 //#define dModuleTimestampKoreans ((HTSisTimestampMap *)fDetectorMapping)->GetTimestampKoreansModule()
 
 //________________________________________________
-HTSisTimestamp::HTSisTimestamp(const char * name, int num_detectors) : HTDetector(name),
-						    fevt(0)
+HTSisTimestamp::HTSisTimestamp(const char * name, int num_detectors) : HTDetector(name, num_detectors),
+								       fevt(0)
 {
-  fevt=new HTTStampRootEvent(num_detectors);
-  fType.assign("HTSisTimestamp");
+  fevt = new HTTStampRootEvent(num_detectors);
+  fType.assign("SisTimestamp");
 }
 
 //________________________________________________

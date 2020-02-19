@@ -47,7 +47,7 @@ HTDetector* HTDetectorFactory::CreateDetector(const std::string& detType,
   if(detType.compare("Microball")==0)
     newDet = new HTMicroball(detName.c_str());
 
-  if(detType.compare("HTSisTimestamp")==0)
+  if(detType.compare("SisTimestamp")==0)
     newDet = new HTSisTimestamp(detName.c_str(), numDets);
 
   if(detType.compare("IonChamber")==0)

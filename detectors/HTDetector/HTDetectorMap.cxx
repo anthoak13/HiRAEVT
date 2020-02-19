@@ -44,12 +44,14 @@ int HTDetectorMap::LoadMapping(const char * file_name)
     }
     if(LineReadCommentLess.find("map ")!=std::string::npos) {
       if(LineReadCommentLess.find(fName)!=std::string::npos) {
-        NChannelsMapped+=ParseMapLine(LineReadCommentLess.c_str());
+        NChannelsMapped += ParseMapLine(LineReadCommentLess.c_str());
       }
     }
   }
   FileIn.close();
 
+  std::cout << "Mapped " << NChannelsMapped << " channels for " << fName << std::endl;
+  
   return NChannelsMapped;
 }
 

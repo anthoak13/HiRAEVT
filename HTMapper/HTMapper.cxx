@@ -91,18 +91,26 @@ int HTMapper::BuildExperimentalSetup()
 int HTMapper::InitRootOutput()
 {
   // Opening a new TFile for output
-  fFileOut = new TFile(Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber), "RECREATE");
+  fFileOut = new TFile(Form("%srun-%04d.root",
+			    HTExperimentInfo::Instance()->GetMappedRootFilePath(),
+			    fRunNumber),
+		       "RECREATE");
   if(fFileOut->IsZombie()) return -1; //failed to open TFile
 
   // Creating output TTree
-  fMappedTree = new TTree(Form("E%s",HTExperimentInfo::Instance()->GetName()), HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(),2);
+  fMappedTree = new TTree(Form("E%s",
+			       HTExperimentInfo::Instance()->GetName()),
+			  HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(),
+			  2);
 
   fMappedTree->SetAutoSave(50000000);
 
   //call individual detectors InitTTreeBranch
   HTExperimentalSetup::Instance()->InitDetectorBranches(fMappedTree);
   
-  printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber));
+  printf("HTMapper: Opened ROOT file %s\n", Form("%srun-%04d.root",
+						 HTExperimentInfo::Instance()->GetMappedRootFilePath(),
+						 fRunNumber));
 
   return 0;
 }

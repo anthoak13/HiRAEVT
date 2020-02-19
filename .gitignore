@@ -38,3 +38,6 @@ unpack
 *.exe
 *.out
 *.app
+
+# link to data
+data

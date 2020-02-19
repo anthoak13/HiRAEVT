@@ -201,11 +201,10 @@ void HTExperimentalSetup::BuildDetectorMaps()
 {
   // Loop over the defined detectors to build the corresponding detector mappers
   // Each of them is mapped with the same name of the detector itself.
+  int nMappedLines = 0;
   for(auto&& det : *fDetectors)
-  {
-    std::cout << "Loading mapping for " << det.second->GetName() << std::endl;
-    det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
-  } //End for loop
+    nMappedLines += det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
+
 }
 
 //________________________________________________

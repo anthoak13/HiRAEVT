@@ -63,7 +63,8 @@ void HTDetector::FillMappedData()
   return;
 }
 
-void HTDetector::LoadMapping(const char* name)
+//returns the number of "map " lines processed
+int HTDetector::LoadMapping(const char* name)
 {
-  fDetectorMapping->LoadMapping(name);
+  return fDetectorMapping->LoadMapping(name);
 }

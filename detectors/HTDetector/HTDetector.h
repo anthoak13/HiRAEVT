@@ -25,7 +25,7 @@ public :
   const char * GetType() const;                   //!Returns detector type
   int GetNumDetectors() const;                    //!Get number of individual detection objects (telescopes, bars, sectors, ...)
 
-  void LoadMapping(const char *);
+  int LoadMapping(const char *);                  //!Calls the mapping function in fDetectorMap
 
   virtual void InitTTreeBranch(TTree *);          //!Individually implemented in specific detector classes
   virtual void BuildEvent();                      //!Individually implemented in specific detector classes

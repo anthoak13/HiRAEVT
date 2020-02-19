@@ -79,10 +79,10 @@ Int_t RBSisTimestampUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
 
   uint64_t high = high1;
   uint64_t timestamp = low1 | (mid1 << 16) | (high << 32);
-  fTimestamp[0] = timestamp;
+  fTimestamp[1] = timestamp;
   high =high0;
   timestamp = low0 | (mid0 << 16) | (high << 32);
-  fTimestamp[1] = timestamp;
+  fTimestamp[0] = timestamp;
 
   return offset;
 
