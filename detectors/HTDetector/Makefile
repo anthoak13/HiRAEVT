@@ -23,16 +23,16 @@ OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
 .$(SrcSuf).$(ObjSuf):
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
-	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+	@echo "Building $<"
 
 all: $(HTDETECTOR_LIB)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
 $(HTDETECTOR_LIB): $(OBJS)
-	@echo ${OBJS}
+	echo ${OBJS}
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
-	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
+	@echo "Building $@"
 
 install:
 	@cp $(HTDETECTOR_LIB) $(HiRAEVTLIB)/.

@@ -17,7 +17,7 @@
 #include <HTRootTimestamp.h>
 
 #include <HTDetector.h>
-#include <HTSisTimestampe15190.h>
+#include <HTSisTimestamp.h>
 #include <HTHiRA.h>
 #include <HTNeutronWall.h>
 #include <HTVetoWall.h>
@@ -28,7 +28,7 @@
 #include <HTIonChamber.h>
 
 #include <HTDetectorMap.h>
-#include <HTSisTimestampe15190Map.h>
+#include <HTSisTimestampMap.h>
 #include <HTTDCSpareMap.h>
 #include <HTHiRAMap.h>
 #include <HTNeutronWallMap.h>

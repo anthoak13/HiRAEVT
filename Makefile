@@ -12,7 +12,7 @@ root:
 	$(MAKE) -C HTRunInfo ;				$(MAKE) -C HTRunInfo install
 	$(MAKE) -C HTRootElectronics ;			$(MAKE) -C HTRootElectronics install
 	$(MAKE) -C detectors/HTDetector ;		$(MAKE) -C detectors/HTDetector install
-	$(MAKE) -C detectors/HTSisTimestampe15190 ;	$(MAKE) -C detectors/HTSisTimestampe15190 install
+	$(MAKE) -C detectors/HTSisTimestamp ;	$(MAKE) -C detectors/HTSisTimestamp install
 	$(MAKE) -C detectors/HTHiRA ;			$(MAKE) -C detectors/HTHiRA install
 	$(MAKE) -C detectors/HTNeutronWall ;		$(MAKE) -C detectors/HTNeutronWall install
 	$(MAKE) -C detectors/HTVetoWall ;		$(MAKE) -C detectors/HTVetoWall install
@@ -33,7 +33,7 @@ install:
 	$(MAKE) -C HTRootElectronics install
 
 	$(MAKE) -C detectors/HTDetector install
-	$(MAKE) -C detectors/HTSisTimestampe15190 install
+	$(MAKE) -C detectors/HTSisTimestamp install
 	$(MAKE) -C detectors/HTHiRA install
 	$(MAKE) -C detectors/HTNeutronWall install
 	$(MAKE) -C detectors/HTVetoWall install
@@ -54,7 +54,7 @@ distclean:
 	$(MAKE) -C HTRootElectronics distclean
 
 	$(MAKE) -C detectors/HTDetector distclean
-	$(MAKE) -C detectors/HTSisTimestampe15190 distclean
+	$(MAKE) -C detectors/HTSisTimestamp distclean
 	$(MAKE) -C detectors/HTHiRA distclean
 	$(MAKE) -C detectors/HTNeutronWall distclean
 	$(MAKE) -C detectors/HTVetoWall distclean
@@ -77,7 +77,7 @@ clean:
 	$(MAKE) -C HTRootElectronics clean
 
 	$(MAKE) -C detectors/HTDetector clean
-	$(MAKE) -C detectors/HTSisTimestampe15190 clean
+	$(MAKE) -C detectors/HTSisTimestamp clean
 	$(MAKE) -C detectors/HTHiRA clean
 	$(MAKE) -C detectors/HTNeutronWall clean
 	$(MAKE) -C detectors/HTVetoWall clean
@@ -102,7 +102,7 @@ debug:
 	$(MAKE) -C HTRunInfo
 	$(MAKE) -C HTRootElectronics
 	$(MAKE) -C detectors/HTDetector
-	$(MAKE) -C detectors/HTSisTimestampe15190
+	$(MAKE) -C detectors/HTSisTimestamp
 	$(MAKE) -C detectors/HTHiRA
 	$(MAKE) -C detectors/HTNeutronWall
 	$(MAKE) -C detectors/HTVetoWall

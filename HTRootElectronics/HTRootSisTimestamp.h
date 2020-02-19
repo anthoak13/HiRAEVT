@@ -12,12 +12,10 @@ public :
   ~HTRootSisTimestamp();                                        //!Destructor
 
   void InitTreeInputBranch(TTreeReader&) override;              //!Set Input TTRee Reader Branch
-  Long64_t GetData() const;                                     //!Get Timestamp
-  Long64_t GetDataKoreans() const;                              //!Get Timestamp for Korean electronics
+  ULong64_t GetData(int ch) const;                                     //!Get Timestamp
 
 private :
-  TTreeReaderValue<Long64_t> * fTimestamp;
-  TTreeReaderValue<Long64_t> * fTimestampKoreans;
+  TTreeReaderArray<ULong64_t> *fTimestamp;
 };
 
 #endif
