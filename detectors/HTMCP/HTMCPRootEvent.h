@@ -7,10 +7,11 @@
 
 #include <stdexcept>
 
-#define MAXNUMDET 10
 
 class HTMCPData
 {
+private:
+  const static int  MAXNUMDET = 10;
 public:
   Int_t    fMulti;
   Int_t    *fDetNum;    //[fMulti]
@@ -28,8 +29,7 @@ public:
 
 class HTMCPRootEvent
 {
-
- public:
+public:
  HTMCPData fMCP;
 
  HTMCPRootEvent(int numDetectors);

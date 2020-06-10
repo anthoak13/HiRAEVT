@@ -179,7 +179,7 @@ Int_t RBMADC32Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
     longsRead--;		// Really should not happen!!
   }
 
-  fTotalUnpackedCount=longsRead;
+  fTotalUnpackedCount += longsRead;
 
   // There will be a 0xffffffff longword for the BERR at the end of the
   // readout.

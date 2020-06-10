@@ -30,16 +30,79 @@
 ********************************************************************************
 
 ** detectors definition
-define detector IonChamber "SimpleDetector" 1
-define detector SisTimstamp "TimeStamp" 2
+define detector IonChamber "IC" 13
+define detector SisTimestamp "TimeStamp" 2
+define detector MCP "MCP" 2
+define detector IonChamber "SiE" 1
+define detector IonChamber "SiDE" 1
+define detector IonChamber "Ge" 1
+define detector IonChamber "TPC" 1
 
 ** assign modules to detectors
-assign module SimpleDetector adc1 tdc1
+assign module IC adc1 tdc1
 assign module TimeStamp tstamp
+assign module MCP qdc1 qdc2 tdc1
+assign module SiE adc2 tdc1
+assign module SiDE adc2 tdc1
+assign module Ge adc2 tdc1
+assign module TPC adc2 tdc1
 
-** detector mapping for SimpleDetector
-map SimpleDetector ENERGY 0 adc1 4
-map SimpleDetector TIME 0 adc1 4
 
+** detector mapping for IC
+map IC ENERGY 0 adc1 0
+map IC TIME   0 tdc1 16
+map IC ENERGY 1 adc1 1
+map IC TIME   1 tdc1 17
+map IC ENERGY 2 adc1 2
+map IC TIME   2 tdc1 18
+map IC ENERGY 3 adc1 3
+map IC TIME   3 tdc1 19
+map IC ENERGY 4 adc1 4
+map IC TIME   4 tdc1 20
+map IC ENERGY 5 adc1 5
+map IC TIME   5 tdc1 21
+map IC ENERGY 6 adc1 6
+map IC TIME   6 tdc1 22
+map IC ENERGY 7 adc1 7
+map IC TIME   7 tdc1 23
+map IC ENERGY 8 adc1 8
+map IC TIME   8 tdc1 24
+map IC ENERGY 9 adc1 9
+map IC TIME   9 tdc1 25
+map IC ENERGY 10 adc1 10
+map IC TIME   10 tdc1 26
+map IC ENERGY 11 adc1 11
+map IC TIME   11 tdc1 27
+map IC ENERGY 12 adc1 14
+map IC TIME   12 tdc1 28
+
+** detector mapping for timestamp **
 map TimeStamp TIMESTAMP 0 tstamp 0
 map TimeStamp TIMESTAMP 1 tstamp 1 
+
+** detector mapping for MCP 0 is US 1 is DS **
+map MCP ANODE ENERGY 0 qdc1 0
+map MCP BACK  ENEGRY 0 qdc1 1
+map MCP ANODE TIME 0 tdc1 3
+map MCP BACK TIME 0 tdc1 4
+
+map MCP ANODE ENERGY 1 qdc2 0
+map MCP BACK  ENEGRY 1 qdc2 1
+map MCP ANODE TIME 1 tdc1 1
+map MCP BACK TIME 1 tdc1 2
+
+** detector mapping for SiE
+map SiE ENERGY 0 adc2 1
+map SiE TIME 0 tdc1 7
+
+** detector mapping for SidE
+map SiDE ENERGY 0 adc2 0
+map SiDE TIME 0 tdc1 6
+
+** detector mapping for HPGe
+map Ge ENERGY 0 adc2 2
+map Se TIME 0 tdc1 8
+
+** detector mapping for TPC
+map TPC ENERGY 0 adc2 3
+map TPC TIME 0 tdc1 5

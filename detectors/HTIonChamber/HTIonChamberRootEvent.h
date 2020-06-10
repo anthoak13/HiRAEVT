@@ -7,10 +7,13 @@
 
 #include <stdexcept>
 
-#define MAXNUMDET 10
+
 
 class HTIonChamberData
 {
+private:
+  const static int MAXNUMDET = 20;
+
 public:
   Int_t     fMulti;
   Int_t    *fDetNum; //[fMulti]
@@ -25,8 +28,8 @@ public:
 
 class HTIonChamberRootEvent
 {
-
- public:
+  
+public:
  HTIonChamberData fIonChamber;
 
  HTIonChamberRootEvent(int);

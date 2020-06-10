@@ -1,0 +1,129 @@
+1 Timestamp Test
+2 Timestamp Test
+3 Timestamp Test
+4 Timestamp Test
+5 Timestamp Test
+6 Timestamp Test
+7 Timestamp Test
+8 Timestamp Test
+9 Timestamp Test
+10 Timestamp Test
+11 Timestamp Test
+12 Timestamp Test
+13 Timestamp Test
+14 Timestamp Test
+15 Timestamp Test
+16 Timestamp Test
+17 Timestamp Test
+18 Timestamp Test
+19 Pulser ramp 0 to 10V 50us fall time
+20 Pulser ramp 0 to 10V 50us fall time 200ns shaping
+21 Pulser ramp 0 to 10V 50us fall time 200ns shaping
+22 Pulser ramp 0 to 10V 50us fall time 200ns shaping
+23 0V-10V; fall time 20us; 200 ns shaping time
+24 0V-10V; fall time 20us; 200 ns shaping time
+25 0V-10V; fall time 20us; 3 us shaping time
+26 0V-10V; fall time 20us; 6 us shaping time
+29 4V pulser; fall time 20us; 3 us shaping time; 
+30 4V pulser; fall time 20us; 3 us shaping time; 
+32 Timestamp test with clear
+33 Timestamp test with clear and ATTPC Data
+34 Timestamp test with clear and O2 to reset timestamp
+35 Timestamp test with clear and O2 to reset timestamp
+36 Timestamp test with clear and O2 to reset timestamp
+37 200ns shaping. 20us fall 200ns rise 0V to 10V
+38 200 ns shaping. 20us fall 200ns rise 0V to 10V
+39 3us shaping. 20us fall 200ns rise 0V to 10V
+40 6us shaping. 20us fall 200ns rise 0V to 10V
+41 Timestamping test with ATTPC busy. Both daqs started before trigger
+42 Timestamping test with ATTPC busy. NSCL and pulser before TPC
+43 Timestamping test with ATTPC busy. NSCL and pulser before TPC
+44 200 ns shaping; 500 ns rise; 200us fall 0-10V
+45 1us shaping; 200 ns rise; 200us fall 0-10V
+46 3us shaping; 200 ns rise; 200us fall 0-10V
+47 6us shaping; 200 ns rise; 200us fall 0-10V
+48 200ns shaping; 500 ns rise; 100us fall 0-10V
+49 1us shaping; 500 ns rise; 100us fall 0-10V
+50 3us shaping; 500 ns rise; 100us fall 0-10V
+51 6us shaping; 500 ns rise; 100us fall 0-10V
+52 Stability test 4V pulser @ 2 Hz 1us shaping 200ns rise 100us fall
+53 MCP timing test. Trig Si
+54 Old IC Test 0.1V pulser @ 100Hz with alpha
+55 Old IC Test with alpha
+56 Old IC Test with alpha
+57 Old IC Pulser ramp 0 to 0.06V 7 steps
+58 Old IC test alpha trigger
+59 Old IC test alpha trigger
+60 ATTPC timestamp test
+61 ATTPC timestamp test
+62 ATTPC timestamp test
+63 Timestamp test with NSCLDAQ and new logic
+64 Timestamp test with NSCLDAQ and new logic
+65 Timestamp test with ATTPC and new logic
+66 Timestamp test with ATTPC and new logic
+67 Timestamp test with ATTPC and new logic. Switched CLK and CLR on TPC
+68 Timestamp test with ATTPC and new logic. Removed TPC CLR
+69 Timestamp test with ATTPC and new logic. Using bad level converter
+70 Timestamp test with ATTPC and new logic. Using bad level converter
+71 Timestamp test with ATTPC and new logic. Using bad level converter
+72 Timestamp test with ATTPC and new logic. Using bad level converter
+73 Old Ic pulser 0-0.06V 100Hz 
+74 Old IC Alpha Test
+75 Old IC Alpha Test
+76 ATTPC Timestamp test
+77 ATTPC Timestamp test with mesh trigger
+78 ATTPC Timestamp test with mesh trigger
+79 ATTPC Timestamp test with mesh trigger
+80 Old IC pulser ramp 0.0 to 0.06 v, 7 steps, 15 s
+81 Old IC pulser alphas, P10 800 torr
+83 Pulser Ramp, 0.00 to 0.06, 7 steps, 10 s per step
+84 Old IC pulser alphas, P10 800 torr
+85 Pulser run on adc2 channel 0
+86 Test data for Tommy's tree
+87 Am241 at 300 torr. In first Section w/ tenelec
+88 Pulser of IC sections 0 to 4 0 to 0.06V
+89 Pulser of IC sections 0 to 4 0V to 0.06V
+90 alpha test 300 torr 1st E segment
+91 alpha test 300 torr 1st E segment
+92 alpha test 350 torr 1st E segment
+93 alpha test 350 torr 467 V 1st E segment
+94 alpha test 360 torr 480 V 1st E segment
+95 alpha test 370 torr 493 V 1st E segment
+97 alpha test 380 torr 507 V 1st E segment
+98 alpha test 390 torr 520 V 1st E segment
+99 alpha test 400 torr 533 V 1st E segment
+100 alpha test 300 torr 400 V 1st E segment
+101 alpha test 300 torr 400 V 1st E segment
+102 300 torr. 250 V, am241
+103 300 torr. 300 V, am241
+104 300 torr. 300 V, am241, after flushing
+105 IC pedistal run 0V pulser @ 100 Hz
+106 IC Pulser 1 ramp. 0 to 5V 100x attenuation 9 steps @ 100 Hz
+107 IC Pulser 2 ramp. 0 to 5V 100x attenuation 9 steps @ 100 Hz
+108 IC Pulser 2 ramp. 0 to 5V 100x attenuation 9 steps @ 100 Hz
+109 IC Pulser 2 ramp. 0 to 5V 100x attenuation 9 steps @ 100 Hz
+110 IC Pulser 1 ramp. 0 to 5V 100x attenuation 9 steps @ 100 Hz 1us shaping
+111 Alpa test. Trigger is E section 2 amplified fast monitor. 300 torr, 300 V
+112 Alpa test.  300 torr, 300 V 1us shaping time
+113 U alpha test.  300 torr, 300 V 3us shaping time. Trigger on ch 11
+114 U alpha test.  300 torr, 300 V 3us shaping time. Trigger on ch 11
+115 U alpha test.  500 torr, 500 V 3us shaping time. Trigger on ch 11
+116 Am alpha test.  300 torr, 300 V 3us. Trigger on ch 2. Missing ch 3
+117 Am alpha test.  300 torr, 300 V 3us. Trigger on ch 2. Missing ch 3
+118 Am alpha test.  200 torr, 200 V 3us. Trigger on ch 4. Missing ch 3
+119 Pulser test 1. 0 to 5 V X100 attenuation trigger on ch 0
+120 Am test. US trigger ch4 200V 200 torr
+121 Am test. US trigger ch3 300V 300 torr
+122 Am test. US trigger ch3 300V 300 torr
+123 HPGe Sb125 calibration source
+124 HPGe Sb125 calibration source
+125 HPGe Co60 calibration source
+126 HPGe Co60 calibration source
+127 HPGe Co60 calibration source
+128 HPGe Sb125 calibration source
+129 HPGe Sb125 calibration source
+130 HPGe Background
+131 Si dE pulser ramp. 10 GeV/ 10 V. 0 to 10 V 11 steps
+132 Si dE pulser ramp. 10 GeV/ 10 V. 0 to 10 V 11 steps. Trigger on pulser
+134 IC Pulser test. Trig on pulser. Test 1. 0 to 5 V 9 steps
+135 IC Pulser test. Trig on pulser. Test 1 3V 2Hz

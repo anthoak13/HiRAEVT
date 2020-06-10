@@ -13,9 +13,6 @@
 
 ** HiRA STACK
 define stack "DAQ Stack" 0
-add module 0 RBSisTimestampUnpacker "tstamp" -1
-add module 0 RBCAEN1x90Unpacker "tdc1" 5 3 0 128 0.1
-add module 0 RBCAEN7xxUnpacker "qdc1" 4
-add module 0 RBCAEN7xxUnpacker "qdc2" 8
-add module 0 RBMADC32Unpacker "adc1" 3
-add module 0 RBMADC32Unpacker "adc2" 7
+add module 0 RBCAEN1x90Unpacker "tdc1" 4 3 15 128 0.1
+add module 0 RBMADC32Unpacker "adc1" 5
+
