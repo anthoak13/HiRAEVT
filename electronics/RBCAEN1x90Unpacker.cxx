@@ -15,9 +15,7 @@ using std::string;
 
 /// ASSUMPTION:
 ///   There are at most 128 channels. Note that if this is wrong, the
-///   parameter map is also going to break;
-
-static const int   MAX_CHANNELS = 128;
+///   parameter map is also going to break; Also assumes the max depth per channel is 16. If more then 16 hits, will take only the first 16.
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -130,9 +128,11 @@ RBCAEN1x90Unpacker::~RBCAEN1x90Unpacker() {
 //______________________________________________________________________________
 void RBCAEN1x90Unpacker::Clear(Option_t *option)
 {
-  for (int i = 0; i < fnCh; i++) {
-    fTimes[i] = -9999;
-  }
+  for (int i = 0; i < fnCh; i++)
+    for(int j = 0; j < fDepth; ++j)
+    {
+      fTimes[i*fDepth+j] = -9999;
+    }
 }
 
 //______________________________________________________________________________
@@ -143,7 +143,7 @@ void RBCAEN1x90Unpacker::InitClass()
 void RBCAEN1x90Unpacker::InitBranch(TTree *tree)
 {
   if(GetFillData()){
-    tree->Branch(fChName, fTimes, Form("%s[%i]/D",fChName.Data(),fnCh));
+    tree->Branch(fChName, fTimes, Form("%s[%i]/D",fChName.Data(),fnCh*fDepth));
   }else{
     cout << "-->RBCAEN1x90Unpacker::InitBranch  Branches will not be created or filled." << endl;
   }
@@ -305,7 +305,7 @@ Int_t RBCAEN1x90Unpacker::Unpack(vector<UShort_t>& event, UInt_t offset)
       //Get rid of random gen noise
       //if(triggerRelative!=0)
       //triggerRelative += fRandomGen->Rndm()-0.5;
-      fTimes[i] = triggerRelative*fChsToNs;
+      fTimes[i*fDepth + hit] = triggerRelative*fChsToNs;
 
     }//End loop over hits
   } //end loop over channels
