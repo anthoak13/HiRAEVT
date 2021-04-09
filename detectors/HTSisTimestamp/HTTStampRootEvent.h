@@ -5,10 +5,13 @@
 
 #include <stdexcept>
 
-#define MAXNUMDET 10
+
 
 class HTTStampData
 {
+private:
+  const static int MAXNUMDET = 10;
+
 public:
   Int_t fMulti;
 
@@ -23,8 +26,7 @@ public:
 
 class HTTStampRootEvent
 {
-private:
-  
+ 
 public:
   HTTStampData fSisTimestamp;
   

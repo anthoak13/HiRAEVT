@@ -1,5 +1,6 @@
 #include <HTTStampRootEvent.h>
 
+
 //________________________________________________
 HTTStampData::HTTStampData(int numDetectors) : fMulti(0)
 {

@@ -21,6 +21,9 @@
 class RBCAEN1x90Unpacker : public RBModuleUnpacker, public RBElectronics
 {
 private:
+  static const int MAX_CHANNELS = 128;
+  static const int MAX_DEPTH    = 16;
+
   Int_t         fDepth;                             //!
   Int_t         fRefChannel;                        //!
   Int_t         fnChannels;                         //!
@@ -30,7 +33,7 @@ private:
   Double_t      fChsToNs;                           //!
   TString       fChName;                            //!
   Int_t         fnCh;                               //!
-  Double_t      fTimes[128];                        //!
+  Double_t      fTimes[MAX_CHANNELS*MAX_DEPTH];     //!
   TRandom3      *fRandomGen;                        //!
   ULong64_t     fTotalUnpackedData;                 //!
   ULong64_t     fErrorCount;                        //!
@@ -57,8 +60,8 @@ public:
   Short_t  GetData(Int_t ch){return (Short_t)Short_t(fTimes[ch]);}
   Double_t GetDataf(Int_t ch){return fTimes[ch];}
 
-  void PrintSummary();
-  void  AddTTreeUserInfo(TTree *);
+  void     PrintSummary();
+  void     AddTTreeUserInfo(TTree *);
 
   ClassDef(RBCAEN1x90Unpacker,1);
 };
