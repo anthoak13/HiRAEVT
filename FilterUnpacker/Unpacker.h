@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+
 class Unpacker {
 private:
    int nevent;
@@ -24,6 +25,7 @@ private:
    uint64_t fTimestampMismatch;
    bool fFoundTimestampMismatch;
 
+
    char fSourceFileName[1000];
    bool fDebug;
    bool fMergedData;
@@ -31,10 +33,12 @@ private:
 
    HTExperiment *fExperiment;
 
+
 public:
    Unpacker();
    Unpacker(const Unpacker &rhs);
    ~Unpacker();
+
 
    void Clear();
 

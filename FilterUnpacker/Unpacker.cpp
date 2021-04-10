@@ -63,6 +63,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
       cout << "Envirment not configured for config file" << endl;
       exit(-1);
    }
+
    std::string configFile(confVal);
 
    // Determine run number from file name.
@@ -101,16 +102,19 @@ void Unpacker::InitializeUnpacker(char *sourceName)
    fStart = clock();
 
    printf("** Unpacking run %d-%02d : %s **\n", runInfo->GetRunNumber(), EvtFileNumber, runInfo->GetTitle());
+
 }
 
 //______________________________________________________________________________
 void Unpacker::operator()(uint64_t eventTimestamp, uint32_t sourceId, uint32_t barrierType, std::string typeName,
                           uint32_t runNumber, uint32_t timeOffset, time_t timestamp, std::string title)
 {
+
    // --
    //
    HTRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName, runNumber, timeOffset, timestamp,
                                    title);
+
 
    fExperiment->SetStateInfo(&stateItem);
 }
@@ -299,6 +303,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
    // Reset the last timestamp.
    m_lastTimestamp = eventTimestamp;
 
+
    // Loop over all data sources and unpack all  . . . (Should implement it this way)
 
    // Loop over all registered electronic modules and call their individual Unpacker methods.
@@ -367,11 +372,13 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
    // Update the counters.
    fReadWords += totalSize / 2;
+
 }
 
 //______________________________________________________________________________
 void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
 {
+
    // -- Unpack non-merged data.
    //
    ++nevent;
@@ -428,6 +435,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
       }
    }
 
+
    fExperiment->Fill();
 
    fReadWords += totalSize / 2;
@@ -447,6 +455,7 @@ unsigned long Unpacker::getLong(std::vector<unsigned short> &event, unsigned int
 //______________________________________________________________________________
 void Unpacker::PrintSummary()
 {
+
    // -- This method print a general final summary of the unpacking procedure
    cout << "\n\n--Unpacking summary--" << endl;
    printf("Unpacking time : %.0f s\n", fTimeElapsed);
@@ -458,6 +467,7 @@ void Unpacker::PrintSummary()
    TIter nextModule(fExperiment->GetElectronicsList());
    while (HTElectronics *elc = (HTElectronics *)nextModule())
       elc->PrintSummary();
+
 }
 
 //______________________________________________________________________________
