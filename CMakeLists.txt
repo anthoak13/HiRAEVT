@@ -64,5 +64,10 @@ Generate_Version_Info()
 # Walk through the project and compile libraries and executables
 add_subdirectory(HTElectronics)
 add_subdirectory(HTDetectors)
+add_subdirectory(HTExperimentalSetup)
+add_subdirectory(HTExperiment)
+add_subdirectory(HTRawDataReader)
+add_subdirectory(HTRootElectronics)
+add_subdirectory(HTRunInfo)
 
 WRITE_CONFIG_FILE(config.sh)

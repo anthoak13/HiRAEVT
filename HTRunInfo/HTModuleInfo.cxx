@@ -24,7 +24,7 @@ HTModuleInfo::~HTModuleInfo()
 }
 
 //________________________________________________
-void HTModuleInfo::SetModule(RBElectronics * newModule)
+void HTModuleInfo::SetModule(HTElectronics *newModule)
 {
   fModule=newModule;
 }
@@ -84,7 +84,7 @@ void HTModuleInfo::SetChannelPedestal(int ch, double newPedestal)
 }
 
 //________________________________________________
-RBElectronics * HTModuleInfo::GetModule() const
+HTElectronics *HTModuleInfo::GetModule() const
 {
   return fModule;
 }

@@ -55,49 +55,39 @@ int HTExperimentalSetup::BuildElectronicModules()
       std::string newModuleType(newModuleInfo->GetModuleType());
       std::string newModuleName(newModuleInfo->GetModuleName());
 
-      if(newModuleType.compare("RBSisTimestampUnpacker")==0)
-      {
-        HTRootSisTimestamp * newModule = new HTRootSisTimestamp(newModuleName.c_str());
-        (*fModules)[newModuleName]=newModule;
-	
-      } else if (newModuleType.compare("RBTimestamp")==0)
-      {
-        HTRootTimestamp * newModule = new HTRootTimestamp(newModuleName.c_str());
-        (*fModules)[newModuleName]=newModule;
-	
-      } else if (newModuleType.compare("RBHINPUnpacker")==0)
-      {
-        HTRootHINP * newModule = new HTRootHINP(newModuleName.c_str());
-        (*fModules)[newModuleName]=newModule;
-	
-      } else if (newModuleType.compare("RBCAEN7xxUnpacker")==0)
-      {
-        HTRootCAEN7xx * newModule = new HTRootCAEN7xx(newModuleName.c_str());
-        int LineLoaded = newModule->LoadPedestals(HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
-        if(LineLoaded < 0)
-	{
-          printf("HTRootCAEN7xx: Error while loading pedestal file %s\n", HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
-        } else
-	{
-          printf("HTRootCAEN7xx: Module %s has loaded %d lines from pedestal file %s\n",
-		 newModuleName.c_str(), LineLoaded, HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
-        }
-        (*fModules)[newModuleName]=newModule;
-	
-      } else if (newModuleType.compare("RBCAEN1x90Unpacker")==0)
-      {
-        HTRootCAEN1x90 * newModule = new HTRootCAEN1x90(newModuleName.c_str(), newModuleInfo->GetNumCh());
-        (*fModules)[newModuleName]=newModule;
-      } else if (newModuleType.compare("RBMADC32Unpacker")==0)
-      {
-        HTRootMADC32 * newModule = new HTRootMADC32(newModuleName.c_str());
-        (*fModules)[newModuleName]=newModule;
+      if (newModuleType.compare("HTSisTimestampUnpacker") == 0) {
+         HTRootSisTimestamp *newModule = new HTRootSisTimestamp(newModuleName.c_str());
+         (*fModules)[newModuleName] = newModule;
+
+      } else if (newModuleType.compare("HTTimestamp") == 0) {
+         HTRootTimestamp *newModule = new HTRootTimestamp(newModuleName.c_str());
+         (*fModules)[newModuleName] = newModule;
+
+      } else if (newModuleType.compare("HTHINPUnpacker") == 0) {
+         HTRootHINP *newModule = new HTRootHINP(newModuleName.c_str());
+         (*fModules)[newModuleName] = newModule;
+
+      } else if (newModuleType.compare("HTCAEN7xxUnpacker") == 0) {
+         HTRootCAEN7xx *newModule = new HTRootCAEN7xx(newModuleName.c_str());
+         int LineLoaded = newModule->LoadPedestals(HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
+         if (LineLoaded < 0) {
+            printf("HTRootCAEN7xx: Error while loading pedestal file %s\n",
+                   HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
+         } else {
+            printf("HTRootCAEN7xx: Module %s has loaded %d lines from pedestal file %s\n", newModuleName.c_str(),
+                   LineLoaded, HTExperimentInfo::Instance()->GetRunInfo()->GetPedestalFile());
+         }
+         (*fModules)[newModuleName] = newModule;
+
+      } else if (newModuleType.compare("HTCAEN1x90Unpacker") == 0) {
+         HTRootCAEN1x90 *newModule = new HTRootCAEN1x90(newModuleName.c_str(), newModuleInfo->GetNumCh());
+         (*fModules)[newModuleName] = newModule;
+      } else if (newModuleType.compare("HTMADC32Unpacker") == 0) {
+         HTRootMADC32 *newModule = new HTRootMADC32(newModuleName.c_str());
+         (*fModules)[newModuleName] = newModule;
+      } else {
+         std::cerr << newModuleType << " is not a known module (no corresponding HTRoot class)" << std::endl;
       }
-      else
-      {
-	std::cerr << newModuleType << " is not a known module (no corresponding HTRoot class)" << std::endl;
-      }
-      
     }
   }
   return fModules->size();

@@ -1,11 +1,10 @@
 #ifndef HTDAQSTACKINFO_H
 #define HTDAQSTACKINFO_H
 
-#include <vector>
-#include <string>
-
-#include <RBElectronics.h>
+#include <HTElectronics.h>
 #include <HTModuleInfo.h>
+#include <string>
+#include <vector>
 
 class HTDAQStackInfo
 {
@@ -18,7 +17,7 @@ public:
   int GetNModules() const;                     //! Returns the number of modules in the stack
   int GetStackID() const;                      //! Returns the ID of the stack
   const char * GetStackName() const;           //! Returns the name of the stack
-  RBElectronics * GetModule(int) const;        //! Returns the pointer of the i-th module
+  HTElectronics *GetModule(int) const;         //! Returns the pointer of the i-th module
   const char * GetModuleType(int) const;       //! Returns a const char * indicating module type
   int GetModuleVSN(int) const;                 //! Returns the VSN of the i-th module
   HTModuleInfo  * GetModuleInfo(int) const;    //! Returns the pointer of the i-th module HTModuleInfo class

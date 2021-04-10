@@ -42,17 +42,17 @@ Table of contents
 ### Working notes
 
 * Folders that compile to an executable
-  [ ] FilterUnpacker
-  [ ] HTMapper
-* Folders that compile to a library
-  [*] HTDetectors
-  [*] HTElectronics
-  [ ] HTElectronicSetup
-  [ ] HTExperiment
-  [ ] HTExperimentalSetup
-  [ ] HTRawDataReader
-  [ ] HTRootElectronics
-  [ ] HTRunInfo
+  * [ ] FilterUnpacker
+  * [ ] HTMapper
+ 
+* Folders that compile to a library (check a bunch of these to remove uneeded lnkdefs and list of detectors)
+  * [x] HTDetectors
+  * [x] HTElectronics
+  * [x] HTExperiment
+  * [x] HTExperimentalSetup (need to edit so it doesn't know about every detector)
+  * [x] HTRawDataReader
+  * [x] HTRootElectronics
+  * [x] HTRunInfo
 
 
 ## Setup and Configuration

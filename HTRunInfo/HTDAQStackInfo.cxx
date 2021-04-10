@@ -32,7 +32,7 @@ int HTDAQStackInfo::GetNModules() const
 }
 
 //________________________________________________
-RBElectronics * HTDAQStackInfo::GetModule(int n_module) const
+HTElectronics *HTDAQStackInfo::GetModule(int n_module) const
 {
   return fModuleInStack[n_module]->GetModule();
 }
