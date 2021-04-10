@@ -111,45 +111,46 @@ void HTRunInfo::ParseAddDAQLine(const char * line_to_parse)
     newModuleInfo->SetModuleType(ModuleType);
     newModuleInfo->SetModuleName(ModuleName);
 
-    if(ModuleType.compare("RBSisTimestampUnpacker")==0) {
-      RBSisTimestampUnpacker * newModule = new RBSisTimestampUnpacker(ModuleName.c_str());
-      newModuleInfo->SetModule(newModule);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
-    } else if (ModuleType.compare("RBTimestamp")==0) {
-      RBTimestamp * newModule = new RBTimestamp(ModuleName.c_str());
-      newModuleInfo->SetModule(newModule);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
-    } else if (ModuleType.compare("RBHINPUnpacker")==0) {
-      int NumMotherboard;
-      std::string usingFADC;
-      LineStream >> NumMotherboard >> usingFADC;
-      RBHINPUnpacker * newModule = new RBHINPUnpacker(ModuleName.c_str(),NumMotherboard,usingFADC.compare("false") ? false : true);
-      newModuleInfo->SetModule(newModule);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
-    } else if (ModuleType.compare("RBCAEN7xxUnpacker")==0) {
-      RBCAEN7xxUnpacker * newModule = new RBCAEN7xxUnpacker(ModuleName.c_str());
-      newModuleInfo->SetModule(newModule);
-      newModuleInfo->SetNumCh(32);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
-    } else if (ModuleType.compare("RBCAEN1x90Unpacker")==0) {
-      int depth, refch, Nchannels;
-      double ns_per_ch;
-      LineStream>>depth>>refch>>Nchannels>>ns_per_ch;
-      RBCAEN1x90Unpacker * newModule = new RBCAEN1x90Unpacker(ModuleName.c_str(),depth, refch, Nchannels,ns_per_ch);
-      newModuleInfo->SetModule(newModule);
-      newModuleInfo->SetNumCh(Nchannels);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
-    } else if (ModuleType.compare("RBMADC32Unpacker")==0) {
-      RBMADC32Unpacker * newModule = new RBMADC32Unpacker(ModuleName.c_str());
-      newModuleInfo->SetModule(newModule);
-      newModuleInfo->SetNumCh(32);
-      fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-      return;
+    if (ModuleType.compare("HTSisTimestampUnpacker") == 0) {
+       HTSisTimestampUnpacker *newModule = new HTSisTimestampUnpacker(ModuleName.c_str());
+       newModuleInfo->SetModule(newModule);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
+    } else if (ModuleType.compare("HTTimestamp") == 0) {
+       HTTimestamp *newModule = new HTTimestamp(ModuleName.c_str());
+       newModuleInfo->SetModule(newModule);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
+    } else if (ModuleType.compare("HTHINPUnpacker") == 0) {
+       int NumMotherboard;
+       std::string usingFADC;
+       LineStream >> NumMotherboard >> usingFADC;
+       HTHINPUnpacker *newModule =
+          new HTHINPUnpacker(ModuleName.c_str(), NumMotherboard, usingFADC.compare("false") ? false : true);
+       newModuleInfo->SetModule(newModule);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
+    } else if (ModuleType.compare("HTCAEN7xxUnpacker") == 0) {
+       HTCAEN7xxUnpacker *newModule = new HTCAEN7xxUnpacker(ModuleName.c_str());
+       newModuleInfo->SetModule(newModule);
+       newModuleInfo->SetNumCh(32);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
+    } else if (ModuleType.compare("HTCAEN1x90Unpacker") == 0) {
+       int depth, refch, Nchannels;
+       double ns_per_ch;
+       LineStream >> depth >> refch >> Nchannels >> ns_per_ch;
+       HTCAEN1x90Unpacker *newModule = new HTCAEN1x90Unpacker(ModuleName.c_str(), depth, refch, Nchannels, ns_per_ch);
+       newModuleInfo->SetModule(newModule);
+       newModuleInfo->SetNumCh(Nchannels);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
+    } else if (ModuleType.compare("HTMADC32Unpacker") == 0) {
+       HTMADC32Unpacker *newModule = new HTMADC32Unpacker(ModuleName.c_str());
+       newModuleInfo->SetModule(newModule);
+       newModuleInfo->SetNumCh(32);
+       fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
+       return;
     }
 
     //In case none of the previous options was typed just delete the module

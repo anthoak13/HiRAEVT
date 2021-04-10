@@ -12,12 +12,12 @@ HTRootHINP::~HTRootHINP()
 }
 
 //________________________________________________
-TTreeReaderValue<RBHINPHit> *  HTRootHINP::GetDataPointer() const
+TTreeReaderValue<HTHINPHit> *HTRootHINP::GetDataPointer() const
 {
   return fData;
 }
 
 void HTRootHINP::InitTreeInputBranch(TTreeReader& theReader)
 {
-  fData = new TTreeReaderValue<RBHINPHit>(theReader, Form("%s.", GetName()));
+   fData = new TTreeReaderValue<HTHINPHit>(theReader, Form("%s.", GetName()));
 }

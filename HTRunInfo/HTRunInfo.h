@@ -1,17 +1,16 @@
 #ifndef HTRUNINFO_H
 #define HTRUNINFO_H
 
+#include <HTCAEN1x90Unpacker.h>
+#include <HTCAEN7xxUnpacker.h>
+#include <HTDAQStackInfo.h>
+#include <HTHINPUnpacker.h>
+#include <HTMADC32Unpacker.h>
+#include <HTPh7xxUnpacker.h>
+#include <HTSisTimestampUnpacker.h>
+#include <HTTimestamp.h>
 #include <fstream>
 #include <sstream>
-
-#include <HTDAQStackInfo.h>
-#include <RBHINPUnpacker.h>
-#include <RBPh7xxUnpacker.h>
-#include <RBCAEN7xxUnpacker.h>
-#include <RBCAEN1x90Unpacker.h>
-#include <RBMADC32Unpacker.h>
-#include <RBSisTimestampUnpacker.h>
-#include <RBTimestamp.h>
 
 class HTRunInfo
 {
@@ -34,9 +33,9 @@ public:
   void SetEvtFilePath(const char *);                     //! Set path for evt files of the run
   void SetRunTitle(const char *);                        //! Set run title
 
-  void AddModuleToStackInfo(RBElectronics *);            //! Add a module to the HTDAQStackInfo object
+  void AddModuleToStackInfo(HTElectronics *); //! Add a module to the HTDAQStackInfo object
 
-private:
+  private:
   std::string fRunTitle;                                 //!
   int fRunNumber;                                        //!
   std::string fEvtFilePath;                              //!
