@@ -3,8 +3,8 @@
 #ifndef CUNPACKERFILTER_CPP
 #define CUNPACKERFILTER_CPP
 
-#include <Unpacker.h>
 #include <CFilter.h>
+#include <Unpacker.h>
 #include <stdint.h>
 
 class CPhysicsEventItem;
@@ -18,26 +18,24 @@ class CPhysicsEventItem;
     to all of the different ring item types. In fact, it is not necessary for
     the user to return the same type of ring item from method as it received.
 */
-class CUnpackerFilter : public CFilter
-{
-  private:
-    char sourceFileName[1000];
+class CUnpackerFilter : public CFilter {
+private:
+   char sourceFileName[1000];
 
-    Unpacker *unpacker;
+   Unpacker *unpacker;
 
-  public:
-    CUnpackerFilter();
-    ~CUnpackerFilter();
+public:
+   CUnpackerFilter();
+   ~CUnpackerFilter();
 
-    Unpacker *GetUnpacker() { return unpacker; }
-    void PassArguments(int argc, char* argv[]);
+   Unpacker *GetUnpacker() { return unpacker; }
+   void PassArguments(int argc, char *argv[]);
 
-    virtual CUnpackerFilter* clone() const { return new CUnpackerFilter(*this);}
+   virtual CUnpackerFilter *clone() const { return new CUnpackerFilter(*this); }
 
-    virtual CRingItem* handleStateChangeItem(CRingStateChangeItem* pItem);
-    // handle the  physics events
-    virtual CRingItem* handlePhysicsEventItem(CPhysicsEventItem* pItem);
-
+   virtual CRingItem *handleStateChangeItem(CRingStateChangeItem *pItem);
+   // handle the  physics events
+   virtual CRingItem *handlePhysicsEventItem(CPhysicsEventItem *pItem);
 };
 
 #endif

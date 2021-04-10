@@ -1,30 +1,28 @@
 #include <HTRootCAEN1x90.h>
 
 //________________________________________________
-HTRootCAEN1x90::HTRootCAEN1x90(const char * name, int numch) : HTRootElectronics(name),
-fNumCh(numch),
-fData(0)
-{}
+HTRootCAEN1x90::HTRootCAEN1x90(const char *name, int numch) : HTRootElectronics(name), fNumCh(numch), fData(0) {}
 
 //________________________________________________
 HTRootCAEN1x90::~HTRootCAEN1x90()
 {
-  if(fData) delete [] fData;
+   if (fData)
+      delete[] fData;
 }
 
 //________________________________________________
 double HTRootCAEN1x90::GetData(int ch) const
 {
-  return (*fData)[ch];
+   return (*fData)[ch];
 }
 
 //________________________________________________
-TTreeReaderArray<Double_t> * HTRootCAEN1x90::GetDataPointer() const
+TTreeReaderArray<Double_t> *HTRootCAEN1x90::GetDataPointer() const
 {
-  return fData;
+   return fData;
 }
 
-void HTRootCAEN1x90::InitTreeInputBranch(TTreeReader& theReader)
+void HTRootCAEN1x90::InitTreeInputBranch(TTreeReader &theReader)
 {
-  fData = new TTreeReaderArray<Double_t>(theReader, GetName());
+   fData = new TTreeReaderArray<Double_t>(theReader, GetName());
 }

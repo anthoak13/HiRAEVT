@@ -1,11 +1,10 @@
 
-#include <iostream>
 #include <CFatalException.h>
 #include <CFilterMain.h>
-
 #include <CUnpackerFilter.h>
 #include <HiRAEVTLogo.h>
 #include <Unpacker.h>
+#include <iostream>
 
 /// The main function
 /**! main function
@@ -16,35 +15,35 @@
           1 for known fatal error,
           2 for unknown fatal error
 */
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    PrintHiRAEVTUnpackerLogo();
+   PrintHiRAEVTUnpackerLogo();
 
-    int status = 0;
+   int status = 0;
 
-    // Create the main
-    CFilterMain theApp(argc,argv);
-    std::cout <<"**Main app created**" << std::endl;
-    //    std::cout <<"**Argc is " << argc  << std::endl;
-    // Construct filter(s) here.
-    CUnpackerFilter unpacker_filter;
-    // Pass along the command-line arguments to the unpacker.
-    unpacker_filter.PassArguments(argc, argv);
-    std::cout << "** Unpacker filter intialized**" << std::endl;
+   // Create the main
+   CFilterMain theApp(argc, argv);
+   std::cout << "**Main app created**" << std::endl;
+   //    std::cout <<"**Argc is " << argc  << std::endl;
+   // Construct filter(s) here.
+   CUnpackerFilter unpacker_filter;
+   // Pass along the command-line arguments to the unpacker.
+   unpacker_filter.PassArguments(argc, argv);
+   std::cout << "** Unpacker filter intialized**" << std::endl;
 
-    // Register the filter(s) here. Note that if more than
-    // one filter will be registered, the order of registration
-    // will define the order of execution. If multiple filters are
-    // registered, the output of the first filter will become the
-    // input of the second filter and so on.
-    theApp.registerFilter(&unpacker_filter);
-    std::cout << "** Unpacker filter registered**" << std::endl;
+   // Register the filter(s) here. Note that if more than
+   // one filter will be registered, the order of registration
+   // will define the order of execution. If multiple filters are
+   // registered, the output of the first filter will become the
+   // input of the second filter and so on.
+   theApp.registerFilter(&unpacker_filter);
+   std::cout << "** Unpacker filter registered**" << std::endl;
 
-    // Run the main loop
-    theApp();
-    
-    // End unpacking process
-    unpacker_filter.GetUnpacker()->EndUnpacking();
+   // Run the main loop
+   theApp();
 
-  return status;
+   // End unpacking process
+   unpacker_filter.GetUnpacker()->EndUnpacking();
+
+   return status;
 }

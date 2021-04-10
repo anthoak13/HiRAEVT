@@ -1,34 +1,30 @@
 #include <HTRootMADC32.h>
 
 //________________________________________________
-HTRootMADC32::HTRootMADC32(const char * name) : HTRootElectronics(name),
-fNumCh(32),
-fData(0),
-fOverflow(8192)
-{
-}
+HTRootMADC32::HTRootMADC32(const char *name) : HTRootElectronics(name), fNumCh(32), fData(0), fOverflow(8192) {}
 
 //________________________________________________
 HTRootMADC32::~HTRootMADC32()
 {
-  if(fData) delete [] fData;
+   if (fData)
+      delete[] fData;
 }
 
 //________________________________________________
 Short_t HTRootMADC32::GetData(int ch) const
 {
-  double datum=(*fData)[ch];
+   double datum = (*fData)[ch];
 
-  return datum>=0 ? datum : -9999;
+   return datum >= 0 ? datum : -9999;
 }
 
 //________________________________________________
-TTreeReaderArray<Short_t> * HTRootMADC32::GetDataPointer() const
+TTreeReaderArray<Short_t> *HTRootMADC32::GetDataPointer() const
 {
-  return fData;
+   return fData;
 }
 
-void HTRootMADC32::InitTreeInputBranch(TTreeReader& theReader)
+void HTRootMADC32::InitTreeInputBranch(TTreeReader &theReader)
 {
-  fData = new TTreeReaderArray<Short_t>(theReader, GetName());
+   fData = new TTreeReaderArray<Short_t>(theReader, GetName());
 }

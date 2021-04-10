@@ -1,32 +1,28 @@
 #include <HTRootElectronics.h>
 
 //________________________________________________
-HTRootElectronics::HTRootElectronics(const char * name) :
-fName(name)
-{}
+HTRootElectronics::HTRootElectronics(const char *name) : fName(name) {}
 
 //________________________________________________
-HTRootElectronics::HTRootElectronics()
-{}
+HTRootElectronics::HTRootElectronics() {}
 
 //________________________________________________
-HTRootElectronics::~HTRootElectronics()
-{}
+HTRootElectronics::~HTRootElectronics() {}
 
 //________________________________________________
-const char * HTRootElectronics::GetName() const
+const char *HTRootElectronics::GetName() const
 {
-  return fName.c_str();
+   return fName.c_str();
 }
 
 //________________________________________________
-void HTRootElectronics::InitTreeOutputBranch(TTree * theTree) const
+void HTRootElectronics::InitTreeOutputBranch(TTree *theTree) const
 {
-  return;
+   return;
 }
 
 //________________________________________________
-void HTRootElectronics::InitTreeInputBranch(TTreeReader & theReader)
+void HTRootElectronics::InitTreeInputBranch(TTreeReader &theReader)
 {
-  return;
+   return;
 }

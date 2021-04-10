@@ -9,20 +9,16 @@
 #ifndef ____HTFilterMain__
 #define ____HTFilterMain__
 
-#include <stdio.h>
+#include "CUnpackerFilter.h"
 
-
-#include <iostream>
 #include <CFatalException.h>
 #include <CFilterMain.h>
-
 #include <TObject.h>
-
-#include "CUnpackerFilter.h"
+#include <iostream>
+#include <stdio.h>
 
 class HTFilterMain {
 private:
-  
 public:
    HTFilterMain(){};
    ~HTFilterMain(){};

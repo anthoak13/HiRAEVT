@@ -5,16 +5,15 @@
 #include <HTRootElectronics.h>
 #include <TROOT.h>
 
-class HTRootHINP : public HTRootElectronics
-{
-public :
-  HTRootHINP(const char *);
-  ~HTRootHINP();
+class HTRootHINP : public HTRootElectronics {
+public:
+   HTRootHINP(const char *);
+   ~HTRootHINP();
 
-  TTreeReaderValue<HTHINPHit> *GetDataPointer() const;     //! Get a pointer to the TTreeReader value
-  void InitTreeInputBranch(TTreeReader&) override;         //!Set Input TTreeReader Branch
+   TTreeReaderValue<HTHINPHit> *GetDataPointer() const; //! Get a pointer to the TTreeReader value
+   void InitTreeInputBranch(TTreeReader &) override;    //! Set Input TTreeReader Branch
 
-private :
+private:
    TTreeReaderValue<HTHINPHit> *fData;
 };
 
