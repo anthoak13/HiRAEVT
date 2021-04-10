@@ -16,11 +16,15 @@
 #pragma link C++ class HTHiRA + ;
 #pragma link C++ class HTHiRACsI + ;
 #pragma link C++ class HTHiRACsIArray + ;
+#pragma link C++ class HTHiRACsIData + ;
+#pragma link C++ class HTHiRAData + ;
 #pragma link C++ class HTHiRAMap + ;
 #pragma link C++ class HTHiRARootEvent + ;
+#pragma link C++ class HTHiRAStripData + ;
 
 #pragma link C++ class HTMcp + ;
 #pragma link C++ class HTMcpMap + ;
+#pragma link C++ class HTMcpData + ;
 #pragma link C++ class HTMcpRootEvent + ;
 
 #pragma link C++ class HTMicroball + ;

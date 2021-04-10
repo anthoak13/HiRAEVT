@@ -1,21 +1,17 @@
 
 #include <FragmentIndex.h>
-#include <Unpacker.h>
-
-#include <iostream>
-#include <iomanip>
-
-#include <TFile.h>
-#include <TH1.h>
-#include <TString.h>
-#include <TTree.h>
-#include <TNamed.h>
-#include <TList.h>
-
-#include <RBExperiment.h>
-#include <HTExperimentInfo.h>
+#include <HTExperiment.h>
 #include <HTExperimentInfo.h>
 #include <HTRunInfo.h>
+#include <TFile.h>
+#include <TH1.h>
+#include <TList.h>
+#include <TNamed.h>
+#include <TString.h>
+#include <TTree.h>
+#include <Unpacker.h>
+#include <iomanip>
+#include <iostream>
 
 //______________________________________________________________________________
 Unpacker::Unpacker():nevent(0),fReadWords(0),fTimeElapsed(0),m_lastTimestamp(0),fDebug(0)
@@ -56,21 +52,21 @@ void Unpacker::Clear()
 //______________________________________________________________________________
 void Unpacker::InitializeUnpacker(char *sourceName)
 {
-  // --
-  // Here the following objects are initialized:
-  // gRun : RBRunInfo class object containing all the info for the current run
-  // fExperiment : RBExperiment class object containing stack configurations and defining the structure of the output file
-  //
-  strcpy(fSourceFileName, sourceName);
-  std::string evtFileStr(fSourceFileName);
-  std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/')+1));
-  auto confVal = std::getenv("HiRAEVTCONFIG");
+   // --
+   // Here the following objects are initialized:
+   // gRun : HTRunInfo class object containing all the info for the current run
+   // fExperiment : HTExperiment class object containing stack configurations and defining the structure of the output
+   // file
+   //
+   strcpy(fSourceFileName, sourceName);
+   std::string evtFileStr(fSourceFileName);
+   std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/') + 1));
+   auto confVal = std::getenv("HiRAEVTCONFIG");
 
-  if (confVal == nullptr)
-  {
-    cout << "Envirment not configured for config file" << endl;
-    exit(-1);
-  }
+   if (confVal == nullptr) {
+      cout << "Envirment not configured for config file" << endl;
+      exit(-1);
+   }
   std::string configFile(confVal);
   
   // Determine run number from file name.
@@ -78,7 +74,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
   int RunNumber = atoi(runNumStr.c_str());
   int EvtFileNumber = atoi(evtFileStr.substr(evtFileStr.find_last_of("-")+1,evtFileStr.find_last_of(".")-(evtFileStr.find_last_of("-")+1)).c_str());
 
-  //Initialization of RBRunInfo class
+  // Initialization of HTRunInfo class
   cout << "** Initializing Run Info **" << endl;
   
   cout << "Loading config file: " << configFile << endl;
@@ -93,7 +89,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
 
   cout << "** Run Info correctly initialized **\n";
 
-  fExperiment = new RBExperiment();
+  fExperiment = new HTExperiment();
   fExperiment->Setup();
 
   if(fExperiment == 0) {
@@ -119,8 +115,8 @@ void Unpacker::operator() (uint64_t eventTimestamp, uint32_t sourceId,
 {
   // --
   //
-  RBRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName,
-                                  runNumber, timeOffset, timestamp, title);
+  HTRingStateChangeItem stateItem(eventTimestamp, sourceId, barrierType, typeName, runNumber, timeOffset, timestamp,
+                                  title);
 
   fExperiment->SetStateInfo(&stateItem);
 }
@@ -180,68 +176,67 @@ void Unpacker::operator()(FragmentIndex& index, uint32_t totalSize, uint64_t eve
     // Loop over all data sources and unpack all  . . . (Should implement it this way)
 
     // Loop over all registered electronic modules and call their individual Unpacker methods.
-    // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
+    // If we come across a USBStack, then each module is unpacked as defined in the HTUSBStack class.
     TIter nextModule(fExperiment->GetElectronicsList());
-    while(RBElectronics *elc = (RBElectronics*)nextModule()){
-      //      cout << "Module is " << elc->GetBranchName() << endl;
+    while (HTElectronics *elc = (HTElectronics *)nextModule()) {
+       //      cout << "Module is " << elc->GetBranchName() << endl;
 
-      // Check if the Merged ID matches that of the current module.
-      if (it->s_sourceId == elc->GetMergedID()) {
-        // Workaround for old EVB bug to only process physics events
-        uint32_t  type          = *(it->s_itemhdr+2);
-        uint16_t* bodyDebugAddr = it->s_itemhdr;
-        // Make sure this is a PHYSICS_EVENT item.
-        if(type == 30) {
-          uint32_t ringSize = *(it->s_itemhdr);
-          //--- Print out the RingItem. -----------------
-          if(false){
-            cout << "RingSize = " << ringSize/2 << " " << index.getNumberFragments() << endl;
-            for(int dd=1; dd<=ringSize/2; dd++){
-              printf("%0.4x ", *bodyDebugAddr++);
-              if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-            }
-            cout << endl;
+       // Check if the Merged ID matches that of the current module.
+       if (it->s_sourceId == elc->GetMergedID()) {
+          // Workaround for old EVB bug to only process physics events
+          uint32_t type = *(it->s_itemhdr + 2);
+          uint16_t *bodyDebugAddr = it->s_itemhdr;
+          // Make sure this is a PHYSICS_EVENT item.
+          if (type == 30) {
+             uint32_t ringSize = *(it->s_itemhdr);
+             //--- Print out the RingItem. -----------------
+             if (false) {
+                cout << "RingSize = " << ringSize / 2 << " " << index.getNumberFragments() << endl;
+                for (int dd = 1; dd <= ringSize / 2; dd++) {
+                   printf("%0.4x ", *bodyDebugAddr++);
+                   if (dd % 5 == 0 && dd != 0)
+                      cout << "-- " << dd << endl;
+                }
+                cout << endl;
+             }
+             //--------------------------------------------------
+
+             // This is actually the pointer to the RingItem body header.
+             uint16_t *bodyAddr = it->s_itembody;
+             uint16_t *bodyAddrJuan = it->s_itembody;
+
+             // Check bodyAddr
+             //	  cout << "Check bodyAddr before skipping " << endl;
+             //	  for(int dd=1; dd<=10; dd++){
+             //	    printf("%0.4x ", bodyAddrJuan[dd-1]);
+             //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
+             //	  }
+
+             // NOTE: THIS SKIPPING IS NO LONGER NECESSARY...THE FRAGMENT
+             // INDEXING NOW TAKES CARE OF THIS
+
+             // Skip the body header, it is 20 bytes long and we pass
+             // along a pointer to the beginning of the RingItem body.
+             // Read the RingItem body header.
+             //          for(Int_t skip=0; skip<10; skip++){//10
+             //	    *bodyAddr++;
+             //	    *bodyAddrJuan++;
+             //	  }
+
+             // Check bodyAddr
+             //	  cout << "Check bodyAddr after skipping " << endl;
+             //	  for(int dd=1; dd<=10; dd++){
+             //	    printf("%0.4x ", bodyAddrJuan[dd+9]);
+             //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
+             //	  }
+
+             // Unpack it
+             fragOffset = elc->Unpack(bodyAddr, 0);
+             // totalUnpackedWords += elc->GetTotalUnpackedWords();
+          } else {
+             cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
           }
-          //--------------------------------------------------
-
-          // This is actually the pointer to the RingItem body header.
-          uint16_t* bodyAddr = it->s_itembody;
-	        uint16_t* bodyAddrJuan = it->s_itembody;
-
-	  //Check bodyAddr
-	  //	  cout << "Check bodyAddr before skipping " << endl;
-	  //	  for(int dd=1; dd<=10; dd++){
-	  //	    printf("%0.4x ", bodyAddrJuan[dd-1]);
-	  //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-	  //	  }
-
-	  //NOTE: THIS SKIPPING IS NO LONGER NECESSARY...THE FRAGMENT
-	  //INDEXING NOW TAKES CARE OF THIS
-
-          // Skip the body header, it is 20 bytes long and we pass
-          // along a pointer to the beginning of the RingItem body.
-          // Read the RingItem body header.
-	  //          for(Int_t skip=0; skip<10; skip++){//10
-	  //	    *bodyAddr++;
-	    //	    *bodyAddrJuan++;
-	  //	  }
-
-	  //Check bodyAddr
-	  //	  cout << "Check bodyAddr after skipping " << endl;
-	  //	  for(int dd=1; dd<=10; dd++){
-	  //	    printf("%0.4x ", bodyAddrJuan[dd+9]);
-	  //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-	  //	  }
-
-
-          // Unpack it
-          fragOffset = elc->Unpack(bodyAddr, 0);
-          //totalUnpackedWords += elc->GetTotalUnpackedWords();
-        }
-        else{
-          cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
-        }
-      }
+       }
     }
 
 //    std::cout << "TStamp: "    << it->s_timestamp
@@ -316,45 +311,45 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
   // Loop over all data sources and unpack all  . . . (Should implement it this way)
 
   // Loop over all registered electronic modules and call their individual Unpacker methods.
-  // If we come across a USBStack, then each module is unpacked as defined in the RBUSBStack class.
+  // If we come across a USBStack, then each module is unpacked as defined in the HTUSBStack class.
   TIter nextModule(fExperiment->GetElectronicsList());
-  while(RBElectronics *elc = (RBElectronics*)nextModule()){
-    // Check if the Merged ID matches that of the current module.
-//    if (it->s_sourceId == elc->GetMergedID()) {
-      // Workaround for old EVB bug to only process physics events
-//      uint32_t  type          = *(it->s_itemhdr+2);
-//      uint16_t* bodyDebugAddr = it->s_itemhdr;
-      // Make sure this is a PHYSICS_EVENT item.
-//      if(type == 30) {
-//        uint32_t ringSize = *(it->s_itemhdr);
-//        //--- Print out the RingItem. -----------------
-//        if(false){
-//          cout << "RingSize = " << ringSize/2 << " " << index.getNumberFragments() << endl;
-//          for(int dd=1; dd<=ringSize/2; dd++){
-//            printf("%0.4x ", *bodyDebugAddr++);
-//            if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-//          }
-//          cout << endl;
-//        }
-        //--------------------------------------------------
+  while (HTElectronics *elc = (HTElectronics *)nextModule()) {
+     // Check if the Merged ID matches that of the current module.
+     //    if (it->s_sourceId == elc->GetMergedID()) {
+     // Workaround for old EVB bug to only process physics events
+     //      uint32_t  type          = *(it->s_itemhdr+2);
+     //      uint16_t* bodyDebugAddr = it->s_itemhdr;
+     // Make sure this is a PHYSICS_EVENT item.
+     //      if(type == 30) {
+     //        uint32_t ringSize = *(it->s_itemhdr);
+     //        //--- Print out the RingItem. -----------------
+     //        if(false){
+     //          cout << "RingSize = " << ringSize/2 << " " << index.getNumberFragments() << endl;
+     //          for(int dd=1; dd<=ringSize/2; dd++){
+     //            printf("%0.4x ", *bodyDebugAddr++);
+     //            if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
+     //          }
+     //          cout << endl;
+     //        }
+     //--------------------------------------------------
 
-//        // This is actually the pointer to the RingItem body header.
-//        uint16_t* bodyAddr = it->s_itembody;
-//
-//        // Skip the body header, it is 20 bytes long and we pass
-//        // along a pointer to the beginning of the RingItem body.
-//        // Read the RingItem body header.
-//        for(Int_t skip=0; skip<10; skip++) *bodyAddr++;
+     //        // This is actually the pointer to the RingItem body header.
+     //        uint16_t* bodyAddr = it->s_itembody;
+     //
+     //        // Skip the body header, it is 20 bytes long and we pass
+     //        // along a pointer to the beginning of the RingItem body.
+     //        // Read the RingItem body header.
+     //        for(Int_t skip=0; skip<10; skip++) *bodyAddr++;
 
-        // Unpack it
-//    *pBody++;
-    fragOffset = elc->Unpack(pBody, 0);
-        //totalUnpackedWords += elc->GetTotalUnpackedWords();
-//      }
-//      else{
-//        cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
-//      }
-//    }
+     // Unpack it
+     //    *pBody++;
+     fragOffset = elc->Unpack(pBody, 0);
+     // totalUnpackedWords += elc->GetTotalUnpackedWords();
+     //      }
+     //      else{
+     //        cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
+     //      }
+     //    }
   }
 
     //    std::cout << "TStamp: "    << it->s_timestamp
@@ -432,13 +427,16 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
 
 
   UInt_t readWords = 0;
-  while(RBElectronics *elc = (RBElectronics*)nextModule()){
+  while (HTElectronics *elc = (HTElectronics *)nextModule()) {
 
-    // unpack it
-    //    cout << "Unpacking electronics " << elc->GetBranchName() << endl;
-    //    cout << "Value of pBody address going into elc Unpack: " << *pBody << endl;
-    readWords = elc->Unpack(pBody,0);
-    while(readWords>0){*pBody++; readWords--;}
+     // unpack it
+     //    cout << "Unpacking electronics " << elc->GetBranchName() << endl;
+     //    cout << "Value of pBody address going into elc Unpack: " << *pBody << endl;
+     readWords = elc->Unpack(pBody, 0);
+     while (readWords > 0) {
+        *pBody++;
+        readWords--;
+     }
   }
 
   fExperiment->Fill();
@@ -473,9 +471,8 @@ void Unpacker::PrintSummary()
   printf("--End of Unpacking--\n\n");
 
   TIter nextModule(fExperiment->GetElectronicsList());
-  while(RBElectronics *elc = (RBElectronics*)nextModule())
-    elc->PrintSummary();
-  
+  while (HTElectronics *elc = (HTElectronics *)nextModule())
+     elc->PrintSummary();
 }
 
 //______________________________________________________________________________

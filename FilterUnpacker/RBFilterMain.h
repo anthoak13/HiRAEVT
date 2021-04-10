@@ -1,13 +1,13 @@
 //
-//  RBFilterMain.h
-//  
+//  HTFilterMain.h
+//
 //
 //  Created by Andrew Rogers on 2/7/15.
 //
 //
 
-#ifndef ____RBFilterMain__
-#define ____RBFilterMain__
+#ifndef ____HTFilterMain__
+#define ____HTFilterMain__
 
 #include <stdio.h>
 
@@ -20,17 +20,14 @@
 
 #include "CUnpackerFilter.h"
 
-class RBFilterMain
-{
+class HTFilterMain {
 private:
   
 public:
-  RBFilterMain(){};
-  ~RBFilterMain(){};
-  
-  
-  
-  ClassDef(RBFilterMain,1);
+   HTFilterMain(){};
+   ~HTFilterMain(){};
+
+   ClassDef(HTFilterMain, 1);
 };
 
-#endif /* defined(____RBFilterMain__) */
+#endif /* defined(____HTFilterMain__) */

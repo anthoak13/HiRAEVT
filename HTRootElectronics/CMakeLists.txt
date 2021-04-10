@@ -4,7 +4,7 @@ set(LINKDEF "")
 set(LIBRARY_NAME HTRootElectronics)
 
 set(DEPENDENCIES
-
+  HTElectronics
   )
 
 set(SRCS
