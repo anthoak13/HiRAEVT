@@ -83,6 +83,7 @@ void HTRunInfo::ParseDefineDAQLine(const char *line_to_parse)
 //________________________________________________
 void HTRunInfo::ParseAddDAQLine(const char *line_to_parse)
 {
+
    std::string LineToParse(line_to_parse);
 
    LineToParse.assign(LineToParse.substr(LineToParse.find("add ") + 4)); // remove add command
@@ -93,16 +94,19 @@ void HTRunInfo::ParseAddDAQLine(const char *line_to_parse)
    LineStream >> ValueToSet;
 
    if (ValueToSet.compare("module") == 0) {
+
       int StackID;
-      LineStream >> StackID;
       std::string ModuleType;
-      LineStream >> ModuleType;
       std::string ModuleName;
-      LineStream >> ModuleName;
       int VSN;
+      LineStream >> StackID;
+      LineStream >> ModuleType;
+      LineStream >> ModuleName;
       LineStream >> VSN;
       ModuleName.assign(
          ModuleName.substr(ModuleName.find("\"") + 1, ModuleName.find_last_of("\"") - (ModuleName.find("\"") + 1)));
+
+      std::cout << "Found module: " << ModuleType << " " << ModuleName << std::endl;
 
       // Found a new module. HTModuleInfo is created and added to the corresponding fStackInfo.
       HTModuleInfo *newModuleInfo = new HTModuleInfo();

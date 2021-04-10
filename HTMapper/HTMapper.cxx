@@ -43,7 +43,7 @@ int HTMapper::InitializeMapper(const char *file_config_name)
 //________________________________________________
 int HTMapper::LoadExperimentInfo(const char *file_name)
 {
-   // Initialization of RBRunInfo class
+   // Initialization of HTRunInfo class
    std::cout << "** Initializing Run Info **\n";
    std::cout << "Loading config file: " << file_name << std::endl;
 

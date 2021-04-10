@@ -4,7 +4,9 @@ set(LINKDEF HTRawDataReaderLinkDef.h)
 set(LIBRARY_NAME HTRawDataReader)
 
 set(DEPENDENCIES
-
+  HTRunInfo
+  HTDetectors
+  HTRootElectronics
   )
 
 set(SRCS

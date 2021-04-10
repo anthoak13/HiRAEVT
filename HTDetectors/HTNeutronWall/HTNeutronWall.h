@@ -4,7 +4,7 @@
 /* *******************************************************************************************************
  * HTNeutronWall Class
  * v1.0 04/29/2018
- * class to store Neutron Walls data is derived from RBNeutronWall class
+ * class to store Neutron Walls data is derived from HTNeutronWall class
  * implemented by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
  * 12/01/2017 v1.0beta Simple version containing only the raw
  * data of the neutron wall. The class is composed by:

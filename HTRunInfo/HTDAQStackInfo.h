@@ -22,6 +22,7 @@ public:
    HTModuleInfo *GetModuleInfo(int) const; //! Returns the pointer of the i-th module HTModuleInfo class
 
    void AddModuleInfo(HTModuleInfo *); //! Add a new module to the stack info class
+   void Print();                       // Prints the stack info
 
 private:
    int fNModules;                              //! Number of modules in stack

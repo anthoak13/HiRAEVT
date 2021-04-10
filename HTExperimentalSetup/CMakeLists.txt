@@ -4,6 +4,7 @@ set(LINKDEF HTExperimentalSetupLinkDef.h)
 set(LIBRARY_NAME HTExperimentalSetup)
 set(DEPENDENCIES
 
+  HTRunInfo
   )
 
 set(SRCS

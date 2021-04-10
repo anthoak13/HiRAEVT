@@ -97,6 +97,7 @@ void HTExperiment::Setup()
       HTDAQStackInfo *newStackInfo = HTExperimentInfo::Instance()->GetRunInfo()->GetStackInfo(NumStack);
 
       printf("HTSetup> Defined new DAQ Stack \"%s\"\n", newStackInfo->GetStackName());
+      // newStackInfo->Print();
 
       for (int NumModule = 0; NumModule < newStackInfo->GetNModules(); NumModule++) {
          // Register electronics which should/can be unpacked as raw channels.

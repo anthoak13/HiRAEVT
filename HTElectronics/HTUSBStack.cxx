@@ -264,6 +264,7 @@ Int_t HTUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 
             cout << "Found marker: " << module->ClassName() << endl;
             HTUSBStackMarker *marker = (HTUSBStackMarker *)module;
+
             sOffset = marker->Unpack(event, sOffset);
             if (sOffset == -1) {
                break;

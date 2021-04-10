@@ -53,6 +53,7 @@ int HTExperimentInfo::InitClass(const char *file_name)
       NLinesRead += LoadRunConfiguration(file_name, run_num);
 
       if (fRunTitle[run_num - fFirstRun].empty()) {
+
          const char *TempRunTitle = RetrieveRunTitleFromEvtFile(
             Form("%srun%d/run-%04d-00.evt", fRunEvtFilePath[run_num - fFirstRun].c_str(), run_num, run_num));
 
@@ -71,6 +72,7 @@ int HTExperimentInfo::LoadSetupConfiguration(const char *file_name)
 {
    std::ifstream FileIn(file_name);
    if (!FileIn.is_open()) {
+      std::cout << "Filed to open configuration file: " << file_name << std::endl;
       return -1;
    }
 

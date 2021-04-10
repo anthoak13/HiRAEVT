@@ -47,7 +47,7 @@ public:
    //  virtual void InitBranch(TTree* tree){}
 
    virtual void InitTree(TTree *tree) { fChain = tree; }
-
+   void Print() override { std::cout << "SisTimestamp" << std::endl; }
    ULong64_t GetTimestamp(unsigned int ch) { return (ch < 2 ? fTimestamp[ch] : 0); }
 
    ClassDef(HTSisTimestampUnpacker, 1);

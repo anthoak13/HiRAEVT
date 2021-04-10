@@ -11,6 +11,7 @@
 
 #include <TObject.h>
 #include <TTree.h>
+#include <iostream>
 #include <stdio.h>
 
 class HTElectronics : public TObject {
@@ -57,6 +58,7 @@ public:
    virtual Double_t GetDataf(Int_t ch) { return -1; }
 
    virtual void PrintSummary() { return; }
+   virtual void Print() = 0;
    virtual void AddTTreeUserInfo(TTree *) { return; }
 
    ClassDef(HTElectronics, 1);

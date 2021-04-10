@@ -23,6 +23,7 @@
 #include <vector>
 
 class HTExperimentInfo {
+
 public:
    static HTExperimentInfo *Instance();
 
@@ -33,6 +34,7 @@ public:
 
    HTRunInfo *GetRunInfo() const; //! Get HTRunInfo for the current run number
    int GetRunNumber() const;
+
    HTRunInfo *SetRunNumber(int runNum);
 
    bool IsDataMerged() const; //!

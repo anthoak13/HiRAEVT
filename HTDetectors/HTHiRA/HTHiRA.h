@@ -10,7 +10,7 @@
  * logic: i.e. looping on each individual detector and retrieve the information from the
  * associated modules and then write down the information on the HiRAData class.
  * For the case of strip detectors, I rather loop directly on the module and fill
- * HiRAData strip objects with only the strips present in the RBHINPHit class
+ * HiRAData strip objects with only the strips present in the HTHINPHit class
  *
  * - HTHiRACsIArray
  * | - int fNumCsI

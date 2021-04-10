@@ -4,15 +4,15 @@
 /* *******************************************************************************************************
  * HTForwardArray Class
  * v1.0 04/29/2018
- * class to store Forward Array data derived from RBForwardArray class
+ * class to store Forward Array data derived from HTForwardArray class
  * implemented by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
  * 02/13/2018 v1.0 The class is composed by:
  * 1 HTForwardArrayCluster.
  *
  *
- * class HTForwardArrayCluster : it contains an array of RBForwardArrayDetector objects
+ * class HTForwardArrayCluster : it contains an array of HTForwardArrayDetector objects
  *
- * - RBForwardArrayDetector array
+ * - HTForwardArrayDetector array
  * | - fnumdet
  * | - fE
  * | - fTime

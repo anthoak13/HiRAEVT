@@ -53,6 +53,7 @@ public:
    void InitTree(TTree *);
 
    void PrintSummary();
+   void Print() override { std::cout << fChName << std::endl; }
    void AddTTreeUserInfo(TTree *);
 
    ClassDef(HTHINPUnpacker, 1);

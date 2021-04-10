@@ -32,7 +32,7 @@ public:
    virtual void InitTree(TTree *tree) { fChain = tree; }
 
    Int_t Unpack(UShort_t *pEvent);
-
+   void Print() override { std::cout << "HTTimestamp" << std::endl; }
    ClassDef(HTTimestamp, 1);
 };
 #endif /* defined(____HTTimestamp__) */

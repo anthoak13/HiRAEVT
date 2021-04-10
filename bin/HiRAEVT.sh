@@ -16,7 +16,7 @@ done < $HiRAEVTCONFIG
 #Set environmental variables for HiRAEVT
 export HiRAEVTSRC=${HiRAEVTPath}
 export HiRAEVTLIB=${HiRAEVTPath}/build/lib
-export HiRAEVTBIN=${HiRAEVTPath}/bin
+export HiRAEVTBIN=${HiRAEVTPath}/build/bin
 export HiRAEVTDAQROOT=/usr/opt/nscldaq/current
 export DAQROOT=/usr/opt/nscldaq/current
 

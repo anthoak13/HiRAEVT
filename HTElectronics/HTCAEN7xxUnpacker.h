@@ -51,6 +51,7 @@ public:
    Short_t GetData(Int_t ch) { return fData[ch]; }
 
    void PrintSummary();
+   void Print() override { std::cout << fChName << std::endl; }
    void AddTTreeUserInfo(TTree *);
 
    ClassDef(HTCAEN7xxUnpacker, 1);

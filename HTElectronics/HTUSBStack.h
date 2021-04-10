@@ -73,6 +73,7 @@ public:
    Int_t Unpack(UShort_t *pEvent, UInt_t offset);
 
    void PrintSummary();
+   void Print() override { std::cout << "HTUSBstack" << std::endl; }
    void AddTTreeUserInfo(TTree *);
 
    ClassDef(HTUSBStack, 1);

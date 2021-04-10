@@ -10,6 +10,7 @@
 #include <TList.h>
 #include <TNamed.h>
 #include <TTree.h>
+#include <iostream>
 
 /*
  * This unpacker is responsible for unpacking Mesytech 32 channel digitizers.
@@ -45,6 +46,7 @@ public:
    Short_t GetData(Int_t ch) { return fData[ch]; }
 
    void PrintSummary();
+   void Print() override { std::cout << fChName << std::endl; }
    void AddTTreeUserInfo(TTree *);
 
    ClassDef(HTMADC32Unpacker, 1);

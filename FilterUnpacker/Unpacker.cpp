@@ -75,7 +75,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
          .c_str());
 
    // Initialization of HTRunInfo class
-   cout << "** Initializing Run Info **" << endl;
+   cout << "** Initializing Run Info for run " << RunNumber << " **" << endl;
 
    cout << "Loading config file: " << configFile << endl;
 
@@ -177,6 +177,7 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
          //      cout << "Module is " << elc->GetBranchName() << endl;
 
          // Check if the Merged ID matches that of the current module.
+
          if (it->s_sourceId == elc->GetMergedID()) {
             // Workaround for old EVB bug to only process physics events
             uint32_t type = *(it->s_itemhdr + 2);
@@ -199,31 +200,6 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
                // This is actually the pointer to the RingItem body header.
                uint16_t *bodyAddr = it->s_itembody;
                uint16_t *bodyAddrJuan = it->s_itembody;
-
-               // Check bodyAddr
-               //	  cout << "Check bodyAddr before skipping " << endl;
-               //	  for(int dd=1; dd<=10; dd++){
-               //	    printf("%0.4x ", bodyAddrJuan[dd-1]);
-               //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-               //	  }
-
-               // NOTE: THIS SKIPPING IS NO LONGER NECESSARY...THE FRAGMENT
-               // INDEXING NOW TAKES CARE OF THIS
-
-               // Skip the body header, it is 20 bytes long and we pass
-               // along a pointer to the beginning of the RingItem body.
-               // Read the RingItem body header.
-               //          for(Int_t skip=0; skip<10; skip++){//10
-               //	    *bodyAddr++;
-               //	    *bodyAddrJuan++;
-               //	  }
-
-               // Check bodyAddr
-               //	  cout << "Check bodyAddr after skipping " << endl;
-               //	  for(int dd=1; dd<=10; dd++){
-               //	    printf("%0.4x ", bodyAddrJuan[dd+9]);
-               //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-               //	  }
 
                // Unpack it
                fragOffset = elc->Unpack(bodyAddr, 0);
@@ -336,6 +312,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
       // Unpack it
       //    *pBody++;
+
       fragOffset = elc->Unpack(pBody, 0);
       // totalUnpackedWords += elc->GetTotalUnpackedWords();
       //      }
@@ -422,7 +399,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
    while (HTElectronics *elc = (HTElectronics *)nextModule()) {
 
       // unpack it
-      //    cout << "Unpacking electronics " << elc->GetBranchName() << endl;
+      // cout << "Unpacking electronics " << elc->GetBranchName() << endl;
       //    cout << "Value of pBody address going into elc Unpack: " << *pBody << endl;
       readWords = elc->Unpack(pBody, 0);
       while (readWords > 0) {
@@ -495,7 +472,7 @@ void Unpacker::EndUnpacking()
 void Unpacker::PrintPercentage() const
 {
    double time_elapsed = (double)(clock() - fStart) / CLOCKS_PER_SEC;
-   std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5)
+   std::cout << "  Percentage= " << std::fixed << std::setprecision(1) << std::setw(5)
              << 100 * ((Long64_t)(2 * fReadWords)) / (fExperiment->GetEvtFileSize()) << " %";
    std::cout << "   [";
    int printindex = 0;
@@ -509,7 +486,7 @@ void Unpacker::PrintPercentage() const
              << (time_elapsed < 60 ? " s; " : (time_elapsed < 3600 ? " m; " : " h; "));
    if (fReadWords > 2) {
       double time_remaining = (time_elapsed / (2. * fReadWords)) * (fExperiment->GetEvtFileSize() - 2 * fReadWords);
-      std::cout << " estimated remaining time " << std::setprecision(1)
+      std::cout << " estimated remaining time: " << std::setprecision(1)
                 << (time_remaining < 60 ? time_remaining
                                         : (time_remaining < 3600 ? time_remaining / 60 : time_remaining / 3600))
                 << (time_remaining < 60 ? " s      " : (time_remaining < 3600 ? " m      " : " h      "));
