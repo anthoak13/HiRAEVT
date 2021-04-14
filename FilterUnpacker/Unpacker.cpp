@@ -202,7 +202,7 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
                uint16_t *bodyAddrJuan = it->s_itembody;
 
                // Unpack it
-               fragOffset = elc->Unpack(bodyAddr, 0);
+               fragOffset =  static_cast<HTUSBStack*>(elc)->Unpack(bodyAddr, 0);
                // totalUnpackedWords += elc->GetTotalUnpackedWords();
             } else {
                cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
@@ -313,7 +313,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
       // Unpack it
       //    *pBody++;
 
-      fragOffset = elc->Unpack(pBody, 0);
+      fragOffset = static_cast<HTUSBStack*>(elc)->Unpack(pBody, 0);
       // totalUnpackedWords += elc->GetTotalUnpackedWords();
       //      }
       //      else{
@@ -401,7 +401,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
       // unpack it
       // cout << "Unpacking electronics " << elc->GetBranchName() << endl;
       //    cout << "Value of pBody address going into elc Unpack: " << *pBody << endl;
-      readWords = elc->Unpack(pBody, 0);
+      readWords = static_cast<HTUSBStack*>(elc)->Unpack(pBody, 0);
       while (readWords > 0) {
          *pBody++;
          readWords--;

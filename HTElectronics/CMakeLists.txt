@@ -10,15 +10,11 @@ set(SRCS
   # Put source files to compile here
   HTCAEN1x90Unpacker.cxx
   HTCAEN7xxUnpacker.cxx
-  HTCCUSBPacket.cxx
   HTElectronics.cxx
   HTHINPHit.cxx
   HTHINPUnpacker.cxx
   HTMADC32Unpacker.cxx
-  HTModuleUnpacker.cxx
-  HTPh7xxUnpacker.cxx
   HTSisTimestampUnpacker.cxx
-  HTTimestamp.cxx
   HTUSBStack.cxx
   HTUSBStackMarker.cxx
   )

@@ -6,7 +6,6 @@
 #define __HTMADC32UNPACKER_H
 
 #include <HTElectronics.h>
-#include <HTModuleUnpacker.h>
 #include <TList.h>
 #include <TNamed.h>
 #include <TTree.h>
@@ -17,7 +16,7 @@
  * Created by Daniele Dell'Aquila (dellaquila.daniele@gmail.com)
  * v1 : 12 February 2019
  */
-class HTMADC32Unpacker : public HTModuleUnpacker, public HTElectronics {
+class HTMADC32Unpacker :  public HTElectronics {
 private:
    TString fChName;               //!
    Int_t fnCh;                    //!
@@ -34,22 +33,23 @@ public:
    HTMADC32Unpacker(const char *chName);
    ~HTMADC32Unpacker();
 
-   Int_t DecodeVSN(Int_t header);
+   Int_t DecodeVSN(Int_t header) override;
 
-   void Clear(Option_t *option = "");
-   void InitClass();
-   void InitBranch(TTree *tree);
-   void InitTree(TTree *tree);
-   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset);
+   void Clear(Option_t *option = "") override;
+   void InitClass()override;
+   void InitBranch(TTree *tree)override;
+   void InitTree(TTree *tree)override;
+   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset)override;
 
    Short_t *GetData() { return fData; }
-   Short_t GetData(Int_t ch) { return fData[ch]; }
+   Short_t GetData(Int_t ch) override{ return fData[ch]; }
+   Double_t GetDataf(Int_t ch) override{ return fData[ch]; }
 
-   void PrintSummary();
+   void PrintSummary()override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *);
+   void AddTTreeUserInfo(TTree *)override;
 
-   ClassDef(HTMADC32Unpacker, 1);
+   ClassDefOverride(HTMADC32Unpacker, 1);
 };
 
 #endif

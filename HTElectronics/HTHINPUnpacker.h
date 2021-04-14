@@ -1,16 +1,13 @@
 #ifndef __HTHINPUnpakcer_H
 #define __HTHINPUnpakcer_H
 
-#ifndef __HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
 
 #include "TTree.h"
 
 #include "HTElectronics.h"
 #include "HTHINPHit.h"
 
-class HTHINPUnpacker : public HTModuleUnpacker, public HTElectronics {
+class HTHINPUnpacker :  public HTElectronics {
 private:
    Int_t fnMBs;                //! Number of total MBs for all XLMs to be read.
    Bool_t fUsingSISFADC;       //! Using SIS FADC for digitization?
@@ -45,18 +42,20 @@ public:
    void AddHit(Int_t xlm, UShort_t bank, Bool_t mismatch, UShort_t ch, UShort_t chip, UShort_t Hi, UShort_t Lo,
                UShort_t time); // Add a hit to the HTHINPHit object fHits
 
-   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset);
+   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
-   void Clear(Option_t *option = "");
-   void InitClass() {}
-   void InitBranch(TTree *);
-   void InitTree(TTree *);
+   void Clear(Option_t *option = "") override;
+   void InitClass() override{}
+   void InitBranch(TTree *)override;
+   void InitTree(TTree *)override;
 
-   void PrintSummary();
+   void PrintSummary()override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *);
+   Short_t GetData(Int_t ch) override {return -1;}
+   Double_t GetDataf(Int_t ch) override {return -1;}
+   void AddTTreeUserInfo(TTree *)override;
 
-   ClassDef(HTHINPUnpacker, 1);
+   ClassDefOverride(HTHINPUnpacker, 1);
 };
 
 #endif

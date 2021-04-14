@@ -75,6 +75,10 @@ if(NOT json_POPULATED)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+message ("TESTING")
+message (${json_SOURCE_DIR})
+
+
 # Walk through the project and compile libraries and executables
 add_subdirectory(HTElectronics)
 add_subdirectory(HTDetectors)

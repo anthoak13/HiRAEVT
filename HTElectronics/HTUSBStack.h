@@ -12,22 +12,17 @@
 #include <iostream>
 #include <stdio.h>
 
-#ifndef __HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
-
 #include "TList.h"
 #include "TTree.h"
 
 #include "HTElectronics.h"
-#include "HTTimestamp.h"
 #include "HTUSBStackMarker.h"
 
 #include <TNamed.h>
 
 using namespace std;
 
-class HTUSBStack : public HTModuleUnpacker, public HTElectronics {
+class HTUSBStack : public HTElectronics {
 private:
    // data structures:
    typedef struct _StackInfo {
@@ -40,7 +35,6 @@ private:
    ULong64_t fVsnErrorCount;
    ULong64_t fBufferMismatchCount;
 
-   HTTimestamp *fUSBTimestamp; //
    TList *fStacks;             // Array of stacks.
 
    TTree *fChain; //!
@@ -65,18 +59,23 @@ public:
    Int_t AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module, Int_t idx);
    Int_t RemoveFromStack();
 
-   void Clear(Option_t *option);
+   void Clear(Option_t *option)override;
 
-   void InitClass();
-   void InitBranch(TTree *tree);
-   void InitTree(TTree *tree);
+   void InitClass()override;
+   void InitBranch(TTree *tree)override;
+   void InitTree(TTree *tree)override;
    Int_t Unpack(UShort_t *pEvent, UInt_t offset);
+   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override { return -1;}
 
-   void PrintSummary();
+
+   Short_t GetData(Int_t ch) override { return -1;}
+   Double_t GetDataf(Int_t ch) override { return -1;}
+   
+   void PrintSummary()override;
    void Print() override { std::cout << "HTUSBstack" << std::endl; }
-   void AddTTreeUserInfo(TTree *);
+   void AddTTreeUserInfo(TTree *) override;
 
-   ClassDef(HTUSBStack, 1);
+   ClassDefOverride(HTUSBStack, 1);
 };
 
 #endif /* defined(____HTUSBStack__) */

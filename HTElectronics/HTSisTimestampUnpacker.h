@@ -10,9 +10,6 @@
 #ifndef __HTSisTimestampUNPACKER_H
 #define __HTSisTimestampUNPACKER_H
 
-#ifndef __HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
 
 #include "TTree.h"
 
@@ -24,7 +21,7 @@
 // Made more general by Adam Anthony Feb 2020
 // Jan 2018
 
-class HTSisTimestampUnpacker : public HTModuleUnpacker, public HTElectronics {
+class HTSisTimestampUnpacker :  public HTElectronics {
 private:
    ULong64_t fTimestamp[2];
 
@@ -35,22 +32,28 @@ public:
    HTSisTimestampUnpacker(const char *chName);
    ~HTSisTimestampUnpacker();
 
-   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset);
+   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    //  Int_t   *GetData()        {return fTimes;}
 
-   virtual void InitBranch(TTree *tree);
+   virtual void InitBranch(TTree *tree) override;
    virtual void Clear();
 
-   virtual void InitClass() {}
+   virtual void InitClass() override {}
    //  virtual void InitBranch(TTree* tree);
    //  virtual void InitBranch(TTree* tree){}
 
-   virtual void InitTree(TTree *tree) { fChain = tree; }
+   virtual void InitTree(TTree *tree) override { fChain = tree; }
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
+   void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }
+   virtual Short_t GetData(Int_t ch) override {return -1;}
+   virtual Double_t GetDataf(Int_t ch) override {return -1;}
+   virtual void AddTTreeUserInfo(TTree *) override {}
+
+
    ULong64_t GetTimestamp(unsigned int ch) { return (ch < 2 ? fTimestamp[ch] : 0); }
 
-   ClassDef(HTSisTimestampUnpacker, 1);
+   ClassDefOverride(HTSisTimestampUnpacker, 1);
 };
 
 #endif

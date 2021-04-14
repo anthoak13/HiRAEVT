@@ -24,6 +24,9 @@ private:
 
    UShort_t fUnpackError; // Unpacking error code.
 
+protected:
+   static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
+   
 public:
    Int_t fUnpackErrorCount;
 
@@ -33,9 +36,7 @@ public:
    virtual void InitClass() = 0;
    virtual void InitBranch(TTree *tree) = 0;
    virtual void InitTree(TTree *tree) = 0;
-   virtual Int_t Unpack(UShort_t *pEvent) { return 0; };
-   virtual Int_t Unpack(UShort_t *pEvent, UInt_t offset) { return 0; };
-   virtual Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) { return 0; };
+   virtual Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) =0;
 
    virtual Int_t DecodeVSN(Int_t header) { return -1; }
 
@@ -54,12 +55,12 @@ public:
    void SetMergedID(Int_t ID) { kMergedID = ID; }
    void SetUnpackError(UShort_t code) { fUnpackError = code; } //
 
-   virtual Short_t GetData(Int_t ch) { return -1; }
-   virtual Double_t GetDataf(Int_t ch) { return -1; }
+   virtual Short_t GetData(Int_t ch) =0;
+   virtual Double_t GetDataf(Int_t ch) =0;
 
-   virtual void PrintSummary() { return; }
+   virtual void PrintSummary() =0;
    virtual void Print() = 0;
-   virtual void AddTTreeUserInfo(TTree *) { return; }
+   virtual void AddTTreeUserInfo(TTree *) =0;
 
    ClassDef(HTElectronics, 1);
 };

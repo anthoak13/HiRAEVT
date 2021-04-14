@@ -1,41 +1,29 @@
 #ifndef HTDETECTOR_H
 #define HTDETECTOR_H
 
-#include "HTDetectorMap.h"
-#include "HTRootElectronics.h"
+// This is the abstract base class for all detectors. It is responsible for saving the state of
+// the detector. Taking the raw data from the unpacker and filling the member variables is the
+// responsibility of the Detector Map class. This class has no direct knowledge of the detector
+// map class.
 
-#include <TTree.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <vector>
+#include "TString.h"
 
 class HTDetector {
 public:
-   HTDetector(const char *, int num_detectors = 0); //! Constructor
-   virtual ~HTDetector();                           //! Destructor
 
-   virtual void Clear(); //! Clear detector data to -9999
+   HTDetector(const TString detectorName); //Constructor
+   virtual ~HTDetector();                  // Destructor
 
-   void AssignModule(HTRootElectronics *); //! Assign a module to the detector
+   virtual void Clear() =0; // Clear detector data to -9999
 
-   const char *GetName() const; //! Returns detector name
-   const char *GetType() const; //! Returns detector type
-   int GetNumDetectors() const; //! Get number of individual detection objects (telescopes, bars, sectors, ...)
-
-   int LoadMapping(const char *); //! Calls the mapping function in fDetectorMap
-
-   virtual void InitTTreeBranch(TTree *); //! Individually implemented in specific detector classes
-   virtual void BuildEvent();             //! Individually implemented in specific detector classes
-   virtual void FillMappedData();         //! Individually implemented in specific detector classes
-   virtual void InitMapping() = 0;        //! Create a detector mapping of the right type
+   const TString GetName() const { return fName; } // Returns detector name
+   const TString GetType() const { return fType; } // Returns detector type
 
 protected:
-   std::string fName; //! Detector Name
-   std::string fType; //! Detector Type
-   int fNumDetectors; //! Number of individual detection objects (telescopes, bars, sectors, ...)
-   std::vector<HTRootElectronics *> fModules; //! HTRootElectronics modules
-   HTDetectorMap *fDetectorMapping;           //! Detector Mapping
+   std::string fName; // Detector Name
+   std::string fType; // Detector Type
+
+   ClassDef(HTDetector, 1)
 };
 
 #endif

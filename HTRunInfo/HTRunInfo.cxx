@@ -1,5 +1,9 @@
 #include <HTRunInfo.h>
 
+#include <iostream>
+
+using namespace std;
+
 //________________________________________________
 HTRunInfo::HTRunInfo(int run_number, const char *run_title)
    : fRunNumber(run_number), fNStacks(0), fDAQLoaded(false), fPedestalsFileSet(false), fMappingFileSet(false)
@@ -116,11 +120,6 @@ void HTRunInfo::ParseAddDAQLine(const char *line_to_parse)
 
       if (ModuleType.compare("HTSisTimestampUnpacker") == 0) {
          HTSisTimestampUnpacker *newModule = new HTSisTimestampUnpacker(ModuleName.c_str());
-         newModuleInfo->SetModule(newModule);
-         fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
-         return;
-      } else if (ModuleType.compare("HTTimestamp") == 0) {
-         HTTimestamp *newModule = new HTTimestamp(ModuleName.c_str());
          newModuleInfo->SetModule(newModule);
          fStackInfo[StackID]->AddModuleInfo(newModuleInfo);
          return;

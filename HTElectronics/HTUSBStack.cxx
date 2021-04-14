@@ -57,7 +57,7 @@ static const UInt_t TRAILER(4);
 static const UInt_t INVALID(6);
 
 //______________________________________________________________________________
-HTUSBStack::HTUSBStack() : fEventCount(0), fWordsCount(0), fVsnErrorCount(0), fBufferMismatchCount(0), fUSBTimestamp(0)
+HTUSBStack::HTUSBStack() : fEventCount(0), fWordsCount(0), fVsnErrorCount(0), fBufferMismatchCount(0)
 {
    // --
    //
@@ -124,11 +124,6 @@ Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module, I
 
    //  cout << "Adding to HTUSBStack: " << module->ClassName() << endl;
 
-   if (strcmp(module->ClassName(), "HTTimestamp") == 0) {
-      fUSBTimestamp = (HTTimestamp *)module;
-      cout << "HTUSBStack:: Added timestamp to stack." << endl;
-      return 2;
-   }
    TList *stack = (TList *)fStacks->At(stackIdx);
    if (idx == -1) {
       stack->AddLast(module);

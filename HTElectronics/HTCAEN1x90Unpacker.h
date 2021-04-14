@@ -5,10 +5,6 @@
 #ifndef HTCAEN1x90UNPACKER_H
 #define HTCAEN1x90UNPACKER_H
 
-#ifndef HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
-
 #include "HTElectronics.h"
 
 #include <TList.h>
@@ -17,7 +13,7 @@
 #include <TTree.h>
 #include <iostream>
 
-class HTCAEN1x90Unpacker : public HTModuleUnpacker, public HTElectronics {
+class HTCAEN1x90Unpacker : public HTElectronics {
 private:
    static const int MAX_CHANNELS = 128;
    static const int MAX_DEPTH = 16;

@@ -5,10 +5,6 @@
 #ifndef __HTCAEN7xxUNPACKER_H
 #define __HTCAEN7xxUNPACKER_H
 
-#ifndef __HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
-
 #include "HTElectronics.h"
 
 #include <TList.h>
@@ -22,7 +18,7 @@
  module may be completely supressed.  Fortunately the header of a module is
  quite unambiguous and this unpacker can deal with that case just fine.
  */
-class HTCAEN7xxUnpacker : public HTModuleUnpacker, public HTElectronics {
+class HTCAEN7xxUnpacker :  public HTElectronics {
 private:
    TString fChName;               //!
    Int_t fnCh;                    //!
@@ -39,22 +35,23 @@ public:
    HTCAEN7xxUnpacker(const char *chName);
    ~HTCAEN7xxUnpacker();
 
-   Int_t DecodeVSN(Int_t header);
+   Int_t DecodeVSN(Int_t header) override;
 
-   void Clear(Option_t *option = "");
-   void InitClass();
-   void InitBranch(TTree *tree);
-   void InitTree(TTree *tree);
-   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset);
+   void Clear(Option_t *option = "") override;
+   void InitClass() override;
+   void InitBranch(TTree *tree) override;
+   void InitTree(TTree *tree) override;
+   Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    Short_t *GetData() { return fData; }
-   Short_t GetData(Int_t ch) { return fData[ch]; }
+   Short_t GetData(Int_t ch) override{ return fData[ch]; }
+   Double_t GetDataf(Int_t ch) override{ return fData[ch]; }
 
-   void PrintSummary();
+   void PrintSummary() override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *);
+   void AddTTreeUserInfo(TTree *) override;
 
-   ClassDef(HTCAEN7xxUnpacker, 1);
+   ClassDefOverride(HTCAEN7xxUnpacker, 1);
 };
 
 #endif

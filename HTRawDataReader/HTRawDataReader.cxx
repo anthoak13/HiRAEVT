@@ -1,5 +1,7 @@
 #include <HTRawDataReader.h>
+#include <iomanip>
 
+using namespace std;
 //________________________________________________
 HTRawDataReader::HTRawDataReader(HTMapper *theMapper)
    : fDataMapper(theMapper), fDataTree(0), fNEvtFiles(0), fDataReader(0), fTotalEvents(0), fCurrEvent(0), fStart(0),
@@ -67,7 +69,7 @@ void HTRawDataReader::ProcessRawTree()
          time(&fNow);
          fTimeElapsed = difftime(fNow, fStart);
          double PercentDone = 100 * (double(fCurrEvent) / fTotalEvents);
-         std::cout << "Processing Event: " << setw(10) << fCurrEvent << setw(10) << "  " << Form("%02.2f", PercentDone)
+         std::cout << "Processing Event: " << std::setw(10) << fCurrEvent << std::setw(10) << "  " << Form("%02.2f", PercentDone)
                    << "%"
                    << "   " << fTimeElapsed << " s"
                    << "\r";

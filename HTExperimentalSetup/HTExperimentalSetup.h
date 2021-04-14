@@ -6,29 +6,16 @@
 #include <HTDetectorFactory.h>
 #include <HTDetectorMap.h>
 #include <HTExperimentInfo.h>
-#include <HTForwardArray.h>
-#include <HTForwardArrayMap.h>
-#include <HTHiRA.h>
-#include <HTHiRAMap.h>
-#include <HTIonChamber.h>
-#include <HTMicroball.h>
-#include <HTMicroballMap.h>
-#include <HTModuleInfo.h>
-#include <HTNeutronWall.h>
-#include <HTNeutronWallMap.h>
+
 #include <HTRootCAEN1x90.h>
 #include <HTRootCAEN7xx.h>
 #include <HTRootElectronics.h>
 #include <HTRootHINP.h>
 #include <HTRootSisTimestamp.h>
 #include <HTRootTimestamp.h>
+#include "HTRootMADC32.h"
 #include <HTRunInfo.h>
-#include <HTSisTimestamp.h>
-#include <HTSisTimestampMap.h>
-#include <HTTDCSpare.h>
-#include <HTTDCSpareMap.h>
-#include <HTVetoWall.h>
-#include <HTVetoWallMap.h>
+
 #include <iostream>
 #include <map>
 #include <sstream>

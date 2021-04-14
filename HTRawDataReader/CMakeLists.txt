@@ -18,7 +18,8 @@ set(SRCS
 
 set(INCLUDE_DIRECTORIES
   ${ROOT_INCLUDE_DIR}
-
+  ${json_SOURCE_DIR}/include
+  
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTRawDataReader
   ${CMAKE_SOURCE_DIR}/HTMapper
