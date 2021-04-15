@@ -12,9 +12,11 @@ public:
    HTRootAdc(TString name, Int_t maxCh = 32);
    ~HTRootAdc();
 
-   Short_t GetData(int) const;
+   virtual void Clear() override;
+   Short_t GetData(Int_t ch) const;
+   void SetData(Int_t ch, Short_t data);
 
-   ClassDef(HTRootAdc,1)
+   ClassDefOverride(HTRootAdc,1)
 
 
 };

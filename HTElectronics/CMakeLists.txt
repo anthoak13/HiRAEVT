@@ -21,6 +21,8 @@ set(INCLUDE_DIRECTORIES
 
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTElectronics
+  ${CMAKE_SOURCE_DIR}/HTRootElectronics
+    
   )
 
 set(LINK_DIRECTORIES

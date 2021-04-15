@@ -34,13 +34,7 @@ public:
    ~HTMADC32Unpacker();
 
    Int_t DecodeVSN(Int_t header) override;
-
-   void Clear(Option_t *option = "") override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset)override;
-
-   Short_t *GetData() { return fData; }
-   Short_t GetData(Int_t ch) override{ return fData[ch]; }
-   Double_t GetDataf(Int_t ch) override{ return fData[ch]; }
 
    void PrintSummary()override;
    void Print() override { std::cout << fChName << std::endl; }

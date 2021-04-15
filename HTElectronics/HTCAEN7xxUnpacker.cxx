@@ -2,10 +2,10 @@
 //  HTCAEN7xxUnpacker.cpp
 //
 
-//#include <config.h>
+
 #include "HTCAEN7xxUnpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
+#include "HTRootAdc.h"
+
 #include <iostream>
 
 using namespace std;
@@ -16,7 +16,7 @@ ClassImp(HTCAEN7xxUnpacker)
 
    // All data words have these bits:
 
-   static const UInt_t ALLH_TYPEMASK(0x7000000);
+static const UInt_t ALLH_TYPEMASK(0x7000000);
 static const UInt_t ALLH_TYPESHIFT(24);
 static const UInt_t ALLH_GEOMASK(0xf8000000);
 static const UInt_t ALLH_GEOSHIFT(27);
@@ -66,25 +66,15 @@ static const UInt_t INVALID(6);
  Destruction is a no-op.
  */
 //______________________________________________________________________________
-HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(const char *chName)
-   : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
+HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(TString name)
 {
-   // --
-   //
 
-   Clear();
+   fModule = std::make_shared<HTRootAdc>(name);
 }
 
 //______________________________________________________________________________
 HTCAEN7xxUnpacker::~HTCAEN7xxUnpacker() {}
 
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++) {
-      fData[i] = -9999;
-   }
-}
 
  
 //////////////////////////////////////////////////////////////////////
@@ -113,7 +103,11 @@ void HTCAEN7xxUnpacker::Clear(Option_t *option)
 //______________________________________________________________________________
 Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+
+   //Clear the module
+   fModule->Clear();
+   //the correct pointer to the module
+   auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
 
    // DEBUG
    //   printf("called HTCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)\n");
@@ -153,7 +147,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
             if (!overflow) {
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = datum & DATAL_DATAMASK;
-               fData[channel] = value;
+               modPtr->SetData(channel, value);
 
                //           printf("setting %d channel to %d value\n",channel, value);
                //           printf("the value was %lu\n",datum & DATAL_DATAMASK);
@@ -163,7 +157,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
                fOverflowCount++;
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = 4096;
-               fData[channel] = value;
+	       modPtr->SetData(channel, value);
 
                //           printf("setting %d channel to %d value\n",channel, value);
 
@@ -203,10 +197,14 @@ Int_t HTCAEN7xxUnpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTCAEN7xxUnpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fChName.Data());
+   printf("-- module %s --\n", fModule->GetName().Data());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
 }
 
+void HTCAEN7xxUnpacker::Print()
+{
+   std::cout << fModule->GetName() << std::endl;
+}

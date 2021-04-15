@@ -2,39 +2,20 @@
 //  HTSisTimestampUnpacker.cpp
 //
 
-//#include <config.h>
+
 #include "HTSisTimestampUnpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
-#include <iostream>
-#include <stdint.h>
+#include "HTRootSisTimestamp.h"
 
 using namespace std;
 
 ClassImp(HTSisTimestampUnpacker)
 
-   using std::vector;
-using std::string;
-
-/////////////////////////////////////////////////////////////////////
-// Canonicals..
-
-/*!
- Construction is a no-op.
-
- */
-
-/*!
- Destruction is a no-op.
- */
+HTSisTimestampUnpacker::HTSisTimestampUnpacker(TString name)
+{
+   fModule = std::make_shared<HTRootSisTimestamp>(name);
+}
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
 
-void HTSisTimestampUnpacker::Clear()
-{
-
-   fTimestamp[0] = 0;
-   fTimestamp[1] = 0;
-}
 
 Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
@@ -48,8 +29,9 @@ Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    uint64_t high1 = event[offset + 5];
    offset += 6;
 
-   fTimestamp[0] = low0 | (mid0 << 16) | (high0 << 32);
-   fTimestamp[1] = low1 | (mid1 << 16) | (high1 << 32);
-
+   auto ptrMod = dynamic_pointer_cast<HTRootSisTimestamp>(fModule);
+   ptrMod.get()->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
+   ptrMod.get()->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
+   
    return offset;
 }

@@ -22,31 +22,16 @@
 // Jan 2018
 
 class HTSisTimestampUnpacker :  public HTModuleUnpacker {
-private:
-   ULong64_t fTimestamp[2];
-
-   TTree *fChain;  //! Pointer to current TTree or TChain
-   Int_t fCurrent; //! Current Tree number in a TChain
-
 public:
-   HTSisTimestampUnpacker(const char *chName);
+   HTSisTimestampUnpacker(TString moduleName);
    ~HTSisTimestampUnpacker();
 
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
+   Int_t DecodeVSN(Int_t header) override { return -1;}
 
-   //  Int_t   *GetData()        {return fTimes;}
-
-   virtual void Clear();
-
-   
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
    void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }
-   virtual Short_t GetData(Int_t ch) override {return -1;}
-   virtual Double_t GetDataf(Int_t ch) override {return -1;}
-
-
-   ULong64_t GetTimestamp(unsigned int ch) { return (ch < 2 ? fTimestamp[ch] : 0); }
-
+   
    ClassDefOverride(HTSisTimestampUnpacker, 1);
 };
 

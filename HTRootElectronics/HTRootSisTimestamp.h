@@ -13,9 +13,10 @@ public:
    HTRootSisTimestamp(TString name); //! Constructor
    ~HTRootSisTimestamp();            //! Destructor
 
-   ULong64_t GetData(int ch) const { if(ch < 2) return fData[ch]; return 0; }
-
-   ClassDef(HTRootSisTimestamp, 1)
+   virtual void Clear() override;
+   ULong64_t GetData(Int_t ch) const { return (ch < 2) ? fData[ch]: 0; }
+   void SetData(Int_t ch, ULong64_t data) { if (ch < 2) fData[ch] = data; }
+   ClassDefOverride(HTRootSisTimestamp, 1)
    
 };
 

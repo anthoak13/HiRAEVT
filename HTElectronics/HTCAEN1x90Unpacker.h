@@ -34,22 +34,15 @@ private:
    ULong64_t fNoReferenceCount;               //!
    ULong64_t fVSNMismatchCount;               //!
 
-   TTree *fChain;  //! Pointer to current TTree or TChain
-   Int_t fCurrent; //! Current Tree number in a TChain
-
+   
 public:
-   HTCAEN1x90Unpacker() : fDepth(1), fRefChannel(0), fnCh(128) { fChName = "Ch"; }
-   HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs = 1);
+   HTCAEN1x90Unpacker(TString name, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs);
    ~HTCAEN1x90Unpacker();
 
-   Int_t DecodeVSN(Int_t header) override;
    void reportError(UInt_t errorWord, int slot);
 
-   void Clear(Option_t *option = "") override;
+   Int_t DecodeVSN(Int_t header) override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
-
-   Short_t GetData(Int_t ch) override { return (Short_t)Short_t(fTimes[ch]); }
-   Double_t GetDataf(Int_t ch) override { return fTimes[ch]; }
 
    void PrintSummary() override;
    void Print() override { std::cout << fChName << std::endl; }

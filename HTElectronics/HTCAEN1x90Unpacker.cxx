@@ -3,14 +3,16 @@
 //
 
 #include "HTCAEN1x90Unpacker.h"
+#include "HTRootCAEN1x90.h"
 
 #include <iostream>
+
 
 using namespace std;
 
 ClassImp(HTCAEN1x90Unpacker)
 
-   using std::vector;
+using std::vector;
 using std::string;
 
 /// ASSUMPTION:
@@ -69,18 +71,14 @@ static const char *ERROR_STRINGS[] = {"Hit lost in group 0 from read-out FIFO ov
 
  */
 //______________________________________________________________________________
-HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs)
-   : fChName(chName), fnCh(nChannels), fTotalUnpackedData(0), fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
+HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(TString name, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs)
+   : fDepth(depth), fRefChannel(refCh), fnCh(nChannels), fChsToNs(chsToNs), fTotalUnpackedData(0),
+     fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
 {
-   // --
-   //
-   
-   fDepth = depth;
-   fRefChannel = refCh;
-   fnChannels = nChannels;
-   fChsToNs = chsToNs;
    fRandomGen = new TRandom3(0);
+   fModule = make_shared<HTRootCAEN1x90>(name, nChannels);
 
+      
    switch (fnChannels) {
       // V1190: 18 bits of data then 7 bits of channel number:
    case 128:
@@ -101,8 +99,6 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t re
       std::cerr << "-->HTCAEN1x90  mis configured. \n";
       std::cerr << "  -fnChannels must be one of 16,32,64 or 128 but was: " << fnChannels << std::endl;
    }
-
-   Clear();
 }
 
 /*!
@@ -112,15 +108,6 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t re
 HTCAEN1x90Unpacker::~HTCAEN1x90Unpacker()
 {
    delete fRandomGen;
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++)
-      for (int j = 0; j < fDepth; ++j) {
-         fTimes[i * fDepth + j] = -9999;
-      }
 }
 
 
@@ -150,7 +137,10 @@ void HTCAEN1x90Unpacker::Clear(Option_t *option)
 //______________________________________________________________________________
 Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+   //Create a nice pointer to the module
+   auto modPtr = dynamic_pointer_cast<HTRootCAEN1x90>(fModule);
+   modPtr->Clear();
+
    vector<Int_t> rawTimes[128]; //  Raw times are stored here pending ref time subtraction.
    vector<Int_t> chanVec;       // Vector that holds all the hit channels for this event
 
@@ -238,11 +228,11 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // Two cases to consider.  If the reference channel number is -1
    // there's no reference channel..otherwised there is:
    //
-   Int_t reftime = 0;      // Default to no reference chhanel:
+   Int_t refTime = 0;      // Default to no reference chhanel:
    if (fRefChannel >= 0) { //  Reference channel used:
 
       if (rawTimes[fRefChannel].size() > 0)
-         reftime = rawTimes[fRefChannel][0];
+         refTime = rawTimes[fRefChannel][0];
       else {
          fNoReferenceCount++;
          // std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
@@ -254,21 +244,18 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // The reftime defaults to zero which essentially does not adjust the times
    // if no reference channel is specified.
 
-   for (int i = 0; i < fnChannels; i++) {
-      int hits = rawTimes[i].size();
-      if (hits > fDepth)
-         hits = fDepth;
-
-      for (int hit = 0; hit < hits; hit++) {
-         double triggerRelative = static_cast<double>(rawTimes[i][hit] - reftime);
-
+   for (int i = 0; i < fnChannels; i++) 
+      for (auto& rawTime : rawTimes[i])
+      {
          // Get rid of random gen noise
          // if(triggerRelative!=0)
          // triggerRelative += fRandomGen->Rndm()-0.5;
-         fTimes[i * fDepth + hit] = triggerRelative * fChsToNs;
+
+	 Double_t calTime = fChsToNs * (rawTime - refTime);
+	 modPtr->SetNextData(i, calTime);
 
       } // End loop over hits
-   }    // end loop over channels
+   
 
    return offset;
 }

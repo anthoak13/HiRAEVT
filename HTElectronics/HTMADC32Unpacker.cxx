@@ -2,21 +2,17 @@
 //  HTMADC32Unpacker.cpp
 //
 
-//#include <config.h>
-#include <HTMADC32Unpacker.h>
-//#include <Event.h>
-//#include <stdint.h>
+
+#include "HTMADC32Unpacker.h"
 #include <iostream>
 
 using namespace std;
 
-ClassImp(HTMADC32Unpacker)
+// Constants
 
-   // Constants
+// All longwords have a type in the top two bits:
 
-   // All longwords have a type in the top two bits:
-
-   static const uint32_t ALL_TYPEMASK(0xc0000000);
+static const uint32_t ALL_TYPEMASK(0xc0000000);
 static const uint32_t ALL_TYPESHFT(30);
 
 static const uint32_t TYPE_HEADER(1);
@@ -53,19 +49,10 @@ HTMADC32Unpacker::HTMADC32Unpacker(const char *chName)
    : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
    
-   Clear();
 }
 
 //______________________________________________________________________________
 HTMADC32Unpacker::~HTMADC32Unpacker() {}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++) {
-      fData[i] = -9999;
-   }
-}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -175,3 +162,5 @@ void HTMADC32Unpacker::PrintSummary()
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
 }
+
+ClassImp(HTMADC32Unpacker)

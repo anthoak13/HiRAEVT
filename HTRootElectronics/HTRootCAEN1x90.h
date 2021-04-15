@@ -7,16 +7,20 @@
 class HTRootCAEN1x90 : public HTRootModule {
 private:
    Int_t fMaxCh;
-   Double_t *fData;   //[fMaxCh] The data
+   std::vector<std::vector<Double_t>> fData;   
    
 public:
+   HTRootCAEN1x90(): HTRootModule("Undefined"){} //Default constructor for file reading
    HTRootCAEN1x90(TString name, Int_t maxCh);
    ~HTRootCAEN1x90();
 
-   Double_t GetData(Int_t ch) { return ch < fMaxCh ? fData[ch] : -9999.; }
-   void SetData(Int_t ch, Double_t data) { if ( ch < fMaxCh) fData[ch] = data;}
+   virtual void Clear() override;
+   Double_t GetData(Int_t ch, Int_t depth); 
+   std::vector<Double_t> *GetData(Int_t ch);
+   void SetNextData(Int_t ch, Double_t data);
+   void SetData(Int_t ch, Int_t depth, Double_t data);
 
-   ClassDef(HTRootCAEN1x90, 1)
+   ClassDefOverride(HTRootCAEN1x90, 1)
 
 };
 
