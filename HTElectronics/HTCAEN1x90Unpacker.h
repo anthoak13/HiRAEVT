@@ -5,7 +5,7 @@
 #ifndef HTCAEN1x90UNPACKER_H
 #define HTCAEN1x90UNPACKER_H
 
-#include "HTElectronics.h"
+#include "HTModuleUnpacker.h"
 
 #include <TList.h>
 #include <TNamed.h>
@@ -13,7 +13,7 @@
 #include <TTree.h>
 #include <iostream>
 
-class HTCAEN1x90Unpacker : public HTElectronics {
+class HTCAEN1x90Unpacker : public HTModuleUnpacker {
 private:
    static const int MAX_CHANNELS = 128;
    static const int MAX_DEPTH = 16;
@@ -46,8 +46,6 @@ public:
    void reportError(UInt_t errorWord, int slot);
 
    void Clear(Option_t *option = "") override;
-   void InitBranch(TTree *tree) override;
-   void InitTree(TTree *tree) override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    Short_t GetData(Int_t ch) override { return (Short_t)Short_t(fTimes[ch]); }
@@ -55,7 +53,6 @@ public:
 
    void PrintSummary() override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *) override;
 
    ClassDefOverride(HTCAEN1x90Unpacker, 1);
 };

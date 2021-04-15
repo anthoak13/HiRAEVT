@@ -13,7 +13,7 @@
 
 #include "TTree.h"
 
-#include "HTElectronics.h"
+#include "HTModuleUnpacker.h"
 
 //#include <stdint.h>
 
@@ -21,7 +21,7 @@
 // Made more general by Adam Anthony Feb 2020
 // Jan 2018
 
-class HTSisTimestampUnpacker :  public HTElectronics {
+class HTSisTimestampUnpacker :  public HTModuleUnpacker {
 private:
    ULong64_t fTimestamp[2];
 
@@ -36,16 +36,13 @@ public:
 
    //  Int_t   *GetData()        {return fTimes;}
 
-   virtual void InitBranch(TTree *tree) override;
    virtual void Clear();
 
    
-   virtual void InitTree(TTree *tree) override { fChain = tree; }
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
    void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }
    virtual Short_t GetData(Int_t ch) override {return -1;}
    virtual Double_t GetDataf(Int_t ch) override {return -1;}
-   virtual void AddTTreeUserInfo(TTree *) override {}
 
 
    ULong64_t GetTimestamp(unsigned int ch) { return (ch < 2 ? fTimestamp[ch] : 0); }

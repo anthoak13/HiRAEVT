@@ -87,7 +87,7 @@ add_subdirectory(HTLogo)
 add_subdirectory(HTExperiment)
 #add_subdirectory(HTRawDataReader)
 add_subdirectory(HTRootElectronics)
-add_subdirectory(HTRunInfo)
+#add_subdirectory(HTRunInfo)
 
 # build executables
 add_subdirectory(FilterUnpacker)

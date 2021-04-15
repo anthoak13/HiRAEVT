@@ -1,20 +1,22 @@
 #ifndef HTROOTSISTIMESTAMP_H
 #define HTROOTSISTIMESTAMP_H
 
-#include <HTRootElectronics.h>
-#include <TROOT.h>
-#include <TTreeReaderValue.h>
+#include "HTRootModule.h"
 
-class HTRootSisTimestamp : public HTRootElectronics {
-public:
-   HTRootSisTimestamp(const char *); //! Constructor
-   ~HTRootSisTimestamp();            //! Destructor
-
-   void InitTreeInputBranch(TTreeReader &) override; //! Set Input TTRee Reader Branch
-   ULong64_t GetData(int ch) const;                  //! Get Timestamp
+class HTRootSisTimestamp : public HTRootModule {
 
 private:
-   TTreeReaderArray<ULong64_t> *fTimestamp;
+   ULong64_t fData[2];
+
+
+public:
+   HTRootSisTimestamp(TString name); //! Constructor
+   ~HTRootSisTimestamp();            //! Destructor
+
+   ULong64_t GetData(int ch) const { if(ch < 2) return fData[ch]; return 0; }
+
+   ClassDef(HTRootSisTimestamp, 1)
+   
 };
 
 #endif

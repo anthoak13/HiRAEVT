@@ -1,21 +1,23 @@
 #ifndef HTROOTCAEN1X90_H
 #define HTROOTCAEN1X90_H
 
-#include <HTRootElectronics.h>
-#include <TROOT.h>
+#include "HTRootModule.h"
 
-class HTRootCAEN1x90 : public HTRootElectronics {
+
+class HTRootCAEN1x90 : public HTRootModule {
+private:
+   Int_t fMaxCh;
+   Double_t *fData;   //[fMaxCh] The data
+   
 public:
-   HTRootCAEN1x90(const char *, int);
+   HTRootCAEN1x90(TString name, Int_t maxCh);
    ~HTRootCAEN1x90();
 
-   TTreeReaderArray<Double_t> *GetDataPointer() const; //! Get the pointer to TTreeReaderArray
-   double GetData(int) const;                          //! Get the data corresponding to a given channel
-   void InitTreeInputBranch(TTreeReader &) override;   //! Set Input TTreeReader Branch
+   Double_t GetData(Int_t ch) { return ch < fMaxCh ? fData[ch] : -9999.; }
+   void SetData(Int_t ch, Double_t data) { if ( ch < fMaxCh) fData[ch] = data;}
 
-private:
-   int fNumCh;
-   TTreeReaderArray<Double_t> *fData;
+   ClassDef(HTRootCAEN1x90, 1)
+
 };
 
 #endif

@@ -5,7 +5,7 @@
 #ifndef __HTCAEN7xxUNPACKER_H
 #define __HTCAEN7xxUNPACKER_H
 
-#include "HTElectronics.h"
+#include "HTModuleUnpacker.h"
 
 #include <TList.h>
 #include <TNamed.h>
@@ -18,7 +18,7 @@
  module may be completely supressed.  Fortunately the header of a module is
  quite unambiguous and this unpacker can deal with that case just fine.
  */
-class HTCAEN7xxUnpacker :  public HTElectronics {
+class HTCAEN7xxUnpacker :  public HTModuleUnpacker {
 private:
    TString fChName;               //!
    Int_t fnCh;                    //!
@@ -38,8 +38,6 @@ public:
    Int_t DecodeVSN(Int_t header) override;
 
    void Clear(Option_t *option = "") override;
-   void InitBranch(TTree *tree) override;
-   void InitTree(TTree *tree) override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    Short_t *GetData() { return fData; }
@@ -48,7 +46,6 @@ public:
 
    void PrintSummary() override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *) override;
 
    ClassDefOverride(HTCAEN7xxUnpacker, 1);
 };

@@ -72,11 +72,6 @@ HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(const char *chName)
    // --
    //
 
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
-   SetBranchName(chName);
-
    Clear();
 }
 
@@ -91,22 +86,7 @@ void HTCAEN7xxUnpacker::Clear(Option_t *option)
    }
 }
 
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fData, Form("%s[%i]/S", fChName.Data(), fnCh));
-   } else {
-      cout << "-->HTCAEN7xxUnpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
-}
-
+ 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
 
@@ -230,17 +210,3 @@ void HTCAEN7xxUnpacker::PrintSummary()
    printf("\n");
 }
 
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedCount));
-   TNamed *VSNMismatches =
-      new TNamed(Form("module %s : VSN Mismatches", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *overflowsFound = new TNamed(Form("module %s : %% Overflow Data", fChName.Data()),
-                                       Form("%.1f", 100 * double(fOverflowCount) / double(fTotalUnpackedCount)));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(VSNMismatches);  // Number of VSN Mismatches
-   tree->GetUserInfo()->Add(overflowsFound); // Percentage of Overflows found
-}

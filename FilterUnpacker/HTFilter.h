@@ -16,12 +16,17 @@ using json = nlohmann::json;
 class CPhysicsEventItem;
 class HTExperiment;
 class HTExperimentInfo;
+class HTModuleUnpacker;
 
 class HTFilter : public CFilter {
 
 private:
    HTExperiment *fExperiment;
    HTExperimentInfo *fExperimentInfo;
+
+   std::vector<HTModuleUnpacker*> unpackers;
+   
+   void CreateUnpackers(json moduleList);
    
 public:
    HTFilter(json configJson);

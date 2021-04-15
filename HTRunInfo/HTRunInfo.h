@@ -4,7 +4,6 @@
 #include <HTCAEN1x90Unpacker.h>
 #include <HTCAEN7xxUnpacker.h>
 #include <HTDAQStackInfo.h>
-#include <HTHINPUnpacker.h>
 #include <HTMADC32Unpacker.h>
 #include <HTSisTimestampUnpacker.h>
 #include <fstream>

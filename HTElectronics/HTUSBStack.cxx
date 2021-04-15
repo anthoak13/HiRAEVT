@@ -7,7 +7,7 @@
 //
 
 #include "HTUSBStack.h"
-
+#include "HTModuleUnpacker.h"
 // Constants
 
 static const UShort_t VMUSB_STACKID_MASK(0xe000);
@@ -59,12 +59,7 @@ static const UInt_t INVALID(6);
 //______________________________________________________________________________
 HTUSBStack::HTUSBStack() : fEventCount(0), fWordsCount(0), fVsnErrorCount(0), fBufferMismatchCount(0)
 {
-   // --
-   //
-
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
+   
    // Initialize the list of stacks.
    fStacks = new TList();
 }
@@ -80,35 +75,9 @@ Int_t HTUSBStack::AddStack()
 }
 
 //______________________________________________________________________________
-Int_t HTUSBStack::AddToStack(Int_t stackIdx, HTUSBStackMarker *marker)
-{
-   // --
-   //
-
-   return AddToStack(stackIdx, marker, -1);
-}
 
 //______________________________________________________________________________
-Int_t HTUSBStack::AddToStack(Int_t stackIdx, HTUSBStackMarker *marker, Int_t idx)
-{
-   // --
-   //
-
-   TList *stack = (TList *)fStacks->At(stackIdx);
-   if (idx == -1) {
-      stack->AddLast(marker);
-   } else if (idx > -1) {
-      stack->AddAt(marker, idx);
-   } else {
-      cerr << "-->HTUSBStack::AddToStack  Invalid stack index." << endl;
-      return 0;
-   }
-
-   return 1;
-}
-
-//______________________________________________________________________________
-Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module)
+Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTModuleUnpacker *module)
 {
    // --
    //
@@ -117,7 +86,7 @@ Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module)
 }
 
 //______________________________________________________________________________
-Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module, Int_t idx)
+Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTModuleUnpacker *module, Int_t idx)
 {
    // --
    //
@@ -147,57 +116,6 @@ Int_t HTUSBStack::RemoveFromStack()
    return 1;
 }
 
-//______________________________________________________________________________
-void HTUSBStack::Clear(Option_t *option)
-{
-   // --
-   //
-
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         module->Clear(option);
-      }
-   }
-
-   // fEventCount       = 0;
-}
-
-//______________________________________________________________________________
-void HTUSBStack::InitBranch(TTree *tree)
-{
-   // -- Initialize the branch pointers of this class.
-   //
-
-   // Initialize the branches for each module in each stack.
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         module->InitBranch(tree);
-      }
-   }
-   cout.flush();
-}
-
-//______________________________________________________________________________
-void HTUSBStack::InitTree(TTree *tree)
-{
-   // -- Initialize this class to a TTree.
-   //
-
-   fChain = tree;
-
-   // Initialize the class for each module in each stack.
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         module->InitTree(tree);
-      }
-   }
-}
 
 //______________________________________________________________________________
 Int_t HTUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
@@ -230,24 +148,12 @@ Int_t HTUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
       // report the error.
       TIter nextModule(stack);
 
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
+      while (HTModuleUnpacker *module = (HTModuleUnpacker *)nextModule()) {
 
          // Search the RingItem body for this module's data.
          // Get the 'header' .. ensure that it matches our VSN if module has a VSN.
          unsigned long header;
          int vsn = -99;
-
-         // If this is a Marker, just read it.
-         if (strcmp(module->ClassName(), "HTUSBStackMarker") == 0) {
-
-            cout << "Found marker: " << module->ClassName() << endl;
-            HTUSBStackMarker *marker = (HTUSBStackMarker *)module;
-
-            sOffset = marker->Unpack(event, sOffset);
-            if (sOffset == -1) {
-               break;
-            }
-         }
 
          // Try to unpack the module given the order it was defined in the stack.
          // If the VSN does not match, then search for the VSN in rest of the body.
@@ -352,48 +258,10 @@ HTUSBStack::StackInfo HTUSBStack::assembleEvent(UShort_t *p, vector<UShort_t> &e
    return result;
 }
 
-//______________________________________________________________________________
-void HTUSBStack::PrintSummary()
+ULong_t HTUSBStack::getLong(std::vector<UShort_t> &event, ULong_t offset)
 {
-   printf("**********************************************\n");
-   printf("-- %s summary --\n", GetBranchName());
-   printf("%llu words read\n", fWordsCount);
-   printf("%llu vsn errors\n", fVsnErrorCount);
-   printf("%llu events not entirely decoded\n\n", fBufferMismatchCount);
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         module->PrintSummary();
-      }
-   }
-   printf("**********************************************\n");
+      ULong_t low = event[offset];
+      ULong_t high = event[offset+1];
+      return low | ( high << 16);
 
-   return;
-}
-
-//______________________________________________________________________________
-void HTUSBStack::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *wordsRead = new TNamed(Form("%s : Words Read", GetBranchName()), Form("%llu", fWordsCount));
-   TNamed *VSNErrors = new TNamed(Form("%s : VSN Errors", GetBranchName()), Form("%llu", fVsnErrorCount));
-   TNamed *bufferMismatches =
-      new TNamed(Form("%s : Events Not Entirely Decoded", GetBranchName()), Form("%llu", fBufferMismatchCount));
-
-   tree->GetUserInfo()->Add(wordsRead); // Number of words read in the stack
-   tree->GetUserInfo()->Add(VSNErrors); // Number of VSN errors found in the stack
-   tree->GetUserInfo()->Add(
-      bufferMismatches); // Number of events not entirely decoded by the unpacker for the current stack
-
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         if (module->GetFillData()) {
-            module->AddTTreeUserInfo(tree);
-         }
-      }
-   }
-
-   return;
 }

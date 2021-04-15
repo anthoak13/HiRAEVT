@@ -81,22 +81,24 @@ int main(int argc, char *argv[])
    }
    TString sink("--sink=file:///dev/null");
 
-   std::cout << "Unpacking: " << source << " to " << outFileName << std::endl;
-
+   //Open the output file
    TFile *outFile = new TFile(outFileName, "RECREATE");
+   if(!outFile->IsOpen()) {
+      std::cerr << "ERROR: Failed to open output file: " << outFileName << std::endl;
+      return -1;
+   }
    
+
+   //Create the main app
    char *newArgs[3];
    newArgs[0] = argv[0];
    newArgs[1] = const_cast<char*>(source.Data());
    newArgs[2] = const_cast<char*>(sink.Data());
-
-   // Create the main
    CFilterMain theApp(3, newArgs);
+
    std::cout << "**Main app created**" << std::endl;
 
-
-   json temp;
-   HTFilter filter(temp);
+   HTFilter filter(configData);
    
    std::cout << "** Unpacker filter intialized**" << std::endl;
 

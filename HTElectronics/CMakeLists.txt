@@ -8,15 +8,12 @@ set(DEPENDENCIES
 
 set(SRCS
   # Put source files to compile here
+  HTModuleUnpacker.cxx  
   HTCAEN1x90Unpacker.cxx
   HTCAEN7xxUnpacker.cxx
-  HTElectronics.cxx
-  HTHINPHit.cxx
-  HTHINPUnpacker.cxx
   HTMADC32Unpacker.cxx
   HTSisTimestampUnpacker.cxx
   HTUSBStack.cxx
-  HTUSBStackMarker.cxx
   )
 
 set(INCLUDE_DIRECTORIES

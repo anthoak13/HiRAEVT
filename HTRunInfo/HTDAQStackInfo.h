@@ -1,7 +1,7 @@
 #ifndef HTDAQSTACKINFO_H
 #define HTDAQSTACKINFO_H
 
-#include <HTElectronics.h>
+#include <HTModuleUnpacker.h>
 #include <HTModuleInfo.h>
 #include <string>
 #include <vector>

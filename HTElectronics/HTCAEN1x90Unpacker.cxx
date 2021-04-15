@@ -74,12 +74,7 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t re
 {
    // --
    //
-
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
-   SetBranchName(chName);
-
+   
    fDepth = depth;
    fRefChannel = refCh;
    fnChannels = nChannels;
@@ -128,22 +123,6 @@ void HTCAEN1x90Unpacker::Clear(Option_t *option)
       }
 }
 
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fTimes, Form("%s[%i]/D", fChName.Data(), fnCh * fDepth));
-   } else {
-      cout << "-->HTCAEN1x90Unpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
-}
 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
@@ -361,21 +340,4 @@ void HTCAEN1x90Unpacker::PrintSummary()
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%llu TDC data with no hit in reference found\n", fNoReferenceCount);
    printf("\n");
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedData));
-   TNamed *errorsFound = new TNamed(Form("module %s : Errors Produced", fChName.Data()), Form("%llu", fErrorCount));
-   TNamed *VSNMistmatches =
-      new TNamed(Form("module %s : VSN Mismatches Found", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *TDCNoReference = new TNamed(Form("module %s : TDC Data With No Hit in Reference", fChName.Data()),
-                                       Form("%llu", fNoReferenceCount));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(errorsFound);    // Errors produced
-   tree->GetUserInfo()->Add(VSNMistmatches); // VSN mismatches found
-   tree->GetUserInfo()->Add(TDCNoReference); // TDC data with no hit in reference
 }

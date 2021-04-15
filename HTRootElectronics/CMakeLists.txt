@@ -1,22 +1,19 @@
 # Create a library called libHTElectronics
 
-set(LINKDEF "")
+set(LINKDEF "GenLinkDef.h")
 set(LIBRARY_NAME HTRootElectronics)
 
 set(DEPENDENCIES
-  HTElectronics
+
   )
 
 set(SRCS
   # Put source files to compile here
 
-  HTRootElectronics.cxx
+  HTRootModule.cxx
   HTRootCAEN1x90.cxx
-  HTRootCAEN7xx.cxx
-  HTRootHINP.cxx
-  HTRootMADC32.cxx
   HTRootSisTimestamp.cxx
-  HTRootTimestamp.cxx 
+  HTRootAdc.cxx 
   
   )
 
@@ -26,8 +23,7 @@ set(INCLUDE_DIRECTORIES
   
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
-  ${CMAKE_SOURCE_DIR}/HTElectronics
-
+ 
   )
 
 set(LINK_DIRECTORIES

@@ -5,7 +5,7 @@
 #ifndef __HTMADC32UNPACKER_H
 #define __HTMADC32UNPACKER_H
 
-#include <HTElectronics.h>
+#include "HTModuleUnpacker.h"
 #include <TList.h>
 #include <TNamed.h>
 #include <TTree.h>
@@ -16,7 +16,7 @@
  * Created by Daniele Dell'Aquila (dellaquila.daniele@gmail.com)
  * v1 : 12 February 2019
  */
-class HTMADC32Unpacker :  public HTElectronics {
+class HTMADC32Unpacker :  public HTModuleUnpacker {
 private:
    TString fChName;               //!
    Int_t fnCh;                    //!
@@ -36,8 +36,6 @@ public:
    Int_t DecodeVSN(Int_t header) override;
 
    void Clear(Option_t *option = "") override;
-      void InitBranch(TTree *tree)override;
-   void InitTree(TTree *tree)override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset)override;
 
    Short_t *GetData() { return fData; }
@@ -46,7 +44,6 @@ public:
 
    void PrintSummary()override;
    void Print() override { std::cout << fChName << std::endl; }
-   void AddTTreeUserInfo(TTree *)override;
 
    ClassDefOverride(HTMADC32Unpacker, 1);
 };

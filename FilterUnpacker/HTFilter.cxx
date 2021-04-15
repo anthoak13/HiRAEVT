@@ -13,23 +13,22 @@
 #include "HTExperiment.h"
 
 
-/**! \class HTFilter
-    Here is a sample implementation of a filter to append a reversed copy of the
-    data in physics event to its body. This is for illustration purposes.
 
-    See the documentation for the CFilter base class for the virtually declared
-    methods available for dealing with non-physics events. The user has access
-    to all of the different ring item types. In fact, it is not necessary for
-    the user to return the same type of ring item from method as it received.
-*/
 HTFilter::HTFilter(json configJson)
 {
    fExperimentInfo = new HTExperimentInfo();
    fExperiment = new HTExperiment();
+   CreateUnpackers(configJson["VMEstacks"]);
 }
 
 HTFilter::~HTFilter()
 {
+}
+
+void HTFilter::CreateUnpackers(json moduleList)
+{
+   for( auto& elem : moduleList)
+      std::cout << elem << std::endl;
 }
 
 // handle the state change events

@@ -18,7 +18,7 @@ set(DEPENDENCIES
   HTElectronics
   HTExperiment
   HTLogo
-  HTRunInfo
+  HTRootElectronics
   )
 
 set(LINK_DIRECTORIES

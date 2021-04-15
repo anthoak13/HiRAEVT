@@ -11,21 +11,19 @@
 // It contains a vector of electronics modules.
 
 #include "HTExperimentInfo.h"
-#include "HTRunInfo.h"
 #include "HTUSBStack.h"
 
-#include <HTElectronics.h>
 #include <vector>
 
-class HTVmeModule;
+class HTModuleUnpacker;
 
 class HTExperiment : public TObject {
 private:
-   std::vector<HTVmeModule*> vmeModules;
+   std::vector<HTModuleUnpacker*> vmeModules;
    
 public:
-   std::vector<HTVmeModule*> *GetVmeModules() { return &vmeModules;}
-   void RegisterModule(HTVmeModule *module) { vmeModules.emplace_back(module);}
+   std::vector<HTModuleUnpacker*> *GetVmeModules() { return &vmeModules;}
+   void RegisterModule(HTModuleUnpacker *module) { vmeModules.emplace_back(module);}
    
    ClassDef(HTExperiment, 1) // NSCL event-data unpacker.
 };

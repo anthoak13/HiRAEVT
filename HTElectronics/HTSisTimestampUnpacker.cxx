@@ -23,27 +23,11 @@ using std::string;
  Construction is a no-op.
 
  */
-HTSisTimestampUnpacker::HTSisTimestampUnpacker(const char *chName)
-{
-
-   Clear();
-   SetBranchName(chName);
-}
 
 /*!
  Destruction is a no-op.
  */
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
-
-void HTSisTimestampUnpacker::InitBranch(TTree *tree)
-{
-
-   if (GetFillData()) {
-      tree->Branch(GetBranchName(), fTimestamp, TString::Format("%s[2]/l", GetBranchName()));
-   } else {
-      cout << "HTSisTimestamp InitBranch problem" << endl;
-   }
-}
 
 void HTSisTimestampUnpacker::Clear()
 {

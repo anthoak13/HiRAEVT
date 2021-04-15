@@ -52,14 +52,7 @@ static const uint32_t TRAILER_COUNTMASK(0x3fffffff); // trigger count or timesta
 HTMADC32Unpacker::HTMADC32Unpacker(const char *chName)
    : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
-   // --
-   //
-
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
-   SetBranchName(chName);
-
+   
    Clear();
 }
 
@@ -74,22 +67,6 @@ void HTMADC32Unpacker::Clear(Option_t *option)
    }
 }
 
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fData, Form("%s[%i]/S", fChName.Data(), fnCh));
-   } else {
-      cout << "-->HTMADC32Unpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
-}
 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
@@ -197,19 +174,4 @@ void HTMADC32Unpacker::PrintSummary()
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
-}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedCount));
-   TNamed *VSNMismatches =
-      new TNamed(Form("module %s : VSN Mismatches", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *overflowsFound = new TNamed(Form("module %s : %% Overflow Data", fChName.Data()),
-                                       Form("%.1f", 100 * double(fOverflowCount) / double(fTotalUnpackedCount)));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(VSNMismatches);  // Number of VSN Mismatches
-   tree->GetUserInfo()->Add(overflowsFound); // Percentage of Overflows found
 }
