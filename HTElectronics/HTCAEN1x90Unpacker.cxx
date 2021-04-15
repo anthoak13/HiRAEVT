@@ -128,8 +128,6 @@ void HTCAEN1x90Unpacker::Clear(Option_t *option)
       }
 }
 
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitClass() {}
 
 //______________________________________________________________________________
 void HTCAEN1x90Unpacker::InitBranch(TTree *tree)

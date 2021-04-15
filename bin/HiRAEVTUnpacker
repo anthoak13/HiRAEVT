@@ -41,6 +41,6 @@ if [ ! -d "${EvtFilesPath}run$run_num/" ]; then #the directory of evt files does
 fi
 
 for file_evt in $(ls ${EvtFilesPath}run$run_num/*.evt); do
-    eval '${HiRAEVTBIN}/${NAMEHIRAEVTUNPACKEREXECUTABLE} --source=file://'$file_evt' --sink=file:///dev/null'
+    echo '${HiRAEVTBIN}/${NAMEHIRAEVTUNPACKEREXECUTABLE} --source=file://'$file_evt' --sink=file:///dev/null'
 done
 done

@@ -92,9 +92,6 @@ void HTCAEN7xxUnpacker::Clear(Option_t *option)
 }
 
 //______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitClass() {}
-
-//______________________________________________________________________________
 void HTCAEN7xxUnpacker::InitBranch(TTree *tree)
 {
    if (GetFillData()) {

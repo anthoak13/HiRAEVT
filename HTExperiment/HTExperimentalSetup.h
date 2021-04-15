@@ -25,7 +25,7 @@ private:
    
 public:
    std::vector<HTVmeModule*> *GetVmeModules() { return &vmeModules;}
-   void RegisterModule(HTVmeModule *module) { vmeModules.emplace_back(module);}
+   void RegisterModule(HTVmeModule *module);
    
    ClassDef(HTExperiment, 1) // NSCL event-data unpacker.
 };

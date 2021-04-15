@@ -39,10 +39,7 @@ public:
    virtual void InitBranch(TTree *tree) override;
    virtual void Clear();
 
-   virtual void InitClass() override {}
-   //  virtual void InitBranch(TTree* tree);
-   //  virtual void InitBranch(TTree* tree){}
-
+   
    virtual void InitTree(TTree *tree) override { fChain = tree; }
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
    void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }

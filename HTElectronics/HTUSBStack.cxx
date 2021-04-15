@@ -165,23 +165,6 @@ void HTUSBStack::Clear(Option_t *option)
 }
 
 //______________________________________________________________________________
-void HTUSBStack::InitClass()
-{
-   // -- Initialize any additional components of this class.
-   //
-
-   // Initialize the class for each module in each stack.
-   TIter nextStack(fStacks);
-   while (TList *stack = (TList *)nextStack()) {
-      TIter nextModule(stack);
-      while (HTElectronics *module = (HTElectronics *)nextModule()) {
-         module->InitClass();
-      }
-   }
-   fUnpackErrorCount = 0;
-}
-
-//______________________________________________________________________________
 void HTUSBStack::InitBranch(TTree *tree)
 {
    // -- Initialize the branch pointers of this class.

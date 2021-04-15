@@ -74,8 +74,6 @@ void HTMADC32Unpacker::Clear(Option_t *option)
    }
 }
 
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitClass() {}
 
 //______________________________________________________________________________
 void HTMADC32Unpacker::InitBranch(TTree *tree)

@@ -33,7 +33,6 @@ public:
 public:
    virtual ~HTElectronics(){};
 
-   virtual void InitClass() = 0;
    virtual void InitBranch(TTree *tree) = 0;
    virtual void InitTree(TTree *tree) = 0;
    virtual Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) =0;

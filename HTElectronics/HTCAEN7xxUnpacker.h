@@ -38,7 +38,6 @@ public:
    Int_t DecodeVSN(Int_t header) override;
 
    void Clear(Option_t *option = "") override;
-   void InitClass() override;
    void InitBranch(TTree *tree) override;
    void InitTree(TTree *tree) override;
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;

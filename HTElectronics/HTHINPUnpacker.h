@@ -45,7 +45,6 @@ public:
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    void Clear(Option_t *option = "") override;
-   void InitClass() override{}
    void InitBranch(TTree *)override;
    void InitTree(TTree *)override;
 

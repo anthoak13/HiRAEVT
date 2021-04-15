@@ -2,6 +2,9 @@
 build
 jsonTest
 
+# root files
+*.root
+
 # Executable
 unpack
 *~

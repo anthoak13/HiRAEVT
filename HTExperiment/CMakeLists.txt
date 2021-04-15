@@ -11,10 +11,7 @@ set(SRCS
   # Put source files to compile here
 
   HTExperiment.cxx
-  HTNSCLBufferHeader.cxx
-  HTRingItem.cxx
-  HTRingStateChangeItem.cxx
-
+  HTExperimentInfo.cxx
   )
 
 set(INCLUDE_DIRECTORIES

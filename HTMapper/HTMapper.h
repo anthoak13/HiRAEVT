@@ -1,7 +1,7 @@
 #ifndef HTMAPPER_H
 #define HTMAPPER_H
 
-#include <HTExperimentInfo.h>
+#include <HTExperimentInfo.h.old>
 #include <HTExperimentalSetup.h>
 #include <HTRunInfo.h>
 #include <TChain.h>

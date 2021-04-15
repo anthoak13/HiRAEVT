@@ -81,17 +81,17 @@ message (${json_SOURCE_DIR})
 
 # Walk through the project and compile libraries and executables
 add_subdirectory(HTElectronics)
-add_subdirectory(HTDetectors)
+#add_subdirectory(HTDetectors)
 add_subdirectory(HTLogo)
-add_subdirectory(HTExperimentalSetup)
+#add_subdirectory(HTExperimentalSetup)
 add_subdirectory(HTExperiment)
-add_subdirectory(HTRawDataReader)
+#add_subdirectory(HTRawDataReader)
 add_subdirectory(HTRootElectronics)
 add_subdirectory(HTRunInfo)
 
 # build executables
 add_subdirectory(FilterUnpacker)
-add_subdirectory(HTMapper)
+#add_subdirectory(HTMapper)
 add_subdirectory(jsonTest)
 
 WRITE_CONFIG_FILE(config.sh)
