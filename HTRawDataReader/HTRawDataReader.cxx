@@ -69,8 +69,8 @@ void HTRawDataReader::ProcessRawTree()
          time(&fNow);
          fTimeElapsed = difftime(fNow, fStart);
          double PercentDone = 100 * (double(fCurrEvent) / fTotalEvents);
-         std::cout << "Processing Event: " << std::setw(10) << fCurrEvent << std::setw(10) << "  " << Form("%02.2f", PercentDone)
-                   << "%"
+         std::cout << "Processing Event: " << std::setw(10) << fCurrEvent << std::setw(10) << "  "
+                   << Form("%02.2f", PercentDone) << "%"
                    << "   " << fTimeElapsed << " s"
                    << "\r";
          std::cout.flush();

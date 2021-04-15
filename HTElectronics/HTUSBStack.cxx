@@ -7,6 +7,7 @@
 //
 
 #include "HTUSBStack.h"
+
 #include "HTModuleUnpacker.h"
 // Constants
 
@@ -59,7 +60,7 @@ static const UInt_t INVALID(6);
 //______________________________________________________________________________
 HTUSBStack::HTUSBStack() : fEventCount(0), fWordsCount(0), fVsnErrorCount(0), fBufferMismatchCount(0)
 {
-   
+
    // Initialize the list of stacks.
    fStacks = new TList();
 }
@@ -260,8 +261,7 @@ HTUSBStack::StackInfo HTUSBStack::assembleEvent(UShort_t *p, vector<UShort_t> &e
 
 ULong_t HTUSBStack::getLong(std::vector<UShort_t> &event, ULong_t offset)
 {
-      ULong_t low = event[offset];
-      ULong_t high = event[offset+1];
-      return low | ( high << 16);
-
+   ULong_t low = event[offset];
+   ULong_t high = event[offset + 1];
+   return low | (high << 16);
 }

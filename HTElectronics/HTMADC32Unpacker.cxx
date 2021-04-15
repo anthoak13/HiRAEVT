@@ -2,8 +2,8 @@
 //  HTMADC32Unpacker.cpp
 //
 
-
 #include "HTMADC32Unpacker.h"
+
 #include <iostream>
 
 using namespace std;
@@ -48,7 +48,6 @@ static const uint32_t TRAILER_COUNTMASK(0x3fffffff); // trigger count or timesta
 HTMADC32Unpacker::HTMADC32Unpacker(const char *chName)
    : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
-   
 }
 
 //______________________________________________________________________________

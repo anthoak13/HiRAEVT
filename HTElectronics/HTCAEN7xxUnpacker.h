@@ -14,12 +14,11 @@
  module may be completely supressed.  Fortunately the header of a module is
  quite unambiguous and this unpacker can deal with that case just fine.
  */
-class HTCAEN7xxUnpacker :  public HTModuleUnpacker {
+class HTCAEN7xxUnpacker : public HTModuleUnpacker {
 private:
    ULong64_t fTotalUnpackedCount; //!
    ULong64_t fOverflowCount;      //!
    ULong64_t fVSNMismatchCount;   //!
-   
 
 public:
    HTCAEN7xxUnpacker(TString name);

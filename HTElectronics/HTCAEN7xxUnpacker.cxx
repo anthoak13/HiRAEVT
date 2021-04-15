@@ -2,8 +2,8 @@
 //  HTCAEN7xxUnpacker.cpp
 //
 
-
 #include "HTCAEN7xxUnpacker.h"
+
 #include "HTRootAdc.h"
 
 #include <iostream>
@@ -16,7 +16,7 @@ ClassImp(HTCAEN7xxUnpacker)
 
    // All data words have these bits:
 
-static const UInt_t ALLH_TYPEMASK(0x7000000);
+   static const UInt_t ALLH_TYPEMASK(0x7000000);
 static const UInt_t ALLH_TYPESHIFT(24);
 static const UInt_t ALLH_GEOMASK(0xf8000000);
 static const UInt_t ALLH_GEOSHIFT(27);
@@ -75,8 +75,6 @@ HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(TString name)
 //______________________________________________________________________________
 HTCAEN7xxUnpacker::~HTCAEN7xxUnpacker() {}
 
-
- 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
 
@@ -104,9 +102,9 @@ HTCAEN7xxUnpacker::~HTCAEN7xxUnpacker() {}
 Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
 
-   //Clear the module
+   // Clear the module
    fModule->Clear();
-   //the correct pointer to the module
+   // the correct pointer to the module
    auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
 
    // DEBUG
@@ -157,7 +155,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
                fOverflowCount++;
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = 4096;
-	       modPtr->SetData(channel, value);
+               modPtr->SetData(channel, value);
 
                //           printf("setting %d channel to %d value\n",channel, value);
 

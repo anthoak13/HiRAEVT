@@ -1,18 +1,15 @@
+#include "HTExperiment.h"
+#include "HTExperimentInfo.h"
+
 #include <CFilter.h>
 #include <CPhysicsEventItem.h>
 #include <CRingStateChangeItem.h>
-#include <HTFilter.h>
 #include <FragmentIndex.h>
-
+#include <HTFilter.h>
+#include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
-#include <iomanip>
-
-#include "HTExperimentInfo.h"
-#include "HTExperiment.h"
-
-
 
 HTFilter::HTFilter(json configJson)
 {
@@ -21,13 +18,11 @@ HTFilter::HTFilter(json configJson)
    CreateUnpackers(configJson["VMEstacks"]);
 }
 
-HTFilter::~HTFilter()
-{
-}
+HTFilter::~HTFilter() {}
 
 void HTFilter::CreateUnpackers(json moduleList)
 {
-   for( auto& elem : moduleList)
+   for (auto &elem : moduleList)
       std::cout << elem << std::endl;
 }
 
@@ -36,26 +31,22 @@ CRingItem *HTFilter::handleStateChangeItem(CRingStateChangeItem *pItem)
 {
    TDatime time(pItem->getTimestamp());
 
-   switch(pItem->type())
-   {
-      
-      //Its a begin run event, so save the run number, time, and title
+   switch (pItem->type()) {
+
+      // Its a begin run event, so save the run number, time, and title
    case 1:
-      std::cout << "Begin run " << pItem->getRunNumber() << " at "
-		<< time.AsString() << std::endl;
+      std::cout << "Begin run " << pItem->getRunNumber() << " at " << time.AsString() << std::endl;
       fExperimentInfo->SetStartTime(time);
       fExperimentInfo->SetRunNumber(pItem->getRunNumber());
       fExperimentInfo->SetRunTitle(pItem->getTitle());
       break;
-      
-      //It's a end run event to save the end time
+
+      // It's a end run event to save the end time
    case 2:
-      std::cout << "End run " << pItem->getRunNumber() << " at "
-		<< time.AsString() << std::endl;
+      std::cout << "End run " << pItem->getRunNumber() << " at " << time.AsString() << std::endl;
       fExperimentInfo->SetEndTime(time);
       break;
-   default:
-      break;
+   default: break;
    }
 
    return pItem;

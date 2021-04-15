@@ -3,7 +3,6 @@
 //________________________________________________
 HTRootModule::HTRootModule(TString name) : fName(name) {}
 
-
 //________________________________________________
 HTRootModule::~HTRootModule() {}
 

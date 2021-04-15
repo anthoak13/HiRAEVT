@@ -32,7 +32,6 @@ private:
    ULong64_t fNoReferenceCount;               //!
    ULong64_t fVSNMismatchCount;               //!
 
-   
 public:
    HTCAEN1x90Unpacker(TString name, Int_t refCh, Int_t nChannels, Double_t chsToNs);
    ~HTCAEN1x90Unpacker();

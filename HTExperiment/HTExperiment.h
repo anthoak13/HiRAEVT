@@ -19,12 +19,12 @@ class HTModuleUnpacker;
 
 class HTExperiment : public TObject {
 private:
-   std::vector<HTModuleUnpacker*> vmeModules;
-   
+   std::vector<HTModuleUnpacker *> vmeModules;
+
 public:
-   std::vector<HTModuleUnpacker*> *GetVmeModules() { return &vmeModules;}
-   void RegisterModule(HTModuleUnpacker *module) { vmeModules.emplace_back(module);}
-   
+   std::vector<HTModuleUnpacker *> *GetVmeModules() { return &vmeModules; }
+   void RegisterModule(HTModuleUnpacker *module) { vmeModules.emplace_back(module); }
+
    ClassDef(HTExperiment, 1) // NSCL event-data unpacker.
 };
 

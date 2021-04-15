@@ -126,7 +126,7 @@ void HTMapper::MapDetectors()
    auto DefinedDetectors = HTExperimentalSetup::Instance()->GetDetectors();
 
    for (auto TheDetector : *DefinedDetectors)
-      ;//TheDetector.second->BuildEvent();
+      ; // TheDetector.second->BuildEvent();
 
    return;
 }

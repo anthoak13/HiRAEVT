@@ -7,8 +7,8 @@
 // calibration class gets called. This class is never written to disk, so doesn't get a streamer
 // no linkdef or ClassDef
 
-
 #include "TString.h"
+
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -16,11 +16,10 @@ using json = nlohmann::json;
 class HTDetectorMap {
 public:
    HTDetectorMap(json mappingJSON); // Constructor
-   virtual ~HTDetectorMap() =0;        // Destructor
+   virtual ~HTDetectorMap() = 0;    // Destructor
 
 protected:
    TString fName;
-
 };
 
 #endif

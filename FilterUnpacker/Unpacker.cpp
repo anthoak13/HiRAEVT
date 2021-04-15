@@ -54,7 +54,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
    // fExperiment : HTExperiment class object containing stack configurations and defining the structure of the output
    // file
    //
-   
+
    strcpy(fSourceFileName, sourceName);
    std::string evtFileStr(fSourceFileName);
    std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/') + 1));
@@ -190,7 +190,6 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
             if (type == 30) {
                uint32_t ringSize = *(it->s_itemhdr);
 
-
                //--- Print out the RingItem. -----------------
                if (false) {
                   cout << "RingSize = " << ringSize / 2 << " " << index.getNumberFragments() << endl;
@@ -207,7 +206,7 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
                uint16_t *bodyAddr = it->s_itembody;
 
                // Unpack it
-               fragOffset =  static_cast<HTUSBStack*>(elc)->Unpack(bodyAddr, 0);
+               fragOffset = static_cast<HTUSBStack *>(elc)->Unpack(bodyAddr, 0);
                // totalUnpackedWords += elc->GetTotalUnpackedWords();
             } else {
                cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
@@ -271,8 +270,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
    // Verify that the data does not look corrupted
    UShort_t bodySize = *pBody;
    if (2 * (bodySize + 1) != totalSize) {
-      std::cerr << "The first word should represent the number of words composing the event"
-		  << std::endl;
+      std::cerr << "The first word should represent the number of words composing the event" << std::endl;
       fReadWords += totalSize;
       return;
    }
@@ -291,9 +289,8 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
    UInt_t totalReadWords = 0;
 
    TIter nextModule(fExperiment->GetElectronicsList());
-   while (HTElectronics *elc = (HTElectronics *)nextModule())
-   {
-      UInt_t readWords = static_cast<HTUSBStack*>(elc)->Unpack(pBody, 0);
+   while (HTElectronics *elc = (HTElectronics *)nextModule()) {
+      UInt_t readWords = static_cast<HTUSBStack *>(elc)->Unpack(pBody, 0);
       *pBody += readWords;
       totalReadWords += readWords;
    }

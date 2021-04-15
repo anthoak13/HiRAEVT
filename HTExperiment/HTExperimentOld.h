@@ -15,7 +15,6 @@
 #include "HTUSBStack.h"
 
 #include <HTElectronics.h>
-
 #include <HTRingStateChangeItem.h>
 #include <TBranch.h>
 #include <TChain.h>
@@ -34,7 +33,7 @@ using namespace std;
 class HTExperiment : public TNamed {
 
 private:
-   //UShort_t *p; //! Pointer to event buffers.
+   // UShort_t *p; //! Pointer to event buffers.
 
    Int_t fRunNumber;      //! Number of the current run to be unpacked.
    Int_t fEvtFileNumber;  //! Number of the current evt file.
@@ -43,7 +42,7 @@ private:
 
    TList *fElectronics; //! List of registered electronics to process.
 
-   TFile *fROOTFile;  //! The current ROOT file for output.
+   TFile *fROOTFile; //! The current ROOT file for output.
    TTree *fRootTree; //!
 
    UInt_t fBRI_Size;         //
@@ -78,30 +77,29 @@ public:
 
    void Clear(Option_t *option = "");
 
-
    void AddTTreeUserInfo();
-   void Fill();      // Fill TTree
+   void Fill(); // Fill TTree
 
    // Initialized the TTrees and etc. for EVT file conversion.
-   Bool_t InitializeROOTConverter(const Char_t *evtFile, const Char_t *rootFile = "out.root"); 
+   Bool_t InitializeROOTConverter(const Char_t *evtFile, const Char_t *rootFile = "out.root");
    Bool_t EndROOTConverter();
-   
+
    HTElectronics *RegisterElectronics(HTElectronics *elc); //
 
    // Getters
-   Bool_t IsDataMerged() { return fMergedData; } 
+   Bool_t IsDataMerged() { return fMergedData; }
    Long64_t GetEvtFileSize() { return fEvtFileSize; }
-   TList *GetElectronicsList() { return fElectronics; } 
-   TTree *GetTree();                  
-   
-   //Setters
+   TList *GetElectronicsList() { return fElectronics; }
+   TTree *GetTree();
+
+   // Setters
    void SetBRISize(UInt_t size) { fBRI_Size = size; }
    void SetBRITimestamp(ULong64_t tStamp) { fBRI_Timestamp = tStamp; }
    void SetMergedData(Bool_t mergedFlag) { fMergedData = mergedFlag; } // Sets the merged data flag.
-   Bool_t SetEventFilePath(const Char_t *path);      // Sets the event file path.
-   Bool_t SetExperimentNumber(const Char_t *number); // Sets the experiment number.
-   Bool_t SetRootFilePath(const Char_t *path);       // Sets the root file path.
-   void SetStateInfo(HTRingStateChangeItem *);       // Sets additional information such as run start time
+   Bool_t SetEventFilePath(const Char_t *path);                        // Sets the event file path.
+   Bool_t SetExperimentNumber(const Char_t *number);                   // Sets the experiment number.
+   Bool_t SetRootFilePath(const Char_t *path);                         // Sets the root file path.
+   void SetStateInfo(HTRingStateChangeItem *); // Sets additional information such as run start time
 
    ClassDef(HTExperiment, 1) // NSCL event-data unpacker.
 };

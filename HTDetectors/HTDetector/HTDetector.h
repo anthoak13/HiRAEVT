@@ -10,11 +10,10 @@
 
 class HTDetector {
 public:
-
-   HTDetector(const TString detectorName); //Constructor
+   HTDetector(const TString detectorName); // Constructor
    virtual ~HTDetector();                  // Destructor
 
-   virtual void Clear() =0; // Clear detector data to -9999
+   virtual void Clear() = 0; // Clear detector data to -9999
 
    const TString GetName() const { return fName; } // Returns detector name
    const TString GetType() const { return fType; } // Returns detector type

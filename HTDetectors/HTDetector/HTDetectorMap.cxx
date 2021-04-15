@@ -1,5 +1,4 @@
 #include <HTDetectorMap.h>
-
 #include <string>
 //________________________________________________
 HTDetectorMap::HTDetectorMap(json mappingJSON)

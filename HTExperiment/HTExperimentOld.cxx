@@ -40,8 +40,7 @@ ClassImp(HTExperiment);
 ////////////////////////////////////////////////////////////////////////////////
 
 //______________________________________________________________________________
-HTExperiment::HTExperiment(const char *name)
-   : fRunNumber(-1), fEvtFileNumber(-1), fRootTree(0)
+HTExperiment::HTExperiment(const char *name) : fRunNumber(-1), fEvtFileNumber(-1), fRootTree(0)
 {
    // -- Default constructor.
    // If a sub-class inherits from TObject and you do not want the fBits and
@@ -152,7 +151,7 @@ void HTExperiment::SetStateInfo(HTRingStateChangeItem *stateItem)
    //    dateBegin
    struct tm *tptr;
 
-   if ( strcmp(stateItem->GetType(), "Unknown (1)") == 0) { // run begin
+   if (strcmp(stateItem->GetType(), "Unknown (1)") == 0) { // run begin
 
       time_t tstamp(stateItem->GetTimestamp());
       tptr = gmtime(&tstamp);
@@ -170,7 +169,6 @@ void HTExperiment::SetStateInfo(HTRingStateChangeItem *stateItem)
       dateEnd->SetTitle(Form("%02d.%02d.%4d", tptr->tm_mon, tptr->tm_mday, tptr->tm_year + 1900));
    }
 }
-
 
 //______________________________________________________________________________
 TTree *HTExperiment::GetTree()
@@ -298,7 +296,6 @@ Bool_t HTExperiment::EndROOTConverter()
 
    return kTRUE;
 }
-
 
 //______________________________________________________________________________
 Bool_t HTExperiment::SetEventFilePath(const Char_t *path)

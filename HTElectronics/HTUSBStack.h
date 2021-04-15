@@ -9,21 +9,18 @@
 #ifndef ____HTUSBStack__
 #define ____HTUSBStack__
 
-#include <iostream>
-#include <stdio.h>
-
 #include "TList.h"
 #include "TTree.h"
 
-
-
 #include <TNamed.h>
+#include <iostream>
+#include <stdio.h>
 
 class HTModuleUnpacker;
 
 using namespace std;
 
-class HTUSBStack  {
+class HTUSBStack {
 private:
    // data structures:
    typedef struct _StackInfo {
@@ -44,7 +41,7 @@ private:
 private:
    static StackInfo assembleEvent(UShort_t *p, std::vector<UShort_t> &event);
    static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
-   
+
 public:
    HTUSBStack();
    ~HTUSBStack(){};
@@ -60,7 +57,6 @@ public:
    Int_t RemoveFromStack();
 
    Int_t Unpack(UShort_t *pEvent, UInt_t offset);
-   
 
    ClassDef(HTUSBStack, 1);
 };

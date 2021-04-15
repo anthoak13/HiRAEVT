@@ -3,21 +3,21 @@
 //
 
 #include "HTCAEN1x90Unpacker.h"
+
 #include "HTRootCAEN1x90.h"
 
 #include <iostream>
-
 
 using namespace std;
 
 ClassImp(HTCAEN1x90Unpacker)
 
-using std::vector;
+   using std::vector;
 using std::string;
 
 /// ASSUMPTION:
 ///   There are at most 128 channels. Note that if this is wrong, the
-///   parameter map is also going to break; 
+///   parameter map is also going to break;
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -71,13 +71,12 @@ static const char *ERROR_STRINGS[] = {"Hit lost in group 0 from read-out FIFO ov
  */
 //______________________________________________________________________________
 HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(TString name, Int_t refCh, Int_t nChannels, Double_t chsToNs)
-   : fRefChannel(refCh), fnCh(nChannels), fChsToNs(chsToNs), fTotalUnpackedData(0),
-     fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
+   : fRefChannel(refCh), fnCh(nChannels), fChsToNs(chsToNs), fTotalUnpackedData(0), fErrorCount(0),
+     fNoReferenceCount(0), fVSNMismatchCount(0)
 {
    fRandomGen = new TRandom3(0);
    fModule = make_shared<HTRootCAEN1x90>(name, nChannels);
 
-      
    switch (fnChannels) {
       // V1190: 18 bits of data then 7 bits of channel number:
    case 128:
@@ -136,7 +135,7 @@ HTCAEN1x90Unpacker::~HTCAEN1x90Unpacker()
 //______________________________________________________________________________
 Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   //Create a nice pointer to the module
+   // Create a nice pointer to the module
    auto modPtr = dynamic_pointer_cast<HTRootCAEN1x90>(fModule);
    modPtr->Clear();
 
@@ -243,18 +242,16 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // The reftime defaults to zero which essentially does not adjust the times
    // if no reference channel is specified.
 
-   for (int i = 0; i < fnChannels; i++) 
-      for (auto& rawTime : rawTimes[i])
-      {
+   for (int i = 0; i < fnChannels; i++)
+      for (auto &rawTime : rawTimes[i]) {
          // Get rid of random gen noise
          // if(triggerRelative!=0)
          // triggerRelative += fRandomGen->Rndm()-0.5;
 
-	 Double_t calTime = fChsToNs * (rawTime - refTime);
-	 modPtr->SetNextData(i, calTime);
+         Double_t calTime = fChsToNs * (rawTime - refTime);
+         modPtr->SetNextData(i, calTime);
 
       } // End loop over hits
-   
 
    return offset;
 }

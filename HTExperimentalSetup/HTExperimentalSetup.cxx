@@ -183,7 +183,7 @@ void HTExperimentalSetup::BuildDetectorMaps()
    // Each of them is mapped with the same name of the detector itself.
    int nMappedLines = 0;
    for (auto &&det : *fDetectors)
-      ;//nMappedLines += det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
+      ; // nMappedLines += det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
 }
 
 //________________________________________________
@@ -234,9 +234,8 @@ void HTExperimentalSetup::InitDetectorBranches(TTree *theTree)
    // Loop over all the define detectors to call their individual InitTTreeBranch(TTree *)
    if (fDetectors) {
       for (std::map<std::string, HTDetector *>::iterator TheDetector = fDetectors->begin();
-           TheDetector != fDetectors->end(); TheDetector++)
-      {
-         ;//(*TheDetector).second->InitTTreeBranch(theTree);
+           TheDetector != fDetectors->end(); TheDetector++) {
+         ; //(*TheDetector).second->InitTTreeBranch(theTree);
       }
    }
 }

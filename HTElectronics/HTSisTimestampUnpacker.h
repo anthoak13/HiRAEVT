@@ -21,17 +21,17 @@
 // Made more general by Adam Anthony Feb 2020
 // Jan 2018
 
-class HTSisTimestampUnpacker :  public HTModuleUnpacker {
+class HTSisTimestampUnpacker : public HTModuleUnpacker {
 public:
    HTSisTimestampUnpacker(TString moduleName);
    ~HTSisTimestampUnpacker();
 
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
-   Int_t DecodeVSN(Int_t header) override { return -1;}
+   Int_t DecodeVSN(Int_t header) override { return -1; }
 
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
    void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }
-   
+
    ClassDefOverride(HTSisTimestampUnpacker, 1);
 };
 

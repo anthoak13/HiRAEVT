@@ -2,20 +2,19 @@
 //  HTSisTimestampUnpacker.cpp
 //
 
-
 #include "HTSisTimestampUnpacker.h"
+
 #include "HTRootSisTimestamp.h"
 
 using namespace std;
 
 ClassImp(HTSisTimestampUnpacker)
 
-HTSisTimestampUnpacker::HTSisTimestampUnpacker(TString name)
+   HTSisTimestampUnpacker::HTSisTimestampUnpacker(TString name)
 {
    fModule = std::make_shared<HTRootSisTimestamp>(name);
 }
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
-
 
 Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
@@ -32,6 +31,6 @@ Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    auto ptrMod = dynamic_pointer_cast<HTRootSisTimestamp>(fModule);
    ptrMod.get()->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
    ptrMod.get()->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
-   
+
    return offset;
 }

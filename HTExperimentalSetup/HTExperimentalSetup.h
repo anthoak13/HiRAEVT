@@ -3,21 +3,20 @@
 
 // This is the mapper side class that knows about the experimental setup, both the electronics and the detectors
 
+#include "HTRootMADC32.h"
+
 #include <HTDAQStackInfo.h>
 #include <HTDetector.h>
 #include <HTDetectorFactory.h>
 #include <HTDetectorMap.h>
 #include <HTExperimentInfo.h.old>
-
 #include <HTRootCAEN1x90.h>
 #include <HTRootCAEN7xx.h>
 #include <HTRootElectronics.h>
 #include <HTRootHINP.h>
 #include <HTRootSisTimestamp.h>
 #include <HTRootTimestamp.h>
-#include "HTRootMADC32.h"
 #include <HTRunInfo.h>
-
 #include <iostream>
 #include <map>
 #include <sstream>

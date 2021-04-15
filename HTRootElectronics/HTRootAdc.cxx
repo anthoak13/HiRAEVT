@@ -1,8 +1,7 @@
 #include "HTRootAdc.h"
 
 //________________________________________________
-HTRootAdc::HTRootAdc(TString name, Int_t maxCh)
-   : HTRootModule(name), fMaxCh(maxCh)
+HTRootAdc::HTRootAdc(TString name, Int_t maxCh) : HTRootModule(name), fMaxCh(maxCh)
 {
    fData = new Short_t[fMaxCh];
 }
@@ -16,7 +15,7 @@ HTRootAdc::~HTRootAdc()
 
 void HTRootAdc::Clear()
 {
-   for(int i = 0; i < fMaxCh; ++i)
+   for (int i = 0; i < fMaxCh; ++i)
       fData[i] = -9999;
 }
 
@@ -27,7 +26,7 @@ Short_t HTRootAdc::GetData(Int_t ch) const
 
 void HTRootAdc::SetData(Int_t ch, Short_t data)
 {
-   if(ch<fMaxCh)
+   if (ch < fMaxCh)
       fData[ch] = data;
 }
 ClassImp(HTRootAdc)

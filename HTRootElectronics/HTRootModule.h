@@ -4,7 +4,7 @@
 #include "TObject.h"
 #include "TString.h"
 
-//Virtual base clase for ROOT versions of modules
+// Virtual base clase for ROOT versions of modules
 
 class HTRootModule : public TObject {
 
@@ -15,10 +15,10 @@ public:
    HTRootModule(TString name); //! Constructor
    virtual ~HTRootModule();    //! Destructor
 
-   virtual void Clear() =0;
+   virtual void Clear() = 0;
 
-   virtual const char* GetName() const override { return fName.Data(); }
-   TString GetName() { return fName;}
+   virtual const char *GetName() const override { return fName.Data(); }
+   TString GetName() { return fName; }
 
    ClassDefOverride(HTRootModule, 1)
 };

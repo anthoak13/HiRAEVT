@@ -1,18 +1,18 @@
 
+#include "TFile.h"
+
 #include <CFatalException.h>
 #include <CFilterMain.h>
 #include <HTFilter.h>
 #include <HiRAEVTLogo.h>
 #include <Unpacker.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-#include "TFile.h"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 void PrintUsage();
-  
 
 /// The main function
 /**! main function
@@ -32,74 +32,65 @@ int main(int argc, char *argv[])
 
    int status = 0;
 
-   //Check for proper numbner of command line inputs
-   if(argc != 3)
-   {
-      std::cerr << "HiRAEVTUnpacker requires three arguments, only "
-		<< argc << " passed!" << std::endl;
+   // Check for proper numbner of command line inputs
+   if (argc != 3) {
+      std::cerr << "HiRAEVTUnpacker requires three arguments, only " << argc << " passed!" << std::endl;
       PrintUsage();
    }
-   
-   
-   TString configFileName(argv[1]); //Get config file name
-   Int_t runNumber = TString(argv[2]).Atoi(); //Get run number
 
-   //Open the configFile and load in the json data
+   TString configFileName(argv[1]);           // Get config file name
+   Int_t runNumber = TString(argv[2]).Atoi(); // Get run number
+
+   // Open the configFile and load in the json data
    ifstream confFile(configFileName);
-   if(!confFile)
-   {
+   if (!confFile) {
       std::cerr << "ERROR: Could not open config file: " << configFileName << std::endl;
       return -1;
    }
    json configData;
    confFile >> configData;
-   
+
    // Set the source parameter from the config file
    TString source;
-   if(configData["evtDirectory"].is_string())
+   if (configData["evtDirectory"].is_string())
       source = TString::Format("--source=file://%s/run%d/run-%04d-00.evt",
-			       configData["evtDirectory"].get<std::string>().c_str(),
-			       runNumber, runNumber);
-   else
-   {
-      std::cerr << "ERROR: input badly formated, the key-value pair \"evtDirectory\":"
-		<< configData["evtDirectory"] << " is not a string!" << std::endl;
+                               configData["evtDirectory"].get<std::string>().c_str(), runNumber, runNumber);
+   else {
+      std::cerr << "ERROR: input badly formated, the key-value pair \"evtDirectory\":" << configData["evtDirectory"]
+                << " is not a string!" << std::endl;
       return -1;
    }
 
    // Set the output file from the config file
    TString outFileName;
-   if(configData["outputDirectory"].is_string())
-      outFileName = TString::Format("%s/run-%d.root",
-			       configData["outputDirectory"].get<std::string>().c_str(),
-			       runNumber);
-   else
-   {
+   if (configData["outputDirectory"].is_string())
+      outFileName =
+         TString::Format("%s/run-%d.root", configData["outputDirectory"].get<std::string>().c_str(), runNumber);
+   else {
       std::cerr << "ERROR: input badly formated, the key-value pair \"outputDirectory\":"
-		<< configData["outputDirectory"] << " is not a string!" << std::endl;
+                << configData["outputDirectory"] << " is not a string!" << std::endl;
       return -1;
    }
    TString sink("--sink=file:///dev/null");
 
-   //Open the output file
+   // Open the output file
    TFile *outFile = new TFile(outFileName, "RECREATE");
-   if(!outFile->IsOpen()) {
+   if (!outFile->IsOpen()) {
       std::cerr << "ERROR: Failed to open output file: " << outFileName << std::endl;
       return -1;
    }
-   
 
-   //Create the main app
+   // Create the main app
    char *newArgs[3];
    newArgs[0] = argv[0];
-   newArgs[1] = const_cast<char*>(source.Data());
-   newArgs[2] = const_cast<char*>(sink.Data());
+   newArgs[1] = const_cast<char *>(source.Data());
+   newArgs[2] = const_cast<char *>(sink.Data());
    CFilterMain theApp(3, newArgs);
 
    std::cout << "**Main app created**" << std::endl;
 
    HTFilter filter(configData);
-   
+
    std::cout << "** Unpacker filter intialized**" << std::endl;
 
    theApp.registerFilter(&filter);
@@ -110,7 +101,7 @@ int main(int argc, char *argv[])
 
    std::cout << "Finished unpacking, saving tree" << std::endl;
 
-   if(outFile->IsOpen())
+   if (outFile->IsOpen())
       filter.GetExperimentInfo()->Write();
    else
       cout << "Didn't wreite";
@@ -121,6 +112,5 @@ int main(int argc, char *argv[])
 
 void PrintUsage()
 {
-   std::cout << "Usage: " << std::endl
-	     << "HiRAEVTUnpacker [configFile] [runNumber]" << std::endl;
+   std::cout << "Usage: " << std::endl << "HiRAEVTUnpacker [configFile] [runNumber]" << std::endl;
 }

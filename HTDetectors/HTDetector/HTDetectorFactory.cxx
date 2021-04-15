@@ -7,7 +7,6 @@
 
 #include <iostream>
 
-
 HTDetectorFactory *HTDetectorFactory::_instance = nullptr;
 
 HTDetectorFactory::HTDetectorFactory() {}
@@ -29,7 +28,6 @@ HTDetector *HTDetectorFactory::CreateDetector(const std::string &detType, const 
 
    if (newDet == nullptr)
       std::cerr << "The detector type " << detType << " was not recognized." << std::endl;
-
 
    return newDet;
 }
