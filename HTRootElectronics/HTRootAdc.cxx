@@ -9,7 +9,7 @@ HTRootAdc::HTRootAdc(TString name, Int_t maxCh) : HTRootModule(name), fMaxCh(max
 //________________________________________________
 HTRootAdc::~HTRootAdc()
 {
-   if (fData)
+   if (fData != nullptr)
       delete[] fData;
 }
 

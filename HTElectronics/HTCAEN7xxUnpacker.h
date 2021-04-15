@@ -28,7 +28,6 @@ public:
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    void PrintSummary() override;
-   void Print() override;
 
    ClassDefOverride(HTCAEN7xxUnpacker, 1);
 };

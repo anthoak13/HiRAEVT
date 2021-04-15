@@ -9,6 +9,7 @@ private:
    Short_t *fData; //[fMaxCh]
 
 public:
+   HTRootAdc() : HTRootModule("Undefined") { fData = nullptr; }
    HTRootAdc(TString name, Int_t maxCh = 32);
    ~HTRootAdc();
 

@@ -9,12 +9,12 @@
 #ifndef HTMODULEUNPACKER
 #define HTMODULEUNPACKER
 
+#include "HTRootModule.h"
+
 #include <TObject.h>
 #include <TTree.h>
 #include <iostream>
 #include <stdio.h>
-
-class HTRootModule;
 
 class HTModuleUnpacker : public TObject {
 protected:
@@ -34,7 +34,7 @@ public:
    virtual Int_t DecodeVSN(Int_t header) = 0;
 
    virtual void PrintSummary() = 0;
-   virtual void Print() = 0;
+   virtual void Print() { std::cout << fModule->GetName() << std::endl; }
 
    // Getters
    Int_t GetMergedID() { return kMergedID; }

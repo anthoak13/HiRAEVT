@@ -4,6 +4,8 @@
 
 #include "HTMADC32Unpacker.h"
 
+#include "HTRootAdc.h"
+
 #include <iostream>
 
 using namespace std;
@@ -45,9 +47,9 @@ static const uint32_t DATA_ISPAD(0x04000000);
 static const uint32_t TRAILER_COUNTMASK(0x3fffffff); // trigger count or timestamp counter.
 
 //______________________________________________________________________________
-HTMADC32Unpacker::HTMADC32Unpacker(const char *chName)
-   : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
+HTMADC32Unpacker::HTMADC32Unpacker(TString name) : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
+   fModule = std::make_shared<HTRootAdc>(name);
 }
 
 //______________________________________________________________________________
@@ -77,7 +79,10 @@ HTMADC32Unpacker::~HTMADC32Unpacker() {}
 //______________________________________________________________________________
 Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+   // Clear the module
+   fModule->Clear();
+   // the correct pointer to the module
+   auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
 
    // Get the 'header' .. ensure that it is one and that it matches our VSN.
    unsigned long header = getLong(event, offset);
@@ -119,12 +124,12 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
       if (!overflow) {
          int channel = (datum & DATA_CHANNELMASK) >> DATA_CHANNELSHFT;
          int value = datum & DATA_VALUEMASK;
-         fData[channel] = value;
+         modPtr->SetData(channel, value);
       } else {
          fOverflowCount++;
          int channel = (datum & DATA_CHANNELMASK) >> DATA_CHANNELSHFT;
          int value = 9999;
-         fData[channel] = value;
+         modPtr->SetData(channel, value);
       }
       datum = getLong(event, offset);
       longsRead++;
@@ -155,7 +160,7 @@ Int_t HTMADC32Unpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTMADC32Unpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fChName.Data());
+   printf("-- module %s --\n", fModule->GetName().Data());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));

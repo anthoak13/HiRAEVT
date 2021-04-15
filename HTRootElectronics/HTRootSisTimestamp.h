@@ -9,6 +9,7 @@ private:
    ULong64_t fData[2];
 
 public:
+   HTRootSisTimestamp() : HTRootModule("Undefined") {}
    HTRootSisTimestamp(TString name); //! Constructor
    ~HTRootSisTimestamp();            //! Destructor
 

@@ -202,7 +202,3 @@ void HTCAEN7xxUnpacker::PrintSummary()
    printf("\n");
 }
 
-void HTCAEN7xxUnpacker::Print()
-{
-   std::cout << fModule->GetName() << std::endl;
-}
