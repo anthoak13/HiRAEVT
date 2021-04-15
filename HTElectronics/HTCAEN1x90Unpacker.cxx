@@ -17,8 +17,7 @@ using std::string;
 
 /// ASSUMPTION:
 ///   There are at most 128 channels. Note that if this is wrong, the
-///   parameter map is also going to break; Also assumes the max depth per channel is 16. If more then 16 hits, will
-///   take only the first 16.
+///   parameter map is also going to break; 
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -71,8 +70,8 @@ static const char *ERROR_STRINGS[] = {"Hit lost in group 0 from read-out FIFO ov
 
  */
 //______________________________________________________________________________
-HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(TString name, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs)
-   : fDepth(depth), fRefChannel(refCh), fnCh(nChannels), fChsToNs(chsToNs), fTotalUnpackedData(0),
+HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(TString name, Int_t refCh, Int_t nChannels, Double_t chsToNs)
+   : fRefChannel(refCh), fnCh(nChannels), fChsToNs(chsToNs), fTotalUnpackedData(0),
      fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
 {
    fRandomGen = new TRandom3(0);

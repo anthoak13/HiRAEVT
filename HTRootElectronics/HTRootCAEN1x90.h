@@ -7,10 +7,10 @@
 class HTRootCAEN1x90 : public HTRootModule {
 private:
    Int_t fMaxCh;
-   std::vector<std::vector<Double_t>> fData;   
+   std::vector<Double_t> *fData;   //[fMaxCh]
    
 public:
-   HTRootCAEN1x90(): HTRootModule("Undefined"){} //Default constructor for file reading
+   HTRootCAEN1x90(): HTRootModule("Undefined"){ fData = new std::vector<Double_t>[1];} //Default constructor for file reading
    HTRootCAEN1x90(TString name, Int_t maxCh);
    ~HTRootCAEN1x90();
 

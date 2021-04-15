@@ -6,8 +6,10 @@
 HTRootCAEN1x90::HTRootCAEN1x90(TString name, Int_t maxCh)
    : HTRootModule(name), fMaxCh(maxCh)
 {
-   for(int i = 0; i < fMaxCh; ++i)
-      fData.push_back(std::vector<Double_t>());
+
+   fData = new std::vector<Double_t>[fMaxCh];
+//   for(int i = 0; i < fMaxCh; ++i)
+//      fData.push_back(std::vector<Double_t>());
 }
 
 //________________________________________________
@@ -24,7 +26,7 @@ void HTRootCAEN1x90::Clear()
 
 Double_t HTRootCAEN1x90::GetData(Int_t ch, Int_t depth)
 {
-   if(fData.at(ch).size() > depth)
+   if(ch < fMaxCh && fData[ch].size() > depth)
       return fData[ch].at(depth);
    else
       return -9999;
@@ -32,7 +34,10 @@ Double_t HTRootCAEN1x90::GetData(Int_t ch, Int_t depth)
 
 std::vector<Double_t> *HTRootCAEN1x90::GetData(Int_t ch)
 {
-   return &fData[ch];
+   if (ch < fMaxCh)
+      return &fData[ch];
+   else
+      return nullptr;
 }
 
 void HTRootCAEN1x90::SetData(Int_t ch, Int_t depth, Double_t data)

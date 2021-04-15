@@ -16,7 +16,6 @@
 class HTCAEN1x90Unpacker : public HTModuleUnpacker {
 private:
    static const int MAX_CHANNELS = 128;
-   static const int MAX_DEPTH = 16;
 
    Int_t fDepth;                              //!
    Int_t fRefChannel;                         //!
@@ -27,7 +26,6 @@ private:
    Double_t fChsToNs;                         //!
    TString fChName;                           //!
    Int_t fnCh;                                //!
-   Double_t fTimes[MAX_CHANNELS * MAX_DEPTH]; //!
    TRandom3 *fRandomGen;                      //!
    ULong64_t fTotalUnpackedData;              //!
    ULong64_t fErrorCount;                     //!
@@ -36,7 +34,7 @@ private:
 
    
 public:
-   HTCAEN1x90Unpacker(TString name, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs);
+   HTCAEN1x90Unpacker(TString name, Int_t refCh, Int_t nChannels, Double_t chsToNs);
    ~HTCAEN1x90Unpacker();
 
    void reportError(UInt_t errorWord, int slot);
