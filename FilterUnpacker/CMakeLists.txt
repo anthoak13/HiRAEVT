@@ -1,7 +1,7 @@
 # Create an executable to unpack the data called HiRAEVTUnpacker
 
 
-add_executable(HiRAEVTUnpacker.exe FragmentIndex.cpp HTFilter.cxx SkeletonMain.cpp)
+add_executable(HiRAEVTUnpacker.exe FragmentIndex.cpp HTFilter.cxx SkeletonMain.cpp HTUnpacker.cxx)
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}

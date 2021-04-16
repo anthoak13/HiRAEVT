@@ -2,12 +2,14 @@
 #include "TFile.h"
 
 #include "HTModuleUnpacker.h"
+#include "HTUnpacker.h"
+#include "HTExperimentInfo.h"
+#include "HTFilter.h"
+#include "HiRAEVTLogo.h"
 
 #include <CFatalException.h>
 #include <CFilterMain.h>
-#include <HTFilter.h>
-#include <HiRAEVTLogo.h>
-#include <Unpacker.h>
+
 #include <fstream>
 #include <iostream>
 
@@ -40,13 +42,14 @@ int main(int argc, char *argv[])
    if (argc != 3) {
       std::cerr << "HiRAEVTUnpacker requires three arguments, only " << argc << " passed!" << std::endl;
       PrintUsage();
+      return -1;
    }
 
    TString configFileName(argv[1]);           // Get config file name
    Int_t runNumber = TString(argv[2]).Atoi(); // Get run number
 
    // Open the configFile and load in the json data
-   ifstream confFile(configFileName);
+   std::ifstream confFile(configFileName);
    if (!confFile) {
       std::cerr << "ERROR: Could not open config file: " << configFileName << std::endl;
       return -1;
@@ -60,24 +63,25 @@ int main(int argc, char *argv[])
    std::cout << "**Main app created**" << std::endl;
 
    // Create and register our filter (what actually unpacks the data)
-   HTFilter filter(configData);
+   HTUnpacker *unpacker = new HTUnpacker(configData, runNumber);
+   HTFilter filter(unpacker);
    std::cout << "** Unpacker filter intialized**" << std::endl;
    theApp.registerFilter(&filter);
    std::cout << "** Unpacker filter registered**" << std::endl;
 
    // Run the main loop (unpack the data with repeated calls to HTFilter::operator()
    theApp();
-   filter.PrintSummary();
+   unpacker->PrintSummary();
 
-   std::cout << "Finished unpacking, saving tree" << std::endl;
+   /* std::cout << "Finished unpacking, saving tree" << std::endl;
    TFile *outFile = GetOutFile(configData, runNumber);
    if (outFile != nullptr && outFile->IsOpen())
-      filter.GetExperimentInfo()->Write();
+      unpacker->GetExperimentInfo()->Write();
    else
-      cout << "Didn't wreite";
+      std::cout << "Didn't wreite";
    outFile->Close();
    std::cout << "Finished saving tree" << std::endl;
-
+   */
    return status;
 }
 

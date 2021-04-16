@@ -40,7 +40,8 @@ public:
    Int_t GetVSN() { return fGeo; }
    UShort_t GetUnpackError() { return fUnpackError; }
    Int_t GetUnpackErrorCount() { return fUnpackErrorCount; }
-
+   std::shared_ptr<HTRootModule> GetRootModule() { return fModule; }
+   
    // Setters
    void SetVSN(Int_t vsn) { fGeo = vsn; }
    void SetUnpackError(UShort_t code) { fUnpackError = code; } //
