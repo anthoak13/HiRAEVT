@@ -18,8 +18,6 @@ public:
    virtual void Clear() = 0;
 
    virtual const char *GetName() const override { return fName.Data(); }
-   TString GetName() { return fName; }
-
    ClassDefOverride(HTRootModule, 1)
 };
 

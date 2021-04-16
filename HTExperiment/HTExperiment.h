@@ -14,18 +14,22 @@
 #include "HTUSBStack.h"
 
 #include <vector>
-
-class HTModuleUnpacker;
+class HTRootModule;
 
 class HTExperiment : public TObject {
 private:
-   std::vector<HTModuleUnpacker *> vmeModules;
+   TString fName;
+   std::vector<std::shared_ptr<HTRootModule>> fRootModules;
 
 public:
-   std::vector<HTModuleUnpacker *> *GetVmeModules() { return &vmeModules; }
-   void RegisterModule(HTModuleUnpacker *module) { vmeModules.emplace_back(module); }
+   HTExperiment(); // Default constuctor for IO
+   HTExperiment(Int_t experimentNumber);
 
-   ClassDef(HTExperiment, 1) // NSCL event-data unpacker.
+   std::vector<std::shared_ptr<HTRootModule>> *GetModules() { return &fRootModules; }
+   void RegisterModule(std::shared_ptr<HTRootModule> module) { fRootModules.emplace_back(module); }
+
+   virtual const char *GetName() const override { return fName.Data(); }
+   ClassDefOverride(HTExperiment, 1) // NSCL event-data unpacker.
 };
 
 #endif /* defined(____HTExperiment__) */

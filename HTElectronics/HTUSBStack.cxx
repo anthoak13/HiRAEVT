@@ -103,7 +103,7 @@ Int_t HTUSBStack::AddToStack(Int_t stackIdx, Int_t geo, HTModuleUnpacker *module
       cerr << "-->HTUSBStack::AddToStack  Invalid stack index." << endl;
       return 0;
    }
-   module->SetGeo(geo);
+   module->SetVSN(geo);
 
    return 1;
 }

@@ -1,22 +1,13 @@
+#include "HTCAEN7xxUnpacker.h"
 //
 //  HTCAEN7xxUnpacker.cpp
 //
 
-#include "HTCAEN7xxUnpacker.h"
+// Constants:
 
-#include "HTRootAdc.h"
+// All data words have these bits:
 
-#include <iostream>
-
-using namespace std;
-
-ClassImp(HTCAEN7xxUnpacker)
-
-   // Constants:
-
-   // All data words have these bits:
-
-   static const UInt_t ALLH_TYPEMASK(0x7000000);
+static const UInt_t ALLH_TYPEMASK(0x7000000);
 static const UInt_t ALLH_TYPESHIFT(24);
 static const UInt_t ALLH_GEOMASK(0xf8000000);
 static const UInt_t ALLH_GEOSHIFT(27);
@@ -53,22 +44,21 @@ static const UInt_t DATA(0);
 static const UInt_t TRAILER(4);
 static const UInt_t INVALID(6);
 
-/////////////////////////////////////////////////////////////////////
-// Canonicals..
+#include "HTRootAdc.h"
 
-/*!
- Construction is a no-op.
+#include <iostream>
 
- */
-// HTCAEN7xxUnpacker::HTCAEN7xxUnpacker() {}
+#include "nlohmann/json.hpp"
 
-/*!
- Destruction is a no-op.
- */
-//______________________________________________________________________________
-HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(TString name)
+using namespace std;
+HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(json moduleDescription)
+   : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
+   // Get info from json
+   TString name = moduleDescription["moduleName"].get<std::string>();
+   Int_t vsn = moduleDescription["vsn"].get<int>();
 
+   SetVSN(vsn);
    fModule = std::make_shared<HTRootAdc>(name);
 }
 
@@ -102,11 +92,10 @@ HTCAEN7xxUnpacker::~HTCAEN7xxUnpacker() {}
 Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
 
-   // Clear the module
-   fModule->Clear();
    // the correct pointer to the module
    auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
-
+   modPtr->Clear();
+   auto origOffset = offset;
    // DEBUG
    //   printf("called HTCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)\n");
 
@@ -122,6 +111,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 
    // If we do not have a VSN and all we have are 0xffff's then return.
    if (GetVSN() == -1 && event[offset] == 0xffff && event[offset + 1] == 0xffff)
+
       return offset + 2;
 
    // Ok this is our data:
@@ -156,10 +146,6 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = 4096;
                modPtr->SetData(channel, value);
-
-               //           printf("setting %d channel to %d value\n",channel, value);
-
-               //	  cout << value << " ";
             }
          }
 
@@ -174,6 +160,9 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
       }
       offset -= 2; // Don't count the non trailer longword.
    }
+
+   // std::cout << "HTCAEN7xxUnpacker: " << std::endl;
+   // PrintHex(event, origOffset, offset-origOffset);
 
    // An extra 32 bits of 0xffffffff was read if not in a chain or if at
    // end of chain:
@@ -195,10 +184,11 @@ Int_t HTCAEN7xxUnpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTCAEN7xxUnpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fModule->GetName().Data());
+   printf("-- module %s --\n", fModule->GetName());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
 }
 
+ClassImp(HTCAEN7xxUnpacker)

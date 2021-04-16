@@ -267,6 +267,7 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
    // Reset the last timestamp.
    m_lastTimestamp = eventTimestamp;
 
+   /********** Start unpacking here ******************/
    // Verify that the data does not look corrupted
    UShort_t bodySize = *pBody;
    if (2 * (bodySize + 1) != totalSize) {

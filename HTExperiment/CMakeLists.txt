@@ -1,10 +1,10 @@
 # Create a library called libHTElectronics
 
-set(LINKDEF HTExperimentLinkDef.h)
+set(LINKDEF GenLinkDef.h)
 set(LIBRARY_NAME HTExperiment)
 
 set(DEPENDENCIES
-
+  HTRootElectronics
   )
 
 set(SRCS
@@ -21,9 +21,8 @@ set(INCLUDE_DIRECTORIES
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTExperiment
   ${CMAKE_SOURCE_DIR}/HTElectronics
-  ${CMAKE_SOURCE_DIR}/HTRunInfo
   ${CMAKE_SOURCE_DIR}/FilterUnpacker
-
+  ${CMAKE_SOURCE_DIR}/HTRootElectronics
   )
 
 set(LINK_DIRECTORIES

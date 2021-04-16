@@ -1,6 +1,8 @@
 
 #include "TFile.h"
 
+#include "HTModuleUnpacker.h"
+
 #include <CFatalException.h>
 #include <CFilterMain.h>
 #include <HTFilter.h>
@@ -12,6 +14,8 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
+char **SetMainArgs(json config, Int_t runNumber, int &argc, char *agrv[]);
+TFile *GetOutFile(json config, Int_t runNumber);
 void PrintUsage();
 
 /// The main function
@@ -50,17 +54,62 @@ int main(int argc, char *argv[])
    json configData;
    confFile >> configData;
 
-   // Set the source parameter from the config file
-   TString source;
-   if (configData["evtDirectory"].is_string())
-      source = TString::Format("--source=file://%s/run%d/run-%04d-00.evt",
-                               configData["evtDirectory"].get<std::string>().c_str(), runNumber, runNumber);
-   else {
-      std::cerr << "ERROR: input badly formated, the key-value pair \"evtDirectory\":" << configData["evtDirectory"]
-                << " is not a string!" << std::endl;
-      return -1;
-   }
+   // Create the main app
+   char **mainArgs = SetMainArgs(configData, runNumber, argc, argv);
+   CFilterMain theApp(argc, mainArgs);
+   std::cout << "**Main app created**" << std::endl;
 
+   // Create and register our filter (what actually unpacks the data)
+   HTFilter filter(configData);
+   std::cout << "** Unpacker filter intialized**" << std::endl;
+   theApp.registerFilter(&filter);
+   std::cout << "** Unpacker filter registered**" << std::endl;
+
+   // Run the main loop (unpack the data with repeated calls to HTFilter::operator()
+   theApp();
+   filter.PrintSummary();
+
+   std::cout << "Finished unpacking, saving tree" << std::endl;
+   TFile *outFile = GetOutFile(configData, runNumber);
+   if (outFile != nullptr && outFile->IsOpen())
+      filter.GetExperimentInfo()->Write();
+   else
+      cout << "Didn't wreite";
+   outFile->Close();
+   std::cout << "Finished saving tree" << std::endl;
+
+   return status;
+}
+
+void PrintUsage()
+{
+   std::cout << "Usage: " << std::endl << "HiRAEVTUnpacker [configFile] [runNumber]" << std::endl;
+}
+
+char **SetMainArgs(json configData, Int_t runNumber, int &argc, char *argv[])
+{
+
+   // Set the source
+   TString *source = new TString();
+   if (configData["evtDirectory"].is_string())
+      source->Form("--source=file://%s/run%d/run-%04d-00.evt", configData["evtDirectory"].get<std::string>().c_str(),
+                   runNumber, runNumber);
+   else
+      throw std::runtime_error("The value with key \"evtDirectory\" is not a string");
+
+   // Set the sink
+   TString *sink = new TString("--sink=file:///dev/null");
+
+   argc = 3;
+   char **newArgs = new char *[argc];
+   newArgs[0] = argv[0];
+   newArgs[1] = const_cast<char *>(source->Data());
+   newArgs[2] = const_cast<char *>(sink->Data());
+   return newArgs;
+}
+
+TFile *GetOutFile(json configData, Int_t runNumber)
+{
    // Set the output file from the config file
    TString outFileName;
    if (configData["outputDirectory"].is_string())
@@ -69,48 +118,9 @@ int main(int argc, char *argv[])
    else {
       std::cerr << "ERROR: input badly formated, the key-value pair \"outputDirectory\":"
                 << configData["outputDirectory"] << " is not a string!" << std::endl;
-      return -1;
+      return nullptr;
    }
-   TString sink("--sink=file:///dev/null");
 
    // Open the output file
-   TFile *outFile = new TFile(outFileName, "RECREATE");
-   if (!outFile->IsOpen()) {
-      std::cerr << "ERROR: Failed to open output file: " << outFileName << std::endl;
-      return -1;
-   }
-
-   // Create the main app
-   char *newArgs[3];
-   newArgs[0] = argv[0];
-   newArgs[1] = const_cast<char *>(source.Data());
-   newArgs[2] = const_cast<char *>(sink.Data());
-   CFilterMain theApp(3, newArgs);
-
-   std::cout << "**Main app created**" << std::endl;
-
-   HTFilter filter(configData);
-
-   std::cout << "** Unpacker filter intialized**" << std::endl;
-
-   theApp.registerFilter(&filter);
-   std::cout << "** Unpacker filter registered**" << std::endl;
-
-   // Run the main loop
-   theApp();
-
-   std::cout << "Finished unpacking, saving tree" << std::endl;
-
-   if (outFile->IsOpen())
-      filter.GetExperimentInfo()->Write();
-   else
-      cout << "Didn't wreite";
-   outFile->Close();
-   std::cout << "Finished saving tree" << std::endl;
-   return status;
-}
-
-void PrintUsage()
-{
-   std::cout << "Usage: " << std::endl << "HiRAEVTUnpacker [configFile] [runNumber]" << std::endl;
+   return new TFile(outFileName, "RECREATE");
 }

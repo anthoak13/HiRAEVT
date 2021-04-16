@@ -1,6 +1,9 @@
 {
     "evtDirectory":"/mnt/rawdata/e12014/experiment",
-    "outputDirectory":"/mnt/analysis/e12014/HiRAEVT/unpacked",
+    "outputDirectoryOld":"/mnt/analysis/e12014/HiRAEVT/unpacked",
+    "outputDirectory":"~/HiRAEVT/",
+    "experimentNumber":12014,
+    "mergedData":false,
     "VMEstacks": [ {
 	"stackID": 0,
 	"stackName": "DAQ Stack",
@@ -12,7 +15,6 @@
 		"moduleType":"HTCAEN1x90Unpacker",
 		"moduleName":"tdc1",
 		"vsn": 3,
-		"depth":3,
 		"refCh":0,
 		"numberCh":128,
 		"nsPerCh":0.1},

@@ -4,11 +4,6 @@
 
 #include "HTMADC32Unpacker.h"
 
-#include "HTRootAdc.h"
-
-#include <iostream>
-
-using namespace std;
 
 // Constants
 
@@ -46,9 +41,22 @@ static const uint32_t DATA_ISPAD(0x04000000);
 
 static const uint32_t TRAILER_COUNTMASK(0x3fffffff); // trigger count or timestamp counter.
 
+#include "HTRootAdc.h"
+
+#include <iostream>
+
+#include "nlohmann/json.hpp"
+
+using namespace std;
+
 //______________________________________________________________________________
-HTMADC32Unpacker::HTMADC32Unpacker(TString name) : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
+HTMADC32Unpacker::HTMADC32Unpacker(json moduleDescription)
+   : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
+   TString name = moduleDescription["moduleName"].get<std::string>();
+   Int_t vsn = moduleDescription["vsn"].get<int>();
+
+   SetVSN(vsn);
    fModule = std::make_shared<HTRootAdc>(name);
 }
 
@@ -79,14 +87,14 @@ HTMADC32Unpacker::~HTMADC32Unpacker() {}
 //______________________________________________________________________________
 Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   // Clear the module
-   fModule->Clear();
    // the correct pointer to the module
    auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
+   modPtr->Clear();
+
+   auto origOffset = offset;
 
    // Get the 'header' .. ensure that it is one and that it matches our VSN.
    unsigned long header = getLong(event, offset);
-
    if (header == 0xffffffff) { // ADC had no data there will be just the two words of 0xffffffff
       return offset + 2;
    }
@@ -100,6 +108,7 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    int id = DecodeVSN(header);
 
    if (id != GetVSN()) {
+      std::cout << "VSN mismatch: " << id << " " << GetVSN() << std::endl;
       fVSNMismatchCount++;
       return offset;
    }
@@ -146,6 +155,9 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // There will be a 0xffffffff longword for the BERR at the end of the
    // readout.
 
+   // std::cout << "HTMADC32Unpacker: " <<std::endl;
+   // PrintHex(event, origOffset, offset-origOffset);
+
    return offset + 2;
 }
 
@@ -160,7 +172,7 @@ Int_t HTMADC32Unpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTMADC32Unpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fModule->GetName().Data());
+   printf("-- module %s --\n", fModule->GetName());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));

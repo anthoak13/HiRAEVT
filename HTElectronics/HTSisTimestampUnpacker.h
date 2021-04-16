@@ -10,27 +10,24 @@
 #ifndef __HTSisTimestampUNPACKER_H
 #define __HTSisTimestampUNPACKER_H
 
-
-#include "TTree.h"
-
 #include "HTModuleUnpacker.h"
 
-//#include <stdint.h>
+#include "nlohmann/json_fwd.hpp"
+using json = nlohmann::json;
 
 // Based on SpecTcl code written by Kyle Brown, adapted for RIBbit by Juan Manfredi
 // Made more general by Adam Anthony Feb 2020
-// Jan 2018
 
 class HTSisTimestampUnpacker : public HTModuleUnpacker {
 public:
-   HTSisTimestampUnpacker(TString moduleName);
+   HTSisTimestampUnpacker(json moduleDescription);
    ~HTSisTimestampUnpacker();
 
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
    Int_t DecodeVSN(Int_t header) override { return -1; }
 
    void Print() override { std::cout << "SisTimestamp" << std::endl; }
-   void PrintSummary() override { std::cout << "SisTimestamp" << std::endl; }
+   void PrintSummary() override;
 
    ClassDefOverride(HTSisTimestampUnpacker, 1);
 };

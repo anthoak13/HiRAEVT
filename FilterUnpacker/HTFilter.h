@@ -8,6 +8,8 @@
 // writes to the file the TTree is in, describing the electronics information. HTExperimentInfo contains the complete
 // information needed for the Mapper to properly read the TTree.
 
+#include "TString.h"
+
 #include <CFilter.h>
 #include <stdint.h>
 
@@ -23,16 +25,25 @@ class HTModuleUnpacker;
 class HTFilter : public CFilter {
 
 private:
+   Bool_t kMergedData;
+
    HTExperiment *fExperiment;
    HTExperimentInfo *fExperimentInfo;
 
-   std::vector<HTModuleUnpacker *> unpackers;
+   // Key is stack ID, the vector is a list of the modules
+   std::map<Int_t, std::vector<HTModuleUnpacker *>> stackMap;
+
+   ULong_t *fEventUnpacked; // This is a pointer because of the stupid NSCLDAQ cloning
+   std::map<Int_t, ULong_t> fBufferMismatchCount;
 
    void CreateUnpackers(json moduleList);
+   void UnpackStack(UShort_t *pEvent, UInt_t offset);
+   static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
+
+   // TString GetStringFromJSON(json data);
 
 public:
    HTFilter(json configJson);
-   // HTFilter(HTFilter const &other);
    ~HTFilter();
 
    virtual HTFilter *clone() const override { return new HTFilter(*this); }
@@ -40,8 +51,11 @@ public:
    virtual CRingItem *handleStateChangeItem(CRingStateChangeItem *pItem) override;
    virtual CRingItem *handlePhysicsEventItem(CPhysicsEventItem *pItem) override;
 
+   void PrintSummary();
+
    HTExperiment *GetExperiment() { return fExperiment; }
    HTExperimentInfo *GetExperimentInfo() { return fExperimentInfo; }
+   std::vector<HTModuleUnpacker *> &GetStackModuleList(Int_t stackID) { return stackMap.at(stackID); }
 };
 
 #endif

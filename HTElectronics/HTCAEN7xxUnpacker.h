@@ -1,3 +1,4 @@
+
 //
 //  HTCAEN7xxUnpacker.h
 //
@@ -6,6 +7,9 @@
 #define __HTCAEN7xxUNPACKER_H
 
 #include "HTModuleUnpacker.h"
+
+#include "nlohmann/json_fwd.hpp"
+using json = nlohmann::json;
 
 /*!
  This unpacker is responsible for unpacking CAEN 32 channel digitizers.  These modules
@@ -21,7 +25,7 @@ private:
    ULong64_t fVSNMismatchCount;   //!
 
 public:
-   HTCAEN7xxUnpacker(TString name);
+   HTCAEN7xxUnpacker(json moduleDescription);
    ~HTCAEN7xxUnpacker();
 
    Int_t DecodeVSN(Int_t header) override;

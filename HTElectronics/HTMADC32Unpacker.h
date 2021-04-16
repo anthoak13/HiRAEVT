@@ -7,7 +7,8 @@
 
 #include "HTModuleUnpacker.h"
 
-#include <iostream>
+#include "nlohmann/json_fwd.hpp"
+using json = nlohmann::json;
 
 /*
  * This unpacker is responsible for unpacking Mesytech 32 channel digitizers.
@@ -21,7 +22,7 @@ private:
    ULong64_t fVSNMismatchCount;   //!
 
 public:
-   HTMADC32Unpacker(TString name);
+   HTMADC32Unpacker(json moduleDescription);
    ~HTMADC32Unpacker();
 
    Int_t DecodeVSN(Int_t header) override;

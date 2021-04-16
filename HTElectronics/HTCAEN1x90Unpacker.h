@@ -7,6 +7,9 @@
 
 #include "HTModuleUnpacker.h"
 
+#include "nlohmann/json_fwd.hpp"
+using json = nlohmann::json;
+
 #include <TList.h>
 #include <TNamed.h>
 #include <TRandom3.h>
@@ -24,7 +27,6 @@ private:
    Int_t fChanshift;                          //!
    Int_t fDatamask;                           //!
    Double_t fChsToNs;                         //!
-   TString fChName;                           //!
    Int_t fnCh;                                //!
    TRandom3 *fRandomGen;                      //!
    ULong64_t fTotalUnpackedData;              //!
@@ -33,7 +35,7 @@ private:
    ULong64_t fVSNMismatchCount;               //!
 
 public:
-   HTCAEN1x90Unpacker(TString name, Int_t refCh, Int_t nChannels, Double_t chsToNs);
+   HTCAEN1x90Unpacker(json moduleDescription);
    ~HTCAEN1x90Unpacker();
 
    void reportError(UInt_t errorWord, int slot);
@@ -42,7 +44,7 @@ public:
    Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) override;
 
    void PrintSummary() override;
-   void Print() override { std::cout << fChName << std::endl; }
+   void Print() override { std::cout << GetName() << std::endl; }
 
    ClassDefOverride(HTCAEN1x90Unpacker, 1);
 };

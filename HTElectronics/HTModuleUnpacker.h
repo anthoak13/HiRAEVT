@@ -19,13 +19,13 @@
 class HTModuleUnpacker : public TObject {
 protected:
    Int_t fGeo;            // Module slot number or geographical address.
-   Int_t kMergedID;       // The merged data ID.
    UShort_t fUnpackError; // Unpacking error code.
    Int_t fUnpackErrorCount;
 
    std::shared_ptr<HTRootModule> fModule; // The ROOT version of the module to store in the tree.
 
    static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
+   void PrintHex(std::vector<UShort_t> &event, ULong_t offset, ULong_t numbeWords, Int_t wordsPerLine = 8);
 
 public:
    virtual ~HTModuleUnpacker(){};
@@ -37,14 +37,12 @@ public:
    virtual void Print() { std::cout << fModule->GetName() << std::endl; }
 
    // Getters
-   Int_t GetMergedID() { return kMergedID; }
    Int_t GetVSN() { return fGeo; }
    UShort_t GetUnpackError() { return fUnpackError; }
    Int_t GetUnpackErrorCount() { return fUnpackErrorCount; }
 
    // Setters
-   void SetGeo(Int_t geo) { fGeo = geo; }
-   void SetMergedID(Int_t ID) { kMergedID = ID; }
+   void SetVSN(Int_t vsn) { fGeo = vsn; }
    void SetUnpackError(UShort_t code) { fUnpackError = code; } //
 
    ClassDef(HTModuleUnpacker, 1);

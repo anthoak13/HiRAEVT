@@ -6,19 +6,26 @@
 
 #include "HTRootSisTimestamp.h"
 
-using namespace std;
+#include <string>
+#include <vector>
 
-ClassImp(HTSisTimestampUnpacker)
+#include "nlohmann/json.hpp"
 
-   HTSisTimestampUnpacker::HTSisTimestampUnpacker(TString name)
+HTSisTimestampUnpacker::HTSisTimestampUnpacker(json moduleDescription)
 {
+   TString name = moduleDescription["moduleName"].get<std::string>();
+
    fModule = std::make_shared<HTRootSisTimestamp>(name);
 }
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
 
-Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
+Int_t HTSisTimestampUnpacker::Unpack(std::vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+   auto ptrMod = std::dynamic_pointer_cast<HTRootSisTimestamp>(fModule);
+   ptrMod->Clear();
+   // Print out what's being unpacked
+   // std::cout << "HTSistimestampunpacker: " << std::endl;
+   // PrintHex(event, offset, 6);
 
    uint64_t low0 = event[offset];
    uint64_t mid0 = event[offset + 1];
@@ -28,9 +35,15 @@ Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    uint64_t high1 = event[offset + 5];
    offset += 6;
 
-   auto ptrMod = dynamic_pointer_cast<HTRootSisTimestamp>(fModule);
    ptrMod.get()->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
    ptrMod.get()->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
 
    return offset;
 }
+
+void HTSisTimestampUnpacker::PrintSummary()
+{
+   std::cout << "-- module " << GetName() << " --" << std::endl << std::endl;
+}
+
+ClassImp(HTSisTimestampUnpacker)

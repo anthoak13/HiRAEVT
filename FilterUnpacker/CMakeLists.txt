@@ -14,7 +14,6 @@ set(DEPENDENCIES
   /usr/opt/nscldaq/current/lib/liburl.so	
   /usr/opt/nscldaq/current/lib/libfilter.so	
 
-  
   HTElectronics
   HTExperiment
   HTLogo
@@ -38,6 +37,7 @@ set(INCLUDE_DIRECTORIES
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTExperiment
   ${CMAKE_SOURCE_DIR}/HTElectronics
+  ${CMAKE_SOURCE_DIR}/HTRootElectronics
   ${CMAKE_SOURCE_DIR}/HTRunInfo
   ${CMAKE_SOURCE_DIR}/FilterUnpacker
   ${CMAKE_SOURCE_DIR}/HTLogo
