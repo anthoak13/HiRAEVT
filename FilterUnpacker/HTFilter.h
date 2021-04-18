@@ -20,16 +20,14 @@ class HTFilter : public CFilter {
 private:
    HTUnpacker *fUnpacker;
 
-
 public:
    HTFilter(HTUnpacker *unpacker);
    ~HTFilter();
-   
+
    virtual HTFilter *clone() const override { return new HTFilter(*this); }
 
    virtual CRingItem *handleStateChangeItem(CRingStateChangeItem *pItem) override;
    virtual CRingItem *handlePhysicsEventItem(CPhysicsEventItem *pItem) override;
-
 };
 
 #endif

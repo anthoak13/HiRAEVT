@@ -59,7 +59,7 @@ HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(json moduleDescription)
    Int_t vsn = moduleDescription["vsn"].get<int>();
 
    SetVSN(vsn);
-   fModule = std::make_shared<HTRootAdc>(name);
+   fModule = new HTRootAdc(name);
 }
 
 //______________________________________________________________________________
@@ -93,7 +93,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
 
    // the correct pointer to the module
-   auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
+   auto modPtr = dynamic_cast<HTRootAdc *>(fModule);
    modPtr->Clear();
    auto origOffset = offset;
    // DEBUG

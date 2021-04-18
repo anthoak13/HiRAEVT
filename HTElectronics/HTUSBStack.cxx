@@ -117,7 +117,6 @@ Int_t HTUSBStack::RemoveFromStack()
    return 1;
 }
 
-
 //______________________________________________________________________________
 Int_t HTUSBStack::Unpack(UShort_t *pEvent, UInt_t offset)
 {

@@ -1,12 +1,13 @@
 #include <HTRootSisTimestamp.h>
 
 //________________________________________________
-HTRootSisTimestamp::HTRootSisTimestamp(TString name) : HTRootModule(name) {}
+HTRootSisTimestamp::HTRootSisTimestamp(TString name) : HTRootModule(name)
+{
+   Clear();
+}
 
 //________________________________________________
-HTRootSisTimestamp::~HTRootSisTimestamp()
-{
-}
+HTRootSisTimestamp::~HTRootSisTimestamp() {}
 
 void HTRootSisTimestamp::Clear()
 {

@@ -13,12 +13,14 @@
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
+class TTree;
 
 class HTUnpackerFactory {
 public:
    static HTUnpackerFactory *Instance();
 
-   HTModuleUnpacker *CreateUnpacker(json moduleDescription);
+   // Creates a new unpacker and registers the output in the tree if passed
+   HTModuleUnpacker *CreateUnpacker(json moduleDescription, TTree *tr = nullptr);
 
 protected:
    HTUnpackerFactory();

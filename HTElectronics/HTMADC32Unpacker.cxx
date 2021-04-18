@@ -4,7 +4,6 @@
 
 #include "HTMADC32Unpacker.h"
 
-
 // Constants
 
 // All longwords have a type in the top two bits:
@@ -57,12 +56,11 @@ HTMADC32Unpacker::HTMADC32Unpacker(json moduleDescription)
    Int_t vsn = moduleDescription["vsn"].get<int>();
 
    SetVSN(vsn);
-   fModule = std::make_shared<HTRootAdc>(name);
+   fModule = new HTRootAdc(name);
 }
 
 //______________________________________________________________________________
 HTMADC32Unpacker::~HTMADC32Unpacker() {}
-
 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
@@ -88,7 +86,7 @@ HTMADC32Unpacker::~HTMADC32Unpacker() {}
 Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
    // the correct pointer to the module
-   auto modPtr = dynamic_pointer_cast<HTRootAdc>(fModule);
+   auto modPtr = dynamic_cast<HTRootAdc *>(fModule);
    modPtr->Clear();
 
    auto origOffset = offset;
@@ -128,7 +126,10 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    unsigned long datum = getLong(event, offset);
    longsRead++;
    offset += 2;
+
+   // Loop through data until we hit something that is not dataOA
    while (((datum & ALL_TYPEMASK) >> ALL_TYPESHFT) == TYPE_DATA) {
+
       bool overflow = (datum & DATA_ISOVERFLOW) != 0;
       if (!overflow) {
          int channel = (datum & DATA_CHANNELMASK) >> DATA_CHANNELSHFT;

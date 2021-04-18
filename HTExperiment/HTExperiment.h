@@ -19,14 +19,14 @@ class HTRootModule;
 class HTExperiment : public TObject {
 private:
    TString fName;
-   std::vector<std::shared_ptr<HTRootModule>> fRootModules;
+   std::vector<HTRootModule *> fRootModules;
 
 public:
    HTExperiment(); // Default constuctor for IO
    HTExperiment(Int_t experimentNumber);
 
-   std::vector<std::shared_ptr<HTRootModule>> *GetModules() { return &fRootModules; }
-   void RegisterModule(std::shared_ptr<HTRootModule> module) { fRootModules.emplace_back(module); }
+   std::vector<HTRootModule *> *GetModules() { return &fRootModules; }
+   void RegisterModule(HTRootModule *module) { fRootModules.emplace_back(module); }
 
    virtual const char *GetName() const override { return fName.Data(); }
    ClassDefOverride(HTExperiment, 1) // NSCL event-data unpacker.

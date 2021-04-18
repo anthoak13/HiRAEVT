@@ -7,6 +7,4 @@ HTDetectorMap::HTDetectorMap(json mappingJSON)
 }
 
 //________________________________________________
-HTDetectorMap::~HTDetectorMap()
-{
-}
+HTDetectorMap::~HTDetectorMap() {}

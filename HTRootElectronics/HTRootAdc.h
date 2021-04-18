@@ -4,16 +4,15 @@
 #include "HTRootModule.h"
 
 class HTRootAdc : public HTRootModule {
-private:
-   Int_t fMaxCh;
-   Short_t *fData; //[fMaxCh]
-
 public:
-   HTRootAdc() : HTRootModule("Undefined") { fData = nullptr; }
-   HTRootAdc(TString name, Int_t maxCh = 32);
+   Short_t fData[32];
+
+   HTRootAdc() : HTRootModule("Undefined") {}
+   HTRootAdc(TString name);
    ~HTRootAdc();
 
    virtual void Clear() override;
+   void PrintData() override;
    Short_t GetData(Int_t ch) const;
    void SetData(Int_t ch, Short_t data);
 

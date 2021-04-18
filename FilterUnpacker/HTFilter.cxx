@@ -1,13 +1,12 @@
 #include "HTFilter.h"
+
 #include "HTUnpacker.h"
 
 #include <CFilter.h>
 #include <CPhysicsEventItem.h>
 #include <CRingStateChangeItem.h>
 
-HTFilter::HTFilter(HTUnpacker *unpacker) : fUnpacker(unpacker)
-{
-}
+HTFilter::HTFilter(HTUnpacker *unpacker) : fUnpacker(unpacker) {}
 
 HTFilter::~HTFilter() {}
 // handle the state change events

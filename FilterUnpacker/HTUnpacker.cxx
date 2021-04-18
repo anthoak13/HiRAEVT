@@ -1,4 +1,8 @@
 #include "HTUnpacker.h"
+
+#include "TFile.h"
+#include "TTree.h"
+
 #include "HTExperiment.h"
 #include "HTExperimentInfo.h"
 #include "HTUnpackerFactory.h"
@@ -7,14 +11,10 @@
 #include <CPhysicsEventItem.h>
 #include <CRingStateChangeItem.h>
 #include <FragmentIndex.h>
-
 #include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
-
-#include "TFile.h"
-#include "TTree.h"
 
 HTUnpacker::HTUnpacker(json configJson, Int_t runNum)
 {
@@ -31,16 +31,13 @@ HTUnpacker::HTUnpacker(json configJson, Int_t runNum)
       kMergedData = false;
    }
 
-   CreateUnpackers(configJson["VMEstacks"]);
+   // Create the output file and tree
+   fOutFile = new TFile(
+      TString::Format("%s/run-%d.root", configJson["outputDirectory"].get<std::string>().c_str(), runNum), "RECREATE");
+   fOutTree = new TTree(fExperiment->GetName(), fExperimentInfo->GetRunTitle());
 
-   //Create the output file and tree
-   fOutFile = new TFile(TString::Format("%s/run-%d.root",
-					configJson["outputDirectory"].get<std::string>().c_str(),
-					runNum), "RECREATE");
-   fOutTree = new TTree(TString::Format("E%d", fExperimentInfo->GetRunNumber()),
-      fExperimentInfo->GetRunTitle());
-   fOutTree->Branch("data", fExperiment);
-   
+   // Create the unpackers and register the output on the tree
+   CreateUnpackers(configJson["VMEstacks"]);
 }
 
 HTUnpacker::~HTUnpacker() {}
@@ -49,16 +46,18 @@ void HTUnpacker::CreateUnpackers(json stackList)
 {
    std::cout << "Creating all unpackers" << std::endl;
    for (auto &stack : stackList) {
+
       // Get the stack ID and create the stack
       Int_t stackID = stack["stackID"].get<int>();
       std::cout << "Creating stack with ID: " << stackID << std::endl;
       std::vector<HTModuleUnpacker *> moduleList;
 
       for (auto &module : stack["modules"]) {
+
          std::cout << "Creating module: " << module << std::endl;
-	 //Register RootModule 
-         moduleList.push_back(HTUnpackerFactory::Instance()->CreateUnpacker(module));
-	 fExperiment->RegisterModule(moduleList.back()->GetRootModule());
+         // Register RootModule
+         moduleList.push_back(HTUnpackerFactory::Instance()->CreateUnpacker(module, fOutTree));
+         // fExperiment->RegisterModule(moduleList.back()->GetRootModule());
       }
       stackMap[stackID] = moduleList;
 
@@ -106,7 +105,7 @@ CRingItem *HTUnpacker::handlePhysicsEventItem(CPhysicsEventItem *pItem)
    uint16_t *pBody = reinterpret_cast<uint16_t *>(pItem->getBodyPointer());
    (fEventUnpacked)++;
 
-   if(fEventUnpacked > 2) return pItem;
+   // if(fEventUnpacked > 2) return pItem;
 
    if (fEventUnpacked % 1000 == 0)
       std::cout << fEventUnpacked << std::endl;
@@ -137,8 +136,8 @@ CRingItem *HTUnpacker::handlePhysicsEventItem(CPhysicsEventItem *pItem)
       UnpackStack(pBody, pItem->getBodySize());
       //(*unpacker)(pBody, pItem->getBodySize());
    }
-
    fOutTree->Fill();
+
    // return the original item
    return pItem;
 }
@@ -188,9 +187,13 @@ void HTUnpacker::UnpackStack(UShort_t *pEvent, UInt_t eventSize)
 
       if (vsn == module->GetVSN() || vsn == -1)
          offset = module->Unpack(event, offset);
-      // else
-      // std::cout << "Skipping unpacking of " << std::dec << vsn << " "
-      //<< module->GetName() << std::endl;
+      /*      else
+          std::cout << "Skipping unpacking of " << std::dec << vsn << " "
+               << module->GetName() << std::endl;
+      */
+
+      // module->GetRootModule()->PrintData();
+      // std::cout << std::endl;
    }
 
    // Clear remaining ffffs

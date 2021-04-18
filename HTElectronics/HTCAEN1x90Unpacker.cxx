@@ -4,7 +4,6 @@
 
 #include "HTCAEN1x90Unpacker.h"
 
-
 ////////////////////////////////////////////////////////////////////
 //
 // Constants that define the fields we need to see in the
@@ -49,7 +48,9 @@ static const char *ERROR_STRINGS[] = {"Hit lost in group 0 from read-out FIFO ov
                                       "Internal Fatal Chip error has been detected"};
 
 #include "HTRootCAEN1x90.h"
+#include "HTRootCAEN1x90SingleHit.h"
 
+#include <exception>
 #include <iostream>
 
 #include "nlohmann/json.hpp"
@@ -64,9 +65,16 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(json moduleDescription)
    fnChannels = moduleDescription["numberCh"].get<int>();
    fRefChannel = moduleDescription["refCh"].get<int>();
    fChsToNs = moduleDescription["nsPerCh"].get<double>();
+   kSingleHit = moduleDescription.value("singleHit", false);
+
+   if (fnChannels > 128)
+      throw std::runtime_error("Cannot support more than 128 channels in CAEN 1x90 tdc!");
 
    fRandomGen = new TRandom3(0);
-   fModule = make_shared<HTRootCAEN1x90>(name, fnChannels);
+   if (kSingleHit)
+      fModule = new HTRootCAEN1x90SingleHit(name);
+   else
+      fModule = new HTRootCAEN1x90(name);
 
    switch (fnChannels) {
       // V1190: 18 bits of data then 7 bits of channel number:
@@ -99,7 +107,6 @@ HTCAEN1x90Unpacker::~HTCAEN1x90Unpacker()
    delete fRandomGen;
 }
 
-
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
 
@@ -127,8 +134,7 @@ HTCAEN1x90Unpacker::~HTCAEN1x90Unpacker()
 Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
    // Create a nice pointer to the module
-   auto modPtr = dynamic_pointer_cast<HTRootCAEN1x90>(fModule);
-   modPtr->Clear();
+   fModule->Clear();
 
    vector<Int_t> rawTimes[128]; //  Raw times are stored here pending ref time subtraction.
 
@@ -243,8 +249,11 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
          // triggerRelative += fRandomGen->Rndm()-0.5;
 
          Double_t calTime = fChsToNs * (rawTime - refTime);
-         modPtr->SetNextData(i, calTime);
-
+         if (kSingleHit) {
+            dynamic_cast<HTRootCAEN1x90SingleHit *>(fModule)->SetData(i, calTime);
+            break;
+         } else
+            dynamic_cast<HTRootCAEN1x90 *>(fModule)->SetNextData(i, calTime);
       } // End loop over hits
 
    return offset;

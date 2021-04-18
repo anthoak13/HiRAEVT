@@ -8,6 +8,7 @@
 // Mapper to properly read the TTree.
 
 #include "Rtypes.h"
+
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -21,24 +22,20 @@ class HTModuleUnpacker;
 class TFile;
 class TTree;
 
-
 class HTUnpacker {
 
 private:
    Bool_t kMergedData;
 
-   HTExperiment *fExperiment; //Unpacked data
-   HTExperimentInfo *fExperimentInfo; //metadata for run
+   HTExperiment *fExperiment;         // Unpacked data
+   HTExperimentInfo *fExperimentInfo; // metadata for run
    TTree *fOutTree;
    TFile *fOutFile;
 
-   
-   std::map<Int_t, std::vector<HTModuleUnpacker *>> stackMap; //key:stackID value:moduleList
+   std::map<Int_t, std::vector<HTModuleUnpacker *>> stackMap; // key:stackID value:moduleList
    ULong_t fEventUnpacked;
    std::map<Int_t, ULong_t> fBufferMismatchCount;
 
-
-   
    void CreateUnpackers(json moduleList);
    void UnpackStack(UShort_t *pEvent, UInt_t offset);
 

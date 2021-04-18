@@ -12,6 +12,7 @@ set(SRCS
 
   HTRootModule.cxx
   HTRootCAEN1x90.cxx
+  HTRootCAEN1x90SingleHit.cxx
   HTRootSisTimestamp.cxx
   HTRootAdc.cxx 
   

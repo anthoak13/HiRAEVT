@@ -33,7 +33,7 @@ private:
    ULong64_t fVsnErrorCount;
    ULong64_t fBufferMismatchCount;
 
-   TList *fStacks;             // Array of stacks.
+   TList *fStacks; // Array of stacks.
 
    TTree *fChain; //!
 

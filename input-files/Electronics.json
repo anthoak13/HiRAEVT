@@ -15,6 +15,7 @@
 		"moduleType":"HTCAEN1x90Unpacker",
 		"moduleName":"tdc1",
 		"vsn": 3,
+		"singleHit":false,
 		"refCh":0,
 		"numberCh":128,
 		"nsPerCh":0.1},

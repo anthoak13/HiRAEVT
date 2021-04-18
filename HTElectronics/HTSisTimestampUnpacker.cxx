@@ -15,13 +15,13 @@ HTSisTimestampUnpacker::HTSisTimestampUnpacker(json moduleDescription)
 {
    TString name = moduleDescription["moduleName"].get<std::string>();
 
-   fModule = std::make_shared<HTRootSisTimestamp>(name);
+   fModule = new HTRootSisTimestamp(name);
 }
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
 
 Int_t HTSisTimestampUnpacker::Unpack(std::vector<UShort_t> &event, UInt_t offset)
 {
-   auto ptrMod = std::dynamic_pointer_cast<HTRootSisTimestamp>(fModule);
+   auto ptrMod = dynamic_cast<HTRootSisTimestamp *>(fModule);
    ptrMod->Clear();
    // Print out what's being unpacked
    // std::cout << "HTSistimestampunpacker: " << std::endl;
@@ -35,8 +35,8 @@ Int_t HTSisTimestampUnpacker::Unpack(std::vector<UShort_t> &event, UInt_t offset
    uint64_t high1 = event[offset + 5];
    offset += 6;
 
-   ptrMod.get()->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
-   ptrMod.get()->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
+   ptrMod->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
+   ptrMod->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
 
    return offset;
 }

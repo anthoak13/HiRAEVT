@@ -1,32 +1,37 @@
 #include "HTRootAdc.h"
 
+#include <iostream>
+
 //________________________________________________
-HTRootAdc::HTRootAdc(TString name, Int_t maxCh) : HTRootModule(name), fMaxCh(maxCh)
+HTRootAdc::HTRootAdc(TString name) : HTRootModule(name)
 {
-   fData = new Short_t[fMaxCh];
+   fType = "HTRootAdc";
+   Clear();
 }
 
 //________________________________________________
-HTRootAdc::~HTRootAdc()
-{
-   if (fData != nullptr)
-      delete[] fData;
-}
+HTRootAdc::~HTRootAdc() {}
 
 void HTRootAdc::Clear()
 {
-   for (int i = 0; i < fMaxCh; ++i)
+   for (int i = 0; i < 32; ++i)
       fData[i] = -9999;
+}
+void HTRootAdc::PrintData()
+{
+   std::cout << fName << std::endl;
+   for (int i = 0; i < 32; ++i)
+      std::cout << i << " " << fData[i] << std::endl;
 }
 
 Short_t HTRootAdc::GetData(Int_t ch) const
 {
-   return ch < fMaxCh ? fData[ch] : -9999;
+   return ch < 32 ? fData[ch] : -9999;
 }
 
 void HTRootAdc::SetData(Int_t ch, Short_t data)
 {
-   if (ch < fMaxCh)
+   if (ch < 32)
       fData[ch] = data;
 }
 ClassImp(HTRootAdc)
