@@ -10,14 +10,11 @@ public:
    HTRootMADC32(const char *);
    ~HTRootMADC32();
 
-   TTreeReaderArray<Short_t> *GetDataPointer() const; //! Get the pointer to TTreeReaderArray
-   Short_t GetData(int) const;                        //! Get the data corresponding to a given channel
-   void InitTreeInputBranch(TTreeReader &) override;  //! Set Input TTreeReader Branch
+   Short_t GetData(int) const;                       //! Get the data corresponding to a given channel
+   void InitTreeInputBranch(TTreeReader &) override; //! Set Input TTreeReader Branch
 
 private:
    int fNumCh;
-   TTreeReaderArray<Short_t> *fData;
-   Short_t fOverflow;
 };
 
 #endif

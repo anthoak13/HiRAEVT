@@ -9,25 +9,18 @@
 #ifndef ____HTUSBStack__
 #define ____HTUSBStack__
 
-#include <iostream>
-#include <stdio.h>
-
-#ifndef __HTMODULEUNPACKER_H
-#include "HTModuleUnpacker.h"
-#endif
-
 #include "TList.h"
 #include "TTree.h"
 
-#include "HTElectronics.h"
-#include "HTTimestamp.h"
-#include "HTUSBStackMarker.h"
-
 #include <TNamed.h>
+#include <iostream>
+#include <stdio.h>
+
+class HTModuleUnpacker;
 
 using namespace std;
 
-class HTUSBStack : public HTModuleUnpacker, public HTElectronics {
+class HTUSBStack {
 private:
    // data structures:
    typedef struct _StackInfo {
@@ -40,40 +33,30 @@ private:
    ULong64_t fVsnErrorCount;
    ULong64_t fBufferMismatchCount;
 
-   HTTimestamp *fUSBTimestamp; //
-   TList *fStacks;             // Array of stacks.
+   TList *fStacks; // Array of stacks.
 
    TTree *fChain; //!
 
    // Utilties:
 private:
    static StackInfo assembleEvent(UShort_t *p, std::vector<UShort_t> &event);
+   static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
 
 public:
    HTUSBStack();
    ~HTUSBStack(){};
 
    Int_t AddStack();
-   Int_t AddToStack(Int_t stackIdx, HTUSBStackMarker *marker);
-   Int_t AddToStack(Int_t stackIdx, HTUSBStackMarker *marker, Int_t idx);
-   Int_t AddToStack(Int_t stackIdx, HTElectronics *module)
+   Int_t AddToStack(Int_t stackIdx, HTModuleUnpacker *module)
    {
       AddToStack(stackIdx, -1, module);
       return 0;
    }
-   Int_t AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module);
-   Int_t AddToStack(Int_t stackIdx, Int_t geo, HTElectronics *module, Int_t idx);
+   Int_t AddToStack(Int_t stackIdx, Int_t geo, HTModuleUnpacker *module);
+   Int_t AddToStack(Int_t stackIdx, Int_t geo, HTModuleUnpacker *module, Int_t idx);
    Int_t RemoveFromStack();
 
-   void Clear(Option_t *option);
-
-   void InitClass();
-   void InitBranch(TTree *tree);
-   void InitTree(TTree *tree);
    Int_t Unpack(UShort_t *pEvent, UInt_t offset);
-
-   void PrintSummary();
-   void AddTTreeUserInfo(TTree *);
 
    ClassDef(HTUSBStack, 1);
 };

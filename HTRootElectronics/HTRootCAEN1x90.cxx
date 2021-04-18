@@ -1,28 +1,58 @@
-#include <HTRootCAEN1x90.h>
+#include "HTRootCAEN1x90.h"
+
+#include <iostream>
 
 //________________________________________________
-HTRootCAEN1x90::HTRootCAEN1x90(const char *name, int numch) : HTRootElectronics(name), fNumCh(numch), fData(0) {}
-
-//________________________________________________
-HTRootCAEN1x90::~HTRootCAEN1x90()
+HTRootCAEN1x90::HTRootCAEN1x90(TString name) : HTRootModule(name)
 {
-   if (fData)
-      delete[] fData;
+   fType = "HTRootCAEN1x90";
+   Clear();
 }
 
 //________________________________________________
-double HTRootCAEN1x90::GetData(int ch) const
+HTRootCAEN1x90::~HTRootCAEN1x90() {}
+
+void HTRootCAEN1x90::Clear()
 {
-   return (*fData)[ch];
+   for (int i = 0; i < 128; ++i)
+      fData[i].clear();
+}
+void HTRootCAEN1x90::PrintData()
+{
+   for (int i = 0; i < 128; ++i) {
+      std::cout << i << ": ";
+      for (auto &time : fData[i])
+         std::cout << time << " ";
+      std::cout << std::endl;
+   }
 }
 
-//________________________________________________
-TTreeReaderArray<Double_t> *HTRootCAEN1x90::GetDataPointer() const
+std::vector<Double_t> *HTRootCAEN1x90::GetData(Int_t ch)
 {
-   return fData;
+   if (ch < 128)
+      return &fData[ch];
+   return nullptr;
 }
 
-void HTRootCAEN1x90::InitTreeInputBranch(TTreeReader &theReader)
+Double_t HTRootCAEN1x90::GetData(Int_t ch, Int_t depth)
 {
-   fData = new TTreeReaderArray<Double_t>(theReader, GetName());
+   if (ch < 128 && depth < fData[ch].size())
+      return fData[ch][depth];
+   else
+      return -9999;
 }
+
+void HTRootCAEN1x90::SetData(Int_t ch, Int_t depth, Double_t data)
+{
+   if (ch < 128) {
+      while (fData[ch].size() < depth)
+         fData[ch].push_back(-9999);
+      fData[ch].push_back(data);
+   }
+}
+void HTRootCAEN1x90::SetNextData(Int_t ch, Double_t data)
+{
+   if (ch < 128)
+      fData[ch].push_back(data);
+}
+ClassImp(HTRootCAEN1x90)

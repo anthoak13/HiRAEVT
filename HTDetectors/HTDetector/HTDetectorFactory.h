@@ -7,15 +7,6 @@
 #define HTDETECTORFACTORY_H
 
 #include "HTDetector.h"
-#include "HTForwardArray.h"
-#include "HTHiRA.h"
-#include "HTIonChamber.h"
-#include "HTMcp.h"
-#include "HTMicroball.h"
-#include "HTNeutronWall.h"
-#include "HTSisTimestamp.h"
-#include "HTTDCSpare.h"
-#include "HTVetoWall.h"
 
 #include <string>
 

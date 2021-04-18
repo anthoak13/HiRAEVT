@@ -2,59 +2,30 @@
 //  HTSisTimestampUnpacker.cpp
 //
 
-//#include <config.h>
 #include "HTSisTimestampUnpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
-#include <iostream>
-#include <stdint.h>
 
-using namespace std;
+#include "HTRootSisTimestamp.h"
 
-ClassImp(HTSisTimestampUnpacker)
+#include <string>
+#include <vector>
 
-   using std::vector;
-using std::string;
+#include "nlohmann/json.hpp"
 
-/////////////////////////////////////////////////////////////////////
-// Canonicals..
-
-/*!
- Construction is a no-op.
-
- */
-HTSisTimestampUnpacker::HTSisTimestampUnpacker(const char *chName)
+HTSisTimestampUnpacker::HTSisTimestampUnpacker(json moduleDescription)
 {
+   TString name = moduleDescription["moduleName"].get<std::string>();
 
-   Clear();
-   SetBranchName(chName);
+   fModule = new HTRootSisTimestamp(name);
 }
-
-/*!
- Destruction is a no-op.
- */
 HTSisTimestampUnpacker::~HTSisTimestampUnpacker() {}
 
-void HTSisTimestampUnpacker::InitBranch(TTree *tree)
+Int_t HTSisTimestampUnpacker::Unpack(std::vector<UShort_t> &event, UInt_t offset)
 {
-
-   if (GetFillData()) {
-      tree->Branch(GetBranchName(), fTimestamp, TString::Format("%s[2]/l", GetBranchName()));
-   } else {
-      cout << "HTSisTimestamp InitBranch problem" << endl;
-   }
-}
-
-void HTSisTimestampUnpacker::Clear()
-{
-
-   fTimestamp[0] = 0;
-   fTimestamp[1] = 0;
-}
-
-Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
-{
-   Clear();
+   auto ptrMod = dynamic_cast<HTRootSisTimestamp *>(fModule);
+   ptrMod->Clear();
+   // Print out what's being unpacked
+   // std::cout << "HTSistimestampunpacker: " << std::endl;
+   // PrintHex(event, offset, 6);
 
    uint64_t low0 = event[offset];
    uint64_t mid0 = event[offset + 1];
@@ -64,8 +35,15 @@ Int_t HTSisTimestampUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    uint64_t high1 = event[offset + 5];
    offset += 6;
 
-   fTimestamp[0] = low0 | (mid0 << 16) | (high0 << 32);
-   fTimestamp[1] = low1 | (mid1 << 16) | (high1 << 32);
+   ptrMod->SetData(0, low0 | (mid0 << 16) | (high0 << 32));
+   ptrMod->SetData(1, low1 | (mid1 << 16) | (high1 << 32));
 
    return offset;
 }
+
+void HTSisTimestampUnpacker::PrintSummary()
+{
+   std::cout << "-- module " << GetName() << " --" << std::endl << std::endl;
+}
+
+ClassImp(HTSisTimestampUnpacker)

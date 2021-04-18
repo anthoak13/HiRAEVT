@@ -42,8 +42,8 @@ Table of contents
 ### Working notes
 
 * Folders that compile to an executable
-  * [ ] FilterUnpacker
-  * [ ] HTMapper
+  * [x] FilterUnpacker
+  * [x] HTMapper
  
 * Folders that compile to a library (check a bunch of these to remove uneeded lnkdefs and list of detectors)
   * [x] HTDetectors
@@ -58,13 +58,17 @@ Table of contents
 ## Setup and Configuration
 
 ### Requirements
-The following are required to use the code:
+The following are required to use the code and must be configured by the user:
 
 * g++ compiler with c++14 feature supports
-* CMake version 3.10 or higher
+* CMake version 3.11 or higher
 * [FairRoot](https://github.com/FairRootGroup/FairRoot) version 18.00 or higher
   * In the future this will be an optional dependence if [ROOT](https://root.cern/) v16.20 or higher is installed
 * [NSCL DAQ](http://docs.nscl.msu.edu/daq/)
+
+The following are requirements of the code, and will be downloaded and configured using cmake:
+
+* [nlohmann's JSON library](https://github.com/nlohmann/json) which is dowloaded and configured using CMake.
 
 NB: For users on the FRIB cluster, fishtank. After the recent move to using singularity containers, the NSCLDAQ files are only accesable if you source `/usr/opt/buster.sh`.
 
@@ -100,7 +104,7 @@ The program can run over different experimental configurations (DAQ, detectors, 
 ### Limitations
 The code is explicitly designed to by a highly versatile tool. Anyway, some limitations are present (and maybe more limitations will be found in the future in more specific cases):
  - The code needs to be launched from the program main folder;
- - The class RBSisTimestamp is specifically designed for the timestamp configuration used in e15190.
+ - The class HTSisTimestamp is specifically designed for the timestamp configuration used in e15190.
 
 ## The HiRAEVTUnpacker Program
 

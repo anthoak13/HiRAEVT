@@ -2,21 +2,13 @@
 //  HTMADC32Unpacker.cpp
 //
 
-//#include <config.h>
-#include <HTMADC32Unpacker.h>
-//#include <Event.h>
-//#include <stdint.h>
-#include <iostream>
+#include "HTMADC32Unpacker.h"
 
-using namespace std;
+// Constants
 
-ClassImp(HTMADC32Unpacker)
+// All longwords have a type in the top two bits:
 
-   // Constants
-
-   // All longwords have a type in the top two bits:
-
-   static const uint32_t ALL_TYPEMASK(0xc0000000);
+static const uint32_t ALL_TYPEMASK(0xc0000000);
 static const uint32_t ALL_TYPESHFT(30);
 
 static const uint32_t TYPE_HEADER(1);
@@ -48,50 +40,27 @@ static const uint32_t DATA_ISPAD(0x04000000);
 
 static const uint32_t TRAILER_COUNTMASK(0x3fffffff); // trigger count or timestamp counter.
 
+#include "HTRootAdc.h"
+
+#include <iostream>
+
+#include "nlohmann/json.hpp"
+
+using namespace std;
+
 //______________________________________________________________________________
-HTMADC32Unpacker::HTMADC32Unpacker(const char *chName)
-   : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
+HTMADC32Unpacker::HTMADC32Unpacker(json moduleDescription)
+   : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
-   // --
-   //
+   TString name = moduleDescription["moduleName"].get<std::string>();
+   Int_t vsn = moduleDescription["vsn"].get<int>();
 
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
-   SetBranchName(chName);
-
-   Clear();
+   SetVSN(vsn);
+   fModule = new HTRootAdc(name);
 }
 
 //______________________________________________________________________________
 HTMADC32Unpacker::~HTMADC32Unpacker() {}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++) {
-      fData[i] = -9999;
-   }
-}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitClass() {}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fData, Form("%s[%i]/S", fChName.Data(), fnCh));
-   } else {
-      cout << "-->HTMADC32Unpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTMADC32Unpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
-}
 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
@@ -116,11 +85,14 @@ void HTMADC32Unpacker::InitTree(TTree *tree)
 //______________________________________________________________________________
 Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+   // the correct pointer to the module
+   auto modPtr = dynamic_cast<HTRootAdc *>(fModule);
+   modPtr->Clear();
+
+   auto origOffset = offset;
 
    // Get the 'header' .. ensure that it is one and that it matches our VSN.
    unsigned long header = getLong(event, offset);
-
    if (header == 0xffffffff) { // ADC had no data there will be just the two words of 0xffffffff
       return offset + 2;
    }
@@ -134,6 +106,7 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    int id = DecodeVSN(header);
 
    if (id != GetVSN()) {
+      std::cout << "VSN mismatch: " << id << " " << GetVSN() << std::endl;
       fVSNMismatchCount++;
       return offset;
    }
@@ -153,17 +126,20 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    unsigned long datum = getLong(event, offset);
    longsRead++;
    offset += 2;
+
+   // Loop through data until we hit something that is not dataOA
    while (((datum & ALL_TYPEMASK) >> ALL_TYPESHFT) == TYPE_DATA) {
+
       bool overflow = (datum & DATA_ISOVERFLOW) != 0;
       if (!overflow) {
          int channel = (datum & DATA_CHANNELMASK) >> DATA_CHANNELSHFT;
          int value = datum & DATA_VALUEMASK;
-         fData[channel] = value;
+         modPtr->SetData(channel, value);
       } else {
          fOverflowCount++;
          int channel = (datum & DATA_CHANNELMASK) >> DATA_CHANNELSHFT;
          int value = 9999;
-         fData[channel] = value;
+         modPtr->SetData(channel, value);
       }
       datum = getLong(event, offset);
       longsRead++;
@@ -180,6 +156,9 @@ Int_t HTMADC32Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // There will be a 0xffffffff longword for the BERR at the end of the
    // readout.
 
+   // std::cout << "HTMADC32Unpacker: " <<std::endl;
+   // PrintHex(event, origOffset, offset-origOffset);
+
    return offset + 2;
 }
 
@@ -194,24 +173,11 @@ Int_t HTMADC32Unpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTMADC32Unpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fChName.Data());
+   printf("-- module %s --\n", fModule->GetName());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
 }
 
-//______________________________________________________________________________
-void HTMADC32Unpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedCount));
-   TNamed *VSNMismatches =
-      new TNamed(Form("module %s : VSN Mismatches", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *overflowsFound = new TNamed(Form("module %s : %% Overflow Data", fChName.Data()),
-                                       Form("%.1f", 100 * double(fOverflowCount) / double(fTotalUnpackedCount)));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(VSNMismatches);  // Number of VSN Mismatches
-   tree->GetUserInfo()->Add(overflowsFound); // Percentage of Overflows found
-}
+ClassImp(HTMADC32Unpacker)

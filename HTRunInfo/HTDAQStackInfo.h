@@ -1,8 +1,8 @@
 #ifndef HTDAQSTACKINFO_H
 #define HTDAQSTACKINFO_H
 
-#include <HTElectronics.h>
 #include <HTModuleInfo.h>
+#include <HTModuleUnpacker.h>
 #include <string>
 #include <vector>
 
@@ -22,6 +22,7 @@ public:
    HTModuleInfo *GetModuleInfo(int) const; //! Returns the pointer of the i-th module HTModuleInfo class
 
    void AddModuleInfo(HTModuleInfo *); //! Add a new module to the stack info class
+   void Print();                       // Prints the stack info
 
 private:
    int fNModules;                              //! Number of modules in stack

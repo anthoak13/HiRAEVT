@@ -1,11 +1,12 @@
 # Create an executable to unpack the data called HiRAEVTUnpacker
 
 
-add_executable(HiRAEVTUnpacker.exe Unpacker.cpp FragmentIndex.cpp CUnpackerFilter.cpp SkeletonMain.cpp)
+add_executable(HiRAEVTUnpacker.exe FragmentIndex.cpp HTFilter.cxx SkeletonMain.cpp HTUnpacker.cxx)
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}
-
+  nlohmann_json::nlohmann_json
+  
   # nscldaq libraries required
   /usr/opt/nscldaq/current/lib/libException.so
   /usr/opt/nscldaq/current/lib/libdaqshm.so
@@ -13,11 +14,10 @@ set(DEPENDENCIES
   /usr/opt/nscldaq/current/lib/liburl.so	
   /usr/opt/nscldaq/current/lib/libfilter.so	
 
-  
   HTElectronics
   HTExperiment
   HTLogo
-  HTRunInfo
+  HTRootElectronics
   )
 
 set(LINK_DIRECTORIES
@@ -32,10 +32,12 @@ set(LINK_DIRECTORIES
 
 set(INCLUDE_DIRECTORIES
   ${ROOT_INCLUDE_DIR}
-
+  ${json_SOURCE_DIR}/include
+  
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTExperiment
   ${CMAKE_SOURCE_DIR}/HTElectronics
+  ${CMAKE_SOURCE_DIR}/HTRootElectronics
   ${CMAKE_SOURCE_DIR}/HTRunInfo
   ${CMAKE_SOURCE_DIR}/FilterUnpacker
   ${CMAKE_SOURCE_DIR}/HTLogo

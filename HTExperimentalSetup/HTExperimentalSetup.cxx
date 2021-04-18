@@ -167,7 +167,7 @@ int HTExperimentalSetup::ParseAssignMappingLine(const char *line_to_parse)
       while (LineStream >> ModuleName) {
          if (fDetectors->find(DetectorName) != fDetectors->end()) {
             NModulesAdded++;
-            (*fDetectors)[DetectorName]->AssignModule((*fModules)[ModuleName]);
+            //(*fDetectors)[DetectorName]->AssignModule((*fModules)[ModuleName]);
          } else
             throw std::invalid_argument(DetectorName.append(" not defined!"));
       }
@@ -183,7 +183,7 @@ void HTExperimentalSetup::BuildDetectorMaps()
    // Each of them is mapped with the same name of the detector itself.
    int nMappedLines = 0;
    for (auto &&det : *fDetectors)
-      nMappedLines += det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
+      ; // nMappedLines += det.second->LoadMapping(HTExperimentInfo::Instance()->GetRunInfo()->GetMappingFile());
 }
 
 //________________________________________________
@@ -235,7 +235,7 @@ void HTExperimentalSetup::InitDetectorBranches(TTree *theTree)
    if (fDetectors) {
       for (std::map<std::string, HTDetector *>::iterator TheDetector = fDetectors->begin();
            TheDetector != fDetectors->end(); TheDetector++) {
-         (*TheDetector).second->InitTTreeBranch(theTree);
+         ; //(*TheDetector).second->InitTTreeBranch(theTree);
       }
    }
 }

@@ -54,6 +54,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
    // fExperiment : HTExperiment class object containing stack configurations and defining the structure of the output
    // file
    //
+
    strcpy(fSourceFileName, sourceName);
    std::string evtFileStr(fSourceFileName);
    std::string evtFileName(evtFileStr.substr(evtFileStr.find_last_of('/') + 1));
@@ -68,6 +69,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
 
    // Determine run number from file name.
    std::string runNumStr(evtFileStr.substr(evtFileStr.find("run-") + 4, 4));
+
    int RunNumber = atoi(runNumStr.c_str());
    int EvtFileNumber = atoi(
       evtFileStr
@@ -75,7 +77,7 @@ void Unpacker::InitializeUnpacker(char *sourceName)
          .c_str());
 
    // Initialization of HTRunInfo class
-   cout << "** Initializing Run Info **" << endl;
+   cout << "** Initializing Run Info for run " << RunNumber << " **" << endl;
 
    cout << "Loading config file: " << configFile << endl;
 
@@ -97,7 +99,9 @@ void Unpacker::InitializeUnpacker(char *sourceName)
    }
 
    fMergedData = fExperiment->IsDataMerged();
+
    fExperiment->InitializeROOTConverter(fSourceFileName);
+
    fExperiment->Clear("A");
    fStart = clock();
 
@@ -177,6 +181,7 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
          //      cout << "Module is " << elc->GetBranchName() << endl;
 
          // Check if the Merged ID matches that of the current module.
+
          if (it->s_sourceId == elc->GetMergedID()) {
             // Workaround for old EVB bug to only process physics events
             uint32_t type = *(it->s_itemhdr + 2);
@@ -184,6 +189,7 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
             // Make sure this is a PHYSICS_EVENT item.
             if (type == 30) {
                uint32_t ringSize = *(it->s_itemhdr);
+
                //--- Print out the RingItem. -----------------
                if (false) {
                   cout << "RingSize = " << ringSize / 2 << " " << index.getNumberFragments() << endl;
@@ -198,35 +204,9 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
 
                // This is actually the pointer to the RingItem body header.
                uint16_t *bodyAddr = it->s_itembody;
-               uint16_t *bodyAddrJuan = it->s_itembody;
-
-               // Check bodyAddr
-               //	  cout << "Check bodyAddr before skipping " << endl;
-               //	  for(int dd=1; dd<=10; dd++){
-               //	    printf("%0.4x ", bodyAddrJuan[dd-1]);
-               //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-               //	  }
-
-               // NOTE: THIS SKIPPING IS NO LONGER NECESSARY...THE FRAGMENT
-               // INDEXING NOW TAKES CARE OF THIS
-
-               // Skip the body header, it is 20 bytes long and we pass
-               // along a pointer to the beginning of the RingItem body.
-               // Read the RingItem body header.
-               //          for(Int_t skip=0; skip<10; skip++){//10
-               //	    *bodyAddr++;
-               //	    *bodyAddrJuan++;
-               //	  }
-
-               // Check bodyAddr
-               //	  cout << "Check bodyAddr after skipping " << endl;
-               //	  for(int dd=1; dd<=10; dd++){
-               //	    printf("%0.4x ", bodyAddrJuan[dd+9]);
-               //	    if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-               //	  }
 
                // Unpack it
-               fragOffset = elc->Unpack(bodyAddr, 0);
+               fragOffset = static_cast<HTUSBStack *>(elc)->Unpack(bodyAddr, 0);
                // totalUnpackedWords += elc->GetTotalUnpackedWords();
             } else {
                cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
@@ -263,13 +243,6 @@ void Unpacker::operator()(FragmentIndex &index, uint32_t totalSize, uint64_t eve
 //______________________________________________________________________________
 void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTimestamp)
 {
-   // -- Call the individual detector unpackers and pass along the FragmentIndex.
-   // Each detector unpacker should handle looking for it's own type identifier and
-   // proceed with it's unpacker.
-   //
-   // NOTE: We really should change this to loop over all Sources where each source contains
-   // detectors, electronics, and etc..
-
    ++nevent;
 
    // Display progress
@@ -281,13 +254,6 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
 
    fExperiment->SetBRISize(totalSize);
    fExperiment->SetBRITimestamp(eventTimestamp);
-
-   // Define an offset to keep track of where we the fragment is located
-   // and to check that we are unpacking all the data in the buffer.
-   UInt_t fragOffset = 0;
-
-   // Let's keep track of the total words that we read.
-   UInt_t totalReadWords = 0;
 
    // Check the timestamps.
    if (eventTimestamp < m_lastTimestamp) {
@@ -301,138 +267,39 @@ void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize, uint64_t eventTim
    // Reset the last timestamp.
    m_lastTimestamp = eventTimestamp;
 
-   // Loop over all data sources and unpack all  . . . (Should implement it this way)
-
-   // Loop over all registered electronic modules and call their individual Unpacker methods.
-   // If we come across a USBStack, then each module is unpacked as defined in the HTUSBStack class.
-   TIter nextModule(fExperiment->GetElectronicsList());
-   while (HTElectronics *elc = (HTElectronics *)nextModule()) {
-      // Check if the Merged ID matches that of the current module.
-      //    if (it->s_sourceId == elc->GetMergedID()) {
-      // Workaround for old EVB bug to only process physics events
-      //      uint32_t  type          = *(it->s_itemhdr+2);
-      //      uint16_t* bodyDebugAddr = it->s_itemhdr;
-      // Make sure this is a PHYSICS_EVENT item.
-      //      if(type == 30) {
-      //        uint32_t ringSize = *(it->s_itemhdr);
-      //        //--- Print out the RingItem. -----------------
-      //        if(false){
-      //          cout << "RingSize = " << ringSize/2 << " " << index.getNumberFragments() << endl;
-      //          for(int dd=1; dd<=ringSize/2; dd++){
-      //            printf("%0.4x ", *bodyDebugAddr++);
-      //            if(dd%5==0 && dd!=0) cout << "-- " << dd << endl;
-      //          }
-      //          cout << endl;
-      //        }
-      //--------------------------------------------------
-
-      //        // This is actually the pointer to the RingItem body header.
-      //        uint16_t* bodyAddr = it->s_itembody;
-      //
-      //        // Skip the body header, it is 20 bytes long and we pass
-      //        // along a pointer to the beginning of the RingItem body.
-      //        // Read the RingItem body header.
-      //        for(Int_t skip=0; skip<10; skip++) *bodyAddr++;
-
-      // Unpack it
-      //    *pBody++;
-      fragOffset = elc->Unpack(pBody, 0);
-      // totalUnpackedWords += elc->GetTotalUnpackedWords();
-      //      }
-      //      else{
-      //        cerr << "-->Unpacker::operator This is not a PHYSICS_EVENT item." << endl;
-      //      }
-      //    }
+   /********** Start unpacking here ******************/
+   // Verify that the data does not look corrupted
+   UShort_t bodySize = *pBody;
+   if (2 * (bodySize + 1) != totalSize) {
+      std::cerr << "The first word should represent the number of words composing the event" << std::endl;
+      fReadWords += totalSize;
+      return;
+   }
+   if (totalSize <= 2) {
+      std::cerr << "Only one word present in event, skipping" << std::endl;
+      fReadWords += totalSize;
+      return;
+   }
+   if (pBody[bodySize] != 0xFFFF) {
+      std::cerr << "The event buffer must terminate with 0xFFFF, skipping" << std::endl;
+      fReadWords += totalSize;
+      return;
    }
 
-   //    std::cout << "TStamp: "    << it->s_timestamp
-   //              << "  SourceId: "  << it->s_sourceId
-   //              << "  Size: "      << it->s_size
-   //              << "  Barrier: "   << it->s_barrier
-   //              << std::endl;
+   // Let's keep track of the total words that we read.
+   UInt_t totalReadWords = 0;
 
-   // increment our iterator
-   //  ++it;
-
-   // Check that we read all the words in the fragment.
-   // If we did not, then all of the detectors/electronics may
-   // no be defined.
-   //    if(totalUnpackedWords != it->s_size){
-   //      cerr << "-->Unpacker:: Total number of words in fragment was "
-   //           << it->s_size << " but we only unpacked " << totalUnpackedWords << endl;
-   //    }
-   //}
-
+   TIter nextModule(fExperiment->GetElectronicsList());
+   while (HTElectronics *elc = (HTElectronics *)nextModule()) {
+      UInt_t readWords = static_cast<HTUSBStack *>(elc)->Unpack(pBody, 0);
+      *pBody += readWords;
+      totalReadWords += readWords;
+   }
    // Finished with this event,
    // now fill the TTrees with the data we just unpacked.
    fExperiment->Fill(); // This unpacker handles PHYSICS event items.
 
    // Update the counters.
-   fReadWords += totalSize / 2;
-}
-
-//______________________________________________________________________________
-void Unpacker::operator()(uint16_t *pBody, uint32_t totalSize)
-{
-
-   // -- Unpack non-merged data.
-   //
-   ++nevent;
-
-   //  cout << "**Unpacking timestamp " << eventTimestamp<< endl;
-
-   // Display progress
-   if (nevent % 10000 == 0) {
-      PrintPercentage();
-   }
-
-   fExperiment->Clear();
-
-   fExperiment->SetBRISize(totalSize);
-   //  fExperiment->SetBRITimestamp(eventTimestamp);
-
-   //  UShort_t bodySize = *pBody++;
-   // Note: I commented out the line above because the HINPUnpacker was starting one word too late
-   //...not sure whether or not this has something to do with a one word difference between
-   // unpacking merged data vs unmerged data.
-   UShort_t bodySize = *pBody;
-   if (2 * (bodySize + 1) != totalSize) {
-      // WARNING: the first word should represent the number of word composing the event
-      fReadWords += totalSize;
-      return;
-   }
-   if (bodySize == 0 || totalSize <= 2) {
-      // WARNING: bodySize can be 0, in such a case the event is bad and has to be skipped!
-      // WARNING: sometimes only 1 word is present in the event (totalSize=2) -> skip the event.
-      fReadWords += totalSize;
-      return;
-   }
-   if (pBody[*pBody] != 0xFFFF) {
-      // WARNING: the event buffer must terminate with 0xFFFF
-      fReadWords += totalSize;
-      return;
-   }
-   //  cout << "Body size is " << bodySize << endl;
-   //  UShort_t hdrSize  = *pBody;
-   //  cout << "Header size is " << hdrSize << endl;
-   // Loop over all registered electronics modules and call their individual Unpacker methods.
-   TIter nextModule(fExperiment->GetElectronicsList());
-
-   UInt_t readWords = 0;
-   while (HTElectronics *elc = (HTElectronics *)nextModule()) {
-
-      // unpack it
-      //    cout << "Unpacking electronics " << elc->GetBranchName() << endl;
-      //    cout << "Value of pBody address going into elc Unpack: " << *pBody << endl;
-      readWords = elc->Unpack(pBody, 0);
-      while (readWords > 0) {
-         *pBody++;
-         readWords--;
-      }
-   }
-
-   fExperiment->Fill();
-
    fReadWords += totalSize / 2;
 }
 
@@ -495,7 +362,7 @@ void Unpacker::EndUnpacking()
 void Unpacker::PrintPercentage() const
 {
    double time_elapsed = (double)(clock() - fStart) / CLOCKS_PER_SEC;
-   std::cout << "  Percentage = " << std::fixed << std::setprecision(1) << std::setw(5)
+   std::cout << "  Percentage= " << std::fixed << std::setprecision(1) << std::setw(5)
              << 100 * ((Long64_t)(2 * fReadWords)) / (fExperiment->GetEvtFileSize()) << " %";
    std::cout << "   [";
    int printindex = 0;
@@ -509,7 +376,7 @@ void Unpacker::PrintPercentage() const
              << (time_elapsed < 60 ? " s; " : (time_elapsed < 3600 ? " m; " : " h; "));
    if (fReadWords > 2) {
       double time_remaining = (time_elapsed / (2. * fReadWords)) * (fExperiment->GetEvtFileSize() - 2 * fReadWords);
-      std::cout << " estimated remaining time " << std::setprecision(1)
+      std::cout << " estimated remaining time: " << std::setprecision(1)
                 << (time_remaining < 60 ? time_remaining
                                         : (time_remaining < 3600 ? time_remaining / 60 : time_remaining / 3600))
                 << (time_remaining < 60 ? " s      " : (time_remaining < 3600 ? " m      " : " h      "));

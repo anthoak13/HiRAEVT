@@ -1,22 +1,13 @@
+#include "HTCAEN7xxUnpacker.h"
 //
 //  HTCAEN7xxUnpacker.cpp
 //
 
-//#include <config.h>
-#include "HTCAEN7xxUnpacker.h"
-//#include <Event.h>
-//#include <stdint.h>
-#include <iostream>
+// Constants:
 
-using namespace std;
+// All data words have these bits:
 
-ClassImp(HTCAEN7xxUnpacker)
-
-   // Constants:
-
-   // All data words have these bits:
-
-   static const UInt_t ALLH_TYPEMASK(0x7000000);
+static const UInt_t ALLH_TYPEMASK(0x7000000);
 static const UInt_t ALLH_TYPESHIFT(24);
 static const UInt_t ALLH_GEOMASK(0xf8000000);
 static const UInt_t ALLH_GEOSHIFT(27);
@@ -53,62 +44,26 @@ static const UInt_t DATA(0);
 static const UInt_t TRAILER(4);
 static const UInt_t INVALID(6);
 
-/////////////////////////////////////////////////////////////////////
-// Canonicals..
+#include "HTRootAdc.h"
 
-/*!
- Construction is a no-op.
+#include <iostream>
 
- */
-// HTCAEN7xxUnpacker::HTCAEN7xxUnpacker() {}
+#include "nlohmann/json.hpp"
 
-/*!
- Destruction is a no-op.
- */
-//______________________________________________________________________________
-HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(const char *chName)
-   : fChName(chName), fnCh(32), fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
+using namespace std;
+HTCAEN7xxUnpacker::HTCAEN7xxUnpacker(json moduleDescription)
+   : fTotalUnpackedCount(0), fOverflowCount(0), fVSNMismatchCount(0)
 {
-   // --
-   //
+   // Get info from json
+   TString name = moduleDescription["moduleName"].get<std::string>();
+   Int_t vsn = moduleDescription["vsn"].get<int>();
 
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
-
-   SetBranchName(chName);
-
-   Clear();
+   SetVSN(vsn);
+   fModule = new HTRootAdc(name);
 }
 
 //______________________________________________________________________________
 HTCAEN7xxUnpacker::~HTCAEN7xxUnpacker() {}
-
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++) {
-      fData[i] = -9999;
-   }
-}
-
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitClass() {}
-
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fData, Form("%s[%i]/S", fChName.Data(), fnCh));
-   } else {
-      cout << "-->HTCAEN7xxUnpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
-}
 
 //////////////////////////////////////////////////////////////////////
 //  Virtual function overrides
@@ -136,8 +91,11 @@ void HTCAEN7xxUnpacker::InitTree(TTree *tree)
 //______________________________________________________________________________
 Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
 
+   // the correct pointer to the module
+   auto modPtr = dynamic_cast<HTRootAdc *>(fModule);
+   modPtr->Clear();
+   auto origOffset = offset;
    // DEBUG
    //   printf("called HTCAEN7xxUnpacker::Unpack(vector<UShort_t>& event, UInt_t offset)\n");
 
@@ -153,6 +111,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 
    // If we do not have a VSN and all we have are 0xffff's then return.
    if (GetVSN() == -1 && event[offset] == 0xffff && event[offset + 1] == 0xffff)
+
       return offset + 2;
 
    // Ok this is our data:
@@ -176,7 +135,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
             if (!overflow) {
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = datum & DATAL_DATAMASK;
-               fData[channel] = value;
+               modPtr->SetData(channel, value);
 
                //           printf("setting %d channel to %d value\n",channel, value);
                //           printf("the value was %lu\n",datum & DATAL_DATAMASK);
@@ -186,11 +145,7 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
                fOverflowCount++;
                int channel = (datum & DATAH_CHANMASK) >> DATAH_CHANSHIFT;
                int value = 4096;
-               fData[channel] = value;
-
-               //           printf("setting %d channel to %d value\n",channel, value);
-
-               //	  cout << value << " ";
+               modPtr->SetData(channel, value);
             }
          }
 
@@ -205,6 +160,9 @@ Int_t HTCAEN7xxUnpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
       }
       offset -= 2; // Don't count the non trailer longword.
    }
+
+   // std::cout << "HTCAEN7xxUnpacker: " << std::endl;
+   // PrintHex(event, origOffset, offset-origOffset);
 
    // An extra 32 bits of 0xffffffff was read if not in a chain or if at
    // end of chain:
@@ -226,24 +184,11 @@ Int_t HTCAEN7xxUnpacker::DecodeVSN(Int_t header)
 //______________________________________________________________________________
 void HTCAEN7xxUnpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fChName.Data());
+   printf("-- module %s --\n", fModule->GetName());
    printf("%llu total unpacked data\n", fTotalUnpackedCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%.1f %% overflows data\n", 100 * double(fOverflowCount) / double(fTotalUnpackedCount));
    printf("\n");
 }
 
-//______________________________________________________________________________
-void HTCAEN7xxUnpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedCount));
-   TNamed *VSNMismatches =
-      new TNamed(Form("module %s : VSN Mismatches", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *overflowsFound = new TNamed(Form("module %s : %% Overflow Data", fChName.Data()),
-                                       Form("%.1f", 100 * double(fOverflowCount) / double(fTotalUnpackedCount)));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(VSNMismatches);  // Number of VSN Mismatches
-   tree->GetUserInfo()->Add(overflowsFound); // Percentage of Overflows found
-}
+ClassImp(HTCAEN7xxUnpacker)

@@ -3,7 +3,9 @@
 set(LINKDEF HTExperimentalSetupLinkDef.h)
 set(LIBRARY_NAME HTExperimentalSetup)
 set(DEPENDENCIES
-
+  nlohmann_json::nlohmann_json
+  HTDetectors
+  HTRunInfo
   )
 
 set(SRCS
@@ -13,7 +15,8 @@ set(SRCS
 
 set(INCLUDE_DIRECTORIES
   ${ROOT_INCLUDE_DIR}
-
+  ${json_SOURCE_DIR}/include
+  
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTExperimentalSetup
   ${CMAKE_SOURCE_DIR}/HTElectronics
@@ -21,16 +24,7 @@ set(INCLUDE_DIRECTORIES
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
   
   ${CMAKE_SOURCE_DIR}/HTDetectors/HTDetector
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTForwardArray
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTHiRA
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTIonChamber
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTMcp
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTMicroball
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTNeutronWall
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTSisTimestamp
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTTDCSpare
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTVetoWall
-
+  
   )
 
 set(LINK_DIRECTORIES

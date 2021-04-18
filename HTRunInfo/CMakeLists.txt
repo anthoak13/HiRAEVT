@@ -12,7 +12,6 @@ set(SRCS
 
   HTRunInfo.cxx
   HTDAQStackInfo.cxx
-  HTExperimentInfo.cxx
   HTModuleInfo.cxx
   
   )

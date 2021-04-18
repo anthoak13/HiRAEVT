@@ -1,4 +1,5 @@
 #include <HTDAQStackInfo.h>
+#include <iostream>
 
 //________________________________________________
 HTDAQStackInfo::HTDAQStackInfo(const char *name, int stackID) : fNModules(0), fStackName(name), fStackID(stackID) {}
@@ -69,4 +70,13 @@ void HTDAQStackInfo::AddModuleInfo(HTModuleInfo *new_module_info)
    fNModules++;
    fModuleInStack.push_back(new_module_info);
    return;
+}
+
+void HTDAQStackInfo::Print()
+{
+   std::cout << "Stack: " << GetStackName() << std::endl;
+   for (int i = 0; i < GetNModules(); ++i) {
+      auto module = GetModule(i);
+      std::cout << module->GetName() << std::endl;
+   }
 }

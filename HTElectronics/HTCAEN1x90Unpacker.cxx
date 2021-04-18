@@ -4,20 +4,6 @@
 
 #include "HTCAEN1x90Unpacker.h"
 
-#include <iostream>
-
-using namespace std;
-
-ClassImp(HTCAEN1x90Unpacker)
-
-   using std::vector;
-using std::string;
-
-/// ASSUMPTION:
-///   There are at most 128 channels. Note that if this is wrong, the
-///   parameter map is also going to break; Also assumes the max depth per channel is 16. If more then 16 hits, will
-///   take only the first 16.
-
 ////////////////////////////////////////////////////////////////////
 //
 // Constants that define the fields we need to see in the
@@ -61,30 +47,34 @@ static const char *ERROR_STRINGS[] = {"Hit lost in group 0 from read-out FIFO ov
                                       "Event lost (trigger FIFO overflow",
                                       "Internal Fatal Chip error has been detected"};
 
-/////////////////////////////////////////////////////////////////////
-// Canonicals..
+#include "HTRootCAEN1x90.h"
+#include "HTRootCAEN1x90SingleHit.h"
 
-/*!
- Construction is a no-op.
+#include <exception>
+#include <iostream>
 
- */
-//______________________________________________________________________________
-HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t refCh, Int_t nChannels, Double_t chsToNs)
-   : fChName(chName), fnCh(nChannels), fTotalUnpackedData(0), fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
+#include "nlohmann/json.hpp"
+using namespace std;
+
+HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(json moduleDescription)
+   : fTotalUnpackedData(0), fErrorCount(0), fNoReferenceCount(0), fVSNMismatchCount(0)
 {
-   // --
-   //
+   // Get data from JSON
+   TString name = moduleDescription["moduleName"].get<std::string>();
+   SetVSN(moduleDescription["vsn"].get<int>());
+   fnChannels = moduleDescription["numberCh"].get<int>();
+   fRefChannel = moduleDescription["refCh"].get<int>();
+   fChsToNs = moduleDescription["nsPerCh"].get<double>();
+   kSingleHit = moduleDescription.value("singleHit", false);
 
-   SetEnabled(kTRUE);
-   SetFillData(kTRUE);
+   if (fnChannels > 128)
+      throw std::runtime_error("Cannot support more than 128 channels in CAEN 1x90 tdc!");
 
-   SetBranchName(chName);
-
-   fDepth = depth;
-   fRefChannel = refCh;
-   fnChannels = nChannels;
-   fChsToNs = chsToNs;
    fRandomGen = new TRandom3(0);
+   if (kSingleHit)
+      fModule = new HTRootCAEN1x90SingleHit(name);
+   else
+      fModule = new HTRootCAEN1x90(name);
 
    switch (fnChannels) {
       // V1190: 18 bits of data then 7 bits of channel number:
@@ -106,8 +96,6 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t re
       std::cerr << "-->HTCAEN1x90  mis configured. \n";
       std::cerr << "  -fnChannels must be one of 16,32,64 or 128 but was: " << fnChannels << std::endl;
    }
-
-   Clear();
 }
 
 /*!
@@ -117,34 +105,6 @@ HTCAEN1x90Unpacker::HTCAEN1x90Unpacker(const char *chName, Int_t depth, Int_t re
 HTCAEN1x90Unpacker::~HTCAEN1x90Unpacker()
 {
    delete fRandomGen;
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::Clear(Option_t *option)
-{
-   for (int i = 0; i < fnCh; i++)
-      for (int j = 0; j < fDepth; ++j) {
-         fTimes[i * fDepth + j] = -9999;
-      }
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitClass() {}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitBranch(TTree *tree)
-{
-   if (GetFillData()) {
-      tree->Branch(fChName, fTimes, Form("%s[%i]/D", fChName.Data(), fnCh * fDepth));
-   } else {
-      cout << "-->HTCAEN1x90Unpacker::InitBranch  Branches will not be created or filled." << endl;
-   }
-}
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::InitTree(TTree *tree)
-{
-   fChain = tree;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -173,22 +133,20 @@ void HTCAEN1x90Unpacker::InitTree(TTree *tree)
 //______________________________________________________________________________
 Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
 {
-   Clear();
+   // Create a nice pointer to the module
+   fModule->Clear();
+
    vector<Int_t> rawTimes[128]; //  Raw times are stored here pending ref time subtraction.
-   vector<Int_t> chanVec;       // Vector that holds all the hit channels for this event
 
    // If this chunk of the event is for us, there should be a TDC global header,
    // and it should have a geo field that matches the vsn in our pMap element.
    UInt_t header = getLong(event, offset);
+   auto origOffset = offset;
 
    if ((header & ITEM_TYPE) != TYPE_GBLHEAD) {
       cerr << "Not TDC Data" << endl;
-      for (int i = offset; i < event.size(); ++i) {
-         if (i % 4 == 0)
-            cout << endl;
-         cout << hex << event[i] << " ";
-      }
-      cout << endl;
+
+      PrintHex(event, offset, event.size());
       return offset; // not TDC data.
    }
 
@@ -215,6 +173,7 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
       if (datum == 0xffffffff)
          break; // premature end of event.
 
+      // Record we found a long to examine
       offset += 2;
 
       switch (datum & ITEM_TYPE) {
@@ -244,28 +203,34 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
       case TYPE_DATA:
          UInt_t channel = (datum & fChanmask) >> fChanshift;
          UInt_t time = datum & fDatamask;
+
+         // Store the raw times in a temp vector
          rawTimes[channel].push_back(time);
-         chanVec.push_back(channel);
          totalHits++;
          break;
       }
    }
 
+   // Print the data unpacked
+   // std::cout << "HTCAEN1x90Unpacker: " << std::endl;
+   // PrintHex(event, origOffset, offset - origOffset);
+
    // If we got no hits (just tdc headers/trailers don't do anything.
    if (totalHits <= 0)
       return offset;
 
+   // Each totalHit is a long (two words)
    fTotalUnpackedData += totalHits;
 
    //
    // Two cases to consider.  If the reference channel number is -1
    // there's no reference channel..otherwised there is:
    //
-   Int_t reftime = 0;      // Default to no reference chhanel:
+   Int_t refTime = 0;      // Default to no reference chhanel:
    if (fRefChannel >= 0) { //  Reference channel used:
 
       if (rawTimes[fRefChannel].size() > 0)
-         reftime = rawTimes[fRefChannel][0];
+         refTime = rawTimes[fRefChannel][0];
       else {
          fNoReferenceCount++;
          // std::cerr << "-- TDC data with no hits in reference time discarded from vsn: ";
@@ -277,21 +242,19 @@ Int_t HTCAEN1x90Unpacker::Unpack(vector<UShort_t> &event, UInt_t offset)
    // The reftime defaults to zero which essentially does not adjust the times
    // if no reference channel is specified.
 
-   for (int i = 0; i < fnChannels; i++) {
-      int hits = rawTimes[i].size();
-      if (hits > fDepth)
-         hits = fDepth;
-
-      for (int hit = 0; hit < hits; hit++) {
-         double triggerRelative = static_cast<double>(rawTimes[i][hit] - reftime);
-
+   for (int i = 0; i < fnChannels; i++)
+      for (auto &rawTime : rawTimes[i]) {
          // Get rid of random gen noise
          // if(triggerRelative!=0)
          // triggerRelative += fRandomGen->Rndm()-0.5;
-         fTimes[i * fDepth + hit] = triggerRelative * fChsToNs;
 
+         Double_t calTime = fChsToNs * (rawTime - refTime);
+         if (kSingleHit) {
+            dynamic_cast<HTRootCAEN1x90SingleHit *>(fModule)->SetData(i, calTime);
+            break;
+         } else
+            dynamic_cast<HTRootCAEN1x90 *>(fModule)->SetNextData(i, calTime);
       } // End loop over hits
-   }    // end loop over channels
 
    return offset;
 }
@@ -357,27 +320,11 @@ void HTCAEN1x90Unpacker::reportError(UInt_t errorWord, int slot)
 //______________________________________________________________________________
 void HTCAEN1x90Unpacker::PrintSummary()
 {
-   printf("-- module %s --\n", fChName.Data());
+   printf("-- module %s --\n", GetName());
    printf("%llu total unpacked data\n", fTotalUnpackedData);
    printf("%llu errors produced\n", fErrorCount);
    printf("%llu VSN mismatches found\n", fVSNMismatchCount);
    printf("%llu TDC data with no hit in reference found\n", fNoReferenceCount);
    printf("\n");
 }
-
-//______________________________________________________________________________
-void HTCAEN1x90Unpacker::AddTTreeUserInfo(TTree *tree)
-{
-   TNamed *unpackedData =
-      new TNamed(Form("module %s : Total Unpacked Data", fChName.Data()), Form("%llu", fTotalUnpackedData));
-   TNamed *errorsFound = new TNamed(Form("module %s : Errors Produced", fChName.Data()), Form("%llu", fErrorCount));
-   TNamed *VSNMistmatches =
-      new TNamed(Form("module %s : VSN Mismatches Found", fChName.Data()), Form("%llu", fVSNMismatchCount));
-   TNamed *TDCNoReference = new TNamed(Form("module %s : TDC Data With No Hit in Reference", fChName.Data()),
-                                       Form("%llu", fNoReferenceCount));
-
-   tree->GetUserInfo()->Add(unpackedData);   // Total unpacked data in this module
-   tree->GetUserInfo()->Add(errorsFound);    // Errors produced
-   tree->GetUserInfo()->Add(VSNMistmatches); // VSN mismatches found
-   tree->GetUserInfo()->Add(TDCNoReference); // TDC data with no hit in reference
-}
+ClassImp(HTCAEN1x90Unpacker)

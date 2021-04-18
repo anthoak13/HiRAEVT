@@ -67,7 +67,7 @@ void HTHiRA::BuildEvent()
 //________________________________________________
 void HTHiRA::FillMappedData()
 {
-   // Retrieving information from HTHiRACsIArray and RBHINPHit to fill HTHiRAData object
+   // Retrieving information from HTHiRACsIArray and HTHINPHit to fill HTHiRAData object
    for (int NumTel = 0; NumTel < fNumDetectors; NumTel++) {
 
       // Loop on CsIs

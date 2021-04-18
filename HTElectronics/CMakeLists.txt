@@ -1,33 +1,31 @@
 # Create a library called libHTElectronics
 
-set(LINKDEF HTElectronicsLinkDef.h)
+set(LINKDEF GenLinkDef.h)
 set(LIBRARY_NAME HTElectronics)
 set(DEPENDENCIES
-
+  HTRootElectronics
   )
 
 set(SRCS
   # Put source files to compile here
+  HTModuleUnpacker.cxx  
   HTCAEN1x90Unpacker.cxx
   HTCAEN7xxUnpacker.cxx
-  HTCCUSBPacket.cxx
-  HTElectronics.cxx
-  HTHINPHit.cxx
-  HTHINPUnpacker.cxx
   HTMADC32Unpacker.cxx
-  HTModuleUnpacker.cxx
-  HTPh7xxUnpacker.cxx
   HTSisTimestampUnpacker.cxx
-  HTTimestamp.cxx
   HTUSBStack.cxx
-  HTUSBStackMarker.cxx
+
+  HTUnpackerFactory.cxx
   )
 
 set(INCLUDE_DIRECTORIES
   ${ROOT_INCLUDE_DIR}
-
+  ${json_SOURCE_DIR}/include
+  
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTElectronics
+  ${CMAKE_SOURCE_DIR}/HTRootElectronics
+    
   )
 
 set(LINK_DIRECTORIES

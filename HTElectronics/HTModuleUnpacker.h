@@ -1,44 +1,51 @@
-#ifndef __HTMODULEUNPACKER_H
-#define __HTMODULEUNPACKER_H
-
 //
-//#ifndef __CPARAMMAPCOMMAND_H
-//#include "CParamMapCommand.h"
-//#endif
+//  HTElectronics.h
+//
+//
+//  Created by Andrew Rogers on 3/20/15.
+//  Modified by Juan Manfredi
+//
 
-#ifndef __STL_VECTOR
-#include <vector>
-#ifndef __STL_VECTOR
-#define __STL_VECTOR
-#endif
-#endif
+#ifndef HTMODULEUNPACKER
+#define HTMODULEUNPACKER
 
-// Forward definitions:
-// class CEvent;
+#include "HTRootModule.h"
 
-/*!
- This is the abstract base class for module unpackers used by the CStackUnpacker
- class.  A concrete class must be created for each actual module type.
- The key method each class must implement is, of course the operator() method.
- This method must unpack the next chunk of the event into the parameters defined
- by its parameter map.  The operator must return a pointer to the next
- unconsumed part of the event.
- */
-class HTModuleUnpacker {
-private:
-   unsigned long fTotalUnpackedWords; //!
+#include <TObject.h>
+#include <TTree.h>
+#include <iostream>
+#include <stdio.h>
 
-   // Canonicals:
-public:
-   virtual ~HTModuleUnpacker(); // To support destructor chaining in a complex class hierarchy.
-
-   void SetTotalUnpackedWords(unsigned long nWords) { fTotalUnpackedWords = nWords; }
-
-   // pure virtual functions:
-
+class HTModuleUnpacker : public TObject {
 protected:
-   static unsigned long getLong(std::vector<unsigned short> &event, unsigned int offset);
-   virtual unsigned long GetTotalUnpackedWords() { return fTotalUnpackedWords; }
-};
+   Int_t fGeo;            // Module slot number or geographical address.
+   UShort_t fUnpackError; // Unpacking error code.
+   Int_t fUnpackErrorCount;
 
-#endif
+   HTRootModule *fModule; // The ROOT version of the module to store in the tree.
+
+   static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
+   void PrintHex(std::vector<UShort_t> &event, ULong_t offset, ULong_t numbeWords, Int_t wordsPerLine = 8);
+
+public:
+   virtual ~HTModuleUnpacker(){};
+
+   virtual Int_t Unpack(std::vector<UShort_t> &event, UInt_t offset) = 0;
+   virtual Int_t DecodeVSN(Int_t header) = 0;
+
+   virtual void PrintSummary() = 0;
+   virtual void Print() { std::cout << fModule->GetName() << std::endl; }
+
+   // Getters
+   Int_t GetVSN() { return fGeo; }
+   UShort_t GetUnpackError() { return fUnpackError; }
+   Int_t GetUnpackErrorCount() { return fUnpackErrorCount; }
+   HTRootModule *GetRootModule() { return fModule; }
+
+   // Setters
+   void SetVSN(Int_t vsn) { fGeo = vsn; }
+   void SetUnpackError(UShort_t code) { fUnpackError = code; } //
+
+   ClassDef(HTModuleUnpacker, 1);
+};
+#endif /* defined(____HTElectronics__) */

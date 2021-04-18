@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.11)
 
 # Set the project name
 project(HiRAEVT)
@@ -39,10 +39,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS -std=c++14)
 
-# Set output location
+# Set output location and location of JSON library
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
-
 
 # Force out of source build and UNIX system
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" insource)
@@ -61,18 +60,38 @@ find_package(ROOT 6.12 REQUIRED)
 SetBasicVariables()
 Generate_Version_Info()
 
+#### End FairRoot specific #####
+
+
+# Fetch the json library
+include(FetchContent)
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+  GIT_TAG v3.9.1)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+  FetchContent_Populate(json)
+  add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
+message ("TESTING")
+message (${json_SOURCE_DIR})
+
+
 # Walk through the project and compile libraries and executables
 add_subdirectory(HTElectronics)
-add_subdirectory(HTDetectors)
+#add_subdirectory(HTDetectors)
 add_subdirectory(HTLogo)
-add_subdirectory(HTExperimentalSetup)
+#add_subdirectory(HTExperimentalSetup)
 add_subdirectory(HTExperiment)
-add_subdirectory(HTRawDataReader)
+#add_subdirectory(HTRawDataReader)
 add_subdirectory(HTRootElectronics)
-add_subdirectory(HTRunInfo)
+#add_subdirectory(HTRunInfo)
 
 # build executables
 add_subdirectory(FilterUnpacker)
-add_subdirectory(HTMapper)
+#add_subdirectory(HTMapper)
+add_subdirectory(jsonTest)
 
 WRITE_CONFIG_FILE(config.sh)

@@ -1,21 +1,17 @@
 #include <HTRootSisTimestamp.h>
 
 //________________________________________________
-HTRootSisTimestamp::HTRootSisTimestamp(const char *name) : HTRootElectronics(name), fTimestamp(0) {}
+HTRootSisTimestamp::HTRootSisTimestamp(TString name) : HTRootModule(name)
+{
+   Clear();
+}
 
 //________________________________________________
-HTRootSisTimestamp::~HTRootSisTimestamp()
-{
-   if (fTimestamp)
-      delete fTimestamp;
-}
+HTRootSisTimestamp::~HTRootSisTimestamp() {}
 
-void HTRootSisTimestamp::InitTreeInputBranch(TTreeReader &theReader)
+void HTRootSisTimestamp::Clear()
 {
-   fTimestamp = new TTreeReaderArray<ULong64_t>(theReader, GetName());
+   fData[0] = 0;
+   fData[1] = 0;
 }
-
-ULong64_t HTRootSisTimestamp::GetData(int ch) const
-{
-   return (*fTimestamp)[ch];
-}
+ClassImp(HTRootSisTimestamp)

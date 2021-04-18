@@ -1,7 +1,7 @@
 #ifndef HTMODULEINFO_H
 #define HTMODULEINFO_H
 
-#include <HTElectronics.h>
+#include <HTModuleUnpacker.h>
 
 class HTModuleInfo {
 public:

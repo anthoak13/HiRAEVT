@@ -1,6 +1,6 @@
 /* *******************************************************************************************************
  * HTVetoWallBar Class
- * simple Veto Wall scintillator bar derived from RBVVbar class
+ * simple Veto Wall scintillator bar derived from HTVVbar class
  * implemented by Daniele Dell'Aquila (dellaqui@nscl.msu.edu)
  * 04/29/2018 v1.0
  *
