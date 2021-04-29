@@ -16,10 +16,8 @@
 #include <stdio.h>
 #include <string.h>
 
-HTUnpacker::HTUnpacker(json configJson, Int_t runNum)
+HTUnpacker::HTUnpacker(json configJson, Int_t runNum, ULong_t fileLength) : fEventUnpacked(0), fFileLength(fileLength)
 {
-   fEventUnpacked = 0;
-
    // Get the experiment name
    fExperimentInfo = new HTExperimentInfo(configJson["experimentNumber"].get<Int_t>());
    fExperiment = new HTExperiment(configJson["experimentNumber"].get<Int_t>());
@@ -38,6 +36,9 @@ HTUnpacker::HTUnpacker(json configJson, Int_t runNum)
 
    // Create the unpackers and register the output on the tree
    CreateUnpackers(configJson["VMEstacks"]);
+
+   // Get the start time of unpacking
+   fStartTime = time(nullptr);
 }
 
 HTUnpacker::~HTUnpacker() {}
@@ -108,7 +109,7 @@ CRingItem *HTUnpacker::handlePhysicsEventItem(CPhysicsEventItem *pItem)
    // if(fEventUnpacked > 2) return pItem;
 
    if (fEventUnpacked % 1000 == 0)
-      std::cout << fEventUnpacked << std::endl;
+      PrintPercentage();
 
    if (kMergedData) {
       // Deal with the built data structure
@@ -134,6 +135,7 @@ CRingItem *HTUnpacker::handlePhysicsEventItem(CPhysicsEventItem *pItem)
    } else {
 
       UnpackStack(pBody, pItem->getBodySize());
+      // Increase total unpacked words by bodysize/2
       //(*unpacker)(pBody, pItem->getBodySize());
    }
    fOutTree->Fill();
@@ -157,6 +159,7 @@ void HTUnpacker::UnpackStack(UShort_t *pEvent, UInt_t eventSize)
    Int_t stackID = (header & VMUSB_STACKID_MASK) << VMUSB_STACKID_SHIFT;
    UShort_t stackSizeWords = header & VMUSB_LENGTH;
    auto stackSizeBytes = 2 * (stackSizeWords + 1);
+   fWordsUnpacked++;
 
    if ((header & VMUSB_CONTINUE) != 0) {
       std::cout << "Didn't get a continue on event " << fEventUnpacked << std::endl;
@@ -200,6 +203,7 @@ void HTUnpacker::UnpackStack(UShort_t *pEvent, UInt_t eventSize)
    while (event[offset] == 0xffff)
       ++offset;
 
+   fWordsUnpacked += event.size();
    if (offset < event.size()) {
       // std::cout << "Event not unpacked fully" << std::endl;
       // std::cout << "Unpacked " << offset << " but is size " << event.size() << std::endl;
@@ -224,4 +228,44 @@ void HTUnpacker::PrintSummary()
       for (auto &module : stack.second)
          module->PrintSummary();
    }
+}
+
+void HTUnpacker::PrintPercentage() const
+{
+   // Get the time elapsed
+   TDatime now = time(nullptr);
+   UInt_t time_elapsed = now.Convert() - fStartTime.Convert();
+
+   std::cout << "Percentage= " << std::fixed << std::setprecision(1) << std::setw(5)
+             << 100 * (2 * fWordsUnpacked) / fFileLength << " %   [";
+
+   // Get the number of ='s to print and print them
+   int numToPrint = 20 * (2 * fWordsUnpacked) / fFileLength;
+   for (int i = 0; i < 20; ++i)
+      if (i < numToPrint)
+         std::cout << "=";
+      else
+         std::cout << " ";
+   std::cout << "]   ";
+
+   // Print the elapsed time
+   std::cout << "elapsed time: "
+             << (time_elapsed < 60 ? time_elapsed : (time_elapsed < 3600 ? time_elapsed / 60 : time_elapsed / 3600))
+             << (time_elapsed < 60 ? " s; " : (time_elapsed < 3600 ? " m; " : " h; "));
+
+   // Get the remaining time and print it
+   if (fWordsUnpacked > 2) {
+      ULong_t remainingFileSize = fFileLength - 2 * fWordsUnpacked;
+      Double_t secondsPerWord = (double)time_elapsed / (2 * fWordsUnpacked);
+
+      Double_t time_remaining = remainingFileSize * secondsPerWord;
+      std::cout << "Estimated remaining time: "
+                << (time_remaining < 60 ? time_remaining
+                                        : (time_remaining < 3600 ? time_remaining / 60 : time_remaining / 3600))
+                << (time_remaining < 60 ? " s      " : (time_remaining < 3600 ? " m      " : " h      "));
+   } // End if we should displat remaining time
+
+   std::cout << "\r";
+   std::cout.flush();
+   // std::cout << std::endl;
 }

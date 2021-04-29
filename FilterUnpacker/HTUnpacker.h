@@ -7,6 +7,8 @@
 // information. HTExperimentInfo contains the complete information needed for the
 // Mapper to properly read the TTree.
 
+#include "TDatime.h"
+
 #include "Rtypes.h"
 
 #include "nlohmann/json.hpp"
@@ -26,6 +28,10 @@ class HTUnpacker {
 
 private:
    Bool_t kMergedData;
+   TDatime fStartTime;
+   ULong_t fEventUnpacked;
+   ULong_t fFileLength;
+   ULong_t fWordsUnpacked;
 
    HTExperiment *fExperiment;         // Unpacked data
    HTExperimentInfo *fExperimentInfo; // metadata for run
@@ -33,16 +39,19 @@ private:
    TFile *fOutFile;
 
    std::map<Int_t, std::vector<HTModuleUnpacker *>> stackMap; // key:stackID value:moduleList
-   ULong_t fEventUnpacked;
+
    std::map<Int_t, ULong_t> fBufferMismatchCount;
 
    void CreateUnpackers(json moduleList);
    void UnpackStack(UShort_t *pEvent, UInt_t offset);
 
+   void PrintPercentage() const;       // Display progress with residual time
+   void PrintPercentageSimple() const; // Simple display progress
+
    static ULong_t getLong(std::vector<UShort_t> &event, ULong_t offset);
 
 public:
-   HTUnpacker(json configJson, Int_t runNum);
+   HTUnpacker(json configJson, Int_t runNum, ULong_t fileLength);
    ~HTUnpacker();
 
    CRingItem *handleStateChangeItem(CRingStateChangeItem *pItem);

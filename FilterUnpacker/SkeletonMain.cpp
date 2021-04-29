@@ -56,20 +56,45 @@ int main(int argc, char *argv[])
    json configData;
    confFile >> configData;
 
-   // Create the main app
-   char **mainArgs = SetMainArgs(configData, runNumber, argc, argv);
-   CFilterMain theApp(argc, mainArgs);
-   std::cout << "**Main app created**" << std::endl;
+   // Loop through and look for all of the evt files associated with the run and record the total
+   // size of all the files.
+   int numFiles = 0;
+   ULong_t totalFileLength = 0;
+   while (true) {
+      TString fileName =
+         TString::Format("%s/run%d/run-%04d-%02d.evt", configData["evtDirectory"].get<std::string>().c_str(), runNumber,
+                         runNumber, numFiles);
+      std::ifstream evtFile;
+      ULong64_t fileSize;
+      evtFile.open(fileName, std::ios::in | std::ios::binary);
+      if (evtFile.is_open()) {
+         numFiles++;
+         evtFile.seekg(0, std::ios::end);
+         totalFileLength += evtFile.tellg();
+      } else
+         break;
+      evtFile.close();
+   } // End loop searching for files
 
    // Create and register our filter (what actually unpacks the data)
-   HTUnpacker *unpacker = new HTUnpacker(configData, runNumber);
+   HTUnpacker *unpacker = new HTUnpacker(configData, runNumber, totalFileLength);
    HTFilter filter(unpacker);
-   std::cout << "** Unpacker filter intialized**" << std::endl;
-   theApp.registerFilter(&filter);
-   std::cout << "** Unpacker filter registered**" << std::endl;
 
-   // Run the main loop (unpack the data with repeated calls to HTFilter::operator()
-   theApp();
+   // Loop through each file and unpack it
+   for (int i = 0; i < numFiles; ++i) {
+
+      // Create the main app for this file and run
+      char **mainArgs = SetMainArgs(configData, runNumber, argc, argv);
+      CFilterMain theApp(argc, mainArgs);
+      std::cout << "**Main app created for file " << i << "**" << std::endl;
+
+      // Clear the unpacker and run
+
+      theApp.registerFilter(&filter);
+      theApp();
+
+   } // end loop over files
+
    unpacker->PrintSummary();
 
    /* std::cout << "Finished unpacking, saving tree" << std::endl;

@@ -362,14 +362,20 @@ void Unpacker::EndUnpacking()
 void Unpacker::PrintPercentage() const
 {
    double time_elapsed = (double)(clock() - fStart) / CLOCKS_PER_SEC;
+
    std::cout << "  Percentage= " << std::fixed << std::setprecision(1) << std::setw(5)
              << 100 * ((Long64_t)(2 * fReadWords)) / (fExperiment->GetEvtFileSize()) << " %";
+
    std::cout << "   [";
+
    int printindex = 0;
+
    for (; printindex < int(100 * ((Long64_t)(2 * fReadWords)) / (fExperiment->GetEvtFileSize())); printindex += 5)
       std::cout << "=";
+
    for (; printindex < 100; printindex += 5)
       std::cout << " ";
+
    std::cout << "]   "
              << "elapsed time " << std::setprecision(1)
              << (time_elapsed < 60 ? time_elapsed : (time_elapsed < 3600 ? time_elapsed / 60 : time_elapsed / 3600))
