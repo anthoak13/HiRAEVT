@@ -1,7 +1,7 @@
 # Create an executable to unpack the data called HiRAEVTUnpacker
 
 
-add_executable(HiRAEVTUnpacker.exe FragmentIndex.cpp HTFilter.cxx SkeletonMain.cpp HTUnpacker.cxx)
+add_executable(HiRAEVTUnpacker.exe FragmentIndex.cxx HTFilter.cxx SkeletonMain.cxx HTUnpacker.cxx)
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}
@@ -14,7 +14,7 @@ set(DEPENDENCIES
   /usr/opt/nscldaq/current/lib/liburl.so	
   /usr/opt/nscldaq/current/lib/libfilter.so	
 
-  HTElectronics
+  HTUnpackers
   HTExperiment
   HTLogo
   HTRootElectronics
@@ -36,11 +36,12 @@ set(INCLUDE_DIRECTORIES
   
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTExperiment
-  ${CMAKE_SOURCE_DIR}/HTElectronics
+  ${CMAKE_SOURCE_DIR}/HTUnpackers
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
-  ${CMAKE_SOURCE_DIR}/HTRunInfo
-  ${CMAKE_SOURCE_DIR}/FilterUnpacker
   ${CMAKE_SOURCE_DIR}/HTLogo
+
+  ${CMAKE_SOURCE_DIR}unpacker
+
   /usr/opt/nscldaq/current/filterkit/include
   /usr/opt/nscldaq/current/include
   

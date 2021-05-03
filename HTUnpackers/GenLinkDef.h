@@ -15,7 +15,6 @@
 #pragma link C++ class HTCAEN7xxUnpacker + ;
 #pragma link C++ class HTCAEN1x90Unpacker + ;
 #pragma link C++ class HTMADC32Unpacker + ;
-#pragma link C++ class HTUSBStack + ;
 #pragma link C++ class HTModuleUnpacker + ;
 #pragma link C++ class HTSisTimestampUnpacker + ;
 

@@ -80,17 +80,20 @@ message (${json_SOURCE_DIR})
 
 
 # Walk through the project and compile libraries and executables
-add_subdirectory(HTElectronics)
-#add_subdirectory(HTDetectors)
-add_subdirectory(HTLogo)
-#add_subdirectory(HTExperimentalSetup)
+# Libraries just for unpacker
+add_subdirectory(HTUnpackers)
 add_subdirectory(HTExperiment)
-#add_subdirectory(HTRawDataReader)
+
+# Libraries shared by unpacker and mapper
+add_subdirectory(HTLogo)
 add_subdirectory(HTRootElectronics)
-#add_subdirectory(HTRunInfo)
+
+# Libraries used by just mapper
+#add_subdirectory(HTDetectors)
+#add_subdirectory(HTExperimentalSetup)
 
 # build executables
-add_subdirectory(FilterUnpacker)
+add_subdirectory(unpacker)
 #add_subdirectory(HTMapper)
 add_subdirectory(jsonTest)
 

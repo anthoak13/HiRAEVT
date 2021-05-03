@@ -146,7 +146,7 @@ CRingItem *HTUnpacker::handlePhysicsEventItem(CPhysicsEventItem *pItem)
 
 void HTUnpacker::UnpackStack(UShort_t *pEvent, UInt_t eventSize)
 {
-   vector<UShort_t> event;
+   std::vector<UShort_t> event;
 
    // Define useful flags for VMSUB header decoding
    const UShort_t VMUSB_CONTINUE = 0x1000;
