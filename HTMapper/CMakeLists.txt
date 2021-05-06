@@ -1,17 +1,16 @@
 # Create an executable to unpack the data called HiRAEVTMapper
 
 
-add_executable(HiRAEVTMapper.exe HTMapper.cxx MapperMain.cxx )
+add_executable(HiRAEVTMapper.exe  MapperMain.cxx )
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}
-
+  nlohmann_json::nlohmann_json
+  
   HTLogo
-  HTRunInfo
-  HTExperimentalSetup
+ # HTExperimentalSetup
   HTRootElectronics
-  HTRawDataReader
-  HTDetectors
+#  HTDetectors
   )
 
 
@@ -21,7 +20,8 @@ set(LINK_DIRECTORIES
 
 set(INCLUDE_DIRECTORIES
   ${ROOT_INCLUDE_DIR}
-
+  ${json_SOURCE_DIR}/include
+  
   # Directories with headers
   ${CMAKE_SOURCE_DIR}/HTMapper
   ${CMAKE_SOURCE_DIR}/HTLogo

@@ -89,12 +89,12 @@ add_subdirectory(HTLogo)
 add_subdirectory(HTRootElectronics)
 
 # Libraries used by just mapper
-#add_subdirectory(HTDetectors)
+add_subdirectory(HTDetectors)
 #add_subdirectory(HTExperimentalSetup)
 
 # build executables
 add_subdirectory(unpacker)
-#add_subdirectory(HTMapper)
+add_subdirectory(HTMapper)
 add_subdirectory(jsonTest)
 
 WRITE_CONFIG_FILE(config.sh)
