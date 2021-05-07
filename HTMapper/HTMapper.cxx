@@ -1,141 +1,159 @@
-#include <HTMapper.h>
+#include "HTMapper.h"
 
-//________________________________________________
-HTMapper::HTMapper() : fMappedTree(0), fFileOut(0), fRunNumber(-1) {}
+#include "TFile.h"
+#include "TString.h"
+#include "TTree.h"
+#include "TTreeReader.h"
 
-//________________________________________________
-HTMapper::~HTMapper() {}
+#include "HTDetectorMapper.h"
+#include "HTMapperFactory.h"
+#include "HTRootModuleFactory.h"
 
-//________________________________________________
-int HTMapper::PassArguments(int argc, char **argv)
+#include <time.h>
+
+#include "nlohmann/json.hpp"
+
+HTMapper *HTMapper::fInstance = nullptr;
+HTMapper *HTMapper::Instance()
 {
-   // Find the --run cmd argument and extract run number
-   for (int i = 1; i < argc; i++) {
-      std::string Argument(argv[i]);
-      if (Argument.find("--run=") != std::string::npos) {
-         fRunNumber = std::stoi(Argument.substr(Argument.find("--run=") + 6));
-      }
+   if (fInstance == nullptr)
+      fInstance = new HTMapper();
+   return fInstance;
+}
+
+void HTMapper::Init(json config, Int_t runNumber)
+{
+   fConfigInfo = config;
+   fRunNumber = runNumber;
+
+   // Open the input file
+   TString inputFileName =
+      TString::Format("%s/run-%d.root", fConfigInfo["inputDirectory"].get<std::string>().data(), runNumber);
+   std::cout << "Opening input file: " << inputFileName << std::endl;
+   fFileInput = new TFile(inputFileName);
+   if (fFileInput->IsZombie())
+      throw std::runtime_error("Error opening input file!");
+
+   // Create the tree reader
+   TString treeName = TString::Format("E%d", fConfigInfo["experimentNumber"].get<int>());
+   fTreeInput = (TTree *)fFileInput->Get(treeName);
+
+   // Open the output file
+   TString outputFileName =
+      TString::Format("%s/mappedRun-%d.root", fConfigInfo["outputDirectory"].get<std::string>().data(), runNumber);
+   std::cout << "Opening output file: " << outputFileName << std::endl;
+   fFileOutput = new TFile(outputFileName, "RECREATE");
+   if (fFileInput->IsZombie())
+      throw std::runtime_error("Error opening output file!");
+
+   // Create the output tree
+   fTreeOutput = new TTree(treeName + "Mapped", treeName);
+
+   // Create all of the electronic modules
+   CreateModules();
+
+   // Create all of the detectors
+   CreateDetectors();
+}
+
+void HTMapper::CreateModules()
+{
+
+   // Loop through each module and create a reader of the correct type.
+   for (const auto &module : fConfigInfo["modules"]) {
+      std::string moduleName = module["moduleName"].get<std::string>();
+      std::string moduleType = module["moduleType"].get<std::string>();
+
+      std::cout << "Creating reader for module " << moduleName << " of type " << moduleType;
+
+      // Create and register the module
+      auto modulePtr = HTRootModuleFactory::Instance()->CreateRootModule(moduleType, moduleName, fTreeInput);
+      fModules[moduleName] = modulePtr;
+
+      std::cout << " addr: " << modulePtr << std::endl;
+   }
+}
+
+void HTMapper::CreateDetectors()
+{
+   // Loop through each detector and create them
+   for (const auto &detector : fConfigInfo["detectors"]) {
+      std::string detectorName = detector["detectorName"].get<std::string>();
+      std::string detectorType = detector["detectorType"].get<std::string>();
+      std::cout << "Creating detector and mapper for " << detectorName << " of type " << detectorType << std::endl;
+
+      // Create mapper
+      fMappers.push_back(HTMapperFactory::Instance()->CreateDetector(detector, fTreeOutput));
+   }
+}
+
+void HTMapper::MapData()
+{
+   fTotalEvents = fTreeInput->GetEntries();
+   fStartTime = time(nullptr);
+
+   for (fEventsMapped = 0; fEventsMapped < fTotalEvents; ++fEventsMapped) {
+      if (fEventsMapped % 1000 == 0)
+         PrintPercentage();
+
+      fTreeInput->GetEntry(fEventsMapped);
+
+      for (const auto &map : fMappers)
+         map->Map();
+
+      // Fill the tree
+      fTreeOutput->Fill();
    }
 
-   if (fRunNumber < 0)
-      return -1;
-   return 0;
+   // Newline after all of the status printing
+   std::cout << std::endl;
 }
 
-//________________________________________________
-int HTMapper::InitializeMapper(const char *file_config_name)
+void HTMapper::End()
 {
-   // Loading configuration file and building RunInfo
-   if (LoadExperimentInfo(file_config_name) != 0)
-      return -3;
-
-   // Building Experimental Setup
-   if (BuildExperimentalSetup() != 0)
-      return -1;
-
-   // Initializing output TFile and TTree
-   if (InitRootOutput() != 0)
-      return -2;
-
-   return 0;
+   fTreeOutput->Write();
+   fFileInput->Close();
+   fFileOutput->Close();
 }
 
-//________________________________________________
-int HTMapper::LoadExperimentInfo(const char *file_name)
+const std::unordered_map<std::string, HTRootModule *> *HTMapper::GetRootModules()
 {
-   // Initialization of HTRunInfo class
-   std::cout << "** Initializing Run Info **\n";
-   std::cout << "Loading config file: " << file_name << std::endl;
-
-   if (HTExperimentInfo::Instance()->InitClass(file_name) <= 0) {
-      std::cout << "Error while reading configuration file.\n";
-      exit(-1);
-   }
-
-   auto runInfo = HTExperimentInfo::Instance()->SetRunNumber(fRunNumber);
-   std::cout << "** Run Info correctly initialized **\n" << std::endl;
-
-   return 0;
+   return &fModules;
 }
 
-//________________________________________________
-int HTMapper::BuildExperimentalSetup()
+void HTMapper::PrintPercentage()
 {
+   TDatime now = time(nullptr);
+   UInt_t time_elapsed = now.Convert() - fStartTime.Convert();
+   Float_t fracDone = (double)fEventsMapped / fTotalEvents;
 
-   if (HTExperimentalSetup::Instance() == 0)
-      return -1;
+   std::cout << "Percentage= " << std::fixed << std::setprecision(1) << std::setw(5) << 100 * fracDone << " %   [";
 
-   if (HTExperimentalSetup::Instance()->BuildElectronicModules() <= 0)
-      return -2;
-   std::cout << "Electronic modules initialized" << std::endl;
+   // Print out status bar
+   int numToPrint = 20 * fracDone;
+   for (int i = 0; i < 20; ++i)
+      if (i < numToPrint)
+         std::cout << "=";
+      else
+         std::cout << " ";
+   std::cout << "]   ";
 
-   if (HTExperimentalSetup::Instance()->BuildDetectors() <= 0)
-      return -3;
-   std::cout << "Detectors initialized" << std::endl;
+   // Print the elapsed time
+   std::cout << "elapsed time: "
+             << (time_elapsed < 60 ? time_elapsed : (time_elapsed < 3600 ? time_elapsed / 60 : time_elapsed / 3600))
+             << (time_elapsed < 60 ? " s; " : (time_elapsed < 3600 ? " m; " : " h; "));
 
-   HTExperimentalSetup::Instance()->BuildDetectorMaps();
-   std::cout << "Detectors mapped" << std::endl;
+   if (fEventsMapped > 0) {
+      auto remainingEvents = fTotalEvents - fEventsMapped;
+      Double_t secondsPerEvent = (Double_t)time_elapsed / fEventsMapped;
+      Double_t time_remaining = secondsPerEvent * remainingEvents;
 
-   return 0;
-}
+      std::cout << "Estimated remaining time: "
+                << (time_remaining < 60 ? time_remaining
+                                        : (time_remaining < 3600 ? time_remaining / 60 : time_remaining / 3600))
+                << (time_remaining < 60 ? " s      " : (time_remaining < 3600 ? " m      " : " h      "));
 
-//________________________________________________
-int HTMapper::InitRootOutput()
-{
-   // Opening a new TFile for output
-   fFileOut =
-      new TFile(Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber), "RECREATE");
-   if (fFileOut->IsZombie())
-      return -1; // failed to open TFile
-
-   // Creating output TTree
-   fMappedTree = new TTree(Form("E%s", HTExperimentInfo::Instance()->GetName()),
-                           HTExperimentInfo::Instance()->GetRunInfo()->GetTitle(), 2);
-
-   fMappedTree->SetAutoSave(50000000);
-
-   // call individual detectors InitTTreeBranch
-   HTExperimentalSetup::Instance()->InitDetectorBranches(fMappedTree);
-
-   printf("HTMapper: Opened ROOT file %s\n",
-          Form("%srun-%04d.root", HTExperimentInfo::Instance()->GetMappedRootFilePath(), fRunNumber));
-
-   return 0;
-}
-
-//________________________________________________
-TTree *HTMapper::GetMappedTree() const
-{
-   return fMappedTree;
-}
-
-//________________________________________________
-void HTMapper::EndMapping()
-{
-   // Writing TTree to file and close file
-   fMappedTree->AutoSave();
-   fMappedTree->GetCurrentFile()->Close();
-
-   return;
-}
-
-//________________________________________________
-void HTMapper::MapDetectors()
-{
-   // Loop over the defined detectors to call their individual HTDetector::BuildEvent()
-   auto DefinedDetectors = HTExperimentalSetup::Instance()->GetDetectors();
-
-   for (auto TheDetector : *DefinedDetectors)
-      ; // TheDetector.second->BuildEvent();
-
-   return;
-}
-
-//________________________________________________
-void HTMapper::FillMappedEvent()
-{
-   // Calling TTree::Fill() with mapped data
-   fMappedTree->Fill();
-
-   return;
+   } // End print remaining time
+   std::cout << "\r";
+   std::cout.flush();
 }

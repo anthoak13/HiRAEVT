@@ -42,11 +42,16 @@ int main(int argc, char **argv)
    json configData;
    configFile >> configData;
 
-   // Create a new HTMapper object
-   // HTMapper *TheMapper = new HTMapper();
+   // Initialize the mapper object
+   HTMapper::Instance()->Init(configData, runNumber);
 
-   // Pass Argument to HTMapper object and retrieve run number to analyze
+   std::cout << "Mapper is initialized" << std::endl;
 
+   // Loop through all of the data
+   HTMapper::Instance()->MapData();
+
+   // Done mapping
+   HTMapper::Instance()->End();
    return 0;
 }
 

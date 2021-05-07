@@ -1,0 +1,42 @@
+{
+    "inputDirectory":"~/HiRAEVT/",
+    "outputDirectory":"~/HiRAEVT/",
+    "experimentNumber":12014,
+    "modules" : [
+	{
+	    "moduleType":"HTRootAdc",
+	    "moduleName":"adc2"},
+	{
+	    "moduleType":"HTRootCAEN1x90",
+	    "moduleName":"tdc1"}
+    ],
+    "detectors": [
+	{
+	    "detectorType":"HTSimpleDetector",
+	    "detectorName":"HPGe",
+	    "fEnergy": {
+		"moduleName":"adc2",
+		"ch":2},
+	    "fTime": {
+		"moduleName":"tdc1",
+		"ch":7},
+	    "calibrationFile":"~/HiRAEVT/input-files/GeCalibration.json"
+	},
+	{
+	    "detectorType":"HTSimpleDetector",
+	    "detectorName":"Si.dE",
+	    "fEnergy": {
+		"moduleName":"adc2",
+		"ch":0},
+	    "fTime": {
+		"moduleName":"tdc1",
+		"ch":5},
+	    "calibration": {
+		"fEnergy": {
+		    "method":"poly",
+		    "parameters" : [0, 0.5] }
+	    }
+	}
+    ] 
+}	    
+	    

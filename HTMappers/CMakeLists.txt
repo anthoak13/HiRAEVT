@@ -1,21 +1,19 @@
-# Create a library called libHTElectronics
+# Create a library called libHTMappers
 
-set(LINKDEF "GenLinkDef.h")
-set(LIBRARY_NAME HTRootElectronics)
-
+set(LINKDEF GenLinkDef.h)
+set(LIBRARY_NAME HTMappers)
 set(DEPENDENCIES
-
+  ${ROOT_LIBRARIES}
+  nlohmann_json::nlohmann_json
+  
+  HTRootElectronics
+  HTDetectors
   )
 
 set(SRCS
   # Put source files to compile here
-
-  HTRootModule.cxx
-  HTRootCAEN1x90.cxx
-  HTRootCAEN1x90SingleHit.cxx
-  HTRootSisTimestamp.cxx
-  HTRootAdc.cxx 
-  HTRootModuleFactory.cxx
+  HTSimpleDetectorMapper.cxx
+  HTMapperFactory.cxx
   
   )
 
@@ -24,13 +22,14 @@ set(INCLUDE_DIRECTORIES
   ${json_SOURCE_DIR}/include
   
   # Directories with headers
+  ${CMAKE_SOURCE_DIR}/HTMappers
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
- 
+  ${CMAKE_SOURCE_DIR}/HTDetectors
+  
   )
 
 set(LINK_DIRECTORIES
   ${ROOT_LIBRARY_DIR}
-
   )
 
 

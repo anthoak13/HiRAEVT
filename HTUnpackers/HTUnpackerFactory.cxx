@@ -31,6 +31,7 @@ HTUnpackerFactory *HTUnpackerFactory::Instance()
 HTModuleUnpacker *HTUnpackerFactory::CreateUnpacker(json moduleDescription, TTree *tr)
 {
    TString unpackerType = moduleDescription["moduleType"].get<std::string>();
+
    HTModuleUnpacker *unpacker = nullptr;
 
    if (unpackerType.EqualTo("HTSisTimestampUnpacker")) {

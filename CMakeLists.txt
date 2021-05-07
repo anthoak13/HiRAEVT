@@ -90,6 +90,7 @@ add_subdirectory(HTRootElectronics)
 
 # Libraries used by just mapper
 add_subdirectory(HTDetectors)
+add_subdirectory(HTMappers)
 #add_subdirectory(HTExperimentalSetup)
 
 # build executables

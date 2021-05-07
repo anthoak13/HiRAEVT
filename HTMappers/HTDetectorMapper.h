@@ -12,14 +12,18 @@
 
 class HTDetector;
 class HTRootModule;
+class HTMapper;
 
 class HTDetectorMapper : public TObject {
-private:
-   HTDetector *fDetector;
-   std::map<TString, HTRootModule *> fModules;
+protected:
+   HTDetector *fDetector;         // Owned by the mapper object, the detector this is filling
+   const HTMapper *fParentMapper; // A pointer to the object that owns this mapper
 
 public:
+   virtual ~HTDetectorMapper() {} // virtual so the derived destructor is always called
+
    virtual void Map() = 0; // Called at each event.
+   HTDetector *GetDetector() { return fDetector; }
 };
 
 #endif //#define HTDETECTORMAPPER_H
