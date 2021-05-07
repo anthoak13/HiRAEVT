@@ -85,7 +85,7 @@ add_subdirectory(HTUnpackers)
 add_subdirectory(HTExperiment)
 
 # Libraries shared by unpacker and mapper
-add_subdirectory(HTLogo)
+#add_subdirectory(HTLogo)
 add_subdirectory(HTRootElectronics)
 
 # Libraries used by just mapper
@@ -95,7 +95,7 @@ add_subdirectory(HTMappers)
 
 # build executables
 add_subdirectory(unpacker)
-add_subdirectory(HTMapper)
-add_subdirectory(jsonTest)
+add_subdirectory(mapper)
+#add_subdirectory(jsonTest)
 
 WRITE_CONFIG_FILE(config.sh)

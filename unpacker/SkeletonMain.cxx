@@ -5,7 +5,7 @@
 #include "HTFilter.h"
 #include "HTModuleUnpacker.h"
 #include "HTUnpacker.h"
-#include "HiRAEVTLogo.h"
+#include "HTUnpackerLogo.h"
 
 #include <CFatalException.h>
 #include <CFilterMain.h>

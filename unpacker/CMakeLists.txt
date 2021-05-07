@@ -16,7 +16,6 @@ set(DEPENDENCIES
 
   HTUnpackers
   HTExperiment
-  HTLogo
   HTRootElectronics
   )
 
@@ -38,9 +37,8 @@ set(INCLUDE_DIRECTORIES
   ${CMAKE_SOURCE_DIR}/HTExperiment
   ${CMAKE_SOURCE_DIR}/HTUnpackers
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
-  ${CMAKE_SOURCE_DIR}/HTLogo
 
-  ${CMAKE_SOURCE_DIR}unpacker
+  ${CMAKE_SOURCE_DIR}/unpacker
 
   /usr/opt/nscldaq/current/filterkit/include
   /usr/opt/nscldaq/current/include

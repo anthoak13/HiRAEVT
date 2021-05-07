@@ -1,7 +1,7 @@
 #include "TString.h"
 
 #include "HTMapper.h"
-#include "HiRAEVTLogo.h"
+#include "HTMapperLogo.h"
 
 #include <fstream>
 #include <iostream>
