@@ -11,7 +11,7 @@
 
 #include "Rtypes.h"
 
-#include "nlohmann/json_fwd.hpp"
+#include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 class HTDetector : public TObject {

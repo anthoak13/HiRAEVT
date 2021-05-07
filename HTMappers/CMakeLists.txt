@@ -12,6 +12,7 @@ set(DEPENDENCIES
 
 set(SRCS
   # Put source files to compile here
+  HTDetectorMapper.cxx
   HTSimpleDetectorMapper.cxx
   HTMapperFactory.cxx
   

@@ -26,34 +26,48 @@ void HTMapper::Init(json config, Int_t runNumber)
    fConfigInfo = config;
    fRunNumber = runNumber;
 
+   std::cout << "*** Opening the input/output files and TTrees ***" << std::endl;
+   OpenFiles();
+   std::cout << std::endl;
+
+   std::cout << "*** Loading electronic modules from input tree ***" << std::endl;
+   // Create all of the electronic modules
+   CreateModules();
+   std::cout << std::endl;
+
+   std::cout << "*** Initializing detectors and mappers ***" << std::endl;
+   // Create all of the detectors
+   CreateDetectors();
+   std::cout << std::endl;
+}
+
+void HTMapper::OpenFiles()
+{
    // Open the input file
    TString inputFileName =
-      TString::Format("%s/run-%d.root", fConfigInfo["inputDirectory"].get<std::string>().data(), runNumber);
+      TString::Format("%s/run-%d.root", fConfigInfo["inputDirectory"].get<std::string>().data(), fRunNumber);
    std::cout << "Opening input file: " << inputFileName << std::endl;
    fFileInput = new TFile(inputFileName);
    if (fFileInput->IsZombie())
       throw std::runtime_error("Error opening input file!");
 
-   // Create the tree reader
+   // Get the input tree
    TString treeName = TString::Format("E%d", fConfigInfo["experimentNumber"].get<int>());
    fTreeInput = (TTree *)fFileInput->Get(treeName);
+   if (fTreeInput == nullptr)
+      throw std::runtime_error(
+         std::string("Could not find tree named ").append(treeName).append(" in ").append(inputFileName));
 
    // Open the output file
    TString outputFileName =
-      TString::Format("%s/mappedRun-%d.root", fConfigInfo["outputDirectory"].get<std::string>().data(), runNumber);
+      TString::Format("%s/mappedRun-%d.root", fConfigInfo["outputDirectory"].get<std::string>().data(), fRunNumber);
    std::cout << "Opening output file: " << outputFileName << std::endl;
    fFileOutput = new TFile(outputFileName, "RECREATE");
    if (fFileInput->IsZombie())
       throw std::runtime_error("Error opening output file!");
 
    // Create the output tree
-   fTreeOutput = new TTree(treeName + "Mapped", treeName);
-
-   // Create all of the electronic modules
-   CreateModules();
-
-   // Create all of the detectors
-   CreateDetectors();
+   fTreeOutput = new TTree(treeName, treeName);
 }
 
 void HTMapper::CreateModules()
@@ -64,13 +78,11 @@ void HTMapper::CreateModules()
       std::string moduleName = module["moduleName"].get<std::string>();
       std::string moduleType = module["moduleType"].get<std::string>();
 
-      std::cout << "Creating reader for module " << moduleName << " of type " << moduleType;
+      std::cout << "Creating reader for module " << moduleName << " of type " << moduleType << std::endl;
 
       // Create and register the module
       auto modulePtr = HTRootModuleFactory::Instance()->CreateRootModule(moduleType, moduleName, fTreeInput);
       fModules[moduleName] = modulePtr;
-
-      std::cout << " addr: " << modulePtr << std::endl;
    }
 }
 
@@ -99,7 +111,7 @@ void HTMapper::MapData()
       fTreeInput->GetEntry(fEventsMapped);
 
       for (const auto &map : fMappers)
-         map->Map();
+         map->MapAndCalibrate();
 
       // Fill the tree
       fTreeOutput->Fill();

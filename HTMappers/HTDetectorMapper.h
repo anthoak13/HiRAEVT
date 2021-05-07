@@ -10,19 +10,24 @@
 
 #include <map>
 
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
+
 class HTDetector;
 class HTRootModule;
 class HTMapper;
 
 class HTDetectorMapper : public TObject {
 protected:
-   HTDetector *fDetector;         // Owned by the mapper object, the detector this is filling
-   const HTMapper *fParentMapper; // A pointer to the object that owns this mapper
+   HTDetector *fDetector;     // Owned by the mapper object, the detector this is filling
+   const json fConfiguration; // The full JSON description of the detector
+   json fCalibration;         // The calibration info for this detector. Format is determined by detector type
 
 public:
-   virtual ~HTDetectorMapper() {} // virtual so the derived destructor is always called
+   HTDetectorMapper(const json &config); // Sets fConfiguration and fCalibration
+   virtual ~HTDetectorMapper() {}        // virtual so the derived destructor is always called
 
-   virtual void Map() = 0; // Called at each event.
+   virtual void MapAndCalibrate() = 0; // Called at each event. Maps and calibrates the data
    HTDetector *GetDetector() { return fDetector; }
 };
 

@@ -20,7 +20,7 @@
 	    "fTime": {
 		"moduleName":"tdc1",
 		"ch":7},
-	    "calibrationFile":"~/HiRAEVT/input-files/GeCalibration.json"
+	    "calibrationFile":"/user/anthonya/HiRAEVT/input-files/GeCalibration.json"
 	},
 	{
 	    "detectorType":"HTSimpleDetector",

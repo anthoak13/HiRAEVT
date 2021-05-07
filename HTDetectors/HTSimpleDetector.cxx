@@ -32,7 +32,7 @@ void HTSimpleDetector::Clear()
    fTime = -9999;
 }
 
-void HTSimpleDetector::Calibrate(const json &calibration)
+void HTSimpleDetector::Calibrate(const json &fCalibration)
 {
    // For this detectir calibration should have the form
    //  {fEnergy:{ calibrationMethod },
@@ -41,14 +41,14 @@ void HTSimpleDetector::Calibrate(const json &calibration)
    //  Calibration method can be found in
 
    // Calibrate energy
-   if (calibration.contains("fEnergy"))
-      fEnergy = HTCalibrator::Instance()->Calibrate(fEnergyRaw, calibration["fEnergy"]);
+   if (fCalibration.contains("fEnergy"))
+      fEnergy = HTCalibrator::Instance()->Calibrate(fEnergyRaw, fCalibration["fEnergy"]);
    else
       fEnergy = fEnergyRaw;
 
    // Calibrate time
-   if (calibration.contains("fTime"))
-      fTime = HTCalibrator::Instance()->Calibrate(fTimeRaw, calibration["fTime"]);
+   if (fCalibration.contains("fTime"))
+      fTime = HTCalibrator::Instance()->Calibrate(fTimeRaw, fCalibration["fTime"]);
    else
       fTime = fTimeRaw;
 }

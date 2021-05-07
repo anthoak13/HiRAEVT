@@ -45,8 +45,6 @@ int main(int argc, char **argv)
    // Initialize the mapper object
    HTMapper::Instance()->Init(configData, runNumber);
 
-   std::cout << "Mapper is initialized" << std::endl;
-
    // Loop through all of the data
    HTMapper::Instance()->MapData();
 

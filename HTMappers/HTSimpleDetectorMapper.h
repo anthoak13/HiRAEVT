@@ -11,14 +11,11 @@ using json = nlohmann::json;
 class HTMapper;
 
 class HTSimpleDetectorMapper : public HTDetectorMapper {
-private:
-   const json &fConfig;
-
 public:
    HTSimpleDetectorMapper(const json &config);
    virtual ~HTSimpleDetectorMapper();
 
-   virtual void Map() override;
+   virtual void MapAndCalibrate() override;
 };
 
 #endif //#ifndef HTSIMPLEDETECTORMAPPER_H

@@ -30,9 +30,9 @@ private:
    TTree *fTreeOutput; // TTree with mapped data
    TFile *fFileOutput; // TFile with output tree
    TTree *fTreeInput;
-   TFile *fFileInput;  // TFile with input tree
+   TFile *fFileInput; // TFile with input tree
 
-   int fRunNumber;     //! Run number to analyze
+   int fRunNumber; //! Run number to analyze
    json fConfigInfo;
 
    // Variables to track time while mapping data
@@ -44,6 +44,7 @@ private:
    std::unordered_map<std::string, HTRootModule *> fModules; // fModules[moduleName] = module
    std::vector<HTDetectorMapper *> fMappers;
 
+   void OpenFiles();
    void CreateModules();
    void CreateDetectors();
 
