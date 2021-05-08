@@ -34,8 +34,10 @@
 	    {
 		"moduleType":"HTMADC32Unpacker",
 		"moduleName":"adc2",
-		"vsn":5} ]
-    }]
+		"vsn":5}
+	]
+    }
+		 ]
 }
 
 		

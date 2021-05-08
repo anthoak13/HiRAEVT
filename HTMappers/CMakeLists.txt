@@ -14,6 +14,7 @@ set(SRCS
   # Put source files to compile here
   HTDetectorMapper.cxx
   HTSimpleDetectorMapper.cxx
+  HTMcpMapper.cxx
   HTMapperFactory.cxx
   
   )

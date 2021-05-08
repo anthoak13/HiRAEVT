@@ -22,5 +22,8 @@ HTDetectorMapper::HTDetectorMapper(const json &config) : fConfiguration(config)
          calFile >> fCalibration;
 
    } else // No calibration data found
-      std::cout << "No calibration data found." << std::endl;
+   {
+      std::cout << "No calibration data found for " << fConfiguration["detectorName"] << std::endl;
+      fCalibration = json();
+   }
 }

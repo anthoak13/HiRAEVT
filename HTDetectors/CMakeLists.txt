@@ -14,23 +14,10 @@ set(SRCS
   # Put source files to compile here
   HTDetector.cxx
   HTSimpleDetector.cxx
-
+  HTMcp.cxx
+  
   HTCalibrator.cxx
-  #HTDetector/HTDetectorFactory.cxx
-  #HTDetector/HTDetectorMap.cxx
-
-#  HTIonChamber/HTIonChamber.cxx
-#  HTIonChamber/HTIonChamberMap.cxx
-#  HTIonChamber/HTIonChamberRootEvent.cxx
-
-#  HTMcp/HTMcp.cxx
-#  HTMcp/HTMcpMap.cxx
-#  HTMcp/HTMcpRootEvent.cxx
-
-#  HTSisTimestamp/HTSisTimestamp.cxx
-#  HTSisTimestamp/HTSisTimestampMap.cxx
-#  HTSisTimestamp/HTSisTimestampRootEvent.cxx
-    
+  
   )
 
 set(INCLUDE_DIRECTORIES
@@ -42,10 +29,6 @@ set(INCLUDE_DIRECTORIES
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
 
   ${CMAKE_SOURCE_DIR}/HTDetectors
-#  ${CMAKE_SOURCE_DIR}/HTDetectors/HTDetector
-#  ${CMAKE_SOURCE_DIR}/HTDetectors/HTIonChamber
-#  ${CMAKE_SOURCE_DIR}/HTDetectors/HTMcp
-#  ${CMAKE_SOURCE_DIR}/HTDetectors/HTSisTimestamp
   )
 
 set(LINK_DIRECTORIES

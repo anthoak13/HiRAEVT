@@ -104,6 +104,8 @@ void HTMapper::MapData()
    fTotalEvents = fTreeInput->GetEntries();
    fStartTime = time(nullptr);
 
+   std::cout << "*** Begining loop over " << fTotalEvents << " events ***" << std::endl;
+
    for (fEventsMapped = 0; fEventsMapped < fTotalEvents; ++fEventsMapped) {
       if (fEventsMapped % 1000 == 0)
          PrintPercentage();

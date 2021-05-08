@@ -1,7 +1,10 @@
 #ifndef HTSIMPLEDETECTOR_H
 #define HTSIMPLEDETECTOR_H
 
-// This detector holds just a time and an energy (calibrated and raw)
+/* This detector holds just a time and an energy (calibrated and raw)
+ * Adam Anthony 5/6/2021
+ *
+ */
 #include "HTDetector.h"
 #include "Rtypes.h"
 

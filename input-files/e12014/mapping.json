@@ -1,0 +1,51 @@
+{
+    "inputDirectory":"~/HiRAEVT/",
+    "outputDirectory":"~/HiRAEVT/",
+    "experimentNumber":12014,
+    "modules" : [
+	{ "moduleType":"HTRootAdc", "moduleName":"adc2"},
+	{ "moduleType":"HTRootCAEN1x90", "moduleName":"tdc1"},
+	{ "moduleType":"HTRootAdc", "moduleName":"qdc1"},
+	{ "moduleType":"HTRootAdc", "moduleName":"qdc2"}
+    ],
+    "detectors": [
+	{
+	    "detectorType":"HTSimpleDetector",
+	    "detectorName":"HPGe",
+	    "fEnergy": { "moduleName":"adc2", "ch":2},
+	    "fTime": { "moduleName":"tdc1", "ch":7},
+	    "calibration": { "fEnergy":{ "method":"poly", "parameters":[-15.7651, 0.4169, 9.03853e-7]}}
+	},
+	{
+	    "detectorType":"HTSimpleDetector",
+	    "detectorName":"Si.dE",
+	    "fEnergy": { "moduleName":"adc2", "ch":0},
+	    "fTime": { "moduleName":"tdc1", "ch":5},
+	    "calibration": { "fEnergy": { "method":"poly", "parameters" : [-0.1294, 0.00404766] }}
+	},
+	{
+	    "detectorType":"HTSimpleDetector",
+	    "detectorName":"Si.E",
+	    "fEnergy": { "moduleName":"adc2", "ch":1},
+	    "fTime": { "moduleName":"tdc1", "ch":6},
+	    "calibration": { "fEnergy": { "method":"poly", "parameters" : [-6.52948, 0.02548] }}
+	},
+	{
+	    "detectorType":"HTMcp",
+	    "detectorName":"DSMCP",
+	    "fEnergyAnode": { "moduleName":"qdc1", "ch":0},
+	    "fEnergyMcp": { "moduleName":"qdc1", "ch":1},
+	    "fTimeAnode": { "moduleName":"tdc1", "ch":1},
+	    "fTimeMcp": { "moduleName":"tdc1", "ch":2}
+	},
+	{
+	    "detectorType":"HTMcp",
+	    "detectorName":"USMCP",
+	    "fEnergyAnode": { "moduleName":"qdc2", "ch":0},
+	    "fEnergyMcp": { "moduleName":"qdc2", "ch":1},
+	    "fTimeAnode": { "moduleName":"tdc1", "ch":3},
+	    "fTimeMcp": { "moduleName":"tdc1", "ch":4}
+	}
+    ] 
+}	    
+	    
