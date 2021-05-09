@@ -1,7 +1,6 @@
 {
     "evtDirectory":"/mnt/rawdata/e12014/experiment",
-    "outputDirectoryOld":"/mnt/analysis/e12014/HiRAEVT/unpacked",
-    "outputDirectory":"~/HiRAEVT/",
+    "outputDirectory":"/mnt/analysis/e12014/HiRAEVT/unpacked",
     "experimentNumber":12014,
     "mergedData":false,
     "VMEstacks": [ {

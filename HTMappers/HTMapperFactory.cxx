@@ -7,6 +7,8 @@
 #include "HTDetectorMapper.h"
 #include "HTMcp.h"
 #include "HTMcpMapper.h"
+#include "HTMusicIC.h"
+#include "HTMusicICMapper.h"
 #include "HTSimpleDetector.h"
 #include "HTSimpleDetectorMapper.h"
 
@@ -39,6 +41,12 @@ HTDetectorMapper *HTMapperFactory::CreateDetector(const json &detConfig, TTree *
       mapper = new HTMcpMapper(detConfig);
       if (tr != nullptr)
          tr->Branch(mapper->GetDetector()->GetName(), (HTMcp *)mapper->GetDetector());
+      return mapper;
+   }
+   if (detType.EqualTo("HTMusicIC")) {
+      mapper = new HTMusicICMapper(detConfig);
+      if (tr != nullptr)
+         tr->Branch(mapper->GetDetector()->GetName(), (HTMusicIC *)mapper->GetDetector());
       return mapper;
    }
 

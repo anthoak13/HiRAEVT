@@ -70,6 +70,15 @@ public:
    void MapData(); // Loops through input tree and maps data
 
    void End(); // Cleanup
+
+   // *** Functions for accessing typical energies and times ***
+
+   // Requires module name to be type castable to HTRootAdc
+   Short_t GetAdcEnergy(const std::string &moduleName, int ch);
+
+   // Requires module to be a TDC type (HTRootCAEN1x90 or HTRootCAEN1x90SingleHit)
+   Double_t GetTimeSingleHit(const std::string &moduleName, int ch);
+   std::vector<Double_t> GetTimeMultiHit(const std::string &moduleName, int ch);
 };
 
 #endif

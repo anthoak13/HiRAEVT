@@ -46,25 +46,17 @@ void HTMcp::Calibrate(const json &calibration)
 {
    if (calibration.contains("fEnergyMcp"))
       fEnergyMcp = HTCalibrator::Instance()->Calibrate(fEnergyMcpRaw, calibration["fEnergyMcp"]);
-   else
-      fEnergyMcp = fEnergyMcpRaw;
 
    if (calibration.contains("fEnergyAnode"))
       fEnergyAnode = HTCalibrator::Instance()->Calibrate(fEnergyAnodeRaw, calibration["fEnergyAnode"]);
-   else
-      fEnergyAnode = fEnergyAnodeRaw;
 
    if (calibration.contains("fTimeMcp"))
       for (const auto &time : fTimeMcpRaw)
          fTimeMcp.push_back(HTCalibrator::Instance()->Calibrate(time, calibration["fTimeMcp"]));
-   else
-      fTimeMcp = fTimeMcpRaw;
 
    if (calibration.contains("fTimeAnode"))
       for (const auto &time : fTimeAnodeRaw)
          fTimeAnode.push_back(HTCalibrator::Instance()->Calibrate(time, calibration["fTimeAnode"]));
-   else
-      fTimeAnode = fTimeAnodeRaw;
 }
 
 ClassImp(HTMcp)

@@ -4,4 +4,6 @@
 #pragma link C++ class HTDetector + ;
 #pragma link C++ class HTSimpleDetector + ;
 #pragma link C++ class HTMcp + ;
+#pragma link C++ class HTMusicIC + ;
+
 #endif

@@ -17,13 +17,12 @@ HTDetectorMapper::HTDetectorMapper(const json &config) : fConfiguration(config)
       std::ifstream calFile(calFileName);
 
       if (!calFile)
-         std::cout << "Failed to open config file " << calFileName << std::endl;
-      else
+         std::cout << "Failed to open calibration file " << calFileName << std::endl;
+      else {
+         std::cout << "Loading calibration file: " << calFileName << std::endl;
          calFile >> fCalibration;
+      }
 
    } else // No calibration data found
-   {
       std::cout << "No calibration data found for " << fConfiguration["detectorName"] << std::endl;
-      fCalibration = json();
-   }
 }

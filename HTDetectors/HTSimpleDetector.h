@@ -2,7 +2,7 @@
 #define HTSIMPLEDETECTOR_H
 
 /* This detector holds just a time and an energy (calibrated and raw)
- * Adam Anthony 5/6/2021
+ * Adam Anthony 5/6/202
  *
  */
 #include "HTDetector.h"
@@ -19,7 +19,7 @@ private:
 
 public:
    HTSimpleDetector(const TString detectorName = "Undefined");
-   ~HTSimpleDetector();
+   virtual ~HTSimpleDetector();
 
    // Getters
    Short_t GetEnergyRaw() const { return fEnergyRaw; }

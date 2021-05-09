@@ -1,0 +1,36 @@
+{
+    "fEnergy": {
+	"0":{ "method":"copy"},
+	"1":{ "method":"copy"},
+	"2":{ "method":"copy"},
+	"3":{ "method":"copy"},
+	"4":{ "method":"copy"},
+	"5":{ "method":"copy"},
+	"6":{ "method":"copy"},
+	"7":{ "method":"copy"},
+	"8":{ "method":"copy"}
+    },
+
+    "fTime": {
+	"0":{ "method":"walkCorrection", "parameters":[ 1237.91, -0.00219314, -308.837] },
+	"1":{ "method":"walkCorrection", "parameters":[ 1080.5, -0.00240093, -307.907] },
+	"2":{ "method":"walkCorrection", "parameters":[ 1060.19, -0.00250603, -306.529] },
+	"3":{ "method":"walkCorrection", "parameters":[ 1266.71, -0.00172837, -313.827] },
+	"4":{ "method":"walkCorrection", "parameters":[ 1335.34, -0.00173201, -315.048] },
+	"5":{ "method":"walkCorrection", "parameters":[ 1373.62, -0.00175296, -312.864] },
+	"6":{ "method":"walkCorrection", "parameters":[ 1319.26, -0.00167248, -314.984] },
+	"7":{ "method":"walkCorrection", "parameters":[ 1390.4, -0.00137283, -314.409] },
+	"8":{ "method":"walkCorrection", "parameters":[ 1236.85, -0.00240714, -311.465] }
+    },
+
+    "fEnergyDSRight":{"method":"copy"},
+    "fEnergyDSLeft":{"method":"copy"},
+    "fEnergyUSRight":{"method":"copy"},
+    "fEnergyUSLeft":{"method":"copy"},
+    
+    "fTimeUSLeft":{"method":"walkCorrection", "parameters":[1202.51, -0.00222711, -310.353]},
+    "fTimeUSRight":{"method":"walkCorrection", "parameters":[1196.83, -0.00226184, -308.37]},
+    "fTimeDSLeft":{"method":"walkCorrection", "parameters":[1127.66, -0.00259408, -305.619]},
+    "fTimeDSRight":{"method":"walkCorrection", "parameters":[1279.51, -0.00206127, -313.194]}
+
+}

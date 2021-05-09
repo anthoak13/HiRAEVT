@@ -15,6 +15,7 @@ set(SRCS
   HTDetectorMapper.cxx
   HTSimpleDetectorMapper.cxx
   HTMcpMapper.cxx
+  HTMusicICMapper.cxx
   HTMapperFactory.cxx
   
   )
@@ -27,6 +28,7 @@ set(INCLUDE_DIRECTORIES
   ${CMAKE_SOURCE_DIR}/HTMappers
   ${CMAKE_SOURCE_DIR}/HTRootElectronics
   ${CMAKE_SOURCE_DIR}/HTDetectors
+  ${CMAKE_SOURCE_DIR}/mapper
   
   )
 

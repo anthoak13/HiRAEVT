@@ -1,9 +1,10 @@
 {
-    "inputDirectory":"~/HiRAEVT/",
-    "outputDirectory":"~/HiRAEVT/",
+    "inputDirectory":"/mnt/analysis/e12014/HiRAEVT/unpacked/",
+    "outputDirectory":"/mnt/analysis/e12014/HiRAEVT/mapped/",
     "experimentNumber":12014,
     "modules" : [
 	{ "moduleType":"HTRootAdc", "moduleName":"adc2"},
+	{ "moduleType":"HTRootAdc", "moduleName":"adc1"},
 	{ "moduleType":"HTRootCAEN1x90", "moduleName":"tdc1"},
 	{ "moduleType":"HTRootAdc", "moduleName":"qdc1"},
 	{ "moduleType":"HTRootAdc", "moduleName":"qdc2"}
@@ -36,7 +37,8 @@
 	    "fEnergyAnode": { "moduleName":"qdc1", "ch":0},
 	    "fEnergyMcp": { "moduleName":"qdc1", "ch":1},
 	    "fTimeAnode": { "moduleName":"tdc1", "ch":1},
-	    "fTimeMcp": { "moduleName":"tdc1", "ch":2}
+	    "fTimeMcp": { "moduleName":"tdc1", "ch":2},
+	    "calibrationFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/DSMCP.json"
 	},
 	{
 	    "detectorType":"HTMcp",
@@ -44,7 +46,40 @@
 	    "fEnergyAnode": { "moduleName":"qdc2", "ch":0},
 	    "fEnergyMcp": { "moduleName":"qdc2", "ch":1},
 	    "fTimeAnode": { "moduleName":"tdc1", "ch":3},
-	    "fTimeMcp": { "moduleName":"tdc1", "ch":4}
+	    "fTimeMcp": { "moduleName":"tdc1", "ch":4},
+	    "calibrationFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/USMCP.json"
+	},
+	{ "detectorType":"HTMusicIC",
+	  "detectorName":"MUSIC",
+	  "fEnergy":[
+	      {"moduleName":"adc1", "ch":2},
+	      {"moduleName":"adc1", "ch":3},
+	      {"moduleName":"adc1", "ch":4},
+	      {"moduleName":"adc1", "ch":5},
+	      {"moduleName":"adc1", "ch":6},
+	      {"moduleName":"adc1", "ch":7},
+	      {"moduleName":"adc1", "ch":8},
+	      {"moduleName":"adc1", "ch":9},
+	      {"moduleName":"adc1", "ch":10} ],
+	  "fTime":[
+	      {"moduleName":"tdc1", "ch":18},
+	      {"moduleName":"tdc1", "ch":19},
+	      {"moduleName":"tdc1", "ch":20},
+	      {"moduleName":"tdc1", "ch":21},
+	      {"moduleName":"tdc1", "ch":22},
+	      {"moduleName":"tdc1", "ch":23},
+	      {"moduleName":"tdc1", "ch":24},
+	      {"moduleName":"tdc1", "ch":25},
+	      {"moduleName":"tdc1", "ch":26}],
+	  "fEnergyUSLeft": {"moduleName":"adc1", "ch":0},
+	  "fEnergyUSRight": {"moduleName":"adc1", "ch":1},
+	  "fEnergyDSLeft": {"moduleName":"adc1", "ch":11},
+	  "fEnergyDSRight": {"moduleName":"adc1", "ch":14},
+	  "fTimeUSLeft": {"moduleName":"tdc1", "ch":16},
+	  "fTimeUSRight": {"moduleName":"tdc1", "ch":17},
+	  "fTimeDSLeft": {"moduleName":"tdc1", "ch":27},
+	  "fTimeDSRight": {"moduleName":"tdc1", "ch":28},
+	  "calibrationFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/MUSIC.json"
 	}
     ] 
 }	    

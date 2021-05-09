@@ -17,9 +17,6 @@ public:
 
    virtual void MapAndCalibrate() override;
 
-private:
-   Short_t GetEnergy(std::string moduleName, int ch);
-   std::vector<Double_t> GetTime(std::string moduleName, int ch);
 };
 
 #endif //#ifndef HTMCPMAPPER_H

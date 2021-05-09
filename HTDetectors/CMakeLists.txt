@@ -15,6 +15,7 @@ set(SRCS
   HTDetector.cxx
   HTSimpleDetector.cxx
   HTMcp.cxx
+  HTMusicIC.cxx
   
   HTCalibrator.cxx
   
