@@ -70,7 +70,7 @@ void HTMusicICMapper::MapAndCalibrate()
       mapper->GetAdcEnergy(fConfiguration["fEnergyUSRight"]["moduleName"], fConfiguration["fEnergyUSRight"]["ch"]));
    det->SetEnergyDSLeftRaw(
       mapper->GetAdcEnergy(fConfiguration["fEnergyDSLeft"]["moduleName"], fConfiguration["fEnergyDSLeft"]["ch"]));
-   det->SetEnergyDSLeftRaw(
+   det->SetEnergyDSRightRaw(
       mapper->GetAdcEnergy(fConfiguration["fEnergyDSRight"]["moduleName"], fConfiguration["fEnergyDSRight"]["ch"]));
    // Map the triangle pad times
    det->SetTimeUSLeftRaw(
