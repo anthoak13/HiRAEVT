@@ -43,7 +43,8 @@ private:
    Double_t fTimeUSLeft;
    Double_t fTimeUSRight;
 
-   Double_t fDriftVelocity; //! Used to calculate the Y-position of the beam, mm/ns
+   Double_t fDriftVelocity; // Used to calculate the Y-position of the beam, mm/ns
+   Double_t fTimeOffset;    // Used to calculate the y position of the beam
 
    // Positive values of offset move the origin further DS
    Double_t fOffsetZ; //! Offset from the center of the detector when calculating z position
@@ -60,6 +61,7 @@ public:
    // Setters
    void SetZOffset(Double_t offset) { fOffsetZ = offset; }
    void SetDriftVelocity(Double_t velocity) { fDriftVelocity = velocity; }
+   void SetTimeOffset(Double_t offset) { fTimeOffset = offset; }
 
    void SetEnergyRaw(Int_t ch, Short_t energy);
    void SetTimeRaw(Int_t ch, Double_t time);
@@ -77,6 +79,7 @@ public:
    // Getters
    Double_t GetZOffset() { return fOffsetZ; }
    Double_t GetDriftVelocity() { return fDriftVelocity; }
+   Double_t GetTimeOffset() { return fTimeOffset; }
 
    Short_t GetEnergyRaw(Int_t ch);
    Double_t GetEnergy(Int_t ch);

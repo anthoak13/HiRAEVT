@@ -42,7 +42,7 @@ Double_t HTCalibrator::TimeWalkOffset(Double_t rawEnergy, const std::vector<Doub
          "Parameter list passed for TimeWalkOffset had %lu parameters. Expected 3!", parameters.size()));
 
    // Now get the offset
-   return parameters[0] / TMath::Sqrt(rawEnergy) + parameters[1] * rawEnergy + parameters[3];
+   return parameters[0] / TMath::Sqrt(rawEnergy) + parameters[1] * rawEnergy + parameters[2];
 }
 
 Double_t HTCalibrator::TimeWalkOffset(Double_t rawEnergy, const json &calFragment)

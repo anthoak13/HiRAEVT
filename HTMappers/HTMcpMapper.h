@@ -16,7 +16,6 @@ public:
    virtual ~HTMcpMapper();
 
    virtual void MapAndCalibrate() override;
-
 };
 
 #endif //#ifndef HTMCPMAPPER_H

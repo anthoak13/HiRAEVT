@@ -77,6 +77,7 @@ CRingItem *HTUnpacker::handleStateChangeItem(CRingStateChangeItem *pItem)
       // Its a begin run event, so save the run number, time, and title
    case 1:
       std::cout << "Begin run " << pItem->getRunNumber() << " at " << time.AsString() << std::endl;
+      std::cout << "Title: " << pItem->getTitle() << std::endl;
       fExperimentInfo->SetStartTime(time);
       fExperimentInfo->SetRunNumber(pItem->getRunNumber());
       fExperimentInfo->SetRunTitle(pItem->getTitle());

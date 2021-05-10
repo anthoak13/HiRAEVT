@@ -1,0 +1,15 @@
+{
+    "gasList":[
+	{
+	    "runRange":[208, 217],
+	    "timeOffset": 870,
+	    "driftVelocity": 0.084
+	},
+	{
+	    "run":223,
+	    "timeOffset": 10513.9,
+	    "driftVelocity":0.1080
+	}
+    ]
+}
+    

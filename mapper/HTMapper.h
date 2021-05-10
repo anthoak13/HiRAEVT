@@ -64,12 +64,10 @@ public:
 
    // Returns pointer to the map of root modules
    const std::unordered_map<std::string, HTRootModule *> *GetRootModules();
-
-   // Setters
+   Int_t GetRunNumber() { return fRunNumber; }
 
    void MapData(); // Loops through input tree and maps data
-
-   void End(); // Cleanup
+   void End();     // Cleanup
 
    // *** Functions for accessing typical energies and times ***
 

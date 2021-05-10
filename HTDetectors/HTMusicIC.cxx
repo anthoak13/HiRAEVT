@@ -2,8 +2,10 @@
 
 #include "HTCalibrator.h"
 
-HTMusicIC::HTMusicIC(const TString detectorName) : HTDetector(detectorName), fDriftVelocity(1), fOffsetZ(0)
+HTMusicIC::HTMusicIC(const TString detectorName)
+   : HTDetector(detectorName), fDriftVelocity(1), fTimeOffset(0), fOffsetZ(0)
 {
+
    fType = "HTMusicIC";
    Clear();
 }
@@ -14,10 +16,12 @@ HTMusicIC::~HTMusicIC() {}
 ROOT::Math::XYZVector HTMusicIC::GetPositionUS()
 {
    Double_t posX = (fEnergyUSRight - fEnergyUSLeft) / (fEnergyUSRight + fEnergyUSLeft);
-   posX /= 41; // width of triangle pad in mm.
+   posX *= 41.; // width of triangle pad in mm.
 
-   Double_t posY = (fTimeUSLeft + fTimeUSRight) / 2 * fDriftVelocity;
-   Double_t posZ = -41; // TODO: Change to correct value;
+   Double_t timeY = fTime[0];
+   Double_t posY = (timeY + fTimeOffset) * fDriftVelocity;
+
+   Double_t posZ = -124;
 
    return ROOT::Math::XYZVector(posX, posY, posZ);
 }
@@ -26,10 +30,12 @@ ROOT::Math::XYZVector HTMusicIC::GetPositionUS()
 ROOT::Math::XYZVector HTMusicIC::GetPositionDS()
 {
    Double_t posX = (fEnergyDSRight - fEnergyDSLeft) / (fEnergyDSRight + fEnergyDSLeft);
-   posX /= 41; // width of triangle pad in mm.
+   posX *= 41.; // width of triangle pad in mm.
 
-   Double_t posY = (fTimeDSLeft + fTimeDSRight) / 2 * fDriftVelocity;
-   Double_t posZ = +41; // TODO: Change to correct value;
+   Double_t timeY = fTime[8];
+   Double_t posY = (timeY + fTimeOffset) * fDriftVelocity;
+
+   Double_t posZ = +124;
 
    return ROOT::Math::XYZVector(posX, posY, posZ);
 }
@@ -44,7 +50,7 @@ ROOT::Math::XYZVector HTMusicIC::GetPosition(Double_t zPosition)
    slope /= slope.Z();
 
    // Return the center + mm along z
-   return posCenter + slope * (zPosition + fOffsetZ);
+   return GetPositionUS() + slope * (zPosition + fOffsetZ + 124);
 }
 
 void HTMusicIC::Clear()

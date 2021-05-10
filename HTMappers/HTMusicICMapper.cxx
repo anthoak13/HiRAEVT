@@ -8,11 +8,42 @@
 #include "HTRootCAEN1x90.h"
 #include "HTRootCAEN1x90SingleHit.h"
 
+#include <fstream>
 #include <string>
 
 HTMusicICMapper::HTMusicICMapper(const json &config) : HTDetectorMapper(config)
 {
    fDetector = new HTMusicIC(fConfiguration["detectorName"].get<std::string>());
+
+   // Check to see if a gasFile was passed and if so open in
+   if (fConfiguration.contains("gasFile")) {
+      std::fstream gasFile(fConfiguration["gasFile"]);
+      if (!gasFile)
+         throw std::invalid_argument("Can not open gas file: " + fConfiguration["gasFile"].get<std::string>());
+
+      json gasInfo;
+      gasFile >> gasInfo;
+
+      // Loop through and look for something that matches this tun
+      for (const auto &info : gasInfo["gasList"]) {
+         bool rightInfo = false;
+         auto runNumber = HTMapper::Instance()->GetRunNumber();
+
+         // Check if this is a single run entry and if it is if it matches our run number
+         rightInfo |= info.value("run", -1) == runNumber;
+
+         if (info.contains("runRange"))
+            rightInfo |= (info["runRange"][0] <= runNumber && info["runRange"][1] >= runNumber);
+
+         // We found the right object
+         if (rightInfo) {
+            std::cout << "Setting drift velocity: " << info["driftVelocity"] << " mm/ns" << std::endl
+                      << "Setting time offset: " << info["timeOffset"] << " ns" << std::endl;
+            dynamic_cast<HTMusicIC *>(fDetector)->SetDriftVelocity(info["driftVelocity"]);
+            dynamic_cast<HTMusicIC *>(fDetector)->SetTimeOffset(info["timeOffset"]);
+         }
+      }
+   }
 }
 
 HTMusicICMapper::~HTMusicICMapper() {}

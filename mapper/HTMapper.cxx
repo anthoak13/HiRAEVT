@@ -8,7 +8,6 @@
 #include "HTDetector.h"
 #include "HTDetectorMapper.h"
 #include "HTMapperFactory.h"
-#include "HTMusicIC.h"
 #include "HTRootAdc.h"
 #include "HTRootCAEN1x90.h"
 #include "HTRootCAEN1x90SingleHit.h"

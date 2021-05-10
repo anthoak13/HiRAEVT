@@ -2,10 +2,6 @@
 build
 jsonTest
 
-#hidden files except clang and gitignire
-.*
-!.gitignore
-!.clang-format
 
 # root files
 *.root
@@ -16,7 +12,7 @@ unpack
 *#*
 *Dict.cxx
 *.pcm
-
+.nfs*
 
 # Prerequisites
 *.d

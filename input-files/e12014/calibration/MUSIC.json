@@ -1,14 +1,15 @@
 {
     "fEnergy": {
-	"0":{ "method":"copy"},
-	"1":{ "method":"copy"},
-	"2":{ "method":"copy"},
-	"3":{ "method":"copy"},
-	"4":{ "method":"copy"},
-	"5":{ "method":"copy"},
-	"6":{ "method":"copy"},
-	"7":{ "method":"copy"},
-	"8":{ "method":"copy"}
+	"0":{ "method":"poly", "parameters":[0.009948296, 0.0002713]},
+	"1":{ "method":"poly", "parameters":[0.009508844, 0.000282615]},
+	"2":{ "method":"poly", "parameters":[0.007013314, 0.000284493]},
+	"3":{ "method":"poly", "parameters":[0.009081844, 0.000298624]},
+	"4":{ "method":"poly", "parameters":[-0.000259995, 0.000285665]},
+	"5":{ "method":"poly", "parameters":[0.113807936, 0.000296269]},
+	"6":{ "method":"poly", "parameters":[0.006580972, 0.00028729]},
+	"7":{ "method":"poly", "parameters":[0.007700712, 0.000287698]},
+	"8":{ "method":"poly", "parameters":[0.006045776, 0.00029968]}
+	
     },
 
     "fTime": {
@@ -23,10 +24,10 @@
 	"8":{ "method":"walkCorrection", "parameters":[ 1236.85, -0.00240714, -311.465] }
     },
 
-    "fEnergyDSRight":{"method":"copy"},
-    "fEnergyDSLeft":{"method":"copy"},
-    "fEnergyUSRight":{"method":"copy"},
-    "fEnergyUSLeft":{"method":"copy"},
+    "fEnergyDSRight":{"method":"poly", "parameters":[-0.004765273, 0.000283636]},
+    "fEnergyDSLeft":{"method":"poly", "parameters":[0.009332314, 0.000275275]},
+    "fEnergyUSRight":{"method":"poly", "parameters":[0.00512759, 0.00026467]},
+    "fEnergyUSLeft":{"method":"poly", "parameters":[-0.001454644, 0.000270653]},
     
     "fTimeUSLeft":{"method":"walkCorrection", "parameters":[1202.51, -0.00222711, -310.353]},
     "fTimeUSRight":{"method":"walkCorrection", "parameters":[1196.83, -0.00226184, -308.37]},
