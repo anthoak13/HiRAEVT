@@ -96,7 +96,7 @@ void HTMapper::CreateDetectors()
    for (const auto &detector : fConfigInfo["detectors"]) {
       std::string detectorName = detector["detectorName"].get<std::string>();
       std::string detectorType = detector["detectorType"].get<std::string>();
-      std::cout << detectorName << " of type " << detectorType << std::endl;
+      std::cout << "Creating detector " << detectorName << " of type " << detectorType << std::endl;
 
       // Create mapper
       fMappers.push_back(HTMapperFactory::Instance()->CreateDetector(detector, fTreeOutput));
