@@ -79,7 +79,7 @@ void HTMusicICMapper::MapAndCalibrate()
       mapper->GetTimeSingleHit(fConfiguration["fTimeUSRight"]["moduleName"], fConfiguration["fTimeUSRight"]["ch"]));
    det->SetTimeDSLeftRaw(
       mapper->GetTimeSingleHit(fConfiguration["fTimeDSLeft"]["moduleName"], fConfiguration["fTimeDSLeft"]["ch"]));
-   det->SetTimeDSLeftRaw(
+   det->SetTimeDSRightRaw(
       mapper->GetTimeSingleHit(fConfiguration["fTimeDSRight"]["moduleName"], fConfiguration["fTimeDSRight"]["ch"]));
 
    det->Calibrate(fCalibration);

@@ -61,6 +61,7 @@
 	      {"moduleName":"adc1", "ch":8},
 	      {"moduleName":"adc1", "ch":9},
 	      {"moduleName":"adc1", "ch":10} ],
+
 	  "fTime":[
 	      {"moduleName":"tdc1", "ch":18},
 	      {"moduleName":"tdc1", "ch":19},
@@ -71,14 +72,17 @@
 	      {"moduleName":"tdc1", "ch":24},
 	      {"moduleName":"tdc1", "ch":25},
 	      {"moduleName":"tdc1", "ch":26}],
+
 	  "fEnergyUSLeft": {"moduleName":"adc1", "ch":1},
 	  "fEnergyUSRight": {"moduleName":"adc1", "ch":0},
 	  "fEnergyDSLeft": {"moduleName":"adc1", "ch":11},
 	  "fEnergyDSRight": {"moduleName":"adc1", "ch":14},
+
 	  "fTimeUSLeft": {"moduleName":"tdc1", "ch":17},
 	  "fTimeUSRight": {"moduleName":"tdc1", "ch":16},
 	  "fTimeDSLeft": {"moduleName":"tdc1", "ch":27},
 	  "fTimeDSRight": {"moduleName":"tdc1", "ch":28},
+
 	  "gasFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/gasFile.json",
 	  "calibrationFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/MUSIC.json"
 	}

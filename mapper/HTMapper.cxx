@@ -107,6 +107,7 @@ void HTMapper::MapData()
 {
    fTotalEvents = fTreeInput->GetEntries();
    fStartTime = time(nullptr);
+   // fTotalEvents = 1;
 
    std::cout << "*** Begining loop over " << fTotalEvents << " events ***" << std::endl;
 
