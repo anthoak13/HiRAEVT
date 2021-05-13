@@ -1,9 +1,0 @@
-{
-    "fEnergy": { "method" : "poly",
-		 "parameters" : [0, 0.5]
-	       },
-    "fTime": { "method" : "poly",
-	       "parameters" : [0, 1]
-	     }
-}
- 

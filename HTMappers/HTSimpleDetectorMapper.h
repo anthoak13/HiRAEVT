@@ -8,8 +8,6 @@
 #include "nlohmann/json_fwd.hpp"
 using json = nlohmann::json;
 
-class HTMapper;
-
 class HTSimpleDetectorMapper : public HTDetectorMapper {
 public:
    HTSimpleDetectorMapper(const json &config);

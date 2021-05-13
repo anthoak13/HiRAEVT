@@ -5,8 +5,12 @@
 #include "TTree.h"
 #include "TTreeReader.h"
 
+#include "HTDetector.h"
 #include "HTDetectorMapper.h"
 #include "HTMapperFactory.h"
+#include "HTRootAdc.h"
+#include "HTRootCAEN1x90.h"
+#include "HTRootCAEN1x90SingleHit.h"
 #include "HTRootModuleFactory.h"
 
 #include <time.h>
@@ -92,7 +96,7 @@ void HTMapper::CreateDetectors()
    for (const auto &detector : fConfigInfo["detectors"]) {
       std::string detectorName = detector["detectorName"].get<std::string>();
       std::string detectorType = detector["detectorType"].get<std::string>();
-      std::cout << "Creating detector and mapper for " << detectorName << " of type " << detectorType << std::endl;
+      std::cout << "Creating detector " << detectorName << " of type " << detectorType << std::endl;
 
       // Create mapper
       fMappers.push_back(HTMapperFactory::Instance()->CreateDetector(detector, fTreeOutput));
@@ -103,6 +107,9 @@ void HTMapper::MapData()
 {
    fTotalEvents = fTreeInput->GetEntries();
    fStartTime = time(nullptr);
+   // fTotalEvents = 1;
+
+   std::cout << "*** Begining loop over " << fTotalEvents << " events ***" << std::endl;
 
    for (fEventsMapped = 0; fEventsMapped < fTotalEvents; ++fEventsMapped) {
       if (fEventsMapped % 1000 == 0)
@@ -110,8 +117,10 @@ void HTMapper::MapData()
 
       fTreeInput->GetEntry(fEventsMapped);
 
-      for (const auto &map : fMappers)
+      for (const auto &map : fMappers) {
+         map->GetDetector()->Clear();
          map->MapAndCalibrate();
+      }
 
       // Fill the tree
       fTreeOutput->Fill();
@@ -168,4 +177,47 @@ void HTMapper::PrintPercentage()
    } // End print remaining time
    std::cout << "\r";
    std::cout.flush();
+}
+
+Short_t HTMapper::GetAdcEnergy(const std::string &moduleName, int ch)
+{
+   // Make sure the module exists
+   if (fModules.count(moduleName) == 0)
+      throw std::invalid_argument(
+         std::string("Could not map an energy using module ").append(moduleName).append(" it does not exist."));
+
+   // Get the energy from the module
+   auto module = dynamic_cast<HTRootAdc *>(fModules.at(moduleName));
+   if (module == nullptr)
+      throw std::invalid_argument(std::string("Could not map an energy using module name ")
+                                     .append(moduleName)
+                                     .append(" it is not of type HTRootAdc."));
+   return module->GetData(ch);
+}
+Double_t HTMapper::GetTimeSingleHit(const std::string &moduleName, int ch)
+{
+   auto times = GetTimeMultiHit(moduleName, ch);
+   return times.size() > 0 ? times.at(0) : -9999;
+}
+std::vector<Double_t> HTMapper::GetTimeMultiHit(const std::string &moduleName, int ch)
+{
+
+   // Make sure the module exists
+   if (fModules.count(moduleName) == 0)
+      throw std::invalid_argument(
+         std::string("Could not map an energy using module ").append(moduleName).append(" it does not exist."));
+
+   // Figure out if we are single or multi hit MCP data
+   auto timeModule = fModules.at(moduleName);
+
+   // If this is a multi-hit tdc
+   if (timeModule->GetType().EqualTo("HTRootCAEN1x90")) {
+      auto multiHit = dynamic_cast<HTRootCAEN1x90 *>(timeModule);
+      return *(multiHit->GetData(ch));
+   } else if (timeModule->GetType().EqualTo("HTRootCAEN1x90SingleHit")) {
+      auto singleHit = dynamic_cast<HTRootCAEN1x90SingleHit *>(timeModule);
+      return std::vector<Double_t>{singleHit->GetData(ch)};
+   } else
+      throw std::invalid_argument(
+         std::string("Could not map time using module ").append(moduleName).append(" it is the wrong type."));
 }

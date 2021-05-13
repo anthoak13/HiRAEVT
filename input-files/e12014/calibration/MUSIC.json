@@ -1,0 +1,118 @@
+{
+    "calibrationList":[
+	{
+	    "runRange":[102, 177],
+	    
+	    "fEnergy": {
+		"0":{ "method":"poly", "parameters":[0.009948296, 0.0002713]},
+		"1":{ "method":"poly", "parameters":[0.009508844, 0.000282615]},
+		"2":{ "method":"poly", "parameters":[0.007013314, 0.000284493]},
+		"3":{ "method":"poly", "parameters":[0.009081844, 0.000298624]},
+		"4":{ "method":"poly", "parameters":[-0.000259995, 0.000285665]},
+		"5":{ "method":"poly", "parameters":[0.113807936, 0.000296269]},
+		"6":{ "method":"poly", "parameters":[0.006580972, 0.00028729]},
+		"7":{ "method":"poly", "parameters":[0.007700712, 0.000287698]},
+		"8":{ "method":"poly", "parameters":[0.006045776, 0.00029968]}
+		
+	    },
+	
+	    "fTime": {
+		"0":{ "method":"walkCorrection", "parameters":[ 1237.91, -0.00219314, -308.837] },
+		"1":{ "method":"walkCorrection", "parameters":[ 1080.5, -0.00240093, -307.907] },
+		"2":{ "method":"walkCorrection", "parameters":[ 1060.19, -0.00250603, -306.529] },
+		"3":{ "method":"walkCorrection", "parameters":[ 1266.71, -0.00172837, -313.827] },
+		"4":{ "method":"walkCorrection", "parameters":[ 1335.34, -0.00173201, -315.048] },
+		"5":{ "method":"walkCorrection", "parameters":[ 1373.62, -0.00175296, -312.864] },
+		"6":{ "method":"walkCorrection", "parameters":[ 1319.26, -0.00167248, -314.984] },
+		"7":{ "method":"walkCorrection", "parameters":[ 1390.4, -0.00137283, -314.409] },
+		"8":{ "method":"walkCorrection", "parameters":[ 1236.85, -0.00240714, -311.465] }
+	    },
+	    
+	    "fEnergyDSRight":{"method":"poly", "parameters":[-0.004765273, 0.000283636]},
+	    "fEnergyDSLeft":{"method":"poly", "parameters":[0.009332314, 0.000275275]},
+	    "fEnergyUSRight":{"method":"poly", "parameters":[0.00512759, 0.00026467]},
+	    "fEnergyUSLeft":{"method":"poly", "parameters":[-0.001454644, 0.000270653]},
+	
+	    "fTimeUSLeft":{"method":"walkCorrection", "parameters":[1202.51, -0.00222711, -310.353]},
+	    "fTimeUSRight":{"method":"walkCorrection", "parameters":[1196.83, -0.00226184, -308.37]},
+	    "fTimeDSLeft":{"method":"walkCorrection", "parameters":[1127.66, -0.00259408, -305.619]},
+	    "fTimeDSRight":{"method":"walkCorrection", "parameters":[1279.51, -0.00206127, -313.194]}
+	},
+	{
+
+	    
+	    "fEnergy": {
+		"0":{ "method":"poly", "parameters":[0.009948296, 0.0002713]},
+		"1":{ "method":"poly", "parameters":[0.009508844, 0.000282615]},
+		"2":{ "method":"poly", "parameters":[0.007013314, 0.000284493]},
+		"3":{ "method":"poly", "parameters":[0.009081844, 0.000298624]},
+		"4":{ "method":"poly", "parameters":[-0.000259995, 0.000285665]},
+		"5":{ "method":"poly", "parameters":[0.113807936, 0.000296269]},
+		"6":{ "method":"poly", "parameters":[0.006580972, 0.00028729]},
+		"7":{ "method":"poly", "parameters":[0.007700712, 0.000287698]},
+		"8":{ "method":"poly", "parameters":[0.006045776, 0.00029968]}
+		
+	    },
+	
+	    "fTime": {
+		"0":{ "method":"walkCorrection", "parameters":[ 1237.91, -0.00219314, -308.837] },
+		"1":{ "method":"walkCorrection", "parameters":[ 1080.5, -0.00240093, -307.907] },
+		"2":{ "method":"walkCorrection", "parameters":[ 1060.19, -0.00250603, -306.529] },
+		"3":{ "method":"walkCorrection", "parameters":[ 1266.71, -0.00172837, -313.827] },
+		"4":{ "method":"walkCorrection", "parameters":[ 1335.34, -0.00173201, -315.048] },
+		"5":{ "method":"walkCorrection", "parameters":[ 1373.62, -0.00175296, -312.864] },
+		"6":{ "method":"walkCorrection", "parameters":[ 1319.26, -0.00167248, -314.984] },
+		"7":{ "method":"walkCorrection", "parameters":[ 1390.4, -0.00137283, -314.409] },
+		"8":{ "method":"walkCorrection", "parameters":[ 1236.85, -0.00240714, -311.465] }
+	    },
+	    
+	    "fEnergyDSRight":{"method":"poly", "parameters":[-0.004765273, 0.000283636]},
+	    "fEnergyDSLeft":{"method":"poly", "parameters":[0.009332314, 0.000275275]},
+	    "fEnergyUSRight":{"method":"poly", "parameters":[0.00512759, 0.00026467]},
+	    "fEnergyUSLeft":{"method":"poly", "parameters":[-0.001454644, 0.000270653]},
+	
+	    "fTimeUSLeft":{"method":"walkCorrection", "parameters":[1202.51, -0.00222711, -310.353]},
+	    "fTimeUSRight":{"method":"walkCorrection", "parameters":[1196.83, -0.00226184, -308.37]},
+	    "fTimeDSLeft":{"method":"walkCorrection", "parameters":[1127.66, -0.00259408, -305.619]},
+	    "fTimeDSRight":{"method":"walkCorrection", "parameters":[1279.51, -0.00206127, -313.194]}
+	},
+	{
+	    "runRange": [243,600],
+	    
+	    "fEnergy": {
+		"0":{ "method":"poly", "parameters":[0.009948296, 0.0002713]},
+		"1":{ "method":"poly", "parameters":[0.009508844, 0.000282615]},
+		"2":{ "method":"poly", "parameters":[0.007013314, 0.000284493]},
+		"3":{ "method":"poly", "parameters":[0.009081844, 0.000298624]},
+		"4":{ "method":"poly", "parameters":[-0.000259995, 0.000285665]},
+		"5":{ "method":"poly", "parameters":[0.113807936, 0.000296269]},
+		"6":{ "method":"poly", "parameters":[0.006580972, 0.00028729]},
+		"7":{ "method":"poly", "parameters":[0.007700712, 0.000287698]},
+		"8":{ "method":"poly", "parameters":[0.006045776, 0.00029968]}
+		
+	    },
+	
+	    "fTime": {
+		"0":{ "method":"walkCorrection", "parameters":[3380.650408, -0.001470, 379.773699] },
+		"1":{ "method":"walkCorrection", "parameters":[3235.055206, -0.001617, 365.576842] },
+		"2":{ "method":"walkCorrection", "parameters":[3245.606275, -0.001593, 363.617943] },
+		"3":{ "method":"walkCorrection", "parameters":[3253.345001, -0.002124, 376.746966] },
+		"4":{ "method":"walkCorrection", "parameters":[3349.628570, -0.002063, 375.603738] },
+		"5":{ "method":"walkCorrection", "parameters":[3317.369795, -0.002064, 375.938318] },
+		"6":{ "method":"walkCorrection", "parameters":[3218.956120, -0.002128, 374.716180] },
+		"7":{ "method":"walkCorrection", "parameters":[3323.380397, -0.001971, 374.313094] },
+		"8":{ "method":"walkCorrection", "parameters":[3205.038605, -0.001847, 363.880421] }
+	    },
+	    
+	    "fEnergyDSRight":{"method":"poly", "parameters":[-0.004765273, 0.000283636]},
+	    "fEnergyDSLeft":{"method":"poly", "parameters":[0.009332314, 0.000275275]},
+	    "fEnergyUSRight":{"method":"poly", "parameters":[0.00512759, 0.00026467]},
+	    "fEnergyUSLeft":{"method":"poly", "parameters":[-0.001454644, 0.000270653]},
+	
+	    "fTimeUSLeft":{ "method":"walkCorrection", "parameters":[3359.633762, -0.001519, 365.883999] },
+	    "fTimeUSRight":{ "method":"walkCorrection", "parameters":[3291.340499, -0.001557, 363.405916]},
+	    "fTimeDSLeft":{ "method":"walkCorrection", "parameters":[3416.882737, -0.001235, 359.739626] },
+	    "fTimeDSRight":{ "method":"walkCorrection", "parameters":[3439.961103, -0.001185, 357.867007] }
+	}
+    ]
+}

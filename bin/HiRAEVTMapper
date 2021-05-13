@@ -1,12 +1,12 @@
 #!/bin/bash
 
+config_file=$1
+first_run=$2
 
-first_run=$1
-
-if [ -z "$2" ]; then
-  last_run=$1
-else
+if [ -z "$3" ]; then
   last_run=$2
+else
+  last_run=$3
 fi
 
 for run_num in `seq $first_run $last_run`
@@ -14,24 +14,9 @@ do
 re='^[0-9]+$'
 
 if ! [[ $run_num =~ $re ]] ; then
-   echo "Error: Invalid run number" >&2; exit 1
+    echo "Error: Invalid run number" >&2; exit 1
 fi
-
-#extracting information from configuration file from config/HiRAEVT.conf
-while IFS= read -r line;do
-    fields=($(printf "%s" "$line"|cut --output-delimiter=' ' -f1-))
-    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVTUNPACKER_ROOT_FILE_PATH" ] ; then
-      RootFilesPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-    fi
-    if [ ${fields[1]} ] && [ ${fields[1]} = "HiRAEVT_DIR" ] ; then
-      HiRAEVTPath=$(echo ${fields[2]} | sed 's/[\"]//g')
-    fi
-done < $HiRAEVTCONFIG
-
-if [ ! -d "${RootFilesPath}" ]; then #the directory of ROOT files does not exist
-    echo "Error: missing or incorrect ROOT files location"; continue
-fi
-
-eval '${HiRAEVTPath}/bin/${NAMEHIRAEVTMAPPEREXECUTABLE} --run='${run_num}''
+echo HiRAEVTMapper.exe $config_file $run_num
+HiRAEVTMapper.exe $config_file $run_num
 
 done

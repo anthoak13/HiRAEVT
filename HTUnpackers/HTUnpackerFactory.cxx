@@ -64,5 +64,8 @@ HTModuleUnpacker *HTUnpackerFactory::CreateUnpacker(json moduleDescription, TTre
          tr->Branch(unpacker->GetRootModule()->GetName(), (HTRootAdc *)unpacker->GetRootModule(), 32000, 1);
    }
 
+   if (unpacker == nullptr)
+      throw std::invalid_argument(std::string("The module type ").append(unpackerType).append(" is not supported!"));
+
    return unpacker;
 }

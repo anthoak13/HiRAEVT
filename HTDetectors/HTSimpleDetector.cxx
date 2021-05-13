@@ -43,14 +43,10 @@ void HTSimpleDetector::Calibrate(const json &fCalibration)
    // Calibrate energy
    if (fCalibration.contains("fEnergy"))
       fEnergy = HTCalibrator::Instance()->Calibrate(fEnergyRaw, fCalibration["fEnergy"]);
-   else
-      fEnergy = fEnergyRaw;
 
    // Calibrate time
    if (fCalibration.contains("fTime"))
       fTime = HTCalibrator::Instance()->Calibrate(fTimeRaw, fCalibration["fTime"]);
-   else
-      fTime = fTimeRaw;
 }
 
 ClassImp(HTSimpleDetector);
