@@ -1,0 +1,6 @@
+{
+    "fEnergyAnode":{"method":"copy"},
+    "fEnergyMcp":{"method":"copy"},
+    "fTimeAnode":{"method":"copy"},
+    "fTimeMcp":{"method":"copy"}
+}

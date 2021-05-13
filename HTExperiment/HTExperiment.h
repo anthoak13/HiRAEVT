@@ -7,13 +7,14 @@
 //  Modified by Adam Anthony 4/14/2021
 //
 
-// This class is what is written to disk by HiRAEVTUnpacker.
-// It contains a vector of electronics modules.
+// This class contains a vector of electronics modules. These modules are what are
+// written to disk by HiRAEVTUnpacker.
 
-#include "HTExperimentInfo.h"
-#include "HTUSBStack.h"
+#include "TObject.h"
+#include "TString.h"
 
 #include <vector>
+
 class HTRootModule;
 
 class HTExperiment : public TObject {
