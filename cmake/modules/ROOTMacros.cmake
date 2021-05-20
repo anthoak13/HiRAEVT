@@ -8,7 +8,11 @@
 ################################################################################
 
 # Creates a target for a new library, and adds everything needed to build it, including the dictionary
-# All file paths shouls be relative ones to the calling CMakeLists.txt file
+# All file paths should be relative ones to the calling CMakeLists.txt file
+# By default all of the header files are assumed to be public headers and added to the target
+# as such. That way anyone depending on this library will know about these headers.
+#
+# Adam Anthony 5/20/21
 #
 # Arguments to function:
 #
@@ -17,7 +21,8 @@
 # LINKDEF: Name of the linkdef file (will skip dictionary generation of not present)
 # HDRS: List of all header files to use in library generation.
 #     - Will use all SRCS renamed from .cxx to .h if empty
-# INCLUDE_DIR: List of include directories in addition to ROOT_INCLUDE_DIR
+# INCLUDE_DIR: List of include directories in addition to:
+#     -ROOT_INCLUDE_DIR, CMAKE_CURRENT_SOURCE_DIR, and CMAKE_CURRENT_SOURCE_DIR/include
 # LIBRARY_DIR: List of link directories in addition to ROOT_LIBRARY_DIR
 # DEPS_PUBLIC: Public dependencies
 # DEPS_PRIVATE: Private dependencies
@@ -46,6 +51,11 @@ function(generate_target_root_library target)
     CHANGE_FILE_EXTENSION(*.cxx *.h HT_HDRS "${SRCS}")
   endif()
 
+  # Add defaults to include directories
+  list(APPEND HT_INCLUDE_DIR ${ROOT_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  
   #Check that files are relative
   foreach(h ${HT_SRCS} ${HT_HDRS} ${HT_LINKDEF})
     if(IS_ABSOLUTE ${h})
@@ -55,14 +65,30 @@ function(generate_target_root_library target)
     endif()
   endforeach()
 
+  # Convert headers from relative paths to absolute and make sure they exist and copy them
+  # to ${CMAKE_BINARY_DIR}/include
+  unset(headers)
+  foreach(h ${HT_HDRS})
+    get_filename_component(habs ${CMAKE_CURRENT_SOURCE_DIR}/${h} ABSOLUTE)
+    if(NOT EXISTS ${habs})
+      message(
+	FATAL_ERROR
+	"generate_target_root_library was passed a non-existant input file: ${h}")
+    endif()
+    list(APPEND headers ${habs})
+    configure_file(${habs} "${CMAKE_BINARY_DIR}/include")
+  endforeach()
+
+  
   # Create the target and add the dependencies
-  add_library(${target} SHARED ${HT_SRCS})
+  add_library(${target} SHARED)
+  target_sources(${target} PRIVATE ${HT_SRCS})
   set_target_properties(${target} PROPERTIES ${PROJECT_LIBRARY_PROPERTIES})
 
   target_link_libraries(${target} PUBLIC ${HT_DEPS_PUBLIC})
   target_link_libraries(${target} PRIVATE ${HT_DEPS_PRIVATE})
-
-  target_include_directories(${target} PUBLIC ${HT_INCLUDE_DIR} ${ROOT_INCLUDE_DIR})
+  
+  target_include_directories(${target} PUBLIC ${HT_INCLUDE_DIR})
   target_link_directories(${target} PUBLIC ${HT_LIBRARY_DIR} ${ROOT_LIBRARY_DIR})
 
   # Make the dictionary
@@ -71,7 +97,11 @@ function(generate_target_root_library target)
       HEADERS ${HT_HDRS}
       LINKDEF ${HT_LINKDEF})
   endif()
-  
+
+  #message("${headers} Include dir: ${CMAKE_INSTALL_INCLUDEDIR}")
+  install(FILES ${headers} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
 endfunction()
 
 # based on the work in https://github.com/AliceO2Group/AliceO2
@@ -176,7 +206,8 @@ function(hiraevt_target_root_dictionary target)
   set(pcmBase ${dictionary}_rdict.pcm)
   set(pcmFile ${lib_output_dir}/${pcmBase})
   set(rootmapFile ${lib_output_dir}/lib${basename}.rootmap)
-
+  file(MAKE_DIRECTORY ${lib_output_dir})
+  
   # get the list of compile_definitions
   set(prop $<TARGET_PROPERTY:${target},COMPILE_DEFINITIONS>)
 
@@ -193,8 +224,6 @@ function(hiraevt_target_root_dictionary target)
 
   set(includeDirs $<TARGET_PROPERTY:${target},INCLUDE_DIRECTORIES>)
 
-  file(GENERATE OUTPUT log CONTENT "${includeDirs}")
-  
   # add a custom command to generate the dictionary using rootcling
   # cmake-format: off
   set(space " ")
@@ -288,169 +317,3 @@ MACRO(UNIQUE var_name list)
   ENDFOREACH(l)
   SET(${var_name} ${unique_tmp})
 ENDMACRO(UNIQUE)
-
-Macro(ROOT_GENERATE_DICTIONARY)
-
-  # All Arguments needed for this new version of the macro are defined
-  # in the parent scope, namely in the CMakeLists.txt of the submodule
-  set(Int_LINKDEF ${LINKDEF})
-  set(Int_DICTIONARY ${DICTIONARY})
-  set(Int_LIB ${LIBRARY_NAME})
-
-  set(Int_INC ${INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRECTORIES})
-  set(Int_HDRS ${HDRS})
-  set(Int_DEF ${DEFINITIONS})
-
-  # Convert the values of the variable to a semi-colon separated list
-  separate_arguments(Int_INC)
-  separate_arguments(Int_HDRS)
-  separate_arguments(Int_DEF)
-
-  # Format neccesary arguments
-  # Add -I and -D to include directories and definitions
-  Format(Int_INC "${Int_INC}" "-I" "")
-  Format(Int_DEF "${Int_DEF}" "-D" "")
-
-  #---call rootcint / cling --------------------------------
-  set(OUTPUT_FILES ${Int_DICTIONARY})
-
-  If (CMAKE_SYSTEM_NAME MATCHES Linux)
-    Set(MY_LD_LIBRARY_PATH ${ROOT_LIBRARY_DIR}:${_intel_lib_dirs}:$ENV{LD_LIBRARY_PATH})
-  ElseIf(CMAKE_SYSTEM_NAME MATCHES Darwin)
-    Set(MY_LD_LIBRARY_PATH ${ROOT_LIBRARY_DIR}:$ENV{DYLD_LIBRARY_PATH})
-  EndIf()
-
-  get_filename_component(script_name ${Int_DICTIONARY} NAME_WE)
-  String(REPLACE ";" " " Int_DEF_STR "${Int_DEF}")
-  String(REPLACE ";" " " Int_INC_STR "${Int_INC}")
-  String(REPLACE ";" " " Int_HDRS_STR "${Int_HDRS}")
-
-  Set(EXTRA_DICT_PARAMETERS "")
-  Set(Int_ROOTMAPFILE ${LIBRARY_OUTPUT_PATH}/lib${Int_LIB}.rootmap)
-  Set(Int_PCMFILE G__${Int_LIB}Dict_rdict.pcm)
-  Set(OUTPUT_FILES ${OUTPUT_FILES} ${Int_PCMFILE} ${Int_ROOTMAPFILE})
-  Set(EXTRA_DICT_PARAMETERS ${EXTRA_DICT_PARAMETERS}
-    -rmf ${Int_ROOTMAPFILE}
-    -rml ${Int_LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
-  Set_Source_Files_Properties(${OUTPUT_FILES} PROPERTIES GENERATED TRUE)
-  String(REPLACE ";" " " EXTRA_DICT_PARAMETERS_STR "${EXTRA_DICT_PARAMETERS}")
-  
-
-
-  # We need some environment variables which are present when running cmake at the
-  # time we run make. To pass the variables a script is created containing the
-  # correct values for the needed variables
-  
-  Configure_File(${PROJECT_SOURCE_DIR}/cmake/scripts/generate_dictionary_root.sh.in
-    ${CMAKE_CURRENT_BINARY_DIR}/generate_dictionary_${script_name}.sh
-    )
-  
-  
-  
-  
-  Add_Custom_Command(OUTPUT  ${OUTPUT_FILES}
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/generate_dictionary_${script_name}.sh
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/${Int_PCMFILE} ${LIBRARY_OUTPUT_PATH}/${Int_PCMFILE}
-    DEPENDS ${Int_HDRS} ${Int_LINKDEF}
-    )
-  Install(FILES ${LIBRARY_OUTPUT_PATH}/${Int_PCMFILE} ${Int_ROOTMAPFILE} DESTINATION lib)
-  
-
-EndMacro(ROOT_GENERATE_DICTIONARY)
-
-# Based on FairRoot's generate library macro. Uses the following variables which are reset
-# at the end of each call
-#
-# LIBRARY_NAME: The name of the library to build
-# DICTIONARY: The name of the dictionary file to generate (defaults to "G_${LIBRARY_NAME}Dict.cxx")
-# LINKDEF: Name of the linkdef file (will skip dictionary generation of not present)
-# SRCS: Sources to build
-# HEADERS: List of all header files. Will use all SRCS renamed from .cxx to .h if empty
-# NO_DICT_SRCS: 
-# DEPENDENCIES: 
-#
-#
-
-Macro(GENERATE_LIBRARY)
-  
-  set(Int_LIB ${LIBRARY_NAME})
-
-  # Set dictionary name
-  Set(DictName "G__${Int_LIB}Dict.cxx")
-  If(NOT DICTIONARY)
-    Set(DICTIONARY ${CMAKE_CURRENT_BINARY_DIR}/${DictName})
-  EndIf(NOT DICTIONARY)
-
-  If( IS_ABSOLUTE ${DICTIONARY})
-    Set(DICTIONARY ${DICTIONARY})
-  Else( IS_ABSOLUTE ${DICTIONARY})
-    Set(Int_DICTIONARY ${CMAKE_CURRENT_SOURCE_DIR}/${DICTIONARY})
-  EndIf( IS_ABSOLUTE ${DICTIONARY})
-  
-  Set(Int_SRCS ${SRCS})
-
-  If(HEADERS)
-    Set(HDRS ${HEADERS})
-  Else(HEADERS)
-    CHANGE_FILE_EXTENSION(*.cxx *.h HDRS "${SRCS}")
-  EndIf(HEADERS)
-
-  # Install the headers into /include
-  install(FILES ${HDRS} DESTINATION include)
-  
-  If(LINKDEF)
-    If( IS_ABSOLUTE ${LINKDEF})
-      Set(Int_LINKDEF ${LINKDEF})
-    Else( IS_ABSOLUTE ${LINKDEF})
-      Set(Int_LINKDEF ${CMAKE_CURRENT_SOURCE_DIR}/${LINKDEF})
-    EndIf( IS_ABSOLUTE ${LINKDEF})
-    
-    ROOT_GENERATE_DICTIONARY()
-
-    SET(Int_SRCS ${Int_SRCS} ${DICTIONARY})
-    SET_SOURCE_FILES_PROPERTIES(${DICTIONARY}
-      PROPERTIES COMPILE_FLAGS "-Wno-old-style-cast"
-      )
-  EndIf(LINKDEF)
-
-
-  set(Int_DEPENDENCIES)
-  foreach(d ${DEPENDENCIES})
-
-    get_filename_component(_ext ${d} EXT)
-    If(NOT _ext MATCHES a$)
-      set(Int_DEPENDENCIES ${Int_DEPENDENCIES} ${d})
-    Else()
-      Message("Found Static library with extension ${_ext}")
-      get_filename_component(_lib ${d} NAME_WE)
-      set(Int_DEPENDENCIES ${Int_DEPENDENCIES} ${_lib})
-    EndIf()
-  endforeach()
-
-  ############### build the library #####################
-
-  #create the library target with the name Int_LIB 
-  If(${CMAKE_GENERATOR} MATCHES Xcode)
-    Add_Library(${Int_LIB} SHARED ${Int_SRCS} ${NO_DICT_SRCS} ${HDRS} ${LINKDEF})
-  Else()
-    Add_Library(${Int_LIB} SHARED ${Int_SRCS} ${NO_DICT_SRCS} ${LINKDEF})
-  EndIf()
-
-  # set target link libraries
-  target_link_libraries(${Int_LIB} ${Int_DEPENDENCIES})
-
-    set_target_properties(${Int_LIB} PROPERTIES ${PROJECT_LIBRARY_PROPERTIES})
-
-  ############### install the library ###################
-  install(TARGETS ${Int_LIB} DESTINATION lib)
-
-#  Set(LIBRARY_NAME)
-#  Set(DICTIONARY)
-#  Set(LINKDEF)
-#  Set(SRCS)
-#  Set(HEADERS)
-#  Set(NO_DICT_SRCS)
-#  Set(DEPENDENCIES)
-
-  
-EndMacro(GENERATE_LIBRARY)

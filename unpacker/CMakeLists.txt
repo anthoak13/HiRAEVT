@@ -1,7 +1,7 @@
 # Create an executable to unpack the data called HiRAEVTUnpacker
 
-
-add_executable(HiRAEVTUnpacker.exe FragmentIndex.cxx HTFilter.cxx SkeletonMain.cxx HTUnpacker.cxx)
+set(execName HiRAEVTUnpacker.exe)
+add_executable(${execName} FragmentIndex.cxx HTFilter.cxx SkeletonMain.cxx HTUnpacker.cxx)
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}
@@ -45,8 +45,9 @@ set(INCLUDE_DIRECTORIES
   
   )
 
-target_link_libraries(HiRAEVTUnpacker.exe ${DEPENDENCIES} )
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
+target_link_libraries(${execName} ${DEPENDENCIES} )
+target_include_directories(${execName} PRIVATE ${INCLUDE_DIRECTORIES} )
+target_link_directories(${execName} PRIVATE ${LINK_DIRECTORIES} )
+install(TARGETS ${execName}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 

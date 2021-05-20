@@ -1,7 +1,7 @@
 # Create an executable to unpack the data called HiRAEVTMapper
 
-
-add_executable(HiRAEVTMapper.exe  MapperMain.cxx HTMapper.cxx)
+set(execName HiRAEVTMapper.exe)
+add_executable(${execName}  MapperMain.cxx)
 
 set(DEPENDENCIES
   ${ROOT_LIBRARIES}
@@ -28,8 +28,8 @@ set(INCLUDE_DIRECTORIES
 
   )
 
-target_link_libraries(HiRAEVTMapper.exe ${DEPENDENCIES} )
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
-
+target_link_libraries(${execName} ${DEPENDENCIES} )
+target_link_directories(${execName} PRIVATE ${LINK_DIRECTORIES} )
+target_include_directories(${execName} PRIVATE ${INCLUDE_DIRECTORIES} )
+install(TARGETS ${execName}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

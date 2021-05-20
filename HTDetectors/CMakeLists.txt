@@ -21,21 +21,13 @@ set(SRCS
   HTCalibrator.cxx
   )
 
-# Include directories outside of the current directory
-set(INCLUDE_DIRECTORIES
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  )
-
 # Create target for the library
 generate_target_root_library( ${LIBRARY_NAME}
   SRCS ${SRCS}
   LINKDEF ${LINKDEF}
-  INCLUDE_DIR ${INCLUDE_DIRECTORIES}
   DEPS_PRIVATE ${DEPS_PRIVATE}
   )
 
-
-#GENERATE_LIBRARY()
 
 
 

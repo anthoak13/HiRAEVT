@@ -1,11 +1,7 @@
 # Create a library called libHTElectronics
 
-set(LINKDEF "GenLinkDef.h")
 set(LIBRARY_NAME HTRootElectronics)
-
-set(DEPENDENCIES
-
-  )
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
 
 set(SRCS
   # Put source files to compile here
@@ -19,19 +15,9 @@ set(SRCS
   
   )
 
-set(INCLUDE_DIRECTORIES
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${ROOT_INCLUDE_DIR}
-  ${json_INCLUDE_DIR}
+# Create target for the library
+generate_target_root_library( ${LIBRARY_NAME}
+  SRCS ${SRCS}
+  LINKDEF ${LINKDEF}
   )
-
-set(LINK_DIRECTORIES
-  ${ROOT_LIBRARY_DIR}
-
-  )
-
-GENERATE_LIBRARY()
-
-target_include_directories(${LIBRARY_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
-target_link_directories(${LIBRARY_NAME} PUBLIC ${LINK_DIRECTORIES})
 

@@ -1,11 +1,13 @@
 # Create a library called libHTElectronics
 
-set(LINKDEF HTExperimentalSetupLinkDef.h)
 set(LIBRARY_NAME HTExperimentalSetup)
-set(DEPENDENCIES
-  nlohmann_json::nlohmann_json
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
+
+set(DEPS_PUBLIC
   HTDetectors
-  HTRunInfo
+  )
+set(DEPS_PRIVATE
+  nlohmann_json::nlohmann_json
   )
 
 set(SRCS
@@ -13,28 +15,11 @@ set(SRCS
   HTExperimentalSetup.cxx
   )
 
-set(INCLUDE_DIRECTORIES
-  ${ROOT_INCLUDE_DIR}
-  ${json_SOURCE_DIR}/include
-  
-  # Directories with headers
-  ${CMAKE_SOURCE_DIR}/HTExperimentalSetup
-  ${CMAKE_SOURCE_DIR}/HTElectronics
-  ${CMAKE_SOURCE_DIR}/HTRunInfo
-  ${CMAKE_SOURCE_DIR}/HTRootElectronics
-  
-  ${CMAKE_SOURCE_DIR}/HTDetectors/HTDetector
-  
+
+generate_target_root_library( ${LIBRARY_NAME}
+  SRCS ${SRCS}
+  LINKDEF ${LINKDEF}
+  DEPS_PUBLIC ${DEPS_PUBLIC}
   )
-
-set(LINK_DIRECTORIES
-  ${ROOT_LIBRARY_DIR}
-  )
-
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
-GENERATE_LIBRARY()
 
 

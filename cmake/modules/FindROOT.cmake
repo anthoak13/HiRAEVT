@@ -42,7 +42,7 @@
 #
 #   RLIBMAP_EXECUTABLE       The rlibmap executable.
 
-#Message(STATUS "Looking for Root...")
+Message(STATUS "Looking for Root...")
 
 Set(ROOT_FOUND FALSE)
 Set(ROOT_DEFINITIONS "")
@@ -71,8 +71,8 @@ If(ROOT_CONFIG_EXECUTABLE)
   String(STRIP ${ROOT_INSTALL_DIR} ROOT_INSTALL_DIR)
 
 
-  # MESSAGE(STATUS "Looking for Root... - Found ${ROOT_INSTALL_DIR}/bin/root")
-  # MESSAGE(STATUS "Looking for Root... - Found version is ${ROOT_VERSION_STRING} ")
+  MESSAGE(STATUS "Looking for Root... - Found ${ROOT_INSTALL_DIR}/bin/root")
+  MESSAGE(STATUS "Looking for Root... - Found version is ${ROOT_VERSION_STRING} ")
 
   # extract major, minor, and patch versions from
   # the version string given by root-config
