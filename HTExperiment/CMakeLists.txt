@@ -30,10 +30,9 @@ set(LINK_DIRECTORIES
 
   )
 
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
 GENERATE_LIBRARY()
+
+target_include_directories(${LIBRARY_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
+target_link_directories(${LIBRARY_NAME} PUBLIC ${LINK_DIRECTORIES})
 
 

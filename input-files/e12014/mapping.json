@@ -7,9 +7,15 @@
 	{ "moduleType":"HTRootAdc", "moduleName":"adc1"},
 	{ "moduleType":"HTRootCAEN1x90", "moduleName":"tdc1"},
 	{ "moduleType":"HTRootAdc", "moduleName":"qdc1"},
-	{ "moduleType":"HTRootAdc", "moduleName":"qdc2"}
+	{ "moduleType":"HTRootAdc", "moduleName":"qdc2"},
+	{ "moduleType":"HTRootSisTimestamp", "moduleName":"tstamp"}
     ],
     "detectors": [
+	{
+	    "detectorType":"HTTimestamp",
+	    "detectorName":"tstamp",
+	    "fTimestamp": {"moduleName":"tstamp", "ch":1}
+	},
 	{
 	    "detectorType":"HTSimpleDetector",
 	    "detectorName":"HPGe",
@@ -83,6 +89,8 @@
 	  "fTimeDSLeft": {"moduleName":"tdc1", "ch":27},
 	  "fTimeDSRight": {"moduleName":"tdc1", "ch":28},
 
+	  "fTimeReference": {"moduleName":"tdc1", "ch":1},
+	  
 	  "gasFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/gasFile.json",
 	  "calibrationFile":"/user/anthonya/HiRAEVT/input-files/e12014/calibration/MUSIC.json"
 	}

@@ -20,12 +20,9 @@ set(SRCS
   )
 
 set(INCLUDE_DIRECTORIES
+  ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_INCLUDE_DIR}
-  ${json_SOURCE_DIR}/include
-  
-  # Directories with headers
-  ${CMAKE_SOURCE_DIR}/HTRootElectronics
- 
+  ${json_INCLUDE_DIR}
   )
 
 set(LINK_DIRECTORIES
@@ -33,10 +30,8 @@ set(LINK_DIRECTORIES
 
   )
 
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
 GENERATE_LIBRARY()
 
+target_include_directories(${LIBRARY_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
+target_link_directories(${LIBRARY_NAME} PUBLIC ${LINK_DIRECTORIES})
 

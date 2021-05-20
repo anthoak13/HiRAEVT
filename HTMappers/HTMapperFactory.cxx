@@ -11,6 +11,8 @@
 #include "HTMusicICMapper.h"
 #include "HTSimpleDetector.h"
 #include "HTSimpleDetectorMapper.h"
+#include "HTTimestamp.h"
+#include "HTTimestampMapper.h"
 
 #include <string>
 
@@ -47,6 +49,12 @@ HTDetectorMapper *HTMapperFactory::CreateDetector(const json &detConfig, TTree *
       mapper = new HTMusicICMapper(detConfig);
       if (tr != nullptr)
          tr->Branch(mapper->GetDetector()->GetName(), (HTMusicIC *)mapper->GetDetector());
+      return mapper;
+   }
+   if (detType.EqualTo("HTTimestamp")) {
+      mapper = new HTTimestampMapper(detConfig);
+      if (tr != nullptr)
+         tr->Branch(mapper->GetDetector()->GetName(), (HTTimestamp *)mapper->GetDetector());
       return mapper;
    }
 

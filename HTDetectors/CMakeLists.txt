@@ -2,11 +2,11 @@
 # To add a detector, add the required source files in SRCS,
 # and add the directory with the headers in INCLUDE_DIRECTORIES
 
-
-set(LINKDEF HTDetectorsLinkDef.h)
 set(LIBRARY_NAME HTDetectors)
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
 
-set(DEPENDENCIES
+#Private dependencies (things that the caller will never need to access)
+set(DEPS_PRIVATE
   nlohmann_json::nlohmann_json
   )
 
@@ -16,28 +16,26 @@ set(SRCS
   HTSimpleDetector.cxx
   HTMcp.cxx
   HTMusicIC.cxx
-  
+  HTTimestamp.cxx
+
   HTCalibrator.cxx
-  
   )
 
+# Include directories outside of the current directory
 set(INCLUDE_DIRECTORIES
-  ${ROOT_INCLUDE_DIR}
-  ${json_SOURCE_DIR}/include
-  
-  # Directories with headers
-  ${CMAKE_SOURCE_DIR}/HTDetectors
-
+  ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-set(LINK_DIRECTORIES
-  ${ROOT_LIBRARY_DIR}
+# Create target for the library
+generate_target_root_library( ${LIBRARY_NAME}
+  SRCS ${SRCS}
+  LINKDEF ${LINKDEF}
+  INCLUDE_DIR ${INCLUDE_DIRECTORIES}
+  DEPS_PRIVATE ${DEPS_PRIVATE}
   )
 
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
 
-GENERATE_LIBRARY()
+#GENERATE_LIBRARY()
 
 
 

@@ -16,6 +16,8 @@ set(SRCS
   HTSimpleDetectorMapper.cxx
   HTMcpMapper.cxx
   HTMusicICMapper.cxx
+  HTTimestampMapper.cxx
+
   HTMapperFactory.cxx
   
   )
@@ -35,10 +37,6 @@ set(INCLUDE_DIRECTORIES
 set(LINK_DIRECTORIES
   ${ROOT_LIBRARY_DIR}
   )
-
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
 
 GENERATE_LIBRARY()
 

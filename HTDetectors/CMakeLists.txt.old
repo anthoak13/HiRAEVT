@@ -1,0 +1,66 @@
+# Create a library for all detectors
+# To add a detector, add the required source files in SRCS,
+# and add the directory with the headers in INCLUDE_DIRECTORIES
+
+set(LIBRARY_NAME HTDetectors)
+add_library(${LIBRARY_NAME} SHARED)
+set_target_properties(${LIBRARY_NAME} PROPERTIES ${PROJECT_LIBRARY_PROPERTIES})
+
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
+
+#Public dependencies (things a caller of this library might need to know
+set(DEPS_PUB
+  )
+
+#Private dependencies (things that the caller will never need to access)
+set(DEPS_PRIV
+  nlohmann_json::nlohmann_json
+  )
+target_link_libraries(${LIBRARY_NAME} PUBLIC ${DEPS_PUB})
+target_link_libraries(${LIBRARY_NAME} PRIVATE ${DEPS_PRIV})
+
+set(SRCS
+  # Put source files to compile here
+  HTDetector.cxx
+  HTSimpleDetector.cxx
+  HTMcp.cxx
+  HTMusicIC.cxx
+  HTTimestamp.cxx
+
+  
+  HTCalibrator.cxx
+  
+  )
+target_sources(${LIBRARY_NAME} PRIVATE ${SRCS})
+
+CHANGE_FILE_EXTENSION(*.cxx *.h HEADERS "${SRCS}")
+
+# Include directories outside of the current directory
+set(INCLUDE_DIRECTORIES
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${ROOT_INCLUDE_DIR}
+  )
+target_include_directories(${LIBRARY_NAME} PUBLIC ${INCLUDE_DIRECTORIES})
+
+set(LINK_DIRECTORIES
+  ${ROOT_LIBRARY_DIR}
+  )
+target_link_directories(${LIBRARY_NAME} PUBLIC ${LINK_DIRECTORIES})
+
+# Create target for the library
+hiraevt_target_root_dictionary( ${LIBRARY_NAME}
+  HEADERS ${HEADERS}
+  LINKDEF ${LINKDEF})
+
+
+
+
+
+
+
+
+#GENERATE_LIBRARY()
+
+
+
+
