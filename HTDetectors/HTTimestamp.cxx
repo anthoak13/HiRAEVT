@@ -8,7 +8,6 @@ HTTimestamp::HTTimestamp(const TString detectorName) : HTDetector(detectorName)
    Clear();
 }
 
-
 void HTTimestamp::Clear()
 {
    fTimestamp = 0;

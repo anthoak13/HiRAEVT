@@ -17,7 +17,7 @@ ROOT::Math::XYZVector HTMusicIC::GetPositionUS()
 {
    Double_t posX = (fEnergyUSRight - fEnergyUSLeft) / (fEnergyUSRight + fEnergyUSLeft);
    posX *= 41.; // width of triangle pad in mm.
-   
+
    Double_t timeY = fTime[0] - fReferenceTime;
    Double_t posY = (timeY + fTimeOffset) * fDriftVelocity;
 
