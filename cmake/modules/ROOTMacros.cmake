@@ -52,9 +52,14 @@ function(generate_target_root_library target)
   endif()
 
   # Add defaults to include directories
-  list(APPEND HT_INCLUDE_DIR ${ROOT_INCLUDE_DIR}
+  list(APPEND HT_INCLUDE_DIR 
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  #set(HT_INCLUDE_DIR
+  #  ${HT_INCLUDE_DIR}
+  #  ${CMAKE_CURRENT_SOURCE_DIR}
+  #  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  #)
   
   #Check that files are relative
   foreach(h ${HT_SRCS} ${HT_HDRS} ${HT_LINKDEF})
@@ -76,7 +81,7 @@ function(generate_target_root_library target)
 	"generate_target_root_library was passed a non-existant input file: ${h}")
     endif()
     list(APPEND headers ${habs})
-    configure_file(${habs} "${CMAKE_BINARY_DIR}/include")
+    configure_file(${habs} "${CMAKE_BINARY_DIR}/include/${h}")
   endforeach()
 
   
@@ -85,12 +90,27 @@ function(generate_target_root_library target)
   target_sources(${target} PRIVATE ${HT_SRCS})
   set_target_properties(${target} PROPERTIES ${PROJECT_LIBRARY_PROPERTIES})
 
-  target_link_libraries(${target} PUBLIC ${HT_DEPS_PUBLIC})
-  target_link_libraries(${target} PRIVATE ${HT_DEPS_PRIVATE})
+  # Add root includes publicly. They are not in the same location for
+  # build and install
+  target_include_directories(${target} PUBLIC ${ROOT_INCLUDE_DIR})
+
+  # Add our includes either in the include directory for install or normal build paths
+  # Build interface need to be commented because ${HT_INCLUDE_DIR} includes a ';'
+  # which CMake does not like outside a string. It just appends the <BUILD_INTERFACE:...
+  # to the last element of the list.
+  # https://stackoverflow.com/questions/44425257/how-to-properly-use-target-include-directories-with-lists-of-includes
+  target_include_directories(${target}
+    PUBLIC
+    $<INSTALL_INTERFACE:include> 
+    "$<BUILD_INTERFACE:${HT_INCLUDE_DIR}>"
+    )
   
-  target_include_directories(${target} PUBLIC ${HT_INCLUDE_DIR})
   target_link_directories(${target} PUBLIC ${HT_LIBRARY_DIR} ${ROOT_LIBRARY_DIR})
 
+  target_link_libraries(${target} PUBLIC ${HT_DEPS_PUBLIC})
+  target_link_libraries(${target} PRIVATE ${HT_DEPS_PRIVATE})
+
+  
   # Make the dictionary
   if(HT_LINKDEF)
     hiraevt_target_root_dictionary( ${target}
@@ -100,7 +120,9 @@ function(generate_target_root_library target)
 
   #message("${headers} Include dir: ${CMAKE_INSTALL_INCLUDEDIR}")
   install(FILES ${headers} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-  install(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  install(TARGETS ${target}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    EXPORT GeneratedRootLibTargets)
 
 endfunction()
 
@@ -267,7 +289,13 @@ function(hiraevt_target_root_dictionary target)
     list(APPEND dirs ${d})
   endforeach()
   list(REMOVE_DUPLICATES dirs)
+  
   target_include_directories(${target} PRIVATE ${dirs})
+  #target_include_directories(${target}
+  #  PRIVATE
+  #  $<BUILD_INTERFACE:${dirs}>
+  #  $<INSTALL_INTERFACE:include>)
+  
 
   # will install the rootmap and pcm files alongside the target's lib
   get_filename_component(dict ${dictionaryFile} NAME_WE)

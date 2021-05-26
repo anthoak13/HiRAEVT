@@ -13,13 +13,20 @@ set(PROJECT_LIBRARY_PROPERTIES ${HIRAEVT_LIBRARY_PROPERTIES}
   SOVERSION "${HiRAEVT_MAJOR_VERSION}"
   )
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+# Install path is changed to "install" if not given a value by the user
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "install" CACHE PATH "..." FORCE)
+  message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
+endif()
 
-# Set variables so we can find root and fairroot
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Set variables so we can find root, fairroot, and nscldaq
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-list(APPEND CMAKE_MODULE_PATH "$ENV{FAIRROOTPATH}/share/fairbase/cmake/modules")
-message("Prefix: ${CMAKE_MODULE_PATH}")
+if(EXISTS $ENV{FAIRROOTPATH})
+  list(APPEND CMAKE_MODULE_PATH "$ENV{FAIRROOTPATH}/share/fairbase/cmake/modules")
+endif()
+message("Looking for modules in: ${CMAKE_MODULE_PATH}")
 
 # Set compile flags
 set(CMAKE_CXX_STANDARD 14)
@@ -31,6 +38,7 @@ set(CMAKE_CXX_FLAGS -std=c++14)
 find_package(FairRoot)
 find_package(ROOT 6.12 REQUIRED)
 
+## Include macros and functions ##
 include(HiRAMacros)
 include(ROOTMacros)
 include(GNUInstallDirs)
@@ -38,13 +46,8 @@ include(GNUInstallDirs)
 #Sanity check on builds that would error out
 CHECK_BUILD()
 
-# Install path is changed to "install" if not given a value by the user
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "install" CACHE PATH "..." FORCE)
-  message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
-endif()
 
-# Fetch the json library
+# Fetch the json library for use
 include(FetchContent)
 FetchContent_Declare(json
   GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
@@ -54,6 +57,16 @@ FetchContent_GetProperties(json)
 if(NOT json_POPULATED)
   FetchContent_Populate(json)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+
+  #Hack around so the json library is properly exported with HiRAEVT
+  set_target_properties(nlohmann_json PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "")
+  target_include_directories(nlohmann_json
+    INTERFACE
+    $<BUILD_INTERFACE:${json_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    )
+  install(DIRECTORY ${json_SOURCE_DIR}/include/nlohmann DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(TARGETS nlohmann_json EXPORT GeneratedRootLibTargets)
 endif()
 
 
@@ -66,10 +79,37 @@ add_subdirectory(HTRootElectronics)
 add_subdirectory(HTDetectors)
 add_subdirectory(HTMappers)
 
+
 # build executables
 add_subdirectory(unpacker)
 add_subdirectory(mapper)
 #add_subdirectory(jsonTest)
 
-#WRITE_CONFIG_FILE(config.sh)
+# Add install targets for libraries
+install(EXPORT GeneratedRootLibTargets
+  FILE HiRAEVT.cmake
+  DESTINATION lib/cmake )
 
+# Create the find module thing
+include(CMakePackageConfigHelpers)
+
+#generate the config file that includes the exports
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake"
+  INSTALL_DESTINATION lib/cmake
+  NO_SET_AND_CHECK_MACRO
+  NO_CHECK_REQUIRED_COMPONENTS_MACRO
+  )
+
+# Generate the version file for the config
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfigVersion.cmake"
+  VERSION ${HiRAEVT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+  )
+
+# install the configuration file
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake
+  DESTINATION lib/cmake
+  )

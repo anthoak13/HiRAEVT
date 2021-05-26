@@ -6,7 +6,7 @@ set(LIBRARY_NAME HTDetectors)
 set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
 
 #Private dependencies (things that the caller will never need to access)
-set(DEPS_PRIVATE
+set(DEPS_PUBLIC
   nlohmann_json::nlohmann_json
   )
 
@@ -25,7 +25,7 @@ set(SRCS
 generate_target_root_library( ${LIBRARY_NAME}
   SRCS ${SRCS}
   LINKDEF ${LINKDEF}
-  DEPS_PRIVATE ${DEPS_PRIVATE}
+  DEPS_PUBLIC ${DEPS_PUBLIC}
   )
 
 
