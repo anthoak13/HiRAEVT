@@ -16,16 +16,16 @@ private:
 public:
    HTTimestamp(const TString detectorName = "Undefined");
    virtual ~HTTimestamp() {}
-   
+
    // Getters
    ULong64_t GetTimestamp() const { return fTimestamp; }
-   
+
    // Setters
-   void SetTimestamp(ULong64_t timestamp) {fTimestamp = timestamp; }
+   void SetTimestamp(ULong64_t timestamp) { fTimestamp = timestamp; }
 
    virtual void Clear() override;
    virtual void Calibrate(const json &calibration) override;
-   
+
    ClassDefOverride(HTTimestamp, 1)
 };
 

@@ -41,9 +41,9 @@ HTMusicICMapper::HTMusicICMapper(const json &config) : HTDetectorMapper(config)
                       << "Setting time offset: " << info["timeOffset"] << " ns" << std::endl;
             dynamic_cast<HTMusicIC *>(fDetector)->SetDriftVelocity(info["driftVelocity"]);
             dynamic_cast<HTMusicIC *>(fDetector)->SetTimeOffset(info["timeOffset"]);
-         } //if we found right into
-      } //Loop over gas info json objects
-   } // There was a gasFile to lookup
+         } // if we found right into
+      }    // Loop over gas info json objects
+   }       // There was a gasFile to lookup
 }
 
 HTMusicICMapper::~HTMusicICMapper() {}
@@ -82,9 +82,9 @@ void HTMusicICMapper::MapAndCalibrate()
    det->SetTimeDSRightRaw(
       mapper->GetTimeSingleHit(fConfiguration["fTimeDSRight"]["moduleName"], fConfiguration["fTimeDSRight"]["ch"]));
 
-   //Map the reference time
+   // Map the reference time
    det->SetReferenceTime(
       mapper->GetTimeSingleHit(fConfiguration["fTimeReference"]["moduleName"], fConfiguration["fTimeReference"]["ch"]));
-   
+
    det->Calibrate(fCalibration);
 }

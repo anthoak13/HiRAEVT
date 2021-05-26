@@ -64,7 +64,7 @@ public:
    void SetDriftVelocity(Double_t velocity) { fDriftVelocity = velocity; }
    void SetTimeOffset(Double_t offset) { fTimeOffset = offset; }
    void SetReferenceTime(Double_t refTime) { fReferenceTime = refTime; }
-   
+
    void SetEnergyRaw(Int_t ch, Short_t energy);
    void SetTimeRaw(Int_t ch, Double_t time);
 
@@ -82,7 +82,7 @@ public:
    Double_t GetZOffset() { return fOffsetZ; }
    Double_t GetDriftVelocity() { return fDriftVelocity; }
    Double_t GetTimeOffset() { return fTimeOffset; }
-   
+
    Short_t GetEnergyRaw(Int_t ch);
    Double_t GetEnergy(Int_t ch);
    Double_t GetTimeRaw(Int_t ch);
@@ -92,7 +92,7 @@ public:
    Double_t GetTimeDSLeftRaw() { return fTimeDSLeftRaw; }
    Double_t GetTimeUSRightRaw() { return fTimeUSRightRaw; }
    Double_t GetTimeUSLeftRaw() { return fTimeUSLeftRaw; }
-   
+
    Double_t GetTimeDSRight() { return fTimeDSRight; }
    Double_t GetTimeDSLeft() { return fTimeDSLeft; }
    Double_t GetTimeUSRight() { return fTimeUSRight; }
