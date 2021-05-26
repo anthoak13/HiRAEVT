@@ -1,37 +1,32 @@
 cmake_minimum_required(VERSION 3.11)
 
-# Set the project name
-project(HiRAEVT)
-set(HiRAEVT_MAJOR_VERSION 0)
+# Set the project name and version
+set(HiRAEVT_MAJOR_VERSION 2)
 set(HiRAEVT_MINOR_VERSION 0)
 set(HiRAEVT_PATCH_VERSION 0)
 set(HiRAEVT_VERSION "${HiRAEVT_MAJOR_VERSION}.${HiRAEVT_MINOR_VERSION}.${HiRAEVT_PATCH_VERSION}")
-  
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# For now needs to be built against FairRoot. On fishtank, fairroot is built agains root 6.12, and that is not
-# exposed as a module to load excpet through FairRoot.
-if(NOT DEFINED ENV{FAIRROOTPATH})
-  message( FATAL_ERROR "Enviroment variable FAIRROOTPATH was not defined, this is needed to properly link against AT-TPC")
-endif(NOT DEFINED ENV{FAIRROOTPATH})
-
-# Set variables so we can find FairRoot
-set(FAIRROOTPATH $ENV{FAIRROOTPATH})
-set(CMAKE_MODULE_PATH "${FAIRROOTPATH}/share/fairbase/cmake/modules" ${CMAKE_MODULE_PATH})
-
-find_package(FairRoot)
-
-# Load macros
-include(FairMacros)
-include(WriteConfigFile)
-
-set(FAIRROOT_LIBRARY_PROPERTIES ${FAIRROOT_LIBRARY_PROPERTIES}
+# Set project version and other global library properties
+project(HiRAEVT VERSION ${HiRAEVT_VERSION})  
+set(PROJECT_LIBRARY_PROPERTIES ${HIRAEVT_LIBRARY_PROPERTIES}
   VERSION "${HiRAEVT_VERSION}"
   SOVERSION "${HiRAEVT_MAJOR_VERSION}"
   )
 
-# I think everything after this point should be FairRoot independent except for the macros I'm using
-# but those should be addable later 
+# Install path is changed to "install" if not given a value by the user
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "install" CACHE PATH "..." FORCE)
+  message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
+endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Set variables so we can find root, fairroot, and nscldaq
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+if(EXISTS $ENV{FAIRROOTPATH})
+  list(APPEND CMAKE_MODULE_PATH "$ENV{FAIRROOTPATH}/share/fairbase/cmake/modules")
+endif()
+message("Looking for modules in: ${CMAKE_MODULE_PATH}")
 
 # Set compile flags
 set(CMAKE_CXX_STANDARD 14)
@@ -39,31 +34,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS -std=c++14)
 
-# Set output location and location of JSON library
-set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
-
-# Force out of source build and UNIX system
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" insource)
-if(insource)
-  message(FATAL_ERROR "${CMAKE_PROJECT_NAME} should be built as an out of source build. Please create a extra build directory and run the command 'cmake path_to_source_dir' in this newly created directory. You have also to delete the directory CMakeFiles and the file CMakeCache.txt in the source directory. Otherwise cmake will complain even if you run it from an out-of-source directory.")
-endif(insource)
-
-if(NOT UNIX)
-  message(FATAL_ERROR "You're not on an UNIX system. The project was up to now only tested on UNIX systems, so we break here. If you want to go on please edit the CMakeLists.txt in the source directory.")
-endif(NOT UNIX)
-
+# Version is the minimum version of root to load
+find_package(FairRoot)
 find_package(ROOT 6.12 REQUIRED)
 
-##### FairRoot specific #####
+## Include macros and functions ##
+include(HiRAMacros)
+include(ROOTMacros)
+include(GNUInstallDirs)
 
-SetBasicVariables()
-Generate_Version_Info()
-
-#### End FairRoot specific #####
+#Sanity check on builds that would error out
+CHECK_BUILD()
 
 
-# Fetch the json library
+# Fetch the json library for use
 include(FetchContent)
 FetchContent_Declare(json
   GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
@@ -73,29 +57,59 @@ FetchContent_GetProperties(json)
 if(NOT json_POPULATED)
   FetchContent_Populate(json)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+
+  #Hack around so the json library is properly exported with HiRAEVT
+  set_target_properties(nlohmann_json PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "")
+  target_include_directories(nlohmann_json
+    INTERFACE
+    $<BUILD_INTERFACE:${json_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    )
+  install(DIRECTORY ${json_SOURCE_DIR}/include/nlohmann DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(TARGETS nlohmann_json EXPORT GeneratedRootLibTargets)
 endif()
 
-message ("TESTING")
-message (${json_SOURCE_DIR})
 
+### List all subdirectories to build ###
 
-# Walk through the project and compile libraries and executables
-# Libraries just for unpacker
+#Libraries
 add_subdirectory(HTUnpackers)
 add_subdirectory(HTExperiment)
-
-# Libraries shared by unpacker and mapper
-#add_subdirectory(HTLogo)
 add_subdirectory(HTRootElectronics)
-
-# Libraries used by just mapper
 add_subdirectory(HTDetectors)
 add_subdirectory(HTMappers)
-#add_subdirectory(HTExperimentalSetup)
+
 
 # build executables
 add_subdirectory(unpacker)
 add_subdirectory(mapper)
 #add_subdirectory(jsonTest)
 
-WRITE_CONFIG_FILE(config.sh)
+# Add install targets for libraries
+install(EXPORT GeneratedRootLibTargets
+  FILE HiRAEVT.cmake
+  DESTINATION lib/cmake )
+
+# Create the find module thing
+include(CMakePackageConfigHelpers)
+
+#generate the config file that includes the exports
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake"
+  INSTALL_DESTINATION lib/cmake
+  NO_SET_AND_CHECK_MACRO
+  NO_CHECK_REQUIRED_COMPONENTS_MACRO
+  )
+
+# Generate the version file for the config
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfigVersion.cmake"
+  VERSION ${HiRAEVT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+  )
+
+# install the configuration file
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake
+  DESTINATION lib/cmake
+  )

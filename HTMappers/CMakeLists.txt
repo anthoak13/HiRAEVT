@@ -1,11 +1,14 @@
 # Create a library called libHTMappers
 
-set(LINKDEF GenLinkDef.h)
 set(LIBRARY_NAME HTMappers)
-set(DEPENDENCIES
-  ${ROOT_LIBRARIES}
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
+
+# When in doubt set a dependency to be public, that way it's headers will be passed along
+set(DEPS_PRIVATE
   nlohmann_json::nlohmann_json
-  
+  )
+
+set(DEPS_PUBLIC
   HTRootElectronics
   HTDetectors
   )
@@ -16,30 +19,15 @@ set(SRCS
   HTSimpleDetectorMapper.cxx
   HTMcpMapper.cxx
   HTMusicICMapper.cxx
+  HTTimestampMapper.cxx
+
   HTMapperFactory.cxx
-  
+  HTMapper.cxx
   )
 
-set(INCLUDE_DIRECTORIES
-  ${ROOT_INCLUDE_DIR}
-  ${json_SOURCE_DIR}/include
-  
-  # Directories with headers
-  ${CMAKE_SOURCE_DIR}/HTMappers
-  ${CMAKE_SOURCE_DIR}/HTRootElectronics
-  ${CMAKE_SOURCE_DIR}/HTDetectors
-  ${CMAKE_SOURCE_DIR}/mapper
-  
+generate_target_root_library( ${LIBRARY_NAME}
+  SRCS ${SRCS}
+  LINKDEF ${LINKDEF}
+  DEPS_PRIVATE ${DEPS_PRIVATE}
+  DEPS_PUBLIC ${DEPS_PUBLIC}
   )
-
-set(LINK_DIRECTORIES
-  ${ROOT_LIBRARY_DIR}
-  )
-
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
-GENERATE_LIBRARY()
-
-

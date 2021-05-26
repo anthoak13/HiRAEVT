@@ -1,9 +1,11 @@
 # Create a library called libHTUnapckers
 
-set(LINKDEF GenLinkDef.h)
 set(LIBRARY_NAME HTUnpackers)
-set(DEPENDENCIES
+set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
+
+set(DEPS_PUBLIC
   HTRootElectronics
+  nlohmann_json::nlohmann_json
   )
 
 set(SRCS
@@ -13,28 +15,16 @@ set(SRCS
   HTCAEN7xxUnpacker.cxx
   HTMADC32Unpacker.cxx
   HTSisTimestampUnpacker.cxx
-
+  
   HTUnpackerFactory.cxx
   )
 
-set(INCLUDE_DIRECTORIES
-  ${ROOT_INCLUDE_DIR}
-  ${json_SOURCE_DIR}/include
-  
-  # Directories with headers
-  ${CMAKE_SOURCE_DIR}/HTUnpackers
-  ${CMAKE_SOURCE_DIR}/HTRootElectronics
-    
-  )
+generate_target_root_library( ${LIBRARY_NAME}
+  SRCS ${SRCS}
+  LINKDEF ${LINKDEF}
+  DEPS_PUBLIC ${DEPS_PUBLIC}
+    )
 
-set(LINK_DIRECTORIES
-  ${ROOT_LIBRARY_DIR}
-  )
-
-
-include_directories( ${INCLUDE_DIRECTORIES} )
-link_directories( ${LINK_DIRECTORIES} )
-
-GENERATE_LIBRARY()
+#GENERATE_LIBRARY()
 
 

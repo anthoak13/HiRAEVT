@@ -3,7 +3,7 @@
 #include "HTCalibrator.h"
 
 HTMusicIC::HTMusicIC(const TString detectorName)
-   : HTDetector(detectorName), fDriftVelocity(1), fTimeOffset(0), fOffsetZ(0)
+   : HTDetector(detectorName), fDriftVelocity(1), fTimeOffset(0), fOffsetZ(0), fReferenceTime(0)
 {
 
    fType = "HTMusicIC";
@@ -18,7 +18,7 @@ ROOT::Math::XYZVector HTMusicIC::GetPositionUS()
    Double_t posX = (fEnergyUSRight - fEnergyUSLeft) / (fEnergyUSRight + fEnergyUSLeft);
    posX *= 41.; // width of triangle pad in mm.
 
-   Double_t timeY = fTime[0];
+   Double_t timeY = fTime[0] - fReferenceTime;
    Double_t posY = (timeY + fTimeOffset) * fDriftVelocity;
 
    Double_t posZ = -124;
@@ -32,7 +32,7 @@ ROOT::Math::XYZVector HTMusicIC::GetPositionDS()
    Double_t posX = (fEnergyDSRight - fEnergyDSLeft) / (fEnergyDSRight + fEnergyDSLeft);
    posX *= 41.; // width of triangle pad in mm.
 
-   Double_t timeY = fTime[8];
+   Double_t timeY = fTime[8] - fReferenceTime;
    Double_t posY = (timeY + fTimeOffset) * fDriftVelocity;
 
    Double_t posZ = +124;
