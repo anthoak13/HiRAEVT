@@ -1,4 +1,5 @@
 #include "HTModuleUnpacker.h"
+#include <iomanip>
 
 ULong_t HTModuleUnpacker::getLong(std::vector<UShort_t> &event, ULong_t offset)
 {

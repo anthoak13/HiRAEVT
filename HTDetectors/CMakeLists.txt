@@ -8,6 +8,7 @@ set(LINKDEF "${LIBRARY_NAME}LinkDef.h")
 #Private dependencies (things that the caller will never need to access)
 set(DEPS_PUBLIC
   nlohmann_json::nlohmann_json
+  ROOT::Core
   )
 
 set(SRCS
