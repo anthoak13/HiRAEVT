@@ -1,7 +1,7 @@
 #!/bin/bash
 
 module purge
-module load fairroot/18.00
+module load fairroot/18.6.3
 module list
 
 #module purge

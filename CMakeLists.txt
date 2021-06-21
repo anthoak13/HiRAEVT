@@ -36,12 +36,19 @@ set(CMAKE_CXX_FLAGS -std=c++14)
 
 # Version is the minimum version of root to load
 find_package(FairRoot)
-find_package(ROOT 6.12 REQUIRED)
+find_package(ROOT 6.16 REQUIRED CONFIG)
 
 ## Include macros and functions ##
 include(HiRAMacros)
 include(ROOTMacros)
 include(GNUInstallDirs)
+
+Find_Program(ROOT_CINT_EXECUTABLE
+  NAMES rootcint
+  PATHS ${ROOT_BINARY_DIR}
+  NO_DEFAULT_PATH
+  )
+
 
 #Sanity check on builds that would error out
 CHECK_BUILD()
