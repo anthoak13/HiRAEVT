@@ -18,6 +18,10 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "install" CACHE PATH "..." FORCE)
   message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
 endif()
+if(NOT BUILD_UNPACKERS)
+  set(BULD_UNPACKERS ON)
+  message("Building unpackers by default. Disable with -DBUILD_UNPACKERS=OFF")
+endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -80,7 +84,11 @@ endif()
 ### List all subdirectories to build ###
 
 #Libraries
-add_subdirectory(HTUnpackers)
+if(BUILD_UNPACKERS)
+  add_subdirectory(HTUnpackers)
+  add_subdirectory(unpacker)
+endif()
+
 add_subdirectory(HTExperiment)
 add_subdirectory(HTRootElectronics)
 add_subdirectory(HTDetectors)
@@ -88,7 +96,7 @@ add_subdirectory(HTMappers)
 
 
 # build executables
-add_subdirectory(unpacker)
+
 add_subdirectory(mapper)
 #add_subdirectory(jsonTest)
 
@@ -120,3 +128,5 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake
   DESTINATION lib/cmake
   )
+
+unset(BUILD_UNPACKERS)
