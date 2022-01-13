@@ -18,6 +18,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "install" CACHE PATH "..." FORCE)
   message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
 endif()
+
 if(NOT BUILD_UNPACKERS)
   set(BULD_UNPACKERS ON)
   message("Building unpackers by default. Disable with -DBUILD_UNPACKERS=OFF")
@@ -39,7 +40,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS -std=c++14)
 
 # Version is the minimum version of root to load
-find_package(FairRoot)
 find_package(ROOT 6.16 REQUIRED CONFIG)
 
 ## Include macros and functions ##
