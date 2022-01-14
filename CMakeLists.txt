@@ -19,6 +19,11 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   message("Setting default install prefix to: ${CMAKE_INSTALL_PREFIX}")
 endif()
 
+if(NOT DEFINED BUILD_UNPACKERS)
+  set(BULD_UNPACKERS ON)
+  message("Building unpackers by default. Disable with -DBUILD_UNPACKERS=OFF")
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set variables so we can find root, fairroot, and nscldaq
@@ -35,7 +40,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS -std=c++14)
 
 # Version is the minimum version of root to load
-find_package(FairRoot)
 find_package(ROOT 6.16 REQUIRED CONFIG)
 
 ## Include macros and functions ##
@@ -60,7 +64,9 @@ FetchContent_Declare(json
   GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
   GIT_TAG v3.9.1)
 
+
 FetchContent_GetProperties(json)
+
 if(NOT json_POPULATED)
   FetchContent_Populate(json)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
@@ -72,6 +78,7 @@ if(NOT json_POPULATED)
     $<BUILD_INTERFACE:${json_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     )
+
   install(DIRECTORY ${json_SOURCE_DIR}/include/nlohmann DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
   install(TARGETS nlohmann_json EXPORT GeneratedRootLibTargets)
 endif()
@@ -80,7 +87,11 @@ endif()
 ### List all subdirectories to build ###
 
 #Libraries
-add_subdirectory(HTUnpackers)
+if(BUILD_UNPACKERS)
+  add_subdirectory(HTUnpackers)
+  add_subdirectory(unpacker)
+endif()
+
 add_subdirectory(HTExperiment)
 add_subdirectory(HTRootElectronics)
 add_subdirectory(HTDetectors)
@@ -88,14 +99,14 @@ add_subdirectory(HTMappers)
 
 
 # build executables
-add_subdirectory(unpacker)
+
 add_subdirectory(mapper)
 #add_subdirectory(jsonTest)
 
 # Add install targets for libraries
 install(EXPORT GeneratedRootLibTargets
   FILE HiRAEVT.cmake
-  DESTINATION lib/cmake )
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/HiRAEVT/cmake )
 
 # Create the find module thing
 include(CMakePackageConfigHelpers)
@@ -103,7 +114,7 @@ include(CMakePackageConfigHelpers)
 #generate the config file that includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake"
-  INSTALL_DESTINATION lib/cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/HiRAEVT/cmake
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
   )
@@ -118,5 +129,7 @@ write_basic_package_version_file(
 # install the configuration file
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfig.cmake
-  DESTINATION lib/cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/HiRAEVTConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/HiRAEVT/cmake
   )
+
